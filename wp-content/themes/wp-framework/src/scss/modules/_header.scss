@@ -1,0 +1,212 @@
+/*
+* Styles for Header area of application
+*/
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: $rem-70;
+    z-index: 1000;
+    .navbar {
+        background: lighten($dark-grey, 30);
+        height: $rem-70;
+        border: none;
+        margin-bottom: 0;
+        @include border-radius(0);
+        padding: $rem-8 0;
+        @include transition(0.4s);
+        .navbar-brand {
+            display: block;
+            height: auto;
+            @include font($primary-font, $bold);
+            font-size: $rem-15;
+            color: $primary-color;
+            text-transform: uppercase;
+            & > img {
+                width: $rem-40;
+                margin-right: $rem-10;
+                display: inline-block;
+            }
+        }
+        .navbar-collapse {
+            .navbar-nav {
+                margin-top: 0;
+                & > li {
+                    position: relative;
+                    margin: 0 $rem-7;
+                    &.active {
+                        a {
+                            &:hover {
+                                color: $secondary-color;
+                            }
+                        }
+                    }
+                    a {
+                        @include font($primary-font, $bold);
+                        font-size: $rem-15;
+                        color: $primary-color;
+                        background: rgba($primary-bg, 0);
+                        text-transform: uppercase;
+                        padding: $rem-15 $rem-7;
+                        line-height: $rem-40;
+                        &:hover, &:focus {
+                            background: rgba($secondary-color, 0);
+                            color: $secondary-color;
+                        }
+                    }
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        width: 0;
+                        @include add-border($rem-3, $primary-color, 'bottom');
+                        @include transition(0.4s);
+                    }
+                    &:hover, &.active, &.current-page-ancestor {
+                        &:before {
+                            width: 100%;
+                        }
+                    }
+                    &.dropdown {
+                        @include transition(0.4s);
+                         a {
+                             .caret {
+                                 display: none;
+                             }
+                         }
+                        & > .dropdown-menu {
+                            background: rgba($primary-bg, 0.9);
+                            padding: 0;
+                            height: auto;
+                            min-width: 200px;
+                            border: none;
+                            display: unset;
+                            visibility: hidden;
+                            opacity: 0;
+                            @include border-radius(0);
+                            // @include transform-scaleY(0);
+                            // transform-origin: top;
+                            transform: translateY(-100%);
+                            @include transition(0.4s);
+                            margin: 0;
+                            z-index: -1;
+                            .dropdown-item {
+                                font-size: $rem-14;
+                                color: $primary-color;
+                                line-height: $rem-18;
+                                text-transform: capitalize;
+                                padding: $rem-15;
+                                &:hover {
+                                    color: $primary-bg;
+                                    background: $primary-color;
+                                }
+                                &.dropdown {
+                                    .dropdown-menu {
+                                        background: rgba($primary-bg, 0.9);
+                                        top: 0;
+                                        left: 100%;
+                                        padding: 0;
+                                        border: none;
+                                        @include border-radius(0);
+                                    }
+                                    &.open {
+                                        & > a {
+                                            color: $primary-bg;
+                                            background: $primary-color;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        &.show {
+                            & > a {
+                                color: $primary-color;
+                            }
+                            & > .dropdown-menu {
+                                &.show {
+                                    display: block;
+                                    visibility: visible;
+                                    opacity: 1;
+                                    transform: translateY(0%);
+                                    // @include transform-scaleY(1);
+                                    @include box-shadow(0 2px 5px, rgba($primary-font-color, 0.1));
+                                    .dropdown-item {
+                                        // font-size: $rem-16;
+                                        // line-height: $rem-18;
+                                        // text-transform: capitalize;
+                                        // padding: $rem-15;
+                                        &:not(:last-child) {
+                                            @include add-border(1px, rgba($primary-color, 0.4), 'bottom');
+                                        }
+                                        // & + .dropdown-menu {
+                                        //     display: block;
+                                        //     visibility: visible;
+                                        //     opacity: 1;
+                                        //     transform: translateY(0%);
+                                        //     top: 0;
+                                        //     left: 90%;
+                                        //     border: none;
+                                        //     border-radius: 0;
+                                        //     padding: 0;
+                                        //     margin-top: 10px;
+                                        //     @include box-shadow(0 2px 5px, rgba($primary-font-color, 0.1));
+                                        // }
+                                    }
+                                }
+                            }
+                        }
+                     }
+                }
+            }
+            .socials {
+                li {
+                    display: inline-flex;
+                    &:not(:last-child) {
+                        margin-right: $rem-10;
+                    }
+                }
+            }
+        }
+    }
+}
+
+body {
+    &.admin-bar {
+        header {
+            top: $rem-32;
+        }
+    }
+}
+
+
+.page-header {
+    background: $dark-grey;
+    color: $grey;
+    @include text-shadow($rem-1 $rem-1 0, rgba($primary-color, 0.15));
+    padding: 0;
+    margin-bottom: $rem-60;
+    &.single {
+        padding: 0;
+    }
+    h1 {
+        font-size: $rem-30;
+        @include font($primary-font, $bold);
+        line-height: $rem-30;
+    }
+    .breadcrumb-trail {
+        &.breadcrumbs {
+            .trail-browse {
+                font-size: $rem-15;
+                @include font($primary-font, $regular);
+                margin-right: $rem-20;
+            }
+            .trail-items {
+                font-size: $rem-15;
+                @include font($primary-font, $regular);
+            }
+        }
+    }
+}

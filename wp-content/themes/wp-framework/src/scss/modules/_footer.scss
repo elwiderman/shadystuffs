@@ -1,0 +1,86 @@
+/* Styles for Footer */
+
+footer {
+    background: rgba($primary-color, 0.7);
+    margin-top: $rem-50;
+    .footer-top {
+        font-size: $rem-16;
+        color: $primary-bg;
+        address {
+            margin-bottom: $rem-10;
+        }
+        a {
+            &:hover {
+                color: $primary-bg;
+            }
+        }
+        .brand {
+            .logo {
+                width: $rem-40;
+                margin-right: $rem-10;
+            }
+            @include font($primary-font, $bold);
+            font-size: $rem-20;
+            color: $primary-bg;
+            line-height: $rem-30;
+            text-transform: uppercase;
+        }
+    }
+    .footer-bottom {
+        background: rgba($primary-color, 0.9);
+        font-size: $rem-14;
+        color: $grey;
+        .copy-info {
+            line-height: $rem-50;
+            .copy {
+                margin: 0;
+            }
+        }
+        .credits {
+            .links {
+                ul {
+                    text-align: right;
+                    li {
+                        display: inline-block;
+                        &:not(:last-child) {
+                            margin-right: $rem-10;
+                        }
+                        a {
+                            color: $grey;
+                            line-height: $rem-50;
+                            text-transform: uppercase;
+                            &:hover {
+                                color: $dark-grey;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.go-top {
+    position: fixed;
+    bottom: $rem-20;
+    right: $rem-15;
+    width: $rem-30;
+    height: $rem-30;
+    line-height: $rem-30;
+    text-align: center;
+    background: $primary-color;
+    color: $primary-bg;
+    @include transition(0.3s);
+    display: none;
+    opacity: 0;
+    &:focus {
+        color: $primary-bg;
+    }
+    &.show {
+        display: block;
+        opacity: 0.8;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

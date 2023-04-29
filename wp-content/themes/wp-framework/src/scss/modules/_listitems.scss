@@ -1,0 +1,85 @@
+/* Styles for all ordered and unordered lists */
+
+.archive-items {
+    li {
+        margin-bottom: $rem-30;
+        .archive-item {
+            .image {
+                display: block;
+                overflow: hidden;
+                margin-bottom: $rem-10;
+                img {
+                    @include transition(0.3s);
+                    &:hover {
+                        @include transform-scale(1.2, 1.2);
+                    }
+                }
+            }
+            .content {
+                .content-header {
+                    font-size: $rem-12;
+                    color: $dark-grey;
+                    @include add-border($rem-1, rgba($dark-grey, 0.1), 'bottom');
+                    .date {
+                        text-align: left;
+                        display: inline-block;
+                    }
+                    .categories {
+                        display: inline-block;
+                        float: right;
+                    }
+                }
+                .summary {
+                    h4 {
+                        font-size: $rem-22;
+                        color: $secondary-color;
+                        @include transition(0.3s);
+                    }
+                    .excerpt {
+                        @include lines-visible($rem-14, 1.4, 3);
+                    }
+                    &:hover {
+                        h4 {
+                            color: $primary-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &.owl-carousel {
+        .owl-item {
+            li {
+                margin-right: $rem-15;
+            }
+        }
+    }
+}
+
+
+.related-items {
+    margin-top: $rem-80;
+    .title-area {
+        @include add-border($rem-1, rgba($dark-grey, 0.2), 'bottom');
+        h1 {
+            @include font($primary-font, $bold);
+            font-size: $rem-25;
+            line-height: $rem-30;
+        }
+    }
+    .related-list {
+        .owl-item {
+            .content {
+                .pre-title {
+                    font-size: $rem-12;
+                    margin: $rem-10 0;
+                    .categories {
+                        a {
+                            font-size: $rem-12;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

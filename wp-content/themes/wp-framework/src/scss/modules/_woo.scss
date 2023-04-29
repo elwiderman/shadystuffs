@@ -1,0 +1,39 @@
+/* 
+    all woo styles
+*/
+
+.woocommerce, .woocommerce-page {
+    ul {
+        &.products {
+            li {
+                &.product {
+                    float: none;
+                    padding: 0 15px;
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+}
+
+
+#add_payment_method,
+.woocommerce-cart,
+.woocommerce-checkout {
+    #payment {
+        ul {
+            &.payment_methods {
+                li {
+                    list-style: none;
+                }
+            }
+        }
+    }
+}
+
+ul {
+    &.woocommerce-error {
+        padding: 1em 2em 1em 3.5em;
+        margin: 0 0 2em;
+    }
+}

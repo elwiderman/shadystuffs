@@ -1,0 +1,33 @@
+/* Styles for all elements in the sidebar */
+
+.sidebar {
+    .widget-box {
+        .widget-title {
+            @include font($primary-font, $bold);
+            font-size: $rem-20;
+            @include add-border($rem-1, rgba($dark-grey, 0.2), 'bottom');
+        }
+        &.widget_recent_entries {
+            ul {
+                padding-left: $rem-20;
+                li {
+                    list-style: circle;
+                    min-height: $rem-40;
+                    padding-bottom: $rem-10;
+                    @include add-border($rem-1, rgba($dark-grey, 0.2), 'bottom');
+                    a {
+                        font-size: $rem-14;
+                        color: $dark-grey;
+                        &:hover {
+                            color: $primary-color;
+                        }
+                    }
+                    .post-date {
+                        display: block;
+                        font-size: $rem-10;
+                    }
+                }
+            }
+        }
+    }
+}

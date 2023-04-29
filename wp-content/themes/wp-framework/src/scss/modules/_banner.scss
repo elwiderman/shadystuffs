@@ -1,0 +1,102 @@
+/* Styles for all banner and page header elements */
+
+.section-block {
+    &.section-slider {
+        position: relative;
+        // height: calc(100vw * 0.45139);
+        height: 600px;
+        padding: 0 !important;
+        .home-slider {
+            .slick-list {
+                .slick-slide {
+                    padding: 0;
+                    .slide-bg {
+                        // height: calc(100vw * 0.45139);
+                        height: 600px;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        position: relative;
+                        &:before {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            height: 100%;
+                            width: 100%;
+                            background: rgba(#245fb3, 0.7);
+                        }
+                        .container {
+                            height: 100%;
+                            & > .row {
+                                height: 100%;
+                            }
+                        }
+                        .slide-content {
+                            color: $primary-bg;
+                            text-align: center;
+                            z-index: 1;
+                            .animation-wrap {
+                                display: inline-block;
+                                h1 {
+                                    @include font($primary-font, $regular);
+                                    font-size: $rem-52;
+                                    @include responsive-size(font-size, 52, 45, 1400, 1300, px);
+                                    line-height: 1.0577;
+
+                                    b,
+                                    strong {
+                                        font-weight: $bold;
+                                    }
+                                }
+                                h3 {
+                                    @include font($primary-font, $regular);
+                                    @include responsive-size(font-size, 40, 35, 1400, 1300, px);
+                                    line-height: 1;
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .slick-dots {
+                position: absolute;
+                bottom: 10px;
+                left: 0;
+                height: 16px;
+                width: 100%;
+                line-height: 0;
+                text-align: center;
+                margin: 0 auto;
+                li {
+                    display: inline-flex;
+                    line-height: 0;
+                    margin: 0 7px;
+                    padding: 0;
+                    &:before {
+                        display: none;
+                    }
+                    button {
+                        font-size: 0;
+                        width: 10px;
+                        height: 10px;
+                        background: $primary-bg;
+                        padding: 0;
+                        border: 2px solid $primary-bg;
+                        border-radius: 30px;
+                        @include transition(0.3s);
+                        cursor: pointer;
+                    }
+                    &.slick-active {
+                        button {
+                            // width: 16px;
+                            // height: 16px;
+                            background: transparent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,70 @@
+/* Styles for all content blocks */
+
+.content-block {
+    padding: $rem-70 0;
+}
+
+.single-page {
+    .the-post {
+        .pre-title {
+            margin-bottom: $rem-30;
+            @include add-border($rem-1, rgba($dark-grey, 0.2), 'bottom');
+            .categories {
+                display: inline-block;
+                font-size: $rem-14;
+                color: $dark-grey;
+                a {
+                    font-size: $rem-14;
+                    color: $dark-grey;
+                    line-height: $rem-18;
+                    &:hover {
+                        color: $primary-color;
+                    }
+                }
+            }
+            .date {
+                font-size: $rem-14;
+                color: $dark-grey;
+                line-height: $rem-18;
+                margin-right: $rem-40;
+            }
+        }
+        .title {
+            margin-bottom: $rem-20;
+        }
+        .featured-image {
+            margin-bottom: $rem-30;
+        }
+        .content {
+            color: $secondary-color;
+        }
+        ul {
+            padding-left: $rem-40;
+            margin-bottom: $rem-30;
+            li {
+                list-style: disc;
+                font-size: $rem-16;
+                & > ul {
+                    margin-bottom: 0;
+                    li {
+                        list-style: circle;
+                        font-size: $rem-15;
+                    }
+                }
+            }
+        }
+        ol {
+            margin-bottom: $rem-30;
+            li {
+                font-size: $rem-16;
+                & > ol {
+                    margin-bottom: 0;
+                    li {
+                        //list-style: decimal;
+                        font-size: $rem-15;
+                    }
+                }
+            }
+        }
+    }
+}

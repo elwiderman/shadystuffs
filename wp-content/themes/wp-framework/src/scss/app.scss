@@ -1,0 +1,33 @@
+/*!
+*   Title: Styles for Framework
+*   Author: Ajasra Das(ajasra@jeetlab.com)
+*   Version: 3.0.0
+*/
+
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~slick-carousel/slick/slick.css';
+@import '~simplebar/dist/simplebar.css';
+
+/* BASE - base styles, variables, mixins etc */
+@import 'base/variables';
+@import 'base/fonticon_variables';
+@import 'base/mixins';
+@import 'base/base';
+
+/* MODULES - component modules */
+@import 'modules/fonticons';
+@import 'modules/typography';
+@import 'modules/buttons';
+@import 'modules/header';
+@import 'modules/banner';
+@import 'modules/contentblocks';
+@import 'modules/sidebar';
+@import 'modules/footer';
+@import 'modules/forms';
+@import 'modules/listitems';
+@import 'modules/woo';
+
+/* LAYOUTS - layout overrides */
+@import 'layouts/desktop';
+@import 'layouts/tablet';
+@import 'layouts/mobile';
