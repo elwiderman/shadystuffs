@@ -13,22 +13,22 @@
 remove_action('woocommerce_widget_shopping_cart_buttons', 'woocommerce_widget_shopping_cart_button_view_cart', 10);
 remove_action('woocommerce_widget_shopping_cart_buttons', 'woocommerce_widget_shopping_cart_proceed_to_checkout', 20);
 
-// add_action('woocommerce_widget_shopping_cart_buttons', 'jeet_woo_widget_shopping_cart_button_view_cart', 10);
-add_action('woocommerce_widget_shopping_cart_buttons', 'jeet_woo_widget_shopping_cart_proceed_to_checkout', 20);
+// add_action('woocommerce_widget_shopping_cart_buttons', 'shady_woo_widget_shopping_cart_button_view_cart', 10);
+add_action('woocommerce_widget_shopping_cart_buttons', 'shady_woo_widget_shopping_cart_proceed_to_checkout', 20);
 
-function jeet_woo_widget_shopping_cart_button_view_cart() {
-    echo '<a href="' . esc_url(wc_get_cart_url()) . '" class="btn btn-primary btn-rounded">' . esc_html__('guarda il carrello', 'jtlb') . '</a>';
+function shady_woo_widget_shopping_cart_button_view_cart() {
+    echo '<a href="' . esc_url(wc_get_cart_url()) . '" class="btn btn-primary btn-rounded">' . esc_html__('guarda il carrello', 'shady') . '</a>';
 }
 
-function jeet_woo_widget_shopping_cart_proceed_to_checkout() {
-    echo '<a href="' . esc_url( wc_get_checkout_url() ) . '" class="btn btn-primary btn-rounded">' . esc_html__('Checkout', 'jtlb') . '</a>';
+function shady_woo_widget_shopping_cart_proceed_to_checkout() {
+    echo '<a href="' . esc_url( wc_get_checkout_url() ) . '" class="btn btn-primary btn-rounded">' . esc_html__('Checkout', 'shady') . '</a>';
 }
 
 
 /* Show cart contents / total Ajax */
-// add_filter('woocommerce_add_to_cart_fragments', 'jeet_woo_header_add_to_cart_fragment');
+// add_filter('woocommerce_add_to_cart_fragments', 'shady_woo_header_add_to_cart_fragment');
 
-function jeet_woo_header_add_to_cart_fragment( $fragments ) {
+function shady_woo_header_add_to_cart_fragment( $fragments ) {
 	global $woocommerce;
 
     ob_start();
@@ -36,7 +36,7 @@ function jeet_woo_header_add_to_cart_fragment( $fragments ) {
 	?>
 
     <button class="btn btn-transparent dropdown-toggle" type="button" id="menuCartBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-shopping-basket"></i> <?php _e('Cart', 'jtlb');?>
+        <i class="fas fa-shopping-basket"></i> <?php _e('Cart', 'shady');?>
         <?php
         if ( $count > 0 ) {
             echo " (<span class='red'>{$count}</span>)";
@@ -53,25 +53,25 @@ function jeet_woo_header_add_to_cart_fragment( $fragments ) {
 
 
 /* Override add to cart text */
-// add_filter('woocommerce_product_add_to_cart_text', 'jeet_woo_custom_product_add_to_cart_text'); // archive
-function jeet_woo_custom_product_add_to_cart_text() {
+// add_filter('woocommerce_product_add_to_cart_text', 'shady_woo_custom_product_add_to_cart_text'); // archive
+function shady_woo_custom_product_add_to_cart_text() {
 	global $product;
 
 	if ($product->is_type('simple')) {
-		return '<i class="fas fa-shopping-basket"></i>' . __('aggiungi', 'jtlb');
+		return '<i class="fas fa-shopping-basket"></i>' . __('aggiungi', 'shady');
 	}
 	if (($product->is_type('grouped') || $product->is_type('variable')) || ($product->get_stock_quantity() < 1)) {
-		return '<i class="fas fa-share"></i>' . __('visualizza', 'jtlb');
+		return '<i class="fas fa-share"></i>' . __('visualizza', 'shady');
 	}
 }
 
-// add_filter('woocommerce_product_single_add_to_cart_text', 'jeet_woo_custom_product_add_to_cart_text_single'); // single
-function jeet_woo_custom_product_add_to_cart_text_single() {
-	return '<i class="fas fa-shopping-basket"></i>' . __('aggiungi al carrello', 'jtlb');
+// add_filter('woocommerce_product_single_add_to_cart_text', 'shady_woo_custom_product_add_to_cart_text_single'); // single
+function shady_woo_custom_product_add_to_cart_text_single() {
+	return '<i class="fas fa-shopping-basket"></i>' . __('aggiungi al carrello', 'shady');
 }
 
 /* overriding billing form */
-function jeet_move_default_address_fields($fields) {
+function shady_move_default_address_fields($fields) {
 	/* // Move these around as necessary. You'll see we added email first.
 	$billing_order = array(
 		'billing_first_name',
@@ -158,11 +158,11 @@ function jeet_move_default_address_fields($fields) {
 
 	return $fields;
 }
-add_filter('woocommerce_default_address_fields', 'jeet_move_default_address_fields');
+add_filter('woocommerce_default_address_fields', 'shady_move_default_address_fields');
 
 
 // move checkout fields
-function jeet_move_woocommerce_checkout_fields($fields) {
+function shady_move_woocommerce_checkout_fields($fields) {
 	// Move these around as necessary. You'll see we added email first.
 	$billing_order = array(
 		'billing_first_name',
@@ -202,16 +202,16 @@ function jeet_move_woocommerce_checkout_fields($fields) {
 	// echo '</pre>';
 	return $fields;
 }
-add_filter('woocommerce_checkout_fields', 'jeet_move_woocommerce_checkout_fields');
+add_filter('woocommerce_checkout_fields', 'shady_move_woocommerce_checkout_fields');
 
 /* 
 	Add custom checkout fields
 */
 
-// add_action( 'woocommerce_billing_fields', 'jeet_add_custom_woocommerce_billing_fields' );
-function jeet_add_custom_woocommerce_billing_fields($fields) {
+// add_action( 'woocommerce_billing_fields', 'shady_add_custom_woocommerce_billing_fields' );
+function shady_add_custom_woocommerce_billing_fields($fields) {
 	$fields['billing_mobile'] = array(
-        'label' 		=> __('Cellulare', 'jtlb'), // Add custom field label
+        'label' 		=> __('Cellulare', 'shady'), // Add custom field label
         'placeholder' 	=> '',
         'required' 		=> true, // if field is required or not
         'clear' 		=> false, // add clear or not
@@ -221,7 +221,7 @@ function jeet_add_custom_woocommerce_billing_fields($fields) {
 	);
 
 	$fields['billing_fiscal_code'] = array(
-        'label' 		=> __('Codice Fiscale / Partita Iva', 'jtlb'), // Add custom field label
+        'label' 		=> __('Codice Fiscale / Partita Iva', 'shady'), // Add custom field label
         'placeholder' 	=> '',
         'required' 		=> true, // if field is required or not
         'clear' 		=> false, // add clear or not
@@ -230,21 +230,21 @@ function jeet_add_custom_woocommerce_billing_fields($fields) {
 	);
 
 	$fields['billing_recipient_code_type'] = array(
-        'label' 		=> __('Scegli un metodo di identificazione per la fattura elettronica', 'jtlb'), // Add custom field label
+        'label' 		=> __('Scegli un metodo di identificazione per la fattura elettronica', 'shady'), // Add custom field label
         'placeholder' 	=> '',
         'required' 		=> false, // if field is required or not
         'clear' 		=> true, // add clear or not
 		'type' 			=> 'radio', // add field type
 		'options'		=> array(
-			'none'		=> __('Nessun codice identificativo', 'jtlb'),
-			'code'		=> __('Codice univoco destinatario (6 o 7 caratteri)', 'jtlb'),
-			'mail'		=> __('Indirizzo di Posta Elettronica Certificata (PEC)', 'jtlb')
+			'none'		=> __('Nessun codice identificativo', 'shady'),
+			'code'		=> __('Codice univoco destinatario (6 o 7 caratteri)', 'shady'),
+			'mail'		=> __('Indirizzo di Posta Elettronica Certificata (PEC)', 'shady')
 		),
 		'class' 		=> array('form-row-wide', 'identify-method'),    // add class name
 	);
 
 	$fields['billing_recipient_code_type_content'] = array(
-        'label' 		=> __('Scegli un metodo di identificazione per la fattura elettronica', 'jtlb'), // Add custom field label
+        'label' 		=> __('Scegli un metodo di identificazione per la fattura elettronica', 'shady'), // Add custom field label
         'placeholder' 	=> '',
         'required' 		=> false, // if field is required or not
         'clear' 		=> false, // add clear or not
@@ -253,7 +253,7 @@ function jeet_add_custom_woocommerce_billing_fields($fields) {
 	);
 	
 	/* $fields['billing_additional_data'] = array(
-        'label' 		=> __('Dati supplementari (Indicare codice SDI e/o PEC per fattura elettronica)', 'jtlb'), // Add custom field label
+        'label' 		=> __('Dati supplementari (Indicare codice SDI e/o PEC per fattura elettronica)', 'shady'), // Add custom field label
         'placeholder' 	=> '',
         'required' 		=> false, // if field is required or not
         'clear' 		=> false, // add clear or not
@@ -265,8 +265,8 @@ function jeet_add_custom_woocommerce_billing_fields($fields) {
 }
 
 // display the custom added fields in the woo orders admin
-// add_action('woocommerce_admin_billing_fields', 'jeet_custom_woocommerce_admin_billing_fields'); 
-function jeet_custom_woocommerce_admin_billing_fields($fields) {
+// add_action('woocommerce_admin_billing_fields', 'shady_custom_woocommerce_admin_billing_fields'); 
+function shady_custom_woocommerce_admin_billing_fields($fields) {
 	$fields['mobile'] = array(
 		'label' => __('Mobile', 'woocommerce'),
 	);
@@ -283,8 +283,8 @@ function jeet_custom_woocommerce_admin_billing_fields($fields) {
 
 
 // add custom fields to woocommerce admin order detail page
-// add_action( 'woocommerce_admin_order_data_after_order_details', 'jeet_editable_order_meta_general' );
-function jeet_editable_order_meta_general( $order ){  ?>
+// add_action( 'woocommerce_admin_order_data_after_order_details', 'shady_editable_order_meta_general' );
+function shady_editable_order_meta_general( $order ){  ?>
  
 		<br class="clear" /><br>
 		<hr>
@@ -298,15 +298,15 @@ function jeet_editable_order_meta_general( $order ){  ?>
 		?>
 		<div class="address">
 			<p>
-				<strong><?php _e('Metodo di identificazione per la fattura elettronica', 'jtlb');?>: </strong>
+				<strong><?php _e('Metodo di identificazione per la fattura elettronica', 'shady');?>: </strong>
 				<?php
 				switch ($code_type) {
 					case 'code':
-						_e('Codice univoco destinatario', 'jtlb');
+						_e('Codice univoco destinatario', 'shady');
 						echo ' - <b>' . $method . '</b>';
 						break;
 					case 'mail':
-						_e('Indirizzo di Posta Elettronica Certificata', 'jtlb');
+						_e('Indirizzo di Posta Elettronica Certificata', 'shady');
 						echo ' - <b>' . $method . '</b>';
 						break;
 					
@@ -322,12 +322,12 @@ function jeet_editable_order_meta_general( $order ){  ?>
  
 			woocommerce_wp_radio( array(
 				'id'			=> 'billing_recipient_code_type',
-				'label' 		=> __('Scegli un metodo di identificazione per la fattura elettronica', 'jtlb'),
+				'label' 		=> __('Scegli un metodo di identificazione per la fattura elettronica', 'shady'),
 				'value' 		=> $code_type,
 				'options' 		=> array(
-					'none'		=> __('Nessun codice identificativo', 'jtlb'),
-					'code'		=> __('Codice univoco destinatario', 'jtlb'),
-					'mail'		=> __('Indirizzo di Posta Elettronica Certificata', 'jtlb')
+					'none'		=> __('Nessun codice identificativo', 'shady'),
+					'code'		=> __('Codice univoco destinatario', 'shady'),
+					'mail'		=> __('Indirizzo di Posta Elettronica Certificata', 'shady')
 				),
 				'style' => 'width:16px', // required for checkboxes and radio buttons
 				'wrapper_class' => 'form-field-wide' // always add this class
@@ -335,7 +335,7 @@ function jeet_editable_order_meta_general( $order ){  ?>
  
 			woocommerce_wp_text_input( array(
 				'id' 		=> 'billing_recipient_code_type_content',
-				'label' 	=> __('Metodo', 'jtlb') . ':',
+				'label' 	=> __('Metodo', 'shady') . ':',
 				'value' 	=> $method,
 				'wrapper_class' => 'form-field-wide'
 			) );
@@ -346,8 +346,8 @@ function jeet_editable_order_meta_general( $order ){  ?>
 <?php }
  
 //  save the metafields on edit from woo admin orders
-// add_action( 'woocommerce_process_shop_order_meta', 'jeet_save_general_details' );
-function jeet_save_general_details( $ord_id ){
+// add_action( 'woocommerce_process_shop_order_meta', 'shady_save_general_details' );
+function shady_save_general_details( $ord_id ){
 	update_post_meta( $ord_id, '_billing_recipient_code_type', wc_clean( $_POST[ 'billing_recipient_code_type' ] ) );
 	if (wc_clean( $_POST[ 'billing_recipient_code_type' ] ) == 'none') {
 		$method = '';
@@ -369,8 +369,8 @@ function jeet_save_general_details( $ord_id ){
  * @param array $rates Array of rates found for the package.
  * @return array
  */
-add_filter( 'woocommerce_package_rates', 'jeet_hide_shipping_when_free_is_available', 100 );
-function jeet_hide_shipping_when_free_is_available( $rates ) {
+add_filter( 'woocommerce_package_rates', 'shady_hide_shipping_when_free_is_available', 100 );
+function shady_hide_shipping_when_free_is_available( $rates ) {
 	$free = array();
 	foreach ( $rates as $rate_id => $rate ) {
 		if ( 'free_shipping' === $rate->method_id ) {
@@ -423,8 +423,8 @@ function misha_save_what_we_added( $order_id ){
 
 
 // modify html of radio field type
-// add_filter( 'woocommerce_form_field_radio', 'jeet_custom_checkout_radio_field', 10, 4 );
-function jeet_custom_checkout_radio_field( $no_parameter, $key, $args, $value ) {
+// add_filter( 'woocommerce_form_field_radio', 'shady_custom_checkout_radio_field', 10, 4 );
+function shady_custom_checkout_radio_field( $no_parameter, $key, $args, $value ) {
 
 	if ( $args['required'] ) {
 		$args['class'][] = 'validate-required';
@@ -478,10 +478,10 @@ function jeet_custom_checkout_radio_field( $no_parameter, $key, $args, $value ) 
 			$field .= '</span>';
 
 			if ($option_key == 'code') {
-				$placeholder = __('Codice univoco destinatario *', 'jtlb');
+				$placeholder = __('Codice univoco destinatario *', 'shady');
 				$content_attr = 'minlength="6" maxlength="7"';
 			} elseif ($option_key == 'mail') {
-				$placeholder = __('Indirizzo di posta elettronica certificata *', 'jtlb');
+				$placeholder = __('Indirizzo di posta elettronica certificata *', 'shady');
 			}
 
 			$field .= ($option_key !== 'none') ? '<span class="form-check-inputfield"><input type="text" name="'. esc_attr($label_id) .'_'. esc_attr($option_key) .'_input" class="input-text" placeholder="'.$placeholder.'" '.$content_attr.' autocomplete="off" required></span>' : '';
@@ -508,8 +508,8 @@ function jeet_custom_checkout_radio_field( $no_parameter, $key, $args, $value ) 
 }
 
 // modify html of hidden text type
-// add_filter('woocommerce_form_field_hidden', 'jeet_custom_checkout_hidden_field', 999, 4);
-function jeet_custom_checkout_hidden_field($no_parameter, $key, $args, $value) {
+// add_filter('woocommerce_form_field_hidden', 'shady_custom_checkout_hidden_field', 999, 4);
+function shady_custom_checkout_hidden_field($no_parameter, $key, $args, $value) {
 
     $field = '<p class="form-row ' . implode( ' ', $args['class'] ) .'" id="' . $key . '_field">
         <input type="hidden" class="input-hidden" name="' . $key . '" id="' . $key . '" placeholder="' . $args['placeholder'] . '" value="'. $value.'" />
@@ -520,14 +520,14 @@ function jeet_custom_checkout_hidden_field($no_parameter, $key, $args, $value) {
 
 
 // add custom validation to check if the method is filled 
-// add_action('woocommerce_checkout_process', 'jeet_custom_woo_checkout_process_error');
-function jeet_custom_woo_checkout_process_error() {	
+// add_action('woocommerce_checkout_process', 'shady_custom_woo_checkout_process_error');
+function shady_custom_woo_checkout_process_error() {	
 	// check if identification method is checked 
 	if (isset($_POST['billing_recipient_code_type']) && $_POST['billing_recipient_code_type'] !== 'none') {
 		// check its not none
 		$msg = '';
 		if (empty($_POST['billing_recipient_code_type_content'])) {
-			$msg .= '<strong>' . __('Metodo di identificazione per la fattura elettronica', 'jtlb') . ' </strong>' . __('is a required field.', 'woocommerce');
+			$msg .= '<strong>' . __('Metodo di identificazione per la fattura elettronica', 'shady') . ' </strong>' . __('is a required field.', 'woocommerce');
 
 			wc_add_notice( $msg, 'error' );
 		}		

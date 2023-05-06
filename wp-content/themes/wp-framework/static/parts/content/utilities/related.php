@@ -6,7 +6,7 @@ if (!empty($related[0])):
         <div class="row">
             <div class="small-12 columns">
                 <h3>
-                    <?php _e('Related', 'jtlb'); ?>
+                    <?php _e('Related', 'shady'); ?>
                 </h3>
                 <hr/>
             </div>

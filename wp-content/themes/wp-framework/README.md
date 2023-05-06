@@ -13,8 +13,8 @@ Please follow the steps below to run the site locally -
 
 1. Clone the repo to the `./wp-content/themes/`. The dev theme directory is called `wp-framework`. 
 2. Go to `wp-framework/config/local.js`. Update the values for `host` and `proxy` in the json.
-3. Open the terminal and browse to the theme directory to run the task commands. Install the dependencies listed in `package.json` by running `npm ci`. Once all the dependencies are installed run `npm run build` to create an initial build of the theme. This would create a new directory under the `themes` directory called `jtlb-theme` if everything goes well.
-4. Login to the wordpress admin and go to `Appearances > Themes`. Activate the `Aguadulce Wp Theme` and follow steps as mentioned in the admin.
+3. Open the terminal and browse to the theme directory to run the task commands. Install the dependencies listed in `package.json` by running `npm ci`. Once all the dependencies are installed run `npm run build` to create an initial build of the theme. This would create a new directory under the `themes` directory called `shady-theme` if everything goes well.
+4. Login to the wordpress admin and go to `Appearances > Themes`. Activate the `shadystuffs Wp Theme` and follow steps as mentioned in the admin.
 5. To run the website in the dev mode with hot reload of the css and javascript run `npm run start` from inside the `wp-framework`.
 6. Move the `.gitignore` file to the root of the wordpress installation and remove git from the theme directory to have the entire wordpress installation under version control.
 
@@ -27,9 +27,9 @@ Please follow the steps below to run the site locally -
 4. The `app.scss` is for the theme frontend styles while `admin.scss` for the theme backend custom pages visible only in the wp-admin sections.
 5. Similarly the `index.js` is for the theme frontend javascript while `admin.js` for the theme backend custom pages visible only in the wp-admin sections.
 6. The custom font files if any and images go inside the `wp-framework/static/assets/` into their respective directories.
-7. To create a production build run `npm run build` and replace the entire `jtlb-theme` directory in the remote server.
+7. To create a production build run `npm run build` and replace the entire `shady-theme` directory in the remote server.
 
 
 ## License
 
-Its a Aguadulce stuff with loads of love!
+Its a shadystuffs stuff with loads of love!

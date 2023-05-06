@@ -21,7 +21,7 @@
     Custom funtions for theme
     ---------------------------
 */
-function jeet_return_products_from_category_slug($slug, $limit) {
+function shady_return_products_from_category_slug($slug, $limit) {
     if(!function_exists('wc_get_products')) {
         return;
     }
@@ -61,8 +61,8 @@ function jeet_return_products_from_category_slug($slug, $limit) {
     My account overrides
     ---------------------
 */
-// add_filter('woocommerce_account_menu_items', 'jeet_remove_my_account_links');
-function jeet_remove_my_account_links($menu_links) {
+// add_filter('woocommerce_account_menu_items', 'shady_remove_my_account_links');
+function shady_remove_my_account_links($menu_links) {
 	// unset( $menu_links['edit-address'] ); // Addresses
 	//unset( $menu_links['dashboard'] ); // Dashboard
 	//unset( $menu_links['payment-methods'] ); // Payment Methods
@@ -75,8 +75,8 @@ function jeet_remove_my_account_links($menu_links) {
 }
 
 // add new link
-// add_filter('woocommerce_account_menu_items', 'jeet_add_one_more_link');
-function jeet_add_one_more_link($menu_links) {
+// add_filter('woocommerce_account_menu_items', 'shady_add_one_more_link');
+function shady_add_one_more_link($menu_links) {
 
 	// we will hook "anyuniquetext123" later
 	$new = array('my-wishlist' => 'Wishlist');
@@ -112,8 +112,8 @@ function jee_fix_woo_my_account_order() {
 /*
  * Step 1. Add Link to My Account menu
  */
-// add_filter('woocommerce_account_menu_items', 'jeet_recent_quotes_link', 40);
-function jeet_recent_quotes_link( $menu_links ){
+// add_filter('woocommerce_account_menu_items', 'shady_recent_quotes_link', 40);
+function shady_recent_quotes_link( $menu_links ){
 
 	$menu_links = array_slice( $menu_links, 0, 5, true )
 	+ array( 'my-wishlist' => 'Lista dei desideri' )
@@ -125,8 +125,8 @@ function jeet_recent_quotes_link( $menu_links ){
 /*
  * Step 2. Register Permalink Endpoint
  */
-add_action( 'init', 'jeet_add_endpoint' );
-function jeet_add_endpoint() {
+add_action( 'init', 'shady_add_endpoint' );
+function shady_add_endpoint() {
 
 	// WP_Rewrite is my Achilles' heel, so please do not ask me for detailed explanation
 	add_rewrite_endpoint( 'my-wishlist', EP_PAGES );
@@ -135,8 +135,8 @@ function jeet_add_endpoint() {
 /*
  * Step 3. Content for the new page in My Account, woocommerce_account_{ENDPOINT NAME}_endpoint
  */
-add_action( 'woocommerce_account_my-wishlist_endpoint', 'jeet_my_account_endpoint_content' );
-function jeet_my_account_endpoint_content() {
+add_action( 'woocommerce_account_my-wishlist_endpoint', 'shady_my_account_endpoint_content' );
+function shady_my_account_endpoint_content() {
 
 	// of course you can print dynamic content here, one of the most useful functions here is get_current_user_id()
 	echo '<div class="page-wishlist-wrap">';
@@ -146,9 +146,9 @@ function jeet_my_account_endpoint_content() {
 /*
 * Step 4. update page title without disturbing the menu title
 */
-// add_filter( 'the_title', 'jeet_hook_my_account_title' );
+// add_filter( 'the_title', 'shady_hook_my_account_title' );
 
-function jeet_hook_my_account_title( $title ) {
+function shady_hook_my_account_title( $title ) {
 
 	global $wp_query;
 
@@ -162,8 +162,8 @@ function jeet_hook_my_account_title( $title ) {
 
 
 // Rename page title for search results page title using the woocommerce_page_title callback
-// add_filter('woocommerce_page_title', 'jeet_filter_woocommerce_page_title', 10, 1);
-function jeet_filter_woocommerce_page_title($page_title) {
+// add_filter('woocommerce_page_title', 'shady_filter_woocommerce_page_title', 10, 1);
+function shady_filter_woocommerce_page_title($page_title) {
     if (is_search()) {
         $page_title = '<span>' . __('Risultati della ricerca : ', 'woocommerce') . '</span>"' . ucfirst(get_search_query()) . '"';
     }
@@ -172,8 +172,8 @@ function jeet_filter_woocommerce_page_title($page_title) {
 
 
 
-// add_action('wp_footer', 'jeet_woo_quantity_wp_footer');
-function jeet_woo_quantity_wp_footer() {
+// add_action('wp_footer', 'shady_woo_quantity_wp_footer');
+function shady_woo_quantity_wp_footer() {
 	if (is_product()) { ?>
 		<script>
 			woo.init();
@@ -187,9 +187,9 @@ function jeet_woo_quantity_wp_footer() {
 	show only products from certain categories
 	// the process is to hack the main query using pre get posts
 */
-// add_action( 'pre_get_posts', 'jeet_show_certain_categories_in_shop_page' );
+// add_action( 'pre_get_posts', 'shady_show_certain_categories_in_shop_page' );
 
-function jeet_show_certain_categories_in_shop_page( $q ) {
+function shady_show_certain_categories_in_shop_page( $q ) {
 
 	if ( !$q->is_main_query() ) return;
 	if ( !$q->is_post_type_archive() ) return;
@@ -212,7 +212,7 @@ function jeet_show_certain_categories_in_shop_page( $q ) {
 
 
 
-function jeet_yith_get_picked_up_message( $data, $pattern = '' ) {
+function shady_yith_get_picked_up_message( $data, $pattern = '' ) {
 	if ( ! isset( $pattern ) || ( 0 == strlen ( $pattern ) ) ) {
 		$pattern = get_option ( 'ywot_order_tracking_text' );
 		

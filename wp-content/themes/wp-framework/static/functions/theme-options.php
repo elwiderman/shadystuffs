@@ -76,7 +76,7 @@ if (is_admin()) : // Load only if we are viewing an admin page
         } ?>
         <div class="wrap theme-options-page" xmlns="http://www.w3.org/1999/html">
 
-            <h2 class="page-title"><?php echo __('Theme Options', 'jtlb'); ?></h2>
+            <h2 class="page-title"><?php echo __('Theme Options', 'shady'); ?></h2>
 
             <div class="options-tabs">
 
@@ -92,22 +92,22 @@ if (is_admin()) : // Load only if we are viewing an admin page
                         <li role="presentation" class="active nav-item">
                             <a href="#general" aria-controls="general" role="tab" data-toggle="tab"
                                class="nav-link show active">
-                                <?php echo __('General Configuration', 'jtlb'); ?>
+                                <?php echo __('General Configuration', 'shady'); ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="nav-link">
-                                <?php echo __('Social', 'jtlb'); ?>
+                                <?php echo __('Social', 'shady'); ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#contact" aria-controls="contact" role="tab" data-toggle="tab" class="nav-link">
-                                <?php echo __('Contact Information', 'jtlb'); ?>
+                                <?php echo __('Contact Information', 'shady'); ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#extra" aria-controls="extra" role="tab" data-toggle="tab" class="nav-link">
-                                <?php echo __('Extra Configuration', 'jtlb'); ?>
+                                <?php echo __('Extra Configuration', 'shady'); ?>
                             </a>
                         </li>
                     </ul>
@@ -208,7 +208,7 @@ if (is_admin()) : // Load only if we are viewing an admin page
 
                                     <div class="form-group row">
                                         <label class="col-md-2">
-                                            <?php echo __('Posts Per Page Override', 'jtlb'); ?>
+                                            <?php echo __('Posts Per Page Override', 'shady'); ?>
                                         </label>
                                         <div class="col-md-4">
                                             <input type="number" min="1" class="form-control"
@@ -220,7 +220,7 @@ if (is_admin()) : // Load only if we are viewing an admin page
 
                                     <div class="form-group row">
                                         <label class="col-md-2">
-                                            <?php echo __('Google map API key', 'jtlb'); ?>
+                                            <?php echo __('Google map API key', 'shady'); ?>
                                         </label>
                                         <div class="col-md-4">
                                             <textarea name="framework_options[extra_config][map_api]"
@@ -230,7 +230,7 @@ if (is_admin()) : // Load only if we are viewing an admin page
 
                                     <div class="form-group row">
                                         <label class="col-md-2">
-                                            <?php echo __('Latitude', 'jtlb'); ?>
+                                            <?php echo __('Latitude', 'shady'); ?>
                                         </label>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control"
@@ -241,7 +241,7 @@ if (is_admin()) : // Load only if we are viewing an admin page
 
                                     <div class="form-group row">
                                         <label class="col-md-2">
-                                            <?php echo __('Longitude', 'jtlb'); ?>
+                                            <?php echo __('Longitude', 'shady'); ?>
                                         </label>
                                         <div class="col-md-4">
                                             <input type="text" class="form-control"
@@ -252,7 +252,7 @@ if (is_admin()) : // Load only if we are viewing an admin page
 
                                     <div class="form-group row">
                                         <label class="col-md-2">
-                                            <?php echo __('Map Infowindow', 'jtlb'); ?>
+                                            <?php echo __('Map Infowindow', 'shady'); ?>
                                         </label>
                                         <div class="col-md-4">
                                             <textarea name="framework_options[extra_config][map_infowindow]"
@@ -276,7 +276,7 @@ if (is_admin()) : // Load only if we are viewing an admin page
             <?php if (false !== $_REQUEST['updated']) : ?>
                 <div class="updated fade">
                     <p>
-                        <strong><?php _e('Options saved', 'jtlb'); ?></strong>
+                        <strong><?php _e('Options saved', 'shady'); ?></strong>
                     </p>
                 </div>
             <?php endif; // If the form has just been submitted, this shows the notification

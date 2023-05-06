@@ -17,7 +17,7 @@ Please follow the steps below to run the site locally -
 4. Download the SQL dump from the server. Replace the project URLs in the sql dump with your local project URL.
 5. Replace the database installed with the new database dump. Please be careful about the credentials in `wp-config.php` and the `table_prefix`. If any change in the table_prefix update the wp-config.php accodingly.
 6. Go to `wp-content/themes/wp-framework/config/local.js`. Update the values for `host` and `proxy` in the json as per your project.
-7. Open the terminal and browse to the theme directory to run the task commands. Install the dependencies listed in `package.json` by running `npm ci`. Once all the dependencies are installed run `npm run build` to create an initial build of the theme. This would create a new directory under the `themes` directory called `jtlb-theme` if everything goes well.
+7. Open the terminal and browse to the theme directory to run the task commands. Install the dependencies listed in `package.json` by running `npm ci`. Once all the dependencies are installed run `npm run build` to create an initial build of the theme. This would create a new directory under the `themes` directory called `shady-theme` if everything goes well.
 8. Download the `wp-content/uploads` directory from the server and add to the project.
 9. To run the website in the dev mode with hot reload of the css and javascript run `npm run start` from inside the `wp-framework`.
 
@@ -29,8 +29,8 @@ Please follow the steps below to run the site locally -
 4. The `app.scss` is for the theme frontend styles while `admin.scss` for the theme backend custom pages visible only in the wp-admin sections.
 5. Similarly the `index.js` is for the theme frontend javascript while `admin.js` for the theme backend custom pages visible only in the wp-admin sections.
 6. The custom font files if any and images go inside the `wp-framework/static/assets/` into their respective directories.
-7. To create a production build run `npm run build` and replace the entire `jtlb-theme` directory in the remote server.
+7. To create a production build run `npm run build` and replace the entire `shady-theme` directory in the remote server.
 
 ## License
 
-Its a Aguadulce stuff with loads of love!
+Its a shadystuffs stuff with loads of love!

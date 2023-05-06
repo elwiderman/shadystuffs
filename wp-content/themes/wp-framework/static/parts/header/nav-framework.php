@@ -29,7 +29,7 @@
                 <div class="dropdown menu-cart">
                     <button class="btn btn-transparent dropdown-toggle" type="button" id="menuCartBtn" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-shopping-basket"></i> <?php _e('Cart', 'jtlb');?>
+                        <i class="fas fa-shopping-basket"></i> <?php _e('Cart', 'shady');?>
                         <?php
                         $count = WC()->cart->get_cart_contents_count();
                         if ($count > 0) {
