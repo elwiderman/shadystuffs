@@ -45,19 +45,19 @@ function jeetlab_framework_register_required_plugins() {
             'required' => true,
             'force_activation' => true
         ),
-        array(
-            'name' => 'Meta Box',
-            'slug' => 'meta-box',
-            'required' => true,
-            'force_activation' => true
-        ),
-        array(
-            'name' => 'Meta Box AIO',
-            'slug' => 'meta-box-aio',
-            'source' => get_template_directory() . '/plugins/meta-box-aio.zip',
-            'required' => true,
-            'force_activation' => true
-        ),
+        // array(
+        //     'name' => 'Meta Box',
+        //     'slug' => 'meta-box',
+        //     'required' => true,
+        //     'force_activation' => true
+        // ),
+        // array(
+        //     'name' => 'Meta Box AIO',
+        //     'slug' => 'meta-box-aio',
+        //     'source' => get_template_directory() . '/plugins/meta-box-aio.zip',
+        //     'required' => true,
+        //     'force_activation' => true
+        // ),
         array(
             'name' => 'Category Order and Taxonomy Terms Order',
             'slug' => 'taxonomy-terms-order',
