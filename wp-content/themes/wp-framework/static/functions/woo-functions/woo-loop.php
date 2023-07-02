@@ -4,13 +4,13 @@
     Author: Ajasra Das
 */
 
-add_action('woocommerce_before_shop_loop', 'jeet_woo_before_shop_loop_start', 9);
-function jeet_woo_before_shop_loop_start() {
+add_action('woocommerce_before_shop_loop', 'shady_woo_before_shop_loop_start', 9);
+function shady_woo_before_shop_loop_start() {
     echo '<div class="row"><div class="col-12">';
 }
 
-add_action('woocommerce_before_shop_loop', 'jeet_woo_before_shop_loop_end', 31);
-function jeet_woo_before_shop_loop_end() {
+add_action('woocommerce_before_shop_loop', 'shady_woo_before_shop_loop_end', 31);
+function shady_woo_before_shop_loop_end() {
     echo '</div></div>';
 
     echo '<div class="row">';
@@ -19,8 +19,8 @@ function jeet_woo_before_shop_loop_end() {
 
     echo '<div class="col-md-9">';
 }
-add_action('woocommerce_after_shop_loop', 'jeet_woo_after_shop_loop', 31);
-function jeet_woo_after_shop_loop() {
+add_action('woocommerce_after_shop_loop', 'shady_woo_after_shop_loop', 31);
+function shady_woo_after_shop_loop() {
     echo '</div>';
     echo '<!-- shop loop end -->';
 
@@ -32,12 +32,12 @@ remove_action('woocommerce_sidebar', 'woocommerce_get_sidebar', 10);
 
 
 
-add_action('woocommerce_before_main_content', 'jeet_woo_before_main_content_start', 9);
-function jeet_woo_before_main_content_start() {
+add_action('woocommerce_before_main_content', 'shady_woo_before_main_content_start', 9);
+function shady_woo_before_main_content_start() {
     echo '<div class="container-fluid"><div class="row"><div class="col-12">';
 }
-add_action('woocommerce_before_main_content', 'jeet_woo_before_main_content_end', 29);
-function jeet_woo_before_main_content_end() {
+add_action('woocommerce_before_main_content', 'shady_woo_before_main_content_end', 29);
+function shady_woo_before_main_content_end() {
     echo '</div></div></div>';
     echo '<!-- main loop start -->';
     echo '<div class="container"><div class="row"><div class="col-12">';
@@ -45,8 +45,8 @@ function jeet_woo_before_main_content_end() {
 
 
 
-add_action('woocommerce_after_main_content', 'jeet_woo_after_main_content', 11);
-function jeet_woo_after_main_content() {
+add_action('woocommerce_after_main_content', 'shady_woo_after_main_content', 11);
+function shady_woo_after_main_content() {
     echo '</div></div></div>';
     echo '<!-- main loop end -->';
 }
@@ -68,14 +68,14 @@ function jeet_woo_after_main_content() {
 	----------------------
 */
 // add wrap to category thumb
-// add_action('woocommerce_before_subcategory', 'jeet_add_wrap_to_product_cat_term', 9);
-function jeet_add_wrap_to_product_cat_term() {
+// add_action('woocommerce_before_subcategory', 'shady_add_wrap_to_product_cat_term', 9);
+function shady_add_wrap_to_product_cat_term() {
 	echo '<div class="cat-wrap">';
 }
 
 // close wrap to category thumb
-// add_action('woocommerce_after_subcategory', 'jeet_close_wrap_to_product_cat_term', 10);
-function jeet_close_wrap_to_product_cat_term() {
+// add_action('woocommerce_after_subcategory', 'shady_close_wrap_to_product_cat_term', 10);
+function shady_close_wrap_to_product_cat_term() {
 	echo '</div>';
 }
 
@@ -86,8 +86,8 @@ function jeet_close_wrap_to_product_cat_term() {
 // remove the original thumb to insert the new one
 // remove_action('woocommerce_before_subcategory_title', 'woocommerce_subcategory_thumbnail', 10);
 // get the full image size for terms
-// add_action('woocommerce_before_subcategory_title', 'jeet_override_thumb_image_of_subcategories', 10);
-function jeet_override_thumb_image_of_subcategories($category) {
+// add_action('woocommerce_before_subcategory_title', 'shady_override_thumb_image_of_subcategories', 10);
+function shady_override_thumb_image_of_subcategories($category) {
 	$thumb_id = get_term_meta($category->term_id, 'thumbnail_id', true);
 	$thumb = wp_get_attachment_image_src($thumb_id, 'full')[0];
 
@@ -97,7 +97,7 @@ function jeet_override_thumb_image_of_subcategories($category) {
 
 /* Override grid/list toggle plugin class to remove buggy excerpt from shop archive items */
 // if (class_exists('WC_List_Grid')) {
-// 	class Jeet_WC_List_Grid extends WC_List_Grid {
+// 	class shady_WC_List_Grid extends WC_List_Grid {
 
 // 		function setup_gridlist() {
 // 			if ( is_shop() || is_product_category() || is_product_tag() || is_product_taxonomy() ) {
@@ -106,7 +106,7 @@ function jeet_override_thumb_image_of_subcategories($category) {
 // 		}
 // 	}
 
-// 	$WC_List_Grid = new Jeet_WC_List_Grid();
+// 	$WC_List_Grid = new shady_WC_List_Grid();
 // }
 
 

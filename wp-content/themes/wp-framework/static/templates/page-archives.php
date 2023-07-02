@@ -100,7 +100,7 @@ PAGINATION;
         else:
 
             /* NO POSTS HAS BEEN FOUND IN THE DB */
-            $string = __('There are currently no posts to show', 'jtlb');
+            $string = __('There are currently no posts to show', 'shady');
             echo <<<NOPOST
                 <div class="row justify-content-center">
                     <div class="col-12">

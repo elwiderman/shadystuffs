@@ -6,8 +6,8 @@ require_once('bs4navwalker.php');
 // Register menus
 register_nav_menus(
     array(
-        'main-nav' => __('Main Menu', 'jtlb'),   // Main nav in header
-        'footer-links' => __('Footer Menu', 'jtlb')
+        'main-nav' => __('Main Menu', 'shady'),   // Main nav in header
+        'footer-links' => __('Footer Menu', 'shady')
     )
 );
 

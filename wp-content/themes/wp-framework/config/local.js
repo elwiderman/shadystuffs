@@ -1,7 +1,7 @@
 /* Settings for the local setup */
 
 module.exports = {
-    host: 'shadystufffs.aja/', 	// directory name eg. example.com
+    host: 'shadystufffs.aja', 	// directory name eg. example.com
 	proxy: 'http://shadystufffs.aja/',	// project url eg. http://example.com/
 	wpStyle: `
 /*

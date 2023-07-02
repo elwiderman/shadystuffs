@@ -1,9 +1,12 @@
 <?php
 // installer
-require_once(get_template_directory().'/functions/install-activate.php');
+// require_once(get_template_directory().'/functions/install-activate.php');
 
 // Required plugins
-require_once(get_template_directory().'/functions/required_plugins.php');
+// require_once(get_template_directory().'/functions/required_plugins.php');
+
+// ACF
+require_once(get_template_directory().'/functions/acf.php');
 
 // WP Head and other cleanup functions
 require_once(get_template_directory().'/functions/cleanup.php');
@@ -24,13 +27,13 @@ require_once(get_template_directory().'/functions/page-navi.php');
 require_once(get_template_directory().'/functions/image.php');
 
 // Theme options
-require_once(get_template_directory().'/functions/theme-options.php');
+// require_once(get_template_directory().'/functions/theme-options.php');
 
 // Cpt
 require_once(get_template_directory().'/functions/cpt.php');
 
 // Metabox
-require_once(get_template_directory().'/functions/metabox.php');
+// require_once(get_template_directory().'/functions/metabox.php');
 
 // Ajax
 require_once(get_template_directory().'/functions/ajax.php');

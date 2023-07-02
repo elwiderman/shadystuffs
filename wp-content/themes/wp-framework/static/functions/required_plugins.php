@@ -45,19 +45,19 @@ function jeetlab_framework_register_required_plugins() {
             'required' => true,
             'force_activation' => true
         ),
-        array(
-            'name' => 'Meta Box',
-            'slug' => 'meta-box',
-            'required' => true,
-            'force_activation' => true
-        ),
-        array(
-            'name' => 'Meta Box AIO',
-            'slug' => 'meta-box-aio',
-            'source' => get_template_directory() . '/plugins/meta-box-aio.zip',
-            'required' => true,
-            'force_activation' => true
-        ),
+        // array(
+        //     'name' => 'Meta Box',
+        //     'slug' => 'meta-box',
+        //     'required' => true,
+        //     'force_activation' => true
+        // ),
+        // array(
+        //     'name' => 'Meta Box AIO',
+        //     'slug' => 'meta-box-aio',
+        //     'source' => get_template_directory() . '/plugins/meta-box-aio.zip',
+        //     'required' => true,
+        //     'force_activation' => true
+        // ),
         array(
             'name' => 'Category Order and Taxonomy Terms Order',
             'slug' => 'taxonomy-terms-order',
@@ -84,14 +84,14 @@ function jeetlab_framework_register_required_plugins() {
     * Array of configuration settings. Amend each line as needed.
     */
     $config = array(
-        'id' => 'jtlb',
+        'id' => 'shady',
         'default_path' => '',
         'menu' => 'framework-install-plugins',
         'parent_slug' => 'themes.php',
         'capability' => 'edit_theme_options',
         'has_notices' => true,
         'dismissable' => false,
-        'dismiss_msg' => __('The following plugins are essential for the theme to work as expected.', 'jtlb'),
+        'dismiss_msg' => __('The following plugins are essential for the theme to work as expected.', 'shady'),
         'is_automatic' => true,
         'message' => '',
     );

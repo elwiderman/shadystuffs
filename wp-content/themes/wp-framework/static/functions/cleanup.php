@@ -74,7 +74,7 @@ function joints_excerpt_more($more)
 {
     global $post;
     // edit here if you like
-    return '<a class="excerpt-read-more" href="' . get_permalink($post->ID) . '" title="' . __('Read', 'jtlb') . get_the_title($post->ID) . '">' . __('... Read more &raquo;', 'jtlb') . '</a>';
+    return '<a class="excerpt-read-more" href="' . get_permalink($post->ID) . '" title="' . __('Read', 'shady') . get_the_title($post->ID) . '">' . __('... Read more &raquo;', 'shady') . '</a>';
 }
 
 //  Stop WordPress from using the sticky class (which conflicts with Foundation), and style WordPress sticky posts using the .wp-sticky class instead
@@ -99,7 +99,7 @@ function joints_get_the_author_posts_link()
     $link = sprintf(
         '<a href="%1$s" title="%2$s" rel="author">%3$s</a>',
         get_author_posts_url($authordata->ID, $authordata->user_nicename),
-        esc_attr(sprintf(__('Posts by %s', 'jtlb'), get_the_author())), // No further l10n needed, core will take care of this one
+        esc_attr(sprintf(__('Posts by %s', 'shady'), get_the_author())), // No further l10n needed, core will take care of this one
         get_the_author()
     );
     return $link;

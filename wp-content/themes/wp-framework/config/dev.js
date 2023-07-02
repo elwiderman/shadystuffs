@@ -7,7 +7,7 @@ module.exports = merge(common, {
 	mode: 'development',
 	devtool: 'cheap-eval-source-map',
 	output: {
-		publicPath: '/wp-content/themes/jtlb-theme/assets/',
+		publicPath: '/wp-content/themes/shady-theme/assets/',
 	},
 	devServer: {
 		host: local.host,

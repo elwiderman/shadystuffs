@@ -6,10 +6,10 @@
 
 
 /* add seed on theme activation */
-add_action('after_switch_theme', 'jeet_create_seed_after_theme_switch');
+add_action('after_switch_theme', 'shady_create_seed_after_theme_switch');
 
-function jeet_create_seed_after_theme_switch () {
-    $theme_activated = get_option('jtlb_theme_active');
+function shady_create_seed_after_theme_switch () {
+    $theme_activated = get_option('shady_theme_active');
 
     // do the stuff if theme is not activated or is activated for the first time
     if (!$theme_activated) :
@@ -194,7 +194,7 @@ function jeet_create_seed_after_theme_switch () {
             $locations['main-nav'] = $menu_id;
             set_theme_mod( 'nav_menu_locations', $locations );
 
-            add_option( 'jtlb_theme_active', true );
+            add_option( 'shady_theme_active', true );
         }
 
     endif;    
@@ -204,9 +204,9 @@ function jeet_create_seed_after_theme_switch () {
 // on cf7 activate for the first time add the shortcode to the contact page
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 // add shortcode to contact page on cf7 activate
-register_activation_hook( 'contact-form-7/wp-contact-form-7.php', 'jeet_add_shortcode_to_contact_page_on_activate');
+register_activation_hook( 'contact-form-7/wp-contact-form-7.php', 'shady_add_shortcode_to_contact_page_on_activate');
 
-function jeet_add_shortcode_to_contact_page_on_activate() {
+function shady_add_shortcode_to_contact_page_on_activate() {
     $cf_query = new WP_Query(array(
         'post_type'         => 'wpcf7_contact_form',
         'posts_per_page'    => 1
@@ -239,10 +239,10 @@ function jeet_add_shortcode_to_contact_page_on_activate() {
         $contact_page_id = wp_insert_post($contact_data);
 
         if (!is_wp_error($contact_page_id)) {
-            update_post_meta($contact_page_id, 'jeet_contact_shortcode', $shortcode);
+            update_post_meta($contact_page_id, 'shady_contact_shortcode', $shortcode);
         }
 
     } else {
-        update_post_meta($contact_page->ID, 'jeet_contact_shortcode', $shortcode);
+        update_post_meta($contact_page->ID, 'shady_contact_shortcode', $shortcode);
     }
 }

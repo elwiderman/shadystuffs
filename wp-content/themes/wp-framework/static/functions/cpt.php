@@ -5,16 +5,16 @@ if (function_exists('register_post_type')) {
     // CPT Example --------------------------------------------------------------------------------------------*/
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*$labels = array(
-        'name' => _x('Example name', 'post type general name', 'jtlb'),
-        'singular_name' => _x('Example name', 'post type singular name', 'jtlb'),
-        'add_new' => _x('Add new example', 'example', 'jtlb'),
-        'add_new_item' => __('Add new example', 'jtlb'),
-        'edit_item' => __('Edit example', 'jtlb'),
-        'new_item' => __('New example', 'jtlb'),
-        'view_item' => __('View example', 'jtlb'),
-        'search_items' => __('Search example', 'jtlb'),
-        'not_found' => __('No Prexampleess found', 'jtlb'),
-        'not_found_in_trash' => __('No example found in trash', 'jtlb'),
+        'name' => _x('Example name', 'post type general name', 'shady'),
+        'singular_name' => _x('Example name', 'post type singular name', 'shady'),
+        'add_new' => _x('Add new example', 'example', 'shady'),
+        'add_new_item' => __('Add new example', 'shady'),
+        'edit_item' => __('Edit example', 'shady'),
+        'new_item' => __('New example', 'shady'),
+        'view_item' => __('View example', 'shady'),
+        'search_items' => __('Search example', 'shady'),
+        'not_found' => __('No Prexampleess found', 'shady'),
+        'not_found_in_trash' => __('No example found in trash', 'shady'),
         'parent_item_colon' => '',
         'menu_name' => 'Example'
     );
@@ -54,16 +54,16 @@ if (function_exists('register_post_type')) {
     // CPT SLIDER ---------------------------------------------------------------------------------------------- */
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /* $labels = array(
-        'name' => _x('Slider', 'post type general name', 'jtlb'),
-        'singular_name' => _x('Slider', 'post type singular name', 'jtlb'),
-        'add_new' => _x('Add new slide', 'slider', 'jtlb'),
-        'add_new_item' => __('Add new slide', 'jtlb'),
-        'edit_item' => __('Modify slide', 'jtlb'),
-        'new_item' => __('New slide', 'jtlb'),
-        'view_item' => __('View slide', 'jtlb'),
-        'search_items' => __('Search slide', 'jtlb'),
-        'not_found' => __('No slides found', 'jtlb'),
-        'not_found_in_trash' => __('No slide found in trash', 'jtlb'),
+        'name' => _x('Slider', 'post type general name', 'shady'),
+        'singular_name' => _x('Slider', 'post type singular name', 'shady'),
+        'add_new' => _x('Add new slide', 'slider', 'shady'),
+        'add_new_item' => __('Add new slide', 'shady'),
+        'edit_item' => __('Modify slide', 'shady'),
+        'new_item' => __('New slide', 'shady'),
+        'view_item' => __('View slide', 'shady'),
+        'search_items' => __('Search slide', 'shady'),
+        'not_found' => __('No slides found', 'shady'),
+        'not_found_in_trash' => __('No slide found in trash', 'shady'),
         'parent_item_colon' => '',
         'menu_name' => 'Slider'
     );
@@ -93,7 +93,7 @@ if (function_exists('register_post_type')) {
 /* 
     DEBUGGER for custom rewrite rules !!
 */
-function jeet_debug_rewrite_rules() {
+function shady_debug_rewrite_rules() {
     global $wp, $template, $wp_rewrite;
 
     echo '<pre style="margin: 120px 0 0 150px;">';
@@ -111,7 +111,7 @@ function jeet_debug_rewrite_rules() {
     print_r($wp_rewrite->rules);
     echo '</pre>';
 }
-// add_action( 'wp_head', 'jeet_debug_rewrite_rules' );
+// add_action( 'wp_head', 'shady_debug_rewrite_rules' );
 
 // flush_rewrite_rules(true);
 // wp_cache_flush();

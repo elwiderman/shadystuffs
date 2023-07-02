@@ -20,7 +20,7 @@ module.exports = {
 		// metabox: ['./src/scripts/metabox.js', './src/scss/metabox.scss'],
 	},
 	output: {
-		path: path.resolve(__root, '../jtlb-theme/assets'),
+		path: path.resolve(__root, '../shady-theme/assets'),
 		filename: 'scripts/[name].min.js',
 		chunkFilename: 'scripts/[name].min.js',
 	},
@@ -66,7 +66,7 @@ module.exports = {
 			title: 'Hot Module Replacement',
 		}),
 		new CleanWebpackPlugin(
-			['jtlb-theme'],
+			['shady-theme'],
 			{ 
 				root: path.resolve(__dirname, '../../'),
 				verbose: true
@@ -75,7 +75,7 @@ module.exports = {
 		new CopyWebpackPlugin([
 			{
 				from: path.resolve(__root, 'static'),
-				to: path.resolve(__root, '../jtlb-theme'),
+				to: path.resolve(__root, '../shady-theme'),
 			}
 		]),
 		// extract css into dedicated file
@@ -89,7 +89,7 @@ module.exports = {
 			notify: true,
 			reloadOnRestart: false,
 			open: 'external',
-			files: ['../jtlb-theme/assets/**/*.css', '../jtlb-theme/**/*.php'],
+			files: ['../shady-theme/assets/**/*.css', '../shady-theme/**/*.php'],
 			cors: true,
 			ui: false
 		}, {
@@ -101,7 +101,7 @@ module.exports = {
 			jQuery: 'jquery',
 		}),
 		new CreateFileWebpack({
-			path: '../jtlb-theme',
+			path: '../shady-theme',
 			fileName: 'style.css',
 			content: local.wpStyle
 		})

@@ -43,7 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php echo wc_get_formatted_cart_item_data( $cart_item ); ?>
 
 							<?php
-							$unit_qty = get_post_meta($_product->get_id(), 'jeet_woo_product_unit_qty', true);
+							$unit_qty = get_post_meta($_product->get_id(), 'shady_woo_product_unit_qty', true);
 							echo "<p class='unit-qty'>{$unit_qty}</p>";
 							?>
 						</td>

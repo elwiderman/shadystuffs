@@ -17,7 +17,7 @@ if (have_posts()):
         get_the_title(),
         get_the_post_thumbnail_url($post->ID, 'page-header'),
         get_the_content(),
-        rwmb_meta('jeet_contact_shortcode'),
+        rwmb_meta('shady_contact_shortcode'),
     );
     ?>
         <section class="single-page single-contact">

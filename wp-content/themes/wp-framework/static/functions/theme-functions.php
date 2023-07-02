@@ -2,8 +2,8 @@
 
 /* Enqueue Dashicons style for frontend use
 ------------------------------------*/
-add_action('admin_enqueue_scripts', 'jeet_enqueue_dashicons');
-function jeet_enqueue_dashicons() {
+add_action('admin_enqueue_scripts', 'shady_enqueue_dashicons');
+function shady_enqueue_dashicons() {
     wp_enqueue_style('dashicons');
 }
 
@@ -29,8 +29,8 @@ STYLE;
 
 /* ADD EXCERPT TO PAGES
 ------------------------------------*/
-add_action('init', 'jeet_add_excerpts_to_pages');
-function jeet_add_excerpts_to_pages() {
+add_action('init', 'shady_add_excerpts_to_pages');
+function shady_add_excerpts_to_pages() {
     add_post_type_support('page', 'excerpt');
 }
 
@@ -60,9 +60,9 @@ add_theme_support('post-formats',
         //'chat'               // chat transcript
     )
 );
-add_action('after_setup_theme', 'jeet_remove_post_formats', 100);
+add_action('after_setup_theme', 'shady_remove_post_formats', 100);
 
-function jeet_remove_post_formats() {
+function shady_remove_post_formats() {
    remove_theme_support('post-formats');
 }
 
@@ -103,7 +103,7 @@ function wpml_current_lang()
 ------------------------------------*/
 if (class_exists('WooCommerce')) {
 
-    function jeet_woocommerce_support() {
+    function shady_woocommerce_support() {
         add_theme_support('woocommerce', array(
             'thumbnail_image_width' => 150,
             'single_image_width'    => 300,
@@ -121,18 +121,18 @@ if (class_exists('WooCommerce')) {
         add_theme_support('wc-product-gallery-lightbox');
         add_theme_support('wc-product-gallery-slider');
     }
-    add_action('after_setup_theme', 'jeet_woocommerce_support');
+    add_action('after_setup_theme', 'shady_woocommerce_support');
 }
 
 
 /* CUSTOM BACKEND FOOTER
 ------------------------------------*/
-function jeet_custom_admin_footer()
+function shady_custom_admin_footer()
 {
-    _e('<span id="footer-thankyou">Developed by <a href="https://aguadulcehq.com/" target="_blank">Aguadulce</a></span>', 'jtlb');
+    _e('<span id="footer-thankyou">Developed by <a href="https://shadystuffs.com/" target="_blank">Shady Stuffs</a></span>', 'shady');
 }
 
-add_filter('admin_footer_text', 'jeet_custom_admin_footer');
+add_filter('admin_footer_text', 'shady_custom_admin_footer');
 
 
 /* MENU LINK ARCHIVI CPT
@@ -183,7 +183,7 @@ function wpclean_metabox_menu_posttype_archive()
 
         echo '<p class="button-controls">';
         echo '<span class="add-to-menu">';
-        echo '<input type="submit"' . disabled(1, 0) . ' class="button-secondary submit-add-to-menu right" value="' . __('Add to Menu', 'jtlb') . '" name="add-posttype-archive-menu-item" id="submit-posttype-archive" />';
+        echo '<input type="submit"' . disabled(1, 0) . ' class="button-secondary submit-add-to-menu right" value="' . __('Add to Menu', 'shady') . '" name="add-posttype-archive-menu-item" id="submit-posttype-archive" />';
         echo '<span class="spinner"></span>';
         echo '</span>';
         echo '</p>';
@@ -325,7 +325,7 @@ function social_menu($menu_class, $position)
 
 
 /* Removing using of .bmp files */
-function jeet_mime_types_setting($mime_types)
+function shady_mime_types_setting($mime_types)
 {
     unset($mime_types['bmp']); //Removing the bmp extension
     unset($mime_types['tif|tiff']); //Removing the tiff extension
@@ -335,7 +335,7 @@ function jeet_mime_types_setting($mime_types)
     return $mime_types;
 }
 
-add_filter('upload_mimes', 'jeet_mime_types_setting', 1, 1);
+add_filter('upload_mimes', 'shady_mime_types_setting', 1, 1);
 
 
 /* Gets the content with formatting */
@@ -368,18 +368,18 @@ function strip_shortcode_gallery($content)
 }
 
 /* Removal of certain posts and pages from wordpress search. eg.contact page, banner,etc */
-function jeet_remove_from_search_filter($query)
+function shady_remove_from_search_filter($query)
 {
     if (!$query->is_admin && $query->is_search && $query->is_main_query()) {
 //    $query->set( 'post__not_in', array( 66 ) ); //add post ids to the array
     }
 }
 
-add_action('pre_get_posts', 'jeet_remove_from_search_filter');
+add_action('pre_get_posts', 'shady_remove_from_search_filter');
 
 
 /* Replacing default wp-gallery with custom lightbox gallery inside posts and pages */
-function jeet_custom_gallery_shortcode($output = '', $atts, $instance)
+function shady_custom_gallery_shortcode($output = '', $atts, $instance)
 {
     $return = $output; // fallback
     /*echo '<pre>';
@@ -426,7 +426,7 @@ GALL;
 //    return $return;
 }
 
-add_filter('post_gallery', 'jeet_custom_gallery_shortcode', 10, 3);
+add_filter('post_gallery', 'shady_custom_gallery_shortcode', 10, 3);
 
 
 /* Get Vimeo video Id */
@@ -450,16 +450,16 @@ function youtube_id($video)
 
 
 /* Adding favicon to admin pages */
-function jeet_add_favicon()
+function shady_add_favicon()
 {
-    $favicon_url = image('admin-favicon.png');
+    $favicon_url = image('theme/admin-favicon.png');
     echo '<link rel="shortcut icon" type="image/x-icon" href="' . $favicon_url . '" />';
 }
 /* Adding custom logo to wp login page */
-function jeet_login_logo() { ?>
+function shady_login_logo() { ?>
     <style type="text/css">
         #login h1 a, .login h1 a {
-            background-image: url(<?php echo image('logo.png') ?>);
+            background-image: url(<?php echo image('theme/admin-logo.png') ?>);
             height: 57px;
             width: 100%;
             background-size: contain;
@@ -469,11 +469,11 @@ function jeet_login_logo() { ?>
         }
     </style>
 <?php }
-add_action( 'login_enqueue_scripts', 'jeet_login_logo' );
+add_action( 'login_enqueue_scripts', 'shady_login_logo' );
 
 // need to make sure that function runs when you're on the login page and admin pages
-add_action('login_head', 'jeet_add_favicon');
-add_action('admin_head', 'jeet_add_favicon');
+add_action('login_head', 'shady_add_favicon');
+add_action('admin_head', 'shady_add_favicon');
 
 
 // custom breadcrumbs
@@ -689,7 +689,7 @@ function get_custom_breadcrumbs()
 }
 
 /* Remove wp editor in certain pages */
-function jeet_hide_editor() {
+function shady_hide_editor() {
     if (is_admin()) {
         // check if post/page
         $screen = get_current_screen();
@@ -718,13 +718,13 @@ function jeet_hide_editor() {
         }
     }
 }
-add_action('current_screen', 'jeet_hide_editor');
+add_action('current_screen', 'shady_hide_editor');
 
 
 /*
 ** Adding bootstrap responsive oembed wrapper to videos added through the wp-editor
 */
-function jeet_embed_oembed_html( $cache, $url, $attr, $post_ID ) {
+function shady_embed_oembed_html( $cache, $url, $attr, $post_ID ) {
     $classes = array();
     // Add these classes to all embeds.
     $classes_all = array(
@@ -744,7 +744,7 @@ function jeet_embed_oembed_html( $cache, $url, $attr, $post_ID ) {
 
     return '<div class="' . esc_attr( implode( $classes, ' ' ) ) . '">' . $cache . '</div>';
 }
-add_filter('embed_oembed_html', 'jeet_embed_oembed_html', 99, 4);
+add_filter('embed_oembed_html', 'shady_embed_oembed_html', 99, 4);
 
 
 /*
@@ -761,23 +761,23 @@ function placeholder_src($size) {
 /*
 ** Limit classificazione taxonomy selection to one, by converting it to radio button instead of the usual checkboxes
 */
-function jeet_taxo_checktoradio(){
+function shady_taxo_checktoradio(){
     echo '<script type="text/javascript">jQuery("#classificazione-pop input, #classificazionechecklist input, .cat-checklist.classificazione-checklist input").each(function(){this.type="radio"});</script>';
 }
 
-// add_action('admin_footer', 'jeet_taxo_checktoradio');
+// add_action('admin_footer', 'shady_taxo_checktoradio');
 
 
 /* Add css to iframe loaded page in visual composer */
-// add_action( 'admin_enqueue_scripts', 'jeet_visual_composer_override' );
+// add_action( 'admin_enqueue_scripts', 'shady_visual_composer_override' );
 
-function jeet_visual_composer_override() {
+function shady_visual_composer_override() {
     wp_enqueue_script('jeet-vc-override', get_template_directory_uri() . '/assets/js/jt_admin.js', array('jquery'), '1.0.0', true);
 }
 
 
 /* Modify asset names on wp upload */
-/* function jeet_modify_uploaded_file_names($file) {
+/* function shady_modify_uploaded_file_names($file) {
     $info = pathinfo($file['name']);
     $ext  = empty($info['extension']) ? '' : '.' . $info['extension'];
     $name = basename($file['name'], $ext);
@@ -787,7 +787,7 @@ function jeet_visual_composer_override() {
     // $file['name'] = base64_encode($name) . $ext; // base64 method
     return $file;
 } */
-// add_filter('wp_handle_upload_prefilter', 'jeet_modify_uploaded_file_names', 1, 1);
+// add_filter('wp_handle_upload_prefilter', 'shady_modify_uploaded_file_names', 1, 1);
 
 
 
@@ -811,7 +811,7 @@ function adjust_show_request($request) {
 
 /* To add custom taxonomy in the url of CPT */
 // here the taxonmy is called servizi - change accordingly
-function jeet_custom_portfolio_post_link( $post_link, $id = 0 ) {
+function shady_custom_portfolio_post_link( $post_link, $id = 0 ) {
     $post = get_post($id);
     if ( is_object( $post ) ){
         $terms = wp_get_object_terms( $post->ID, 'servizi' );
@@ -821,13 +821,13 @@ function jeet_custom_portfolio_post_link( $post_link, $id = 0 ) {
     }
     return $post_link;
 }
-// add_filter('post_type_link', 'jeet_custom_portfolio_post_link', 1, 3);
+// add_filter('post_type_link', 'shady_custom_portfolio_post_link', 1, 3);
 
 
 /* Limit post revisions */
-add_filter('wp_revisions_to_keep', 'jeet_wp_revisions_to_keep', 10, 2 );
+add_filter('wp_revisions_to_keep', 'shady_wp_revisions_to_keep', 10, 2 );
 
-function jeet_wp_revisions_to_keep( $num, $post ) {
+function shady_wp_revisions_to_keep( $num, $post ) {
     // can be set for certain post types
     // if( 'custom_post_type' == $post->post_type ) {
 	//     $num = 5;
@@ -838,13 +838,13 @@ function jeet_wp_revisions_to_keep( $num, $post ) {
 
 
 // prevent pages from being displayed in the search results
-function jeet_exclude_posts_from_search( $query ) {
+function shady_exclude_posts_from_search( $query ) {
     if ( $query->is_search && $query->is_main_query() ) {
         $query->set( 'post__not_in', array( 79 ) );
     }
 }
 
-add_action( 'pre_get_posts', 'jeet_exclude_posts_from_search' );
+add_action( 'pre_get_posts', 'shady_exclude_posts_from_search' );
 
 
 
@@ -854,9 +854,9 @@ add_action( 'pre_get_posts', 'jeet_exclude_posts_from_search' );
 *2: do the preg replace for the entry
 *3: save it back after unserializing so that wp fixes the serilization issue
 */
-// add_action('init', 'jeet_fix_serizliztion_issues');
+// add_action('init', 'shady_fix_serizliztion_issues');
 
-function jeet_fix_serizliztion_issues() {
+function shady_fix_serizliztion_issues() {
     $query = "SELECT * FROM wp_options WHERE option_name = 'framework_options'";
     $result = $wpdb->get_results($query);
 

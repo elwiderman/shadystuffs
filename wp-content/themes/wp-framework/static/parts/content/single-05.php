@@ -59,7 +59,7 @@ FEATIMG;
                 if (!empty($related)) { ?>
                     <div class="row related-items">
                         <div class="title-area col-md-12">
-                            <h1><?php _e('Related posts', 'jtlb'); ?></h1>
+                            <h1><?php _e('Related posts', 'shady'); ?></h1>
                         </div>
                         <div class="col-md-12">
                             <div class="related-list owl-carousel owl-theme">

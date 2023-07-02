@@ -6,10 +6,10 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <div class="title-area text-center">
-                            <h1><?php _e('Want to know more?', 'jtlb'); ?></h1>
+                            <h1><?php _e('Want to know more?', 'shady'); ?></h1>
                             <p class="lead"><?php _e('Fill the form below, we will contact you as soon as possible
 
-', 'jtlb'); ?></p>
+', 'shady'); ?></p>
                         </div>
                     </div>
                 </div>

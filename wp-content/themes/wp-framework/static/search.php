@@ -9,7 +9,7 @@ $search = get_search_query();
     <section class="page-header">
         <div class="container">
             <div class="row">
-                <h1><?php _e('Search Results', 'jtlb');?></h1>
+                <h1><?php _e('Search Results', 'shady');?></h1>
             </div>
         </div>
     </section>
@@ -22,9 +22,9 @@ $search = get_search_query();
                 <div class="col-lg-12">
                     <div class="title-area">
                         <div class="lead">
-                            <?php _e('We have found ', 'jtlb');
+                            <?php _e('We have found ', 'shady');
                             echo $count; ?>
-                            <?php _e('results containing: ', 'jtlb');
+                            <?php _e('results containing: ', 'shady');
                             echo '"' . $search . '"'; ?>
                         </div>
                     </div>
@@ -100,7 +100,7 @@ PAGINATION;
                 else:
 
                     /* NO POSTS HAS BEEN FOUND IN THE DB */
-                    $string = __('There are currently no posts to show', 'jtlb');
+                    $string = __('There are currently no posts to show', 'shady');
                     echo <<<NOPOST
                     <div class="row">
                         <div class="small-12 medium-12 large-12 columns">

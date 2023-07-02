@@ -22,10 +22,5 @@ import 'slick-carousel';
 import 'simplebar';
 
 ready(() => {
-    window.appCommon = new AppCommon();
-    window.appCommon.init();
-
-    // initialize the home 
-    window.home = new Home();
-    window.home.init();
+    new AppCommon();
 });

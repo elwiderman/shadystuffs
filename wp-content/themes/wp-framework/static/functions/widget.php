@@ -3,9 +3,9 @@
 class JeetMailchimpWidget extends WP_Widget {
     public function __construct() {
         parent::__construct(
-            'jeet_mailchimp_widget', // base ID of widget
-            __('Jeetlab Mailchimp', 'jtlb'), // widget name
-            array('description' => __('Displays the Mailchimp form using the shortcode in the widget area.', 'jtlb'))
+            'shady_mailchimp_widget', // base ID of widget
+            __('Jeetlab Mailchimp', 'shady'), // widget name
+            array('description' => __('Displays the Mailchimp form using the shortcode in the widget area.', 'shady'))
         );
     }
 
@@ -35,20 +35,20 @@ class JeetMailchimpWidget extends WP_Widget {
             $shortcode = $instance['shortcode'];
         }
         else {
-            $title = __('Subscribe for Newsletter', 'jtlb');
+            $title = __('Subscribe for Newsletter', 'shady');
         }
 
         // Widget admin form
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'jtlb');?>:</label>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'shady');?>:</label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('shortcode'); ?>"><?php _e('Shortcode', 'jtlb'); ?> <span class="requried">*</span>:</label>
+            <label for="<?php echo $this->get_field_id('shortcode'); ?>"><?php _e('Shortcode', 'shady'); ?> <span class="requried">*</span>:</label>
             <input class="widefat" id="<?php echo $this->get_field_id('shortcode'); ?>" name="<?php echo $this->get_field_name('shortcode'); ?>" type="text" value="<?php echo esc_attr($shortcode); ?>" required/>
         </p>
-        <p><small><em><?php _e('Enter the title to display as the title of the widget area. Copy the shortcode from Mailchimp for Wordpress plugin options.', 'jtlb');?></em></small></p>
+        <p><small><em><?php _e('Enter the title to display as the title of the widget area. Copy the shortcode from Mailchimp for Wordpress plugin options.', 'shady');?></em></small></p>
         <?php
     }
 
@@ -67,9 +67,9 @@ class JeetMailchimpWidget extends WP_Widget {
 class JeetAboutMeWidget extends WP_Widget {
     public function __construct() {
         parent::__construct(
-            'jeet_about_me_widget', // base ID of widget
-            __('Jeetlab About Me', 'jtlb'), // widget name
-            array('description' => __('Displays the excerpt form about me page in the widget area.', 'jtlb'))
+            'shady_about_me_widget', // base ID of widget
+            __('Jeetlab About Me', 'shady'), // widget name
+            array('description' => __('Displays the excerpt form about me page in the widget area.', 'shady'))
         );
     }
 
@@ -119,13 +119,13 @@ ABT;
             $title = $instance['title'];
         }
         else {
-            $title = __('About me', 'jtlb');
+            $title = __('About me', 'shady');
         }
 
         // Widget admin form
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'jtlb');?>:</label>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'shady');?>:</label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
         </p>
         <?php
@@ -146,9 +146,9 @@ ABT;
 class JeetPopularPostsWidget extends WP_Widget {
     public function __construct() {
         parent::__construct(
-            'jeet_popular_posts_widget', // base ID of widget
-            __('Jeetlab Popular Posts', 'jtlb'), // widget name
-            array('description' => __('Displays the most post popular posts form about me page in the widget area.', 'jtlb'))
+            'shady_popular_posts_widget', // base ID of widget
+            __('Jeetlab Popular Posts', 'shady'), // widget name
+            array('description' => __('Displays the most post popular posts form about me page in the widget area.', 'shady'))
         );
     }
 
@@ -165,7 +165,7 @@ class JeetPopularPostsWidget extends WP_Widget {
         $post_args = array(
             'post_type'      => 'post',
             'posts_per_page' => $instance['post_per_page'],
-            'meta_key'       => 'jeet_post_views_count',
+            'meta_key'       => 'shady_post_views_count',
             'orderby'        => 'meta_value_num',
             'order'          => 'DESC'
         );
@@ -207,17 +207,17 @@ LIST;
     // Widget Backend
     public function form($instance) {
 
-        $title = (isset($instance['title'])) ? $instance['title'] : __('Popular Posts', 'jtlb');
+        $title = (isset($instance['title'])) ? $instance['title'] : __('Popular Posts', 'shady');
         $post_per_page = (isset($instance['post_per_page'])) ? $instance['post_per_page'] : 5;
 
         // Widget admin form
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'jtlb');?>:</label>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'shady');?>:</label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('post_per_page'); ?>"><?php _e('Number of posts to be displayed', 'jtlb');?>:</label>
+            <label for="<?php echo $this->get_field_id('post_per_page'); ?>"><?php _e('Number of posts to be displayed', 'shady');?>:</label>
             <input class="widefat" id="<?php echo $this->get_field_id('post_per_page'); ?>" name="<?php echo $this->get_field_name('post_per_page'); ?>" type="number" min="0" step="1" value="<?php echo esc_attr($post_per_page); ?>" />
         </p>
         <?php
@@ -237,9 +237,9 @@ LIST;
 class JeetRecentVideoWidget extends WP_Widget {
     public function __construct() {
         parent::__construct(
-            'jeet_recent_video_widget', // base ID of widget
-            __('Jeetlab Recent Video', 'jtlb'), // widget name
-            array('description' => __('Displays a custom video thumbnail in the sidebar widget area which opens in modal on clicking.', 'jtlb'))
+            'shady_recent_video_widget', // base ID of widget
+            __('Jeetlab Recent Video', 'shady'), // widget name
+            array('description' => __('Displays a custom video thumbnail in the sidebar widget area which opens in modal on clicking.', 'shady'))
         );
     }
 
@@ -300,31 +300,31 @@ class JeetRecentVideoWidget extends WP_Widget {
 
     // Widget Backend
     public function form($instance) {
-        $title = (isset($instance['title'])) ? $instance['title'] : __('Recent Video', 'jtlb');
+        $title = (isset($instance['title'])) ? $instance['title'] : __('Recent Video', 'shady');
         $video_url = ($instance['video_url']) ? $instance['video_url'] : '';
         // Widget admin form
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'jtlb');?><span class="requried">*</span> :</label>
+            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title', 'shady');?><span class="requried">*</span> :</label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id('video_url'); ?>"><?php _e('Youtube/Vimeo Url', 'jtlb');?><span class="requried">*</span> :</label>
+            <label for="<?php echo $this->get_field_id('video_url'); ?>"><?php _e('Youtube/Vimeo Url', 'shady');?><span class="requried">*</span> :</label>
             <input class="widefat" id="<?php echo $this->get_field_id('video_url'); ?>" name="<?php echo $this->get_field_name('video_url'); ?>" type="url" value="<?php echo esc_attr($video_url); ?>"/>
-            <small class="text-muted"><em><?php _e('Insert the URL of the video from youtube or vimeo and paste here.', 'jtlb');?></em></small>
+            <small class="text-muted"><em><?php _e('Insert the URL of the video from youtube or vimeo and paste here.', 'shady');?></em></small>
         </p>
 
         <p>
             <label for="<?php echo $this->get_field_id('image_id'); ?>">Placeholder Image:</label>
             <?php
-                echo '<img class="jeet_widget_media_image" src="' . wp_get_attachment_image_src($instance['image_id'])[0] . '" style="margin:0;padding:0;max-width:150px;display:inline-block" />';
+                echo '<img class="shady_widget_media_image" src="' . wp_get_attachment_image_src($instance['image_id'])[0] . '" style="margin:0;padding:0;max-width:150px;display:inline-block" />';
             ?>
 
-            <input type="hidden" class="widefat jeet_widget_media_button_image_id" name="<?php echo $this->get_field_name('image_id'); ?>" id="<?php echo $this->get_field_id('image_id'); ?>" value="<?php echo esc_attr($instance['image_id']); ?>">
+            <input type="hidden" class="widefat shady_widget_media_button_image_id" name="<?php echo $this->get_field_name('image_id'); ?>" id="<?php echo $this->get_field_id('image_id'); ?>" value="<?php echo esc_attr($instance['image_id']); ?>">
 
-            <input type="button" class="button button-primary jeet_widget_media_button" id="jeet_widget_media_button" name="<?php echo $this->get_field_name('image_id'); ?>" value="Upload Image" style="margin-top:5px;" />
+            <input type="button" class="button button-primary shady_widget_media_button" id="shady_widget_media_button" name="<?php echo $this->get_field_name('image_id'); ?>" value="Upload Image" style="margin-top:5px;" />
 
-            <small class="text-muted" style="float:left;"><em><?php _e('This image acts as the placeholer for triggering the video.', 'jtlb');?></em></small>
+            <small class="text-muted" style="float:left;"><em><?php _e('This image acts as the placeholer for triggering the video.', 'shady');?></em></small>
         </p>
         <?php
     }

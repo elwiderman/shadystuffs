@@ -9,7 +9,7 @@
                 if ( function_exists('yoast_breadcrumb') ) :
                     yoast_breadcrumb('<nav class="breadcrumbs" role="menubar" aria-label="breadcrumbs">','</nav>');
                 else:
-                    echo jeet_custom_breadcrumbs();
+                    echo shady_custom_breadcrumbs();
                 endif;
                 ?>
             </div>

@@ -4,7 +4,7 @@ $args = array(
     'post_type'         => 'slider',
     // 'meta_query'    => array(
     //     array(
-    //         'key'   => 'jeet_slide_is_featured',
+    //         'key'   => 'shady_slide_is_featured',
     //         'value' => 1,
     //         'compare' => '='
     //         )
@@ -28,19 +28,19 @@ if ($slider_query->have_posts()) : ?>
                     ) = array(
                         get_the_post_thumbnail_url(get_the_ID(), 'slider-home'),
                         get_the_content(),
-                        rwmb_meta('jeet_slide_content_position'),
-                        rwmb_meta('jeet_slide_content_anim'),
+                        rwmb_meta('shady_slide_content_position'),
+                        rwmb_meta('shady_slide_content_anim'),
                     );
                     $justify = ($slide_alignment == 'left') ? 'justify-content-start' : 'justify-content-end';
 
                     // if (is_mobile()) {
-                    //     if (rwmb_meta('jeet_slide_mobile_bg')) {
-                    //         $slide_image = rwmb_meta('jeet_slide_mobile_bg', array('size' => 'full'))['url'];
+                    //     if (rwmb_meta('shady_slide_mobile_bg')) {
+                    //         $slide_image = rwmb_meta('shady_slide_mobile_bg', array('size' => 'full'))['url'];
                     //     }
                     // }
                     // if (is_tablet()) {
-                    //     if (rwmb_meta('jeet_slide_tablet_bg')) {
-                    //         $slide_image = rwmb_meta('jeet_slide_tablet_bg', array('size' => 'full'))['url'];
+                    //     if (rwmb_meta('shady_slide_tablet_bg')) {
+                    //         $slide_image = rwmb_meta('shady_slide_tablet_bg', array('size' => 'full'))['url'];
                     //     }
                     // }
                     ?>

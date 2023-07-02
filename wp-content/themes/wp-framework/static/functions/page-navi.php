@@ -34,8 +34,8 @@ function pagination($before = '', $after = '') {
         $start_page = 1;
     }
 
-    $previous = get_previous_posts_link(__('<i class="icon-ita icon-chevron-left"></i>', 'jtlb'), 0);
-    $next = get_next_posts_link(__('<i class="icon-ita icon-chevron-right"></i>', 'jtlb'), 0);
+    $previous = get_previous_posts_link(__('<i class="icon-ita icon-chevron-left"></i>', 'shady'), 0);
+    $next = get_next_posts_link(__('<i class="icon-ita icon-chevron-right"></i>', 'shady'), 0);
     if (!is_single() && $paged == 1) {
         $previous = '<a href="#" class="disabled"><i class="icon-ita icon-chevron-left"></i></a>';
     }
