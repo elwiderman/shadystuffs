@@ -2,7 +2,126 @@
 * Styles for Header area of application
 */
 
-header {
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    z-index: 1000;
+    &__nav {
+        background: $primary-bg;
+        @include flex-display(row, space-between, center);
+        height: 100%;
+        padding: 0 25px;
+        &--brand {
+            .navbar-brand {
+                display: block;
+                padding: 0;
+                margin: 0;
+                img {
+                    height: 60px;
+                }
+            }
+        }
+        &--left, &--right {
+            flex: 0 0 30vw;
+            max-width: 30vw;
+        }
+        &--left {
+            .navbar-toggler {
+                @include flex-display;
+                border: 0;
+                padding: 0;
+                &__btn {
+                    position: relative;
+                    width: 35px;
+                    height: 24px;
+                    & > span {
+                        position: absolute;
+                        left: 0;
+                        width: 100%;
+                        height: 1px;
+                        background: $primary-font-color;
+                        @include transition(0.3s);
+                        &:nth-child(1) {
+                            top: 0;
+                        }
+                        &:nth-child(2) {
+                            top: 50%;
+                            transform: translateY(-50%);
+                        }
+                        &:nth-child(3) {
+                            top: 100%;
+                        }
+                    }
+                }
+                &__label {
+                    font-family: $alt-font;
+                    text-align: left;
+                    margin-left: 10px;
+                    position: relative;
+                    &--open, &--close {
+                        @include transition(0.3s);
+                    }
+                    &--close {
+                        position: absolute;
+                        top: 50%;
+                        left: 0;
+                        transform: translateY(-50%);
+                        opacity: 0;
+                        visibility: hidden;
+                    }
+                }
+                &.open {
+                    .navbar-toggler__btn {
+                        & > span {
+                            &:nth-child(1) {
+                                top: 50%;
+                                transform: rotate(45deg) translateY(-50%);
+                            }
+                            &:nth-child(2) {
+                                left: -30px;
+                                opacity: 0;
+                            }
+                            &:nth-child(3) {
+                                top: 50%;
+                                transform: rotate(-45deg) translateY(-50%);
+                            }
+                        }
+                    }
+                    .navbar-toggler__label {
+                        &--open {
+                            opacity: 0;
+                            visibility: hidden;
+                        }
+                        &--close {
+                            opacity: 1;
+                            visibility: visible;
+                        }
+                    }
+                }
+            }
+        }
+        &--right {
+            @include flex-display(row, flex-end, center);
+            .navbar-account {
+                margin-right: 15px;
+            }
+            .navbar-cart {
+                .btn {
+                    font-size: 20px;
+                    padding: 0;
+                    &:after {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* header {
     position: fixed;
     top: 0;
     left: 0;
@@ -171,7 +290,7 @@ header {
             }
         }
     }
-}
+} */
 
 body {
     &.admin-bar {

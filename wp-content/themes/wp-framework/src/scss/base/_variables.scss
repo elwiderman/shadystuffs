@@ -3,9 +3,12 @@
 */
 
 /* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Montserrat:wght@300;600;700&family=Special+Elite&display=swap');
+
 // Font family
-$primary-font: 'Montserrat', sans-serif;
-$secondary-font: 'Raleway', sans-serif;
+$primary-font: 'Acme', sans-serif;
+$alt-font: 'Special Elite', cursive;
+$secondary-font: 'Montserrat', sans-serif;
 
 // Font sizes
 $rem-160: 10.000rem;
@@ -109,12 +112,12 @@ $ultra-bold: 900;
 
 
 /* Colors */
-$primary-color:             #000000;
-$secondary-color:           #666666;
+$primary-color:             #0D1423;
+$secondary-color:           #FF5C00;
 $dark-grey:					#999999;
 $grey:						#f3f3f3;
 $primary-bg:                #ffffff;
-$primary-font-color:        #000000;
+$primary-font-color:        #0D1423;
 
 
 /* Breakpoints */

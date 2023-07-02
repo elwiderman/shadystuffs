@@ -69,15 +69,20 @@ export default class AppCommon {
         // });
 
         // toggle off-canvas menu
-        $('header').find('.navbar-toggler').click(function () {
-            $('body').toggleClass('no-overflow').children('.no-overflow').toggleClass('show');
-        });
-        $('body .no-overflow').click(function () {
-            $('header .navbar-toggler').trigger('click');
-        });
+        // $('.header').find('.navbar-toggler').click(function () {
+        //     $('body').toggleClass('no-overflow').children('.no-overflow').toggleClass('show');
+        // });
+        // $('body .no-overflow').click(function () {
+        //     $('header .navbar-toggler').trigger('click');
+        // });
 
 
-        
+        $('.header').on('click', '.navbar-toggler', e => {
+            e.preventDefault();
+
+            console.log(e);
+            $(e.currentTarget).toggleClass('open');
+        });
     }
 
     // refresh the page if its resizing

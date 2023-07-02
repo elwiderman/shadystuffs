@@ -1,35 +1,37 @@
-<header class="<?= (!is_front_page()) ? 'inner' : ''; ?>">
-    <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="<?= esc_url(home_url()); ?>">
-                <img src="<?= esc_url(get_template_directory_uri()); ?>/assets/images/logo.png"
-                alt="<?php bloginfo('name'); ?>" class="logo"/>
-                <?php bloginfo('name'); ?>
-            </a>
-            <button class="navbar-toggler collapsed" type="button" data-toggle="collapse"
-            data-target="#navbarMain"
-            aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
+<?php
+// main menu partial
+$logo       = get_field('logo_img', 'option');
+?>
+<header class="header">
+    <nav class="header__nav">
+        <div class="header__nav--left">
+            <button class="navbar-toggler" type="button">
+                <div class="navbar-toggler__btn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <div class="navbar-toggler__label">
+                    <div class="navbar-toggler__label--open"><?php _e('menu', 'shady');?></div>
+                    <div class="navbar-toggler__label--close"><?php _e('close', 'shady');?></div>
+                </div>
             </button>
-
-            <div class="collapse navbar-collapse" id="navbarMain">
-                <?php main_menu(); ?>
-
-                <?php
-                // wpml language switcher
-                get_template_part('parts/header/icl', 'language');
-
-                // social icons
-                get_template_part('parts/header/socials');
-                ?>
-
-                <?php if (function_exists('WC') && (!is_cart() && !is_checkout())) : ?>
+        </div>
+        <div class="header__nav--brand">
+            <a class="navbar-brand" href="<?php echo esc_url(home_url());?>" title="<?php bloginfo('name'); ?>" target="_self">
+                <img class="img-fluid" src="<?php echo $logo['url'];?>" alt="<?php echo $logo['alt'];?>" width="<?php echo $logo['width'];?>" height="<?php echo $logo['height'];?>">
+            </a>
+        </div>
+        <div class="header__nav--right">
+            <div class="navbar-account">
+                <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" title="<?php _e('My Account','shady'); ?>"><i class="fas fa-user"></i></a>
+            </div>
+            
+            <?php if (function_exists('WC') && (!is_cart() && !is_checkout())) : ?>
+            <div class="navbar-cart">
                 <div class="dropdown menu-cart">
-                    <button class="btn btn-transparent dropdown-toggle" type="button" id="menuCartBtn" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-shopping-basket"></i> <?php _e('Cart', 'shady');?>
+                    <button class="btn btn-transparent dropdown-toggle" type="button" id="menuCartBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-shopping-cart"></i>
                         <?php
                         $count = WC()->cart->get_cart_contents_count();
                         if ($count > 0) {
@@ -43,18 +45,9 @@
                         <?php dynamic_sidebar('menu-cart');?>
                     </div>
                 </div>
-                <?php endif;?>
-
-                <div class="dropdown menu-search">
-                    <button class="nav-search-toggle dropdown-toggle" type="button" id="menuSearch"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" arial-labelledby="menuSearch">
-                        <?php get_search_form(); ?>
-                    </div>
-                </div>
             </div>
+            <?php endif;?>
+
         </div>
     </nav>
 </header>

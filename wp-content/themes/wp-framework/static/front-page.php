@@ -8,7 +8,7 @@ get_header();
 <?php
 /* TOP LAYOUTS
 ------------------------------------*/
-get_template_part('parts/slider');
+// get_template_part('parts/slider');
 get_template_part('parts/home', 'example');
 //get_template_part('parts/fixed-image');
 //get_template_part('parts/fixed-video');

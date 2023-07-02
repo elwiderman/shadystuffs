@@ -32,7 +32,7 @@ function framework_styles()
     $path = get_template_directory_uri();
 
     // Register Custom Font
-    wp_enqueue_style('site-font', '//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:300&display=swap', '', '');
+    // wp_enqueue_style('site-font', '//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:300&display=swap', '', '');
 
     // Register main stylesheet
     wp_enqueue_style('site-fontawesome', '//use.fontawesome.com/releases/v5.5.0/css/all.css', array(), '', 'all');
