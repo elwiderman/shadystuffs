@@ -79,6 +79,19 @@ ul {
     to {-webkit-transform: rotate(360deg);}
 }
 
-.main {
-    margin-top: $rem-70;
+.container {
+    padding: 0 12px;
+    @include respond-to('s-desk') {
+        max-width: 1200px;
+    }
+    .row {
+        margin: 0 -12px;
+        & > [class^=col-] {
+            padding: 0 12px;
+        }
+    }
+}
+
+.main-content-wrap {
+    margin-top: 80px;
 }

@@ -1,9 +1,16 @@
 <?php
-get_header();
 /*
-	Template name: Homepage
+    Template name: Homepage
 */
+get_header();
 ?>
+
+<div class="single-page single-home">
+    <?php
+    get_template_part('parts/pages/home/hero');
+    ?>
+</div>
+
 
 <?php
 /* TOP LAYOUTS
