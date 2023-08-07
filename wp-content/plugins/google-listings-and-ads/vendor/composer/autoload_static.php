@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitacbe5a7dfd55a207d5f1037e12501017
+class ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -352,13 +352,13 @@ class ComposerStaticInitacbe5a7dfd55a207d5f1037e12501017
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\AdsCampaignCriterion' => __DIR__ . '/../..' . '/src/API/Google/AdsCampaignCriterion.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\AdsConversionAction' => __DIR__ . '/../..' . '/src/API/Google/AdsConversionAction.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\AdsReport' => __DIR__ . '/../..' . '/src/API/Google/AdsReport.php',
-        'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\ApiExceptionTrait' => __DIR__ . '/../..' . '/src/API/Google/ApiExceptionTrait.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\AssetFieldType' => __DIR__ . '/../..' . '/src/API/Google/AssetFieldType.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\BillingSetupStatus' => __DIR__ . '/../..' . '/src/API/Google/BillingSetupStatus.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\CallToActionType' => __DIR__ . '/../..' . '/src/API/Google/CallToActionType.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\CampaignStatus' => __DIR__ . '/../..' . '/src/API/Google/CampaignStatus.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\CampaignType' => __DIR__ . '/../..' . '/src/API/Google/CampaignType.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\Connection' => __DIR__ . '/../..' . '/src/API/Google/Connection.php',
+        'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\ExceptionTrait' => __DIR__ . '/../..' . '/src/API/Google/ExceptionTrait.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\LocationIDTrait' => __DIR__ . '/../..' . '/src/API/Google/LocationIDTrait.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\Merchant' => __DIR__ . '/../..' . '/src/API/Google/Merchant.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\API\\Google\\MerchantMetrics' => __DIR__ . '/../..' . '/src/API/Google/MerchantMetrics.php',
@@ -555,7 +555,6 @@ class ComposerStaticInitacbe5a7dfd55a207d5f1037e12501017
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Exception\\InvalidType' => __DIR__ . '/../..' . '/src/Exception/InvalidType.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Exception\\InvalidValue' => __DIR__ . '/../..' . '/src/Exception/InvalidValue.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Exception\\InvalidVersion' => __DIR__ . '/../..' . '/src/Exception/InvalidVersion.php',
-        'Automattic\\WooCommerce\\GoogleListingsAndAds\\Exception\\MerchantApiException' => __DIR__ . '/../..' . '/src/Exception/MerchantApiException.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Exception\\ValidateInterface' => __DIR__ . '/../..' . '/src/Exception/ValidateInterface.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Exception\\WPError' => __DIR__ . '/../..' . '/src/Exception/WPError.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Exception\\WPErrorTrait' => __DIR__ . '/../..' . '/src/Exception/WPErrorTrait.php',
@@ -4402,9 +4401,9 @@ class ComposerStaticInitacbe5a7dfd55a207d5f1037e12501017
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitacbe5a7dfd55a207d5f1037e12501017::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitacbe5a7dfd55a207d5f1037e12501017::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitacbe5a7dfd55a207d5f1037e12501017::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe::$classMap;
 
         }, null, ClassLoader::class);
     }
