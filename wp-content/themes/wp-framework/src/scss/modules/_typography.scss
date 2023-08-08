@@ -3,29 +3,28 @@
 // typography
 h1 {
     @include font($primary-font, $regular);
-    font-size: $rem-45;
-    line-height: $rem-55;
+    font-size: 60px;
+    line-height: 1;
     margin: 0;
-    &.xl {
-        font-size: $rem-55;
-        line-height: $rem-77;
-
+    &.xxl {
+        font-size: 175px;
+        line-height: 1;
     }
 }
 h2 {
     @include font($primary-font, $regular);
-    font-size: $rem-45;
-    line-height: $rem-55;
+    font-size: 50px;
+    line-height: 1;
 }
 h3 {
-    @include font($secondary-font, $ultra-bold);
-    font-size: $rem-35;
-    line-height: $rem-48;
+    @include font($primary-font, $regular);
+    font-size: 40px;
+    line-height: 1.2;
 }
 h4 {
     @include font($secondary-font, $ultra-bold);
-    font-size: $rem-28;
-    line-height: $rem-39;
+    font-size: 30px;
+    line-height: 1.2;
 }
 h5 {
     @include font($primary-font, $ultra-bold);
@@ -61,6 +60,12 @@ h6 {
         margin-top: $rem-20;
     }
 }
+
+.color-grey {
+    color: $grey;
+}
+
+
 
 
 // helpers
