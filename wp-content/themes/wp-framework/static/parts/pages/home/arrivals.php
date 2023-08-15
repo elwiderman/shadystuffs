@@ -1,11 +1,10 @@
 <?php
-
-if (get_field('show_bestsellers_bool')) :
-    $section_title  = get_field('bestsellers_title_text');
-    $cta            = get_field('bestsellers_cta_link');
+if (get_field('show_new_arrivals_bool')) :
+    $section_title  = get_field('arrivals_title_text');
+    $cta            = get_field('arrivals_cta_link');
     ?>
 
-    <section class="section-block section-bestsellers">
+    <section class="section-block section-arrivals">
         <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-auto">
@@ -21,9 +20,9 @@ if (get_field('show_bestsellers_bool')) :
         </div>
 
         <?php
-        if (have_rows('bestsellers_repeater')) :
+        if (have_rows('new_arrivals_repeater')) :
             echo "<div class='products-carousel'>";
-            while (have_rows('bestsellers_repeater')) : the_row();
+            while (have_rows('new_arrivals_repeater')) : the_row();
                 $post_object = get_post(get_sub_field('product'));
 
                 setup_postdata($GLOBALS['post'] =& $post_object);

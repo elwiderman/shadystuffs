@@ -471,6 +471,7 @@
                     "multiple": 0,
                     "allow_null": 0,
                     "ui": 1,
+                    "bidirectional_target": [],
                     "parent_repeater": "field_64d8a9a114f19"
                 }
             ]
@@ -547,6 +548,59 @@
                 "id": ""
             },
             "return_format": "array"
+        },
+        {
+            "key": "field_64db92c2111bd",
+            "label": "Add the new arrivals",
+            "name": "new_arrivals_repeater",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_64db92c2111c2",
+                    "label": "Product",
+                    "name": "product",
+                    "aria-label": "",
+                    "type": "post_object",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "post_type": [
+                        "product"
+                    ],
+                    "post_status": [
+                        "publish"
+                    ],
+                    "taxonomy": "",
+                    "return_format": "id",
+                    "multiple": 0,
+                    "allow_null": 0,
+                    "bidirectional": 0,
+                    "ui": 1,
+                    "bidirectional_target": [],
+                    "parent_repeater": "field_64db92c2111bd"
+                }
+            ]
         }
     ],
     "location": [
@@ -567,5 +621,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1691922499
+    "modified": 1692111611
 }
