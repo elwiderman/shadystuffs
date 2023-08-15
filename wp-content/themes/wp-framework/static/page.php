@@ -23,10 +23,7 @@ IMG;
                         <div class="col-lg-12">
                             <div id="the-content">
                                 <?php
-                                if (rwmb_meta('lf_page_subtitle')) {
-                                    echo '<div class="lead blue">' . rwmb_meta('lf_page_subtitle') . '</div>';
-                                }
-                                global $post;
+                                
                                 the_content();
                                 ?>
                             </div>
@@ -35,7 +32,7 @@ IMG;
 
                     <div class="row">
                         <div class="col-lg-12">
-                            <?php get_template_part('parts/content/utilities/gallery'); ?>
+                            
                         </div>
                     </div>
                 </div>

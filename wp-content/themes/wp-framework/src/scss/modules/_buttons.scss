@@ -1,3 +1,45 @@
 /* Styles for buttons */
 
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    @include font($alt-font, $bold);
+    font-size: 18px;
+    line-height: 0.9;
+    border: none;
+    border-radius: 45px;
+    box-shadow: 3px 4px 9px rgba($primary-color, 0.45);
+    outline: 0 !important;
+    padding: 0 30px;
+    @include transition(0.3s);
+}
 
+.btn-main {
+    @extend .btn;
+    background: $secondary-color;
+    color: $primary-bg;
+    &:hover {
+        background: darken($secondary-color, 10);
+        color: $primary-bg;
+        box-shadow: none;
+    }
+}
+
+.btn-square-white {
+    @extend .btn;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    color: $primary-font-color;
+    line-height: 1;
+    background: $primary-bg;
+    @include add-border(1px, $primary-font-color, 'all');
+    box-shadow: none !important;
+    border-radius: 0;
+    padding: 0;
+    &:hover {
+        color: $secondary-color;
+    }
+}

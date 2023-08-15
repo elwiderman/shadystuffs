@@ -14,6 +14,7 @@ if (typeof jQuery != 'undefined') {
 import ready from 'domready';
 
 import AppCommon from './AppCommon';
+import Carousels from './Carousels';
 import Home from './Home';
 
 // get the libraries
@@ -23,4 +24,5 @@ import 'simplebar';
 
 ready(() => {
     new AppCommon();
+    new Carousels();
 });

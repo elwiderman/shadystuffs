@@ -27,4 +27,4 @@
 get_template_part('parts/header/nav', 'framework');
 ?>
 
-<div class="main">
+<div class="main-content-wrap">

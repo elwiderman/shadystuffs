@@ -1,0 +1,103 @@
+.single-page {
+    &.single-home {
+        .section-block {
+            .section-title {
+                @extend h1.xxl;
+            }
+            &.section-collections {
+                padding: 50px 0;
+                .collections-grid {
+                    display: block;
+                    position: relative;
+                    .grid-row {
+                        @include flex-display(row, flex-start, flex-start);
+                        margin: 0 -6px;
+                        position: relative;
+                        z-index: 0;
+                        &:not(:first-child) {
+                            margin-top: 12px;
+                        }
+                        .grid {
+                            flex: 0 0 50%;
+                            max-width: 50%;
+                            padding: 0 6px;
+                            &__perma {
+                                display: block;
+                                width: 100%;
+                                height: 100%;
+                                &:hover {
+                                    .grid__thumb {
+                                        img {
+                                            transform: scale(1.1);
+                                        }
+                                    }
+                                }
+                            }
+                            &__thumb {
+                                width: 100%;
+                                height: 100%;
+                                position: relative;
+                                z-index: 0;
+                                overflow: hidden;
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    object-position: center;
+                                    @include transition(0.6s);
+                                }
+                                &--caption {
+                                    position: absolute;
+                                    bottom: 30px;
+                                    right: 15px;
+                                    text-align: right;
+                                    font-size: 55px;
+                                    @include font($primary-font, $regular);
+                                    color: $primary-bg;
+                                    line-height: 1.3;
+                                    text-transform: lowercase;
+                                    background: $primary-color;
+                                    padding: 0 15px 0 35px;
+                                }
+                            }
+                        }
+                        &:nth-child(odd) {
+                            .grid {
+                                &:nth-child(1) {
+                                    aspect-ratio: 588 / 612;
+                                }
+                                &:nth-child(2), &:nth-child(3) {
+                                    aspect-ratio: 588 / 300;
+                                }
+                                &:nth-child(3) {
+                                    position: absolute;
+                                    bottom: 0;
+                                    right: 0;
+                                }
+                            }
+                        }
+                        &:nth-child(even) {
+                            .grid {
+                                &:nth-child(3) {
+                                    aspect-ratio: 588 / 612;
+                                }
+                                &:nth-child(1), &:nth-child(2) {
+                                    aspect-ratio: 588 / 300;
+                                }
+                                &:nth-child(2) {
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.section-arrivals {
+                margin-top: 50px;
+            }
+        }
+    }
+}

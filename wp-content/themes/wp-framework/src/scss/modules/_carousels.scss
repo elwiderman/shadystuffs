@@ -1,0 +1,92 @@
+.slick-dots {
+    position: absolute;
+    right: 20px;
+    bottom: 15px;
+    @include flex-display(row, flex-end, center);
+    z-index: 2;
+    li {
+        font-size: 0;
+        &:not(:last-child) {
+            margin-right: 10px;
+        }
+        &.slick-active {
+            button {
+                width: 20px;
+            }
+        }
+        button {
+            display: block;
+            font-size: 0;
+            width: 10px;
+            height: 10px;
+            background: $primary-color;
+            border: none;
+            border-radius: 10px;
+            outline: 0 !important;
+            padding: 0;
+            @include transition(0.3s);
+        }
+    }
+}
+
+
+
+.hero-slider {
+    .slick-list {
+        .slick-slide {
+            .slide {
+                &__perma {
+                    display: block;
+                    &.no-link {
+                        pointer-events: none;
+                    }
+                }
+                &__img {
+                    width: 100%;
+                    img {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+.products-carousel {
+    width: calc(100vw - 36px);
+    margin: 0 auto;
+    padding-bottom: 60px;
+    @include respond-to('medium') {
+        width: calc(720px - 20px);
+    }
+    @include respond-to('large') {
+        width: calc(960px - 20px);
+    }
+    @include respond-to('x-large') {
+        width: calc(1200px - 20px);
+    }
+    .slick-track {
+        display: flex !important;
+        .slick-slide {
+            height: inherit !important;
+        }
+    }
+    .slick-list {
+        overflow: visible;
+        .slide {
+            height: 100%;
+            margin-right: 25px;
+            .loop-product-thumb {
+                width: 250px;
+            }
+        }
+    }
+
+    .slick-dots {
+        left: 50%;
+        right: unset;
+        transform: translateX(-50%);
+    }
+}
