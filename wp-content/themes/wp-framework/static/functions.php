@@ -26,14 +26,8 @@ require_once(get_template_directory().'/functions/page-navi.php');
 // Image size
 require_once(get_template_directory().'/functions/image.php');
 
-// Theme options
-// require_once(get_template_directory().'/functions/theme-options.php');
-
 // Cpt
 require_once(get_template_directory().'/functions/cpt.php');
-
-// Metabox
-// require_once(get_template_directory().'/functions/metabox.php');
 
 // Ajax
 require_once(get_template_directory().'/functions/ajax.php');
@@ -46,3 +40,6 @@ require_once(get_template_directory().'/functions/widget.php');
 
 // Custom theme functions
 require_once(get_template_directory().'/functions/theme-functions.php');
+
+// woo functions
+require_once(get_template_directory().'/functions/woo-functions.php');
