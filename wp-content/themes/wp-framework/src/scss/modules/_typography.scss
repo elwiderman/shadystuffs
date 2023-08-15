@@ -22,19 +22,19 @@ h3 {
     line-height: 1.2;
 }
 h4 {
-    @include font($secondary-font, $ultra-bold);
+    @include font($alt-font, $regular);
     font-size: 30px;
     line-height: 1.2;
 }
 h5 {
-    @include font($primary-font, $ultra-bold);
-    font-size: $rem-18;
-    line-height: $rem-33;
+    @include font($alt-font, $regular);
+    font-size: 25px;
+    line-height: 1.2;
 }
 h6 {
-    @include font($primary-font, $bold);
-    font-size: $rem-16;
-    line-height: $rem-28;
+    @include font($secondary-font, $semi-bold);
+    font-size: 16px;
+    line-height: 1.2;
 }
 .lead {
     @include font($primary-font, $regular);
@@ -63,168 +63,4 @@ h6 {
 
 .color-grey {
     color: $grey;
-}
-
-
-
-
-// helpers
-.container-fluid { // keep this blank if not needed
-    // padding: 0 $rem-30;
-}
-.row-eq-height {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
-.no-gutter > [class*='col-'] {
-    padding-right: 0;
-    padding-left: 0;
-}
-.no-margin {
-    margin: 0 !important;
-}
-.no-padding {
-    padding: 0 !important;
-}
-.text-uppercase {
-    text-transform: uppercase;
-}
-.relative {
-    position: relative;
-}
-.vertical-center {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    @include transform-translateY(-50%);
-}
-.underline {
-    width: 10.310rem;
-    margin: $rem-40 auto;
-    @include add-border($rem-1, $primary-bg, 'top');
-}
-.separator {
-    width: 100%;
-    height: $rem-1;
-    background: #e1e1e1;
-    &.padded {
-        margin: $rem-75 0;
-    }
-}
-.content-block {
-    &.padding-lg {
-        padding: 8.25rem 0;
-    }
-    &.padding-md {
-        padding: $rem-90 0;
-    }
-}
-
-a {
-    &.see-all {
-        @include font($secondary-font, $ultra-bold);
-        font-size: $rem-16;
-        color: $primary-color;
-        text-transform: uppercase;
-        position: relative;
-        margin-right: $rem-35;
-        .icon-arrow-right {
-            font-size: $rem-18;
-            color: $primary-color;
-            position: absolute;
-            right: -$rem-35;
-            top: 0;
-            animation-delay: 0.3s;
-        }
-        &:hover {
-            color: $primary-color;
-            i.icon-arrow-right {
-                animation: animate-arrow-right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
-            }
-        }
-    }
-}
-@keyframes animate-arrow-right {
-    0% {
-        transform: translate(0, 0) scale(1, 1);
-        transform: translate3d(0, 0, 0) scale(1, 1);
-        opacity: 1;
-    }
-    50% {
-        transform: translate(10px, 0) scale(1.3, 1);
-        transform: translate3d(10px, 0, 0) scale(1.3, 1);
-        opacity: 0;
-    }
-    51% {
-        transform: translate(-10px, 0) scale(1.3, 1);
-        transform: translate3d(-10px, 0, 0) scale(1.3, 1);
-        opacity: 0;
-    }
-    100% {
-        transform: translate(0, 0) scale(1, 1);
-        transform: translate3d(0, 0, 0) scale(1, 1);
-        opacity: 1;
-    }
-}
-
-// pagination
-.page-navigation {
-    margin: $rem-85 0 $rem-100 0;
-    text-align: center;
-    .prev, .next {
-        a {
-            display: block;
-            font-size: $rem-17;
-            color: $primary-bg;
-            background: $primary-color;
-            width: $rem-40;
-            height: $rem-40;
-            line-height: $rem-40;
-            @include add-border($rem-1, $primary-color, 'all');
-            &:hover, &.disabled {
-                background: $secondary-color;
-                border-color: $secondary-color;
-            }
-            &.disabled {
-                cursor: not-allowed;
-            }
-        }
-    }
-    .prev {
-        float: left;
-        display: inline;
-    }
-    .next {
-         float: right;
-         display: inline;
-     }
-    .pagination {
-        margin: 0 auto;
-        li {
-            display: inline-block;
-            &:not(:last-child) {
-                margin-right: $rem-5;
-            }
-            &.current {
-                a {
-                    border-color: $primary-color;
-                    &:hover {
-                        background: $primary-bg;
-                    }
-                }
-            }
-            a {
-                font-size: $rem-12;
-                font-weight: $ultra-bold;
-                color: $primary-color;
-                width: $rem-40;
-                height: $rem-40;
-                line-height: $rem-39;
-                padding: 0;
-                border-radius: 0;
-            }
-        }
-    }
 }

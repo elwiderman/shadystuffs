@@ -26,3 +26,20 @@
         box-shadow: none;
     }
 }
+
+.btn-square-white {
+    @extend .btn;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    color: $primary-font-color;
+    line-height: 1;
+    background: $primary-bg;
+    @include add-border(1px, $primary-font-color, 'all');
+    box-shadow: none !important;
+    border-radius: 0;
+    padding: 0;
+    &:hover {
+        color: $secondary-color;
+    }
+}

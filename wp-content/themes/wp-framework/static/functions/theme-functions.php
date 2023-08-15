@@ -756,6 +756,15 @@ function placeholder_src($size) {
 
     return wp_get_attachment_image_url($thumb_id, $thumb_size);
 }
+function product_placeholder($size) {
+    $thumb      = get_field('placeholder_prod_img', 'option');
+    $thumb_size = ($size) ? $size : 'thumbnail';
+
+    return [
+        'url'   => $thumb['sizes'][$size],
+        'alt'   => $thumb['alt']
+    ];
+}
 
 
 /*

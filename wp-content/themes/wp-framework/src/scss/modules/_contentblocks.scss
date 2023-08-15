@@ -1,70 +1,116 @@
 /* Styles for all content blocks */
 
-.content-block {
-    padding: $rem-70 0;
-}
+.loop-product-thumb {
+    .product {
+        position: relative;
+        z-index: 0;
+        .woocommerce-loop-product {
+            &__link {
+                display: flex;
+                flex-direction: column;
+                .onsale {
+                    position: absolute;
+                    top: 8px;
+                    background: $secondary-color;
+                    @include font($primary-font, $regular);
+                    font-size: 13px;
+                    color: $primary-bg;
+                    line-height: 1.5;
+                    text-transform: lowercase;
+                    padding: 0 15px;
+                }
+                .price {
+                    @include font($secondary-font, $bold);
+                    font-size: 25px;
+                    color: $primary-font-color;
+                    // line-height: 1;
+                    @include flex-display();
+                    del {
+                        font-size: 15px;
+                        font-weight: $regular;
+                        opacity: 0.5;
+                        order: 1;
+                        margin-left: 10px;
+                    }
+                    ins {
+                        text-decoration: none;
+                    }
+                }
+            }
+            &__title {
+                @include font($secondary-font, $semi-bold);
+                font-size: 14px;
+                color: $primary-font-color;
+                line-height: 1.1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                opacity: 0.6;
+            }
+        }
 
-.single-page {
-    .the-post {
-        .pre-title {
-            margin-bottom: $rem-30;
-            @include add-border($rem-1, rgba($dark-grey, 0.2), 'bottom');
-            .categories {
-                display: inline-block;
-                font-size: $rem-14;
-                color: $dark-grey;
-                a {
-                    font-size: $rem-14;
-                    color: $dark-grey;
-                    line-height: $rem-18;
+        &__image {
+            position: relative;
+            z-index: 0;
+            margin-bottom: 10px;
+        }
+        &__reveal {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            flex-direction: column;
+            &--wishlist {
+                margin-bottom: 8px;
+                .yith-wcwl-add-to-wishlist {
+                    margin-top: 0;
+                    .yith-wcwl-add-button {
+                        .add_to_wishlist {
+                            @extend .btn-square-white;
+                            .yith-wcwl-icon {
+                                margin: 0;
+                                &:before {
+                                    content: '\f004';
+                                    font-weight: $regular;
+                                }
+                            }
+                            &:hover {
+                                color: $secondary-color;
+                            }
+                        }
+                    }
+                }
+                .yith-wcwl-wishlistexistsbrowse {
                     &:hover {
-                        color: $primary-color;
+                        .feedback {
+                            color: $secondary-color;
+                        }
+                    }
+                    .feedback {
+                        @extend .btn-square-white;
+                        font-size: 0;
+                        i {
+                            font-size: 14px;
+                            margin: 0;
+                        }
+                        & + a {
+                            display: block;
+                            font-size: 0;
+                            position: absolute;
+                            left: 0;
+                            top: 1px;
+                            width: 30px;
+                            height: 30px;
+                        }
                     }
                 }
             }
-            .date {
-                font-size: $rem-14;
-                color: $dark-grey;
-                line-height: $rem-18;
-                margin-right: $rem-40;
-            }
-        }
-        .title {
-            margin-bottom: $rem-20;
-        }
-        .featured-image {
-            margin-bottom: $rem-30;
-        }
-        .content {
-            color: $secondary-color;
-        }
-        ul {
-            padding-left: $rem-40;
-            margin-bottom: $rem-30;
-            li {
-                list-style: disc;
-                font-size: $rem-16;
-                & > ul {
-                    margin-bottom: 0;
-                    li {
-                        list-style: circle;
-                        font-size: $rem-15;
-                    }
-                }
-            }
-        }
-        ol {
-            margin-bottom: $rem-30;
-            li {
-                font-size: $rem-16;
-                & > ol {
-                    margin-bottom: 0;
-                    li {
-                        //list-style: decimal;
-                        font-size: $rem-15;
-                    }
-                }
+            & + .yith-wcqv-button {
+                display: none;
             }
         }
     }
 }
+
+
+
