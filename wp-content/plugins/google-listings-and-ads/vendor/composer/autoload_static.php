@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe
+class ComposerStaticInit160862e90214d07e8266e1d06f5a80e4
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -763,8 +763,7 @@ class ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Shipping\\SyncerHooks' => __DIR__ . '/../..' . '/src/Shipping/SyncerHooks.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Shipping\\ZoneLocationsParser' => __DIR__ . '/../..' . '/src/Shipping/ZoneLocationsParser.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Shipping\\ZoneMethodsParser' => __DIR__ . '/../..' . '/src/Shipping/ZoneMethodsParser.php',
-        'Automattic\\WooCommerce\\GoogleListingsAndAds\\TaskList\\CompleteSetup' => __DIR__ . '/../..' . '/src/TaskList/CompleteSetup.php',
-        'Automattic\\WooCommerce\\GoogleListingsAndAds\\TaskList\\TaskListTrait' => __DIR__ . '/../..' . '/src/TaskList/TaskListTrait.php',
+        'Automattic\\WooCommerce\\GoogleListingsAndAds\\TaskList\\CompleteSetupTask' => __DIR__ . '/../..' . '/src/TaskList/CompleteSetupTask.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Tracking\\EventTracking' => __DIR__ . '/../..' . '/src/Tracking/EventTracking.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Tracking\\Events\\ActivatedEvents' => __DIR__ . '/../..' . '/src/Tracking/Events/ActivatedEvents.php',
         'Automattic\\WooCommerce\\GoogleListingsAndAds\\Tracking\\Events\\BaseEvent' => __DIR__ . '/../..' . '/src/Tracking/Events/BaseEvent.php',
@@ -4401,9 +4400,9 @@ class ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6cb7f5c3a22d43570b8a38c712accdfe::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit160862e90214d07e8266e1d06f5a80e4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit160862e90214d07e8266e1d06f5a80e4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit160862e90214d07e8266e1d06f5a80e4::$classMap;
 
         }, null, ClassLoader::class);
     }

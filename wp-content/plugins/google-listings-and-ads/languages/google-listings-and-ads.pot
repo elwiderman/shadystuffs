@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Google Listings and Ads plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Google Listings and Ads 2.5.1\n"
+"Project-Id-Version: Google Listings and Ads 2.5.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/google-listings-and-ads\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-08-01T16:50:22+00:00\n"
+"POT-Creation-Date: 2023-08-08T12:01:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: google-listings-and-ads\n"
@@ -1832,6 +1832,14 @@ msgstr ""
 #. translators: %1 is a random 4-digit string, %2 is the country code
 #: src/Shipping/GoogleAdapter/WCShippingSettingsAdapter.php:149
 msgid "[%1$s] Google Listings and Ads generated service - %2$s"
+msgstr ""
+
+#: src/TaskList/CompleteSetupTask.php:53
+msgid "Set up Google Listings & Ads"
+msgstr ""
+
+#: src/TaskList/CompleteSetupTask.php:74
+msgid "20 minutes"
 msgstr ""
 
 #: views/attributes/tab-panel.php:20
@@ -5184,12 +5192,4 @@ msgstr ""
 
 #: js/build/index.js:115
 msgid "Setup Google Ads"
-msgstr ""
-
-#: js/build/task-complete-setup.js:1
-msgid "Set up Google Listings & Ads"
-msgstr ""
-
-#: js/build/task-complete-setup.js:1
-msgid "20 minutes"
 msgstr ""
