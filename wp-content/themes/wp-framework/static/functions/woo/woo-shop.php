@@ -15,11 +15,15 @@
 remove_action('woocommerce_before_subcategory_title', 'woocommerce_subcategory_thumbnail');
 
 function custom_before_subcategory_title( $category ) {
-    echo "<pre>";
-    var_dump($category);
-    echo "</pre>";
+    if ($category) :
+        $id_for_acf = $category->taxonomy . "_" . $category->term_id;
+        $thumb      = get_field('archive_thumb_img', $id_for_acf);
 
-    // You can add your custom content or elements here
-    echo '<div class="custom-subcategory-content">Custom Content Goes Here</div>';
+        $thumbnail  = $thumb ? $thumb['sizes']['shop-taxo'] : placeholder_src('shop-taxo')['url'];
+
+        echo "<figure class='product-category__thumb'>
+        <img class='img-fluid' src='{$thumbnail}' alt='{$thumb['alt']}'>
+        </figure>";
+    endif;
 }
 add_action( 'woocommerce_before_subcategory_title', 'custom_before_subcategory_title', 10, 1 );
