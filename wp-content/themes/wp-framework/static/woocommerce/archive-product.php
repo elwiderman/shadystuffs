@@ -55,7 +55,7 @@ echo "<div class=''>";
 						if (isset($query_obj->term_id)) :
 							$thumb_id = get_term_meta($query_obj->term_id, 'thumbnail_id', true);
 
-							$thumb = ($thumb_id) ? wp_get_attachment_image_src($thumb_id, 'shop-banner')[0] : placeholder_src('shop-banner');
+							$thumb = ($thumb_id) ? wp_get_attachment_image_src($thumb_id, 'shop-banner')[0] : placeholder_src('shop-banner')['url'];
 						else :
 							$thumb = (has_post_thumbnail(get_the_ID())) ? get_the_post_thumbnail_url(get_the_ID(), 'shop-banner') : placeholder_src('shop-banner')['url'];
 						endif;
@@ -64,10 +64,12 @@ echo "<div class=''>";
 						if (!is_shop()) : ?>
 						<div class="shop-banner">
 							<div class="overlay"></div>
-							<img class="img-fluid" src="<?=$thumb;?>">
-							<h2 class="woocommerce-products-header__title page-title">
+							<figure class="shop-banner__img mb-0">
+								<img class="img-fluid" src="<?=$thumb;?>">
+							</figure>
+							<h1 class="woocommerce-products-header__title shop-banner__title">
 								<?php woocommerce_page_title(); ?>
-							</h2>
+							</h1>
 						</div>
 						<?php
 						endif;
