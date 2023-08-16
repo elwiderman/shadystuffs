@@ -1,0 +1,34 @@
+.archive-page {
+    &.archive-shadystore {
+        position: relative;
+        z-index: 0;
+        .main-wrapper {
+            .content-area {
+                .site-main {
+                    .product-wrap {
+                        width: 100%;
+                        display: flex;
+                        .product-grid {
+                            min-width: 100%;
+                            .loop-product-thumb {
+                                margin-bottom: 40px;
+                                .product {
+                                    .woocommerce-loop-product {
+                                        &__link {
+                                            .onsale {
+                                                left: 0;
+                                                min-height: auto;
+                                                min-width: auto;
+                                                border-radius: 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

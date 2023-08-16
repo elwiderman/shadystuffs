@@ -47,10 +47,31 @@ echo "<div class=''>";
 				do_action( 'woocommerce_before_main_content' );
 
 				?>
-				<header class="woocommerce-products-header">
-					<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-						<h1 class="woocommerce-products-header__title page-title"><?php woocommerce_page_title(); ?></h1>
-					<?php endif; ?>
+				<section class="section-block woocommerce-products-header">
+					<?php
+					if ( apply_filters( 'woocommerce_show_page_title', true ) ) : 
+						$query_obj = get_queried_object();
+
+						if (isset($query_obj->term_id)) :
+							$thumb_id = get_term_meta($query_obj->term_id, 'thumbnail_id', true);
+
+							$thumb = ($thumb_id) ? wp_get_attachment_image_src($thumb_id, 'shop-banner')[0] : placeholder_src('shop-banner');
+						else :
+							$thumb = (has_post_thumbnail(get_the_ID())) ? get_the_post_thumbnail_url(get_the_ID(), 'shop-banner') : placeholder_src('shop-banner')['url'];
+						endif;
+
+
+						if (!is_shop()) : ?>
+						<div class="shop-banner">
+							<div class="overlay"></div>
+							<img class="img-fluid" src="<?=$thumb;?>">
+							<h2 class="woocommerce-products-header__title page-title">
+								<?php woocommerce_page_title(); ?>
+							</h2>
+						</div>
+						<?php
+						endif;
+					endif; ?>
 
 					<?php
 					/**
@@ -61,7 +82,7 @@ echo "<div class=''>";
 					 */
 					do_action( 'woocommerce_archive_description' );
 					?>
-				</header>
+				</section>
 				<?php
 				if ( woocommerce_product_loop() ) {
 
