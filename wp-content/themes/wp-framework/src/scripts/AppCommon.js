@@ -10,7 +10,7 @@ export default class AppCommon {
 
     // init the class
     init() {
-        this.pageLoading();
+        // this.pageLoading();
         this.goTop();
         this.nav();
         this.fancyLightbox();
