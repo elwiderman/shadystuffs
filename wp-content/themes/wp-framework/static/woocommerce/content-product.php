@@ -23,45 +23,62 @@ global $product;
 if ( empty( $product ) || ! $product->is_visible() ) {
 	return;
 }
+
+
+// create the bootstrap col class from the esc_attr( wc_get_loop_prop( 'columns' )
+$cols 			= esc_attr(wc_get_loop_prop('columns'));
+$col_class 		= 'col-6';
+if ($cols) {
+	$cols 		= (int)$cols;
+
+	$bs_cols	= ceil(12 / $cols);
+
+	$col_class	.= " col-xl-{$bs_cols}";
+}
+
 ?>
-<li <?php wc_product_class( '', $product ); ?>>
-	<?php
-	/**
-	 * Hook: woocommerce_before_shop_loop_item.
-	 *
-	 * @hooked woocommerce_template_loop_product_link_open - 10
-	 */
-	do_action( 'woocommerce_before_shop_loop_item' );
-
-	/**
-	 * Hook: woocommerce_before_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_show_product_loop_sale_flash - 10
-	 * @hooked woocommerce_template_loop_product_thumbnail - 10
-	 */
-	do_action( 'woocommerce_before_shop_loop_item_title' );
-
-	/**
-	 * Hook: woocommerce_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_template_loop_product_title - 10
-	 */
-	do_action( 'woocommerce_shop_loop_item_title' );
-
-	/**
-	 * Hook: woocommerce_after_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_template_loop_rating - 5
-	 * @hooked woocommerce_template_loop_price - 10
-	 */
-	do_action( 'woocommerce_after_shop_loop_item_title' );
-
-	/**
-	 * Hook: woocommerce_after_shop_loop_item.
-	 *
-	 * @hooked woocommerce_template_loop_product_link_close - 5
-	 * @hooked woocommerce_template_loop_add_to_cart - 10
-	 */
-	do_action( 'woocommerce_after_shop_loop_item' );
-	?>
-</li>
+<div <?php wc_product_class( $col_class, $product ); ?>>
+	<div class="loop-product-thumb">
+		<div <?php wc_product_class( '', $product ); ?>>
+			<?php
+			/**
+			 * Hook: woocommerce_before_shop_loop_item.
+			 *
+			 * @hooked woocommerce_template_loop_product_link_open - 10
+			 */
+			do_action( 'woocommerce_before_shop_loop_item' );
+		
+			/**
+			 * Hook: woocommerce_before_shop_loop_item_title.
+			 *
+			 * @hooked woocommerce_show_product_loop_sale_flash - 10
+			 * @hooked woocommerce_template_loop_product_thumbnail - 10
+			 */
+			do_action( 'woocommerce_before_shop_loop_item_title' );
+		
+			/**
+			 * Hook: woocommerce_shop_loop_item_title.
+			 *
+			 * @hooked woocommerce_template_loop_product_title - 10
+			 */
+			do_action( 'woocommerce_shop_loop_item_title' );
+		
+			/**
+			 * Hook: woocommerce_after_shop_loop_item_title.
+			 *
+			 * @hooked woocommerce_template_loop_rating - 5
+			 * @hooked woocommerce_template_loop_price - 10
+			 */
+			do_action( 'woocommerce_after_shop_loop_item_title' );
+		
+			/**
+			 * Hook: woocommerce_after_shop_loop_item.
+			 *
+			 * @hooked woocommerce_template_loop_product_link_close - 5
+			 * @hooked woocommerce_template_loop_add_to_cart - 10
+			 */
+			do_action( 'woocommerce_after_shop_loop_item' );
+			?>
+		</div>
+	</div>
+</div>

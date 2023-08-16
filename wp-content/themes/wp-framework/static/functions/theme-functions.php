@@ -751,10 +751,13 @@ add_filter('embed_oembed_html', 'shady_embed_oembed_html', 99, 4);
 ** Get placeholder image
 */
 function placeholder_src($size) {
-    $thumb_id   = rwmb_meta('placeholder_image', ['object_type' => 'setting'], 'site-options')['ID'];
+    $thumb      = get_field('placeholder_gen_img', 'option');
     $thumb_size = ($size) ? $size : 'thumbnail';
 
-    return wp_get_attachment_image_url($thumb_id, $thumb_size);
+    return [
+        'url'   => $thumb['sizes'][$size],
+        'alt'   => $thumb['alt']
+    ];
 }
 function product_placeholder($size) {
     $thumb      = get_field('placeholder_prod_img', 'option');

@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-echo '<div class="col-md-3"><aside class="sidebar">';
+echo '<div class="col-md-3"><aside class="sidebar" id="sideBar">';
 
 dynamic_sidebar( 'shop' );
 

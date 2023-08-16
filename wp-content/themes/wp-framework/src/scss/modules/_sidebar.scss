@@ -1,30 +1,71 @@
 /* Styles for all elements in the sidebar */
 
-.sidebar {
-    .widget-box {
-        .widget-title {
-            @include font($primary-font, $bold);
-            font-size: $rem-20;
-            @include add-border($rem-1, rgba($dark-grey, 0.2), 'bottom');
-        }
-        &.widget_recent_entries {
-            ul {
-                padding-left: $rem-20;
-                li {
-                    list-style: circle;
-                    min-height: $rem-40;
-                    padding-bottom: $rem-10;
-                    @include add-border($rem-1, rgba($dark-grey, 0.2), 'bottom');
-                    a {
-                        font-size: $rem-14;
-                        color: $dark-grey;
-                        &:hover {
-                            color: $primary-color;
+#sideBar {
+    &.sidebar {
+        margin-top: 30px;
+        .widget-box {
+            &.widget_block {
+                margin-bottom: 30px;
+                .wp-block-heading, .widget-title {
+                    @include font($alt-font, $regular);
+                    font-size: 20px;
+                    background: #f0f0f0;
+                    line-height: 2; 
+                    padding: 0 20px;
+                }
+                .dgwt-wcas-search-wrapp {
+                    .dgwt-wcas-sf-wrapp {
+                        padding: 0 0 15px;
+                        .dgwt-wcas-search-input {
+                            font-family: $secondary-font;
+                        }
+                        button.dgwt-wcas-search-submit {
+                            top: 11px;
+                            left: 14px;
                         }
                     }
-                    .post-date {
-                        display: block;
-                        font-size: $rem-10;
+                }
+                .wc-block-product-categories-list {
+                    .wc-block-product-categories-list-item {
+                        &__name {
+                            font-size: 13px;
+                            font-weight: $semi-bold;
+                            color: rgba($primary-font-color, 0.5);
+                        }
+                    }
+                }
+                .wp-block-woocommerce-attribute-filter {
+                    .wc-block-attribute-filter {
+                        margin-bottom: 0;
+                    }
+                }
+                .wc-block-checkbox-list {
+                    &__checkbox {
+                        margin-top: 15px;
+                    }
+                    li {
+                        .wc-block-components-checkbox {
+                            &__label {
+                                font-size: 13px;
+                                font-weight: $semi-bold;
+                                color: rgba($primary-font-color, 0.5);
+                            }
+                            &__input {
+                                min-height: 15px;
+                                min-width: 15px;
+                                width: 17px;
+                                height: 17px;
+                                border-color: rgba($primary-font-color, 0.5);
+                                margin-right: 10px;
+                            }
+                            &__mark {
+                                left: 1px;
+                                top: 0px;
+                                height: 15px;
+                                width: 14px;
+                                fill: $primary-color;
+                            }
+                        }
                     }
                 }
             }

@@ -17,9 +17,9 @@
 
 <div class="no-overflow"></div>
 
-<div class="animationload">
+<!-- <div class="animationload">
     <div class="spinner"></div>
-</div>
+</div> -->
 
 
 <?php

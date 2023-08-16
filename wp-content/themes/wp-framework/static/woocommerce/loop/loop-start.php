@@ -10,9 +10,8 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	    https://docs.woocommerce.com/document/template-structure/
- * @author 		WooThemes
- * @package 	WooCommerce/Templates
+ * @see         https://docs.woocommerce.com/document/template-structure/
+ * @package     WooCommerce\Templates
  * @version     3.3.0
  */
 
@@ -20,20 +19,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-
-<?php
-
-// if (is_shop() && is_archive()) {
-// 	echo '<div class="container"><div class="row">';
-
-// 	echo '<div class="col-md-9">';
-// }
-// if (is_product() && is_single()) {
-// 	echo '<div class="container"><div class="row">';
-
-// 	echo '<div class="col-12">';
-// }
-
-?>
-
-	<ul class="products row justify-content-start">
+<div class="product-wrap">
+	<div class="products row product-grid" id="productGrid">

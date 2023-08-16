@@ -64,8 +64,8 @@
     @include respond-to('large') {
         width: calc(960px - 20px);
     }
-    @include respond-to('x-large') {
-        width: calc(1200px - 20px);
+    @include respond-to('s-desk') {
+        width: calc(1300px - 20px);
     }
     .slick-track {
         display: flex !important;
