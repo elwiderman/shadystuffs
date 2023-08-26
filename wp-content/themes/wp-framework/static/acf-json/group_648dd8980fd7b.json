@@ -3,6 +3,23 @@
     "title": "Settings - General",
     "fields": [
         {
+            "key": "field_64ea0aa935b3d",
+            "label": "General",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
             "key": "field_648dd93424f00",
             "label": "Logo",
             "name": "logo_img",
@@ -96,5 +113,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1687017812
+    "modified": 1693059894
 }
