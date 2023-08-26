@@ -450,16 +450,18 @@ function youtube_id($video)
 
 
 /* Adding favicon to admin pages */
-function shady_add_favicon()
-{
+function shady_add_favicon() {
     $favicon_url = image('theme/admin-favicon.png');
     echo '<link rel="shortcut icon" type="image/x-icon" href="' . $favicon_url . '" />';
 }
 /* Adding custom logo to wp login page */
-function shady_login_logo() { ?>
+function shady_login_logo() {
+    // get logo from theme settings
+    $logo       = get_field('logo_img', 'option');
+    ?>
     <style type="text/css">
         #login h1 a, .login h1 a {
-            background-image: url(<?php echo image('theme/admin-logo.png') ?>);
+            background-image: url(<?php echo $logo['url'];?>);
             height: 57px;
             width: 100%;
             background-size: contain;
