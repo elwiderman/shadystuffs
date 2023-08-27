@@ -4,10 +4,13 @@
 <?php get_template_part('parts/footer/footer', 'framework'); ?>
 </footer>
 
-<?php /* ADDTHIS
-<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57e4ed26ee3be478"></script>
-<div class="addthis_inline_share_toolbox"></div>
-*/ ?>
+<?php
+// add the sharethis script
+$sharethis	= get_field('sharethis_key', 'option');
+
+if (is_singular(['product']) && !empty($sharethis)) : ?>
+	<script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=<?php echo $sharethis;?>&source=platform" async="async"></script>
+<?php endif; ?>
 
 <?php wp_footer(); ?>
 

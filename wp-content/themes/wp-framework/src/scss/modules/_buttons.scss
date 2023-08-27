@@ -19,10 +19,34 @@
 .btn-main {
     @extend .btn;
     background: $secondary-color;
+    font-weight: $bold;
     color: $primary-bg;
+    text-transform: lowercase;
+    padding-top: 2px;
     &:hover {
         background: darken($secondary-color, 10);
         color: $primary-bg;
+        box-shadow: none;
+    }
+    &:disabled, &.disabled {
+        box-shadow: none;
+    }
+}
+
+.btn-main-ghost {
+    @extend .btn;
+    background: $primary-bg;
+    font-weight: $bold;
+    color: $alt-font-color;
+    text-transform: lowercase;
+    padding-top: 2px;
+    @include add-border(1px, $alt-font-color, 'all');
+    &:hover {
+        background: darken($primary-bg, 10);
+        // color: $primary-bg;
+        box-shadow: none;
+    }
+    &:disabled, &.disabled {
         box-shadow: none;
     }
 }

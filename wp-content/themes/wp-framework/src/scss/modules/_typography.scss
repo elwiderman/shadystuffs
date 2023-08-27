@@ -20,6 +20,10 @@ h3 {
     @include font($primary-font, $regular);
     font-size: 40px;
     line-height: 1.2;
+    &.sm {
+        font-size: 33px;
+        line-height: 1.1;
+    }
 }
 h4 {
     @include font($alt-font, $regular);
@@ -36,6 +40,14 @@ h6 {
     font-size: 16px;
     line-height: 1.2;
 }
+
+p {
+    @include font($secondary-font, $regular);
+    font-size: 14px;
+    line-height: 1.34;
+    margin-bottom: calc(14px * 1.34);
+}
+
 .lead {
     @include font($primary-font, $regular);
     font-size: $rem-16;
@@ -63,4 +75,10 @@ h6 {
 
 .color-grey {
     color: $grey;
+}
+.color-dark {
+    color: $primary-font-color;
+}
+.color-alt-dark {
+    color: $alt-font-color;
 }

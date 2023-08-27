@@ -21,6 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if (is_singular('product')) {
+	echo "
+	<div class='container'>
+		<div class='row'>
+			<div class='col-12'>
+	";
+}
+
+
 if ( ! empty( $breadcrumb ) ) {
 
 	echo $wrap_before;
@@ -44,4 +53,13 @@ if ( ! empty( $breadcrumb ) ) {
 
 	echo $wrap_after;
 
+}
+
+
+if (is_singular('product')) {
+	echo "
+			</div>
+		</div>
+	</div>
+	";
 }
