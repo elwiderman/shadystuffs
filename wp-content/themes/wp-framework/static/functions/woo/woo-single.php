@@ -140,7 +140,73 @@ function shady_add_custom_product_tabs($tabs) {
     return $tabs;
 }
 
-
+// render the product specs table 
 function shady_woo_product_spec_table_tab() {
     wc_get_template('single-product/tabs/specs.php');
 }
+
+// set custom image for user in the comments 
+remove_action('woocommerce_review_before', 'woocommerce_review_display_gravatar');
+
+add_action('woocommerce_review_before', 'shady_display_review_gravatar', 10);
+function shady_display_review_gravatar($comment) {
+    // Get the comment author's email
+    $comment_author_email = $comment->comment_author_email;
+
+    // Get the Gravatar image URL
+    $gravatar_url       = get_avatar_url($comment_author_email, array('size' => 64));
+    if (!$gravatar_url) {
+        $placeholder    = get_field('user_placeholder_img', 'option');
+        $gravatar_url   = $placeholder['url'];
+    }
+    $thumb              = esc_url($gravatar_url);
+
+    // Output custom Gravatar markup
+    echo "
+    <div class='comment-wrap__img'>
+        <figure class='user-img'>
+            <img class='img-fluid user-img__thumb' src='{$thumb}'>
+        </figure>
+    </div>
+    ";
+}
+
+
+// render the size chart here
+function siaa_custom_content_before_quantity() {
+    global $product;
+    $size_chart_pid = get_field('select_size_chart_post', $product->get_id());
+
+    // get the size chart images
+    if ($size_chart_pid && get_field('show_size_chart_bool', $product->get_id())) :
+        $desk       = get_field('size_chart_for_desktops', $size_chart_pid);
+        $mob        = get_field('size_chart_for_mobiles', $size_chart_pid);
+        ?>
+        
+        <div class="sizechart-wrap">
+            <a href="#" class="sizechart-wrap__trigger-sizechart" data-toggle="modal" data-target="#sizeChartPop">
+                <?php _e('See size chart', 'shady');?>
+            </a>
+    
+            <div class="modal fade" id="sizeChartPop" tabindex="-1" aria-labelledby="sizeChartPopLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="icon-x"></i>
+                        </button>
+                        <div class="modal-body">
+                            <figure class="size-chart mb-0 d-none d-lg-block">
+                                <img src="<?php echo $desk['url'];?>" alt="<?php echo $desk['alt'];?>" class="img-fluid">
+                            </figure>
+                            <figure class="size-chart mb-0 d-lg-none">
+                                <img src="<?php echo $mob['url'];?>" alt="<?php echo $mob['alt'];?>" class="img-fluid">
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    endif;
+}
+add_action('woocommerce_before_add_to_cart_quantity', 'siaa_custom_content_before_quantity');

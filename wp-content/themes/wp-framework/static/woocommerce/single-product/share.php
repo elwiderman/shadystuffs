@@ -29,5 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="sharethis-inline-share-buttons"></div>
 </div>
 
+<hr class="product-share-separator">
 <?php
 /* Omit closing PHP tag at the end of PHP files to avoid "headers already sent" issues. */

@@ -15,6 +15,7 @@ export default class AppCommon {
         this.nav();
         this.fancyLightbox();
         this.postGallery();
+        this.sizeChartTrigger();
     }
 
     // page loading anim
@@ -113,5 +114,18 @@ export default class AppCommon {
             autoplay: true,
             autoplaySpeed: 2000,
         });
+    }
+
+    // trigger the size chart modal
+    sizeChartTrigger() {
+        if ($('#sizeChartPop').length) {
+            $(document).on('click', 'a', e => {
+                if ($(e.currentTarget).attr('href') === '#sizeChartPop') {
+                    e.preventDefault();
+                    // trigger the modal
+                    $('#sizeChartPop').modal('show');
+                }
+            });
+        }
     }
 }

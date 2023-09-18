@@ -197,6 +197,42 @@
                             .single_add_to_cart_button {
                                 @extend .btn-main;
                             }
+                            .sizechart-wrap {
+                                display: block;
+                                margin: -15px 0 20px;
+                                &__trigger-sizechart {
+                                    display: inline-block;
+                                    font-size: 14px;
+                                    font-weight: $bold;
+                                    color: $secondary-color;
+                                    line-height: 1;
+                                    &:hover {
+                                        color: $primary-font-color;
+                                    }
+                                }
+                                .modal {
+                                    .modal-dialog {
+                                        .modal-content {
+                                            .close {
+                                                position: absolute;
+                                                top: -10px;
+                                                right: -30px;
+                                                width: 30px;
+                                                color: $primary-bg;
+                                                float: unset;
+                                                text-shadow: unset;
+                                                opacity: 1;
+                                            }
+                                            .modal-body {
+                                                padding: 10px;
+                                                .size-chart {
+                                                    width: 100%;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     .wishlist {
@@ -230,16 +266,76 @@
                             }
                         }
                     }
-                    .product-meta-separator {
-                        margin-top: 25px;
+                    .product-meta-separator, .product-share-separator {
+                        margin: 25px 0;
                     }
                     .product_meta {
                         margin-top: 15px;
+                        .sku_wrapper {
+                            font-size: 14px;
+                            margin-bottom: 20px;
+                        }
+                        
+                        .tagged_as {
+                            font-size: 14px;
+                            i {
+                                color: $grey;
+                            }
+                            a {
+                                font-weight: $semi-bold;
+                                color: $secondary-color;
+                                &:hover {
+                                    color: $primary-font-color;
+                                }
+                            }
+                        }
+                    }
+                    .product-share {
+                        margin-top: 20px;
+                        .sharethis-inline-share-buttons {
+                            .st-btn {
+                                padding: 0 !important;
+                                &:not(:last-child) {
+                                    margin-right: 15px !important;
+                                }
+                            }
+                        }
                     }
 
                     .product-accordion {
+                        margin-top: -20px;
                         .card {
+                            border: none;
+                            .card-header {
+                                background: transparent;
+                                padding: 0;
+                                padding: 15px 0;
+                                margin-bottom: 0;
+                                &__title {
+                                    @include flex-display(row, space-between, center);
+                                    @extend h6;
+                                    line-height: 1;
+                                    margin-bottom: 0;
+                                    &--icon {
+                                        i {
+                                            &:before {
+                                                content: '\e912';
+                                            }
+                                        }
+                                    }
+                                    &.collapsed {
+                                        .card-header__title--icon {
+                                            i {
+                                                &:before {
+                                                    content: '\e916';
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             .card-body {
+                                padding: 20px 0 25px;
                                 .product-spec-wrap {
                                     &__row {
                                         @include flex-display(row, flex-start, flex-start);
@@ -265,6 +361,97 @@
                                                 color: $secondary-color;
                                                 &:hover {
                                                     color: $alt-font-color;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .woocommerce-Reviews {
+                                    .woocommerce-Reviews-title {
+                                        @extend h6;
+                                        margin-bottom: 20px;
+                                    }
+                                    .commentlist {
+                                        padding-left: 0;
+                                        .review {
+                                            display: block;
+                                            position: relative;
+                                            &:after {
+                                                content: '';
+                                                position: absolute;
+                                                left: 50%;
+                                                bottom: 0;
+                                                transform: translateX(-50%);
+                                                width: 85%;
+                                                height: 1px;
+                                                background: rgba($alt-font-color, 0.2);
+                                            }
+                                            .comment-wrap {
+                                                @include flex-display(row, flex-start, flex-start);
+                                                &__img {
+                                                    flex: 0 0 70px;
+                                                    max-width: 70px;
+                                                    .user-img {
+                                                        width: 50px;
+                                                        height: 50px;
+                                                        border-radius: 50px;
+                                                        @include add-border(2px, $grey, 'all');
+                                                        overflow: hidden;
+                                                        img {
+                                                            width: 100%;
+                                                            height: 100%;
+                                                            object-fit: cover;
+                                                            object-position: center;
+                                                        }
+                                                    }
+                                                }
+                                                &__text {
+                                                    flex-basis: 0;
+                                                    flex-grow: 1;
+                                                    max-width: 100%;
+                                                    padding-left: 5px;
+                                                    .star-rating {
+                                                        font-size: 12px;
+                                                        color: $secondary-color;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    #review_form_wrapper {
+                                        margin-top: 20px;
+                                        .comment-respond {
+                                            .comment-reply-title {
+                                                @extend h6;
+                                            }
+                                            .comment-form {
+                                                label {
+                                                    flex: 0 0 20%;
+                                                    max-width: 20%;
+                                                    font-size: 14px;
+                                                }
+                                                .comment-form-rating {
+                                                    @include flex-display;
+                                                    .stars {
+                                                        cursor: pointer;
+                                                    }
+                                                }
+                                                .comment-form-comment {
+                                                    @include flex-display(row, flex-start, flex-start);
+                                                    textarea {
+                                                        flex: 0 0 80%;
+                                                        max-width: 80%;
+                                                        min-height: 50px;
+                                                        @include add-border(1px, $alt-font-color, 'all');
+                                                    }
+                                                }
+                                                .form-submit {
+                                                    padding-left: 20%;
+                                                    input#submit {
+                                                        @extend .btn-main;
+                                                        height: 35px;
+                                                        padding: 0 20px;
+                                                    }
                                                 }
                                             }
                                         }
