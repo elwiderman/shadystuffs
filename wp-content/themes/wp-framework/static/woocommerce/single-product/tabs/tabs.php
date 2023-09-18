@@ -35,25 +35,30 @@ if ( ! empty( $product_tabs ) ) : ?>
 		$i = 0;
 		foreach ($product_tabs as $key => $product_tab) :
 			$i++;
-			if ($i == 1) {
+			if ($i == 1) :
 				$title_collapsed 	= '';
 				$aria_expanded		= 'true';
-			} else {
+				$collapse_show		= 'show';
+			else :
 				$title_collapsed 	= 'collapsed';
 				$aria_expanded		= 'false';
-			}
+				$collapse_show		= '';
+			endif;
 			?>
-
-
 			<div class="card">
 				<div class="card-header" id="<?php echo esc_attr( $key ); ?>">
 					<h4 class="card-header__title <?php echo $title_collapsed;?>" type="button" data-toggle="collapse"
 						data-target="#<?php echo esc_attr( $key ); ?>-content" aria-expanded="<?php echo $aria_expanded;?>" aria-controls="<?php echo esc_attr( $key ); ?>-content">
-						<?php echo wp_kses_post(apply_filters('woocommerce_product_' . $key . '_tab_title', $product_tab['title'], $key));?>
+						<span class="card-header__title--label">
+							<?php echo wp_kses_post(apply_filters('woocommerce_product_' . $key . '_tab_title', $product_tab['title'], $key));?>
+						</span>
+						<span class="card-header__title--icon">
+							<i class="icon-plus"></i>
+						</span>
 					</h4>
 				</div>
 
-				<div id="<?php echo esc_attr( $key ); ?>-content" class="collapse show" aria-labelledby="<?php echo esc_attr( $key ); ?>" data-parent="#productAccordion">
+				<div id="<?php echo esc_attr( $key ); ?>-content" class="collapse <?php echo $collapse_show;?>" aria-labelledby="<?php echo esc_attr( $key ); ?>" data-parent="#productAccordion">
 					<div class="card-body">
 						<?php
 						if ( isset( $product_tab['callback'] ) ) {
@@ -70,4 +75,4 @@ if ( ! empty( $product_tabs ) ) : ?>
 
 	</div>
 
-<?php endif; ?>
+<?php endif;
