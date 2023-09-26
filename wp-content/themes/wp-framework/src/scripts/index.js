@@ -16,6 +16,7 @@ import ready from 'domready';
 import AppCommon from './AppCommon';
 import Carousels from './Carousels';
 import Home from './Home';
+import Forms from './Forms';
 
 // get the libraries
 import 'bootstrap';
@@ -25,4 +26,5 @@ import 'simplebar';
 ready(() => {
     new AppCommon();
     new Carousels();
+    new Forms();
 });

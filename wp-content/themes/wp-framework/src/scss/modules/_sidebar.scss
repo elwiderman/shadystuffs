@@ -59,11 +59,11 @@
                                 margin-right: 10px;
                             }
                             &__mark {
-                                left: 1px;
-                                top: 0px;
+                                left: -2px;
+                                top: -1px;
                                 height: 15px;
                                 width: 14px;
-                                fill: $primary-color;
+                                fill: $secondary-color;
                             }
                         }
                     }

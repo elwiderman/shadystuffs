@@ -18,10 +18,12 @@
                     line-height: 1.5;
                     text-transform: lowercase;
                     padding: 0 15px;
+                    border-radius: 0;
+                    min-height: unset;
                 }
                 .price {
-                    @include font($secondary-font, $bold);
-                    font-size: 25px;
+                    @include font($alt-font, $bold);
+                    font-size: 20px;
                     color: $primary-font-color;
                     // line-height: 1;
                     @include flex-display();
@@ -34,6 +36,9 @@
                     }
                     ins {
                         text-decoration: none;
+                    }
+                    .woocommerce-Price-currencySymbol {
+                        font-size: 70%;
                     }
                 }
             }
@@ -68,13 +73,32 @@
                         .add_to_wishlist {
                             @extend .btn-square-white;
                             .yith-wcwl-icon {
+                                font-family: $icomoon-font-family;
                                 margin: 0;
                                 &:before {
-                                    content: '\f004';
-                                    font-weight: $regular;
+                                    content: '\e911';
+                                    font-size: 15px;
                                 }
                             }
                             &:hover {
+                                color: $secondary-color;
+                            }
+                            & > span {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+                .yith-wcwl-wishlistaddedbrowse {
+                    .feedback {
+                        display: none;
+                        & ~ a {
+                            font-family: $icomoon-font-family;
+                            @extend .btn-square-white;
+                            font-size: 0;
+                            &:before {
+                                content: '\e911';
+                                font-size: 15px;
                                 color: $secondary-color;
                             }
                         }
@@ -83,15 +107,23 @@
                 .yith-wcwl-wishlistexistsbrowse {
                     &:hover {
                         .feedback {
-                            color: $secondary-color;
+                            i {
+                                color: $primary-color;
+                            }
                         }
                     }
                     .feedback {
                         @extend .btn-square-white;
                         font-size: 0;
                         i {
-                            font-size: 14px;
+                            font-family: $icomoon-font-family;
+                            font-size: 15px;
+                            color: $secondary-color;
                             margin: 0;
+                            @include transition(0.3s);
+                            &:before {
+                                content: '\e911';
+                            }
                         }
                         & + a {
                             display: block;
@@ -109,8 +141,18 @@
                 display: none;
             }
         }
+        &__meta {
+            .star-rating {
+                font-size: 11px;
+                color: $secondary-color;
+                height: 11px;
+            }
+        }
     }
 }
 
 
-
+#yith-wcwl-popup-message {
+    transform: translate(-50%, -50%);
+    margin: 0 auto !important;
+}

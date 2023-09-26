@@ -83,7 +83,57 @@
                                 }
                             }
                         }
+
+                        &.woocommerce-before-loop {
+                            @include flex-display(row, space-between, center);
+                            .woocommerce-notices-wrapper {
+                                flex: 0 0 100%;
+                                max-width: 100%;
+                            }
+                            .woocommerce-result-count {
+                                // margin-bottom: 0;
+                            }
+                            .woocommerce-ordering {
+                                min-width: 165px;
+                                text-align: right;
+                                .select2-container {
+                                    .select2-selection {
+                                        &--single {
+                                            height: 20px;
+                                            border: 0;
+                                            border-radius: 0;
+                                        }
+                                        &__rendered {
+                                            @extend p;
+                                            color: $primary-color;
+                                            margin-bottom: 0;
+                                        }
+                                        &__arrow {
+                                            height: 19px;
+                                            top: 0;
+                                            right: 0;
+                                        }
+                                    }
+                                    .select2-dropdown {
+                                        border-radius: 0;
+                                        .select2-results {
+                                            &__option {
+                                                @extend p;
+                                                font-size: 12px;
+                                                margin-bottom: 0;
+                                                &--selectable {
+                                                }
+                                                &--highlighted {
+                                                    background: $secondary-color;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+
                 }
             }
         }
