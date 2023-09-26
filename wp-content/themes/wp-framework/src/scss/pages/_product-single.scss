@@ -6,6 +6,8 @@
                     display: block;
                     width: 100%;
                     padding-right: 50px;
+                    position: sticky;
+                    top: 110px;
                     &__inner {
                         @include flex-display(row, flex-start, flex-start);
                     }
@@ -492,6 +494,19 @@
                         }
                     }
                 }
+            }
+
+            &.section-product-more {
+                padding-top: 100px;
+                .related {
+                    h2 {
+                        @extend h4;
+                        font-family: $primary-font;
+                        line-height: 1;
+                        margin-bottom: 20px;
+                    }
+                }
+                
             }
         }
     }
