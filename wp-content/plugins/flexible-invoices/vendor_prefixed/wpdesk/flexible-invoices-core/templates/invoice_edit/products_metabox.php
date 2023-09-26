@@ -83,19 +83,20 @@ if (!empty($items)) {
 				<tr class="product_row">
 				<td>
 						<div class="product_select_name" style="width: 90%; float: left;">
-							<div class="select-product" <?php 
-        echo $is_woocommerce_active ? '' : 'style="display:none"';
-        ?>>
+							<?php 
+        if ($is_woocommerce_active) {
+            ?>
+							<div class="select-product">
 								<select name="product[name][]" class="refresh_product wide-input">
 									<option value="<?php 
-        echo \esc_attr($item_name);
-        ?>"><?php 
-        echo \esc_html($item_name);
-        ?></option>
+            echo \esc_attr($item_name);
+            ?>"><?php 
+            echo \esc_html($item_name);
+            ?></option>
 								</select>
 							</div>
 							<?php 
-        if (!$is_woocommerce_active) {
+        } else {
             ?>
 								<input type="text" class="item_input_name" name="product[name][]" value="<?php 
             echo \esc_html($item_name);
@@ -302,9 +303,10 @@ if (!empty($items)) {
 	<tr class="product_row">
 		<td>
 			<div class="product_select_name" style="width: 90%; float: left;">
-				<div class="select-product" <?php 
-echo $is_woocommerce_active ? '' : 'style="display:none"';
-?>>
+				<?php 
+if ($is_woocommerce_active) {
+    ?>
+				<div class="select-product">
 					<label>
 						<select name="product[name][]" class="refresh_product wide-input">
 							<option value=""></option>
@@ -312,7 +314,7 @@ echo $is_woocommerce_active ? '' : 'style="display:none"';
 					</label>
 				</div>
 				<?php 
-if (!$is_woocommerce_active) {
+} else {
     ?>
 					<input type="text" class="item_input_name" name="product[name][]" value="">
 				<?php 

@@ -3,15 +3,15 @@
  * Plugin Name: Fish and Ships
  * Plugin URI: https://www.wp-centrics.com/
  * Description: A WooCommerce conditional table rate shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.
- * Version: 1.4.15
+ * Version: 1.4.16
  * Author: wpcentrics
  * Author URI: https://www.wp-centrics.com
  * Text Domain: fish-and-ships
  * Domain Path: /languages
  * Requires at least: 4.7
- * Tested up to: 6.2
+ * Tested up to: 6.3
  * WC requires at least: 3.0
- * WC tested up to: 7.7
+ * WC tested up to: 8.0
  * Requires PHP: 7.0
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 } else {
 
-	define ('WC_FNS_VERSION', '1.4.15' );
+	define ('WC_FNS_VERSION', '1.4.16' );
 	define ('WC_FNS_PATH', dirname(__FILE__) . '/' );
 	define ('WC_FNS_URL', plugin_dir_url( __FILE__ ) );
 
@@ -768,8 +768,6 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 				$product_id = $Fish_n_Ships->get_prod_or_variation_id($product);
 				$prod_object = wc_get_product($product_id);
 				$product_terms_id = array($prod_object->get_shipping_class_id());
-
-				//$shipping_class->debug_log('product: #' . $product['data']->get_id() . ' ' . $Fish_n_Ships->get_name($product) . ' has the shipping class: ' . $prod_object->get_shipping_class_id(), 3);
 
 			} elseif ( $taxonomy == 'product_cat' ) {
 
@@ -1500,6 +1498,31 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			return $number;
 		}
 		
+		/**
+		 * Sanitize string as key. Unlike sanitize_key(), it allow upper case letters
+		 *
+		 * This is need for example for user roles, because WP allow upper case letters in the role ID
+		 *
+		 * @since 1.4.16
+		 *
+		 * @param $key (string) 
+		 *
+		 * @return sanitizied camelcase key (string)
+		 *
+		 */
+
+		function sanitize_camelcase( $key ) {
+			
+			$sanitized = '';
+
+			if ( is_scalar( $key ) ) {
+				$sanitized = $key;
+				$sanitized = preg_replace( '/[^A-Za-z0-9_\-]/', '', $sanitized );
+			}
+
+			return $sanitized;
+		}
+
 		/**
 		 * Format the numbers from database to form fields in the same way as WC does
 		 *

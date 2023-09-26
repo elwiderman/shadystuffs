@@ -3,7 +3,7 @@
  * Plugin Name: Flexible Invoices for WooCommerce and WordPress
  * Plugin URI: https://wordpress.org/plugins/flexible-invoices/
  * Description: Flexible Invoices for WooCommerce and WordPress made simple. Available <a href="https://www.flexibleinvoices.com/products/flexible-invoices-woocommerce/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=flexible-invoices-plugins-upgrade-link" target="_blank">PRO extension</a> with automations and different types of documents.
- * Version: 5.6.16
+ * Version: 5.6.17
  * Author: WP Desk
  * Author URI: https://www.flexibleinvoices.com/
  * Text Domain: flexible-invoices
@@ -38,8 +38,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /* THESE TWO VARIABLES CAN BE CHANGED AUTOMATICALLY */
-$plugin_version = '5.6.16';
-$plugin_release_timestamp = '2023-08-21 14:21';
+$plugin_version = '5.6.17';
+$plugin_release_timestamp = '2023-08-25 12:16';
 
 $plugin_name        = 'Flexible Invoices for WooCommerce and WordPress';
 $plugin_class_name  = '\WPDesk\FlexibleInvoices\PluginFactory';
