@@ -2,6 +2,37 @@
     &.single-product {
         .section-block {
             &.section-product-main {
+                .product-img-wrap {
+                    display: block;
+                    width: 100%;
+                    padding-right: 50px;
+                    &__inner {
+                        @include flex-display(row, flex-start, flex-start);
+                    }
+                    .product-carousel {
+                        flex: 0 0 70%;
+                        max-width: 70%;
+                    }
+                    .product-nav {
+                        flex: 0 0 30%;
+                        max-width: 30%;
+                        padding-left: 30px;
+                        .slick-slide {
+                            margin: 1 px 0;
+                            opacity: 0.3;
+                            @include transition(0.2s);
+                            &.slick-current {
+                                opacity: 1;
+                            }
+                            .product-slide {
+                                cursor: pointer;
+                                &__img {
+                                    width: 120px;
+                                }
+                            }
+                        }
+                    }
+                }
                 .entry-summary {
                     .product_title {
                         @extend h3.sm;
