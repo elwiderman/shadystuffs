@@ -173,7 +173,8 @@ function shady_display_review_gravatar($comment) {
 
 
 // render the size chart here
-function siaa_custom_content_before_quantity() {
+add_action('woocommerce_before_add_to_cart_quantity', 'shady_size_chart_before_quantity');
+function shady_size_chart_before_quantity() {
     global $product;
     $size_chart_pid = get_field('select_size_chart_post', $product->get_id());
 
@@ -209,4 +210,16 @@ function siaa_custom_content_before_quantity() {
         <?php
     endif;
 }
-add_action('woocommerce_before_add_to_cart_quantity', 'siaa_custom_content_before_quantity');
+
+
+
+/* the image section */
+remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10);
+remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
+
+add_action('woocommerce_before_single_product_summary', 'shady_woo_custom_product_images', 20);
+function shady_woo_custom_product_images() {
+    if (is_product()) {
+        get_template_part('woocommerce/single-product/custom-images');
+    }
+}

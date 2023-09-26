@@ -11,6 +11,10 @@ export default class Carousels {
         if ($('.products-carousel').length) {
             this.productCarousels();
         }
+
+        if ($('#productSingleCarouselMain').length) {
+            this.productSingleCarousel();
+        }
     }
 
     homeHero() {
@@ -50,6 +54,41 @@ export default class Carousels {
                 pauseOnHover: true,
                 rows: 0,
             });
+        });
+    }
+
+    productSingleCarousel() {
+        $('#productSingleCarouselMain').slick({
+            dots: false,
+            arrows: false,
+            infinite: true,
+            autoplay: false,
+            rows: 0,
+            speed: 800,
+            fade: true,
+            cssEase: 'ease',
+            lazyLoad: 'ondemand',
+            asNavFor: '#productSingleCarouselNav'
+        });
+
+        $('#productSingleCarouselNav').slick({
+            dots: false,
+            arrows: true,
+            infinite: true,
+            autoplay: false,
+            rows: 0,
+            speed: 800,
+            fade: false,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            vertical: true,
+            centerMode: false,
+            focusOnSelect: true,
+            cssEase: 'ease',
+            lazyLoad: 'ondemand',
+            asNavFor: '#productSingleCarouselMain',
+            prevArrow: '<button class="slick-prev slick-arrow"><i class="icon-chevron-up"></i></button>',
+            nextArrow: '<button class="slick-next slick-arrow"><i class="icon-chevron-down"></i></button>',
         });
     }
 }
