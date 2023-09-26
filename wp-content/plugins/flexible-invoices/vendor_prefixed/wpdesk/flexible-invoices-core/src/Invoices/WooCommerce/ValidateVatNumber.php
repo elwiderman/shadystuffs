@@ -32,11 +32,11 @@ class ValidateVatNumber
      *
      * @return bool
      */
-    public static function validate(string $vat_number, string $customer_country) : bool
+    public static function validate(string $raw_vat_number, string $customer_country) : bool
     {
-        $vat_number = \strtoupper(\trim($vat_number));
+        $vat_number = \strtoupper(\trim($raw_vat_number));
         $vat_number = \preg_replace('/[ -,.]/', '', $vat_number);
-        if (\strlen($vat_number) < 8) {
+        if (\strlen($vat_number) < 8 || \strlen($vat_number) !== \strlen($raw_vat_number)) {
             return \false;
         }
         $country = \substr($vat_number, 0, 2);

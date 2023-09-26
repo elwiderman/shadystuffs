@@ -3,10 +3,10 @@ Contributors: wpcentrics
 Donate link: https://www.wp-centrics.com/
 Tags: shipping method, table rate, shipping rate, conditional shipping, shipping
 Requires at least: 4.7
-Tested up to: 6.2
+Tested up to: 6.3
 WC requires at least: 3.0
-WC tested up to: 7.7
-Stable tag: 1.4.15
+WC tested up to: 8.0
+Stable tag: 1.4.16
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -285,6 +285,11 @@ Fish and Ships has widely tested with older and latest; our philosophy is to cov
 13. Apply coupons automatically (Pro)
 
 == Changelog ==
+
+= 1.4.16 - 29/08/2023 =
+* Checked for WordPress 6.3
+* Checked for WooCommerce 8.0
+* Support for user roles that have upper case letters into the role ID (Pro)
 
 = 1.4.15 - 08/06/2023 =
 * Bug solved on Cart total method when 100% coupon discount is added (Pro)
