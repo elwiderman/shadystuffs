@@ -1,38 +1,13 @@
 {
-    "key": "group_64dcf8b19e1be",
-    "title": "Product Taxonomies Image",
+    "key": "group_651d3b8517929",
+    "title": "Collections Archive - Content",
     "fields": [
         {
-            "key": "field_64dcf8b263645",
-            "label": "Thumbnail for archive page",
-            "name": "archive_thumb_img",
+            "key": "field_651d3b85cfd52",
+            "label": "Hero",
+            "name": "",
             "aria-label": "",
-            "type": "image",
-            "instructions": "",
-            "required": 1,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "return_format": "array",
-            "library": "all",
-            "min_width": 460,
-            "min_height": 600,
-            "min_size": "",
-            "max_width": "",
-            "max_height": "",
-            "max_size": "",
-            "mime_types": "",
-            "preview_size": "thumbnail"
-        },
-        {
-            "key": "field_651e078dace2e",
-            "label": "Banner for the archive pages",
-            "name": "banner_for_the_archive_pages_img",
-            "aria-label": "",
-            "type": "image",
+            "type": "tab",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -41,31 +16,66 @@
                 "class": "",
                 "id": ""
             },
+            "placement": "top",
+            "endpoint": 0
+        },
+        {
+            "key": "field_651d3baccfd53",
+            "label": "Hero Banner for desktop",
+            "name": "hero_banner_desk_img",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "return_format": "array",
+            "library": "all",
+            "min_width": 1536,
+            "min_height": 480,
+            "min_size": "",
+            "max_width": 1920,
+            "max_height": 600,
+            "max_size": "",
+            "mime_types": "",
+            "preview_size": "thumbnail"
+        },
+        {
+            "key": "field_651d3bdc9afbe",
+            "label": "Hero Banner for mobile",
+            "name": "hero_banner_mob_img",
+            "aria-label": "",
+            "type": "image",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
             "return_format": "array",
             "library": "all",
             "min_width": "",
             "min_height": "",
             "min_size": "",
-            "max_width": 800,
-            "max_height": 200,
+            "max_width": "",
+            "max_height": "",
             "max_size": "",
             "mime_types": "",
-            "preview_size": "medium"
+            "preview_size": "thumbnail"
         }
     ],
     "location": [
         [
             {
-                "param": "taxonomy",
+                "param": "page_template",
                 "operator": "==",
-                "value": "product_cat"
-            }
-        ],
-        [
-            {
-                "param": "taxonomy",
-                "operator": "==",
-                "value": "collection"
+                "value": "templates\/archive-collections.php"
             }
         ]
     ],
@@ -77,6 +87,6 @@
     "hide_on_screen": "",
     "active": true,
     "description": "",
-    "show_in_rest": 1,
-    "modified": 1696509424
+    "show_in_rest": 0,
+    "modified": 1696415027
 }

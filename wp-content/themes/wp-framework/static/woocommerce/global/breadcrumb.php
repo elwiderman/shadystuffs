@@ -22,11 +22,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if (is_singular('product')) {
-	echo "
-	<div class='container'>
-		<div class='row'>
-			<div class='col-12'>
-	";
+	$wrap_before	= "<div class='container'><div class='row'><div class='col-12'><nav class='woocommerce-breadcrumb'>";
+	$wrap_after		= "</nav></div></div></div>";
+
+	global $product;
+	// get the collections if exsits
+	$producd_id			= $product->get_id();
+	$all_collections 	= get_the_terms($product->get_id(), 'collection');
+	// insert collections to breadcrumb if it exists
+	if ($all_collections && sizeof($all_collections) > 0) {
+		$collection		= $all_collections[0]; // considering only the first one
+		$collection_data = [$collection->name, get_term_link($collection, $collection->taxonomy)];
+		
+		// to insert the collection at before the last elem need to splice the array and get the index of the last elem
+		$last_index		= count($breadcrumb) - 1;
+		array_splice($breadcrumb, $last_index, 0, [$collection_data]);
+	}
 }
 
 
@@ -53,13 +64,4 @@ if ( ! empty( $breadcrumb ) ) {
 
 	echo $wrap_after;
 
-}
-
-
-if (is_singular('product')) {
-	echo "
-			</div>
-		</div>
-	</div>
-	";
 }
