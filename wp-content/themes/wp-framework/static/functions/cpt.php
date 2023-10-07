@@ -1,92 +1,37 @@
 <?php
-if (function_exists('register_post_type')) {
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // CPT Example --------------------------------------------------------------------------------------------*/
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /*$labels = array(
-        'name' => _x('Example name', 'post type general name', 'shady'),
-        'singular_name' => _x('Example name', 'post type singular name', 'shady'),
-        'add_new' => _x('Add new example', 'example', 'shady'),
-        'add_new_item' => __('Add new example', 'shady'),
-        'edit_item' => __('Edit example', 'shady'),
-        'new_item' => __('New example', 'shady'),
-        'view_item' => __('View example', 'shady'),
-        'search_items' => __('Search example', 'shady'),
-        'not_found' => __('No Prexampleess found', 'shady'),
-        'not_found_in_trash' => __('No example found in trash', 'shady'),
-        'parent_item_colon' => '',
-        'menu_name' => 'Example'
+// custom rewrite rule product single
+add_action('init', 'shady_custom_product_rewrite_rules');
+function shady_custom_product_rewrite_rules() {
+    add_rewrite_rule(
+        '^store/([^/]+)/([^/]+)/([^/]+)/?$',
+        'index.php?product=$matches[3]&product_cat=$matches[1]&collection=$matches[2]',
+        'top'
     );
-    //args for the cpt
-    $args = array(
-        'labels' => $labels,
-        'public' => true,
-        'publicly_queryable' => true,
-        'exclude_from_search' => false,
-        'show_ui' => true,
-        'show_in_menu' => true,
-        'query_var' => true,
-        'rewrite' => false, //this rewrites the url to make use
-        'has_archive' => false, //takes the url of the archive page(in wp-admin) for the cpt
-        'capability_type' => 'post',
-        'menu_icon' => 'dashicons-megaphone',
-        'hierarchical' => true,
-        'menu_position' => null,
-        'supports' => array('thumbnail', 'title', 'editor', 'excerpt'),
-        'taxonomies' => array( 'category', 'tags' )
-    );
-    register_post_type('example', $args);
-
-    // cpt custom taxonomy
-    register_taxonomy( 'example-category', // register custom taxonomy - category
-        'example',
-        array(
-            'hierarchical' => true,
-            'labels' => array(
-                'name' => 'Example categories',
-                'singular_name' => 'Example category',
-            )
-        )
-    );*/
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // CPT SLIDER ---------------------------------------------------------------------------------------------- */
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* $labels = array(
-        'name' => _x('Slider', 'post type general name', 'shady'),
-        'singular_name' => _x('Slider', 'post type singular name', 'shady'),
-        'add_new' => _x('Add new slide', 'slider', 'shady'),
-        'add_new_item' => __('Add new slide', 'shady'),
-        'edit_item' => __('Modify slide', 'shady'),
-        'new_item' => __('New slide', 'shady'),
-        'view_item' => __('View slide', 'shady'),
-        'search_items' => __('Search slide', 'shady'),
-        'not_found' => __('No slides found', 'shady'),
-        'not_found_in_trash' => __('No slide found in trash', 'shady'),
-        'parent_item_colon' => '',
-        'menu_name' => 'Slider'
-    );
-    //viene escluso dalla ricerca frontend
-    $args = array(
-        'labels' => $labels,
-        'public' => true,
-        'publicly_queryable' => false,
-        'exclude_from_search' => true,
-        'show_ui' => true,
-        'show_in_menu' => true,
-        'query_var' => false,
-        'rewrite' => true,
-        'capability_type' => 'post',
-        'has_archive' => true,
-        'menu_icon' => 'dashicons-images-alt2',
-        'hierarchical' => false,
-        'menu_position' => 20,
-        'supports' => array('thumbnail', 'title', 'editor', 'excerpt')
-    );
-    register_post_type('slider', $args); */
-
 }
+
+// custom rewrite rule collections archive page
+add_action('init', 'shady_custom_collections_archive_rewrite_rules');
+function shady_custom_collections_archive_rewrite_rules() {
+    add_rewrite_rule(
+        '^collections/?$',
+        'index.php?pagename=collections',
+        'top'
+    );
+}
+
+
+// adding collections to the permalink
+function shady_custom_product_permalink_structure($post_link, $post) {
+    if ('product' === $post->post_type) {
+        $collection_terms = wp_get_object_terms($post->ID, 'collection');
+
+        if (!empty($collection_terms)) {
+            $post_link = str_replace('%collection%', $collection_terms[0]->slug, $post_link);
+        }
+    }
+    return $post_link;
+}
+add_filter('post_type_link', 'shady_custom_product_permalink_structure', 10, 2);
 
 
 

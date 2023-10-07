@@ -463,6 +463,7 @@ function shady_login_logo() {
         #login h1 a, .login h1 a {
             background-image: url(<?php echo $logo['url'];?>);
             height: 57px;
+            min-width: 220px;
             width: 100%;
             background-size: contain;
             background-repeat: no-repeat;
