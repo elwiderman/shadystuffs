@@ -5,7 +5,7 @@
 get_header();
 ?>
 
-<div class="single-page single-home">
+<div class="single-page single-home woocommerce">
     <?php
     get_template_part('parts/pages/home/hero');
     get_template_part('parts/pages/home/collections-v2');

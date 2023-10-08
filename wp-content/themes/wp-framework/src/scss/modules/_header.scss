@@ -105,8 +105,14 @@
         }
         &--right {
             @include flex-display(row, flex-end, center);
-            .navbar-account {
+            .navbar-wishlist, .navbar-account {
                 margin-right: 15px;
+                a {
+                    @include flex-display(column, center, center);
+                    span {
+                        font-size: 10px;
+                    }
+                }
             }
             .navbar-cart {
                 .btn {

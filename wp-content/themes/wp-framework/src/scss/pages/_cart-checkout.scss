@@ -1,0 +1,313 @@
+.single-page {
+    &.single-cart-checkout {
+        &.cart {
+            padding-top: 40px;
+            .section-block {
+                &.section-content {
+                    .cart-wrap {
+                        .block-title {
+                            @include font($secondary-font, $bold);
+                            font-size: 24px;
+                            .cart-count {
+                                font-weight: $regular;
+                            }
+                        }
+
+                        .cart-table-wrap {
+                            @include add-border(1px, $grey, 'all');
+                            border-radius: 8px;
+                            margin-top: 30px;
+                            padding: 20px;
+                            .cart-row {
+                                @include flex-display(row, flex-start, flex-start);
+                                margin: 0 -10px;
+                                &:not(:last-child) {
+                                    @include add-border(1px, $dark-grey, 'bottom');
+                                    padding-bottom: 25px;
+                                }
+                                &:not(:first-child) {
+                                    padding-top: 25px;
+                                }
+                                .product-info {
+                                    flex-basis: 0;
+                                    flex-grow: 1;
+                                    max-width: 100%;
+                                    padding: 0 10px;
+                                    .product-name {
+                                        margin-bottom: 10px;
+                                        a {
+                                            font-size: 25px;
+                                            font-weight: $semi-bold;
+                                            color: $alt-font-color;
+                                            &:hover {
+                                                color: $secondary-color;
+                                            }
+                                        }
+                                    }
+                                    .product-price, .product-subtotal {
+                                        @extend h5;
+                                        font-size: 20px;
+                                        color: $alt-font-color;
+                                        margin-bottom: 15px;
+                                        .woocommerce-Price-amount {
+                                            .woocommerce-Price-currencySymbol {
+                                                font-size: 70%;
+                                            }
+                                        }
+                                    }
+                                    .product-quantity {
+                                        .quantity {
+                                            position: relative;
+                                            @include flex-display;
+                                            margin-right: 15px;
+                                            &__btn {
+                                                height: 35px;
+                                                display: inline-flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                font-size: 12px;
+                                                width: 30px;
+                                                padding: 0;
+                                                @include add-border(1px, $alt-font-color, 'all');
+                                                background: $primary-bg;
+                                                @include transition(0.3s);
+                                                &:hover {
+                                                    background: rgba($alt-font-color, 0.1);
+                                                }
+                                                &.minus {
+                                                    border-radius: 30px 0 0 30px;
+                                                    border-right: 0;
+                                                }
+                                                &.plus {
+                                                    border-radius: 0 30px 30px 0;
+                                                    border-left: 0;
+                                                }
+                                            }
+                                            .qty {
+                                                height: 35px;
+                                                display: inline-flex;
+                                                max-width: 50px;
+                                                @include font($secondary-font, $semi-bold);
+                                                @include add-border(1px, $alt-font-color, 'all');
+                                                pointer-events: none;
+                                                -moz-appearance: textfield;
+                                                appearance: textfield;
+                                                margin: 0;
+                                            }
+                                            .qty::-webkit-inner-spin-button,
+                                            .qty::-webkit-outer-spin-button {
+                                                -webkit-appearance: none; 
+                                                margin: 0;
+                                            }
+                                        }
+                                    }
+                                    .product-subtotal {
+                                        font-size: 25px;
+                                        margin-top: 25px;
+                                        margin-bottom: 0;
+                                        .small {
+                                            font-size: 50%;
+                                        }
+                                    }
+                                }
+                                .product-image {
+                                    flex: 0 0 18%;
+                                    max-width: 18%;
+                                    padding: 0 10px;
+                                    &__thumb {
+                                        border-radius: 5px;
+                                        overflow: hidden;
+                                    }
+                                }
+                                .product-footer {
+                                    flex: 0 0 100%;
+                                    max-width: 100%;
+                                    padding: 15px 10px 0;
+                                    margin-top: 15px;
+                                    @include add-border(1px, rgba($grey, 0.6), 'top');
+                                    .product-remove {
+                                        @include flex-display(row, center);
+                                        a {
+                                            display: inline-block;
+                                            width: unset;
+                                            height: auto;
+                                            font-size: 14px;
+                                            color: #bababa !important;
+                                            &:hover {
+                                                background: transparent;
+                                                color: $dark-grey !important;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .cart-footer {
+                            padding-left: 20px;
+                            margin: 60px 0 30px;
+                            .coupon {
+                                display: flex;
+                                justify-content: flex-start;
+                                align-items: center;
+                                margin-bottom: 25px;
+                                .form-control {
+                                    font-size: 15px;
+                                    text-transform: uppercase;
+                                    height: 35px;
+                                    @include add-border(1px, $alt-font-color, 'all');
+                                    border-radius: 8px 0 0 8px;
+                                }
+                                .btn-main-ghost {
+                                    height: 35px;
+                                    font-size: 15px;
+                                    min-width: 150px;
+                                    padding: 0 15px;
+                                    border-radius: 0 8px 8px 0;
+                                    box-shadow: none;
+                                    margin-left: -1px;
+                                }
+                            }
+                            .update {
+                                @include flex-display(row, center);
+                            }
+                        }
+
+                        .cart-totals {
+                            padding-left: 20px;
+                            position: sticky;
+                            top: 110px;
+                            .woocommerce-shipping-totals {
+                                &.shipping {
+                                    input[type='text'] {
+                                        height: 28px;
+                                        font-size: 14px;
+                                        @include add-border(1px, $form-border, 'all');
+                                        border-radius: 4px;
+                                        box-shadow: none !important;
+                                        outline: 0 !important;
+                                    }
+                                    .button {
+                                        @extend .btn-main-ghost;
+                                        height: 30px;
+                                        font-size: 14px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .wc-proceed-to-checkout {
+                            display: flex;
+                            justify-content: center;
+                            .btn-main {
+                                font-size: 24px;
+                                height: 70px;
+                                padding: 0 35px;
+                            }
+                        }
+
+                        .cross-sells {
+                            margin-top: 40px;
+                            .products-carousel {
+                                width: 100%;
+                                overflow: hidden;
+                                .slick-list {
+                                    .slide {
+                                        .loop-product-thumb {
+                                            max-width: 200px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &.checkout {
+            .section-block {
+                &.section-hero {
+                    padding: 20px 0 25px;
+                    .section-title {
+                        @include font($secondary-font, $bold);
+                        font-size: 35px;
+                    }
+                }
+
+                &.section-content {
+                    .customer-detail {
+                        padding-right: 40px;
+                        .woocommerce-billing-fields, .woocommerce-shipping-fields {
+                            h3 {
+                                @include font($secondary-font, $bold);
+                                font-size: 25px;
+                            }
+                        }
+        
+                        .woocommerce-shipping-fields {
+                            margin-top: 30px;
+                        }
+                    }
+                    .order-review {
+                        h3 {
+                            @include font($secondary-font, $bold);
+                            font-size: 25px;
+                        }
+                        .place-order {
+                            .btn-main {
+                                font-size: 25px;
+                                height: 60px;
+                                padding: 0 35px;
+                            }
+                        }
+                    }
+
+                    .woocommerce-order {
+                        margin-top: 30px;
+                        .woocommerce-notice {
+                            font-size: 25px;
+                        }
+                        .woocommerce-order-details {
+                            max-width: 750px;
+                            margin: 30px auto 50px;
+                            &__title {
+                                @include font($secondary-font, $bold);
+                                font-size: 25px;
+                                color: $alt-font-color;
+                                margin-bottom: 10px;
+                            }
+                            .woocommerce-table {
+                                &--order-details {
+                                    .wc-item-meta {
+                                        li {
+                                            @include flex-display;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .woocommerce-customer-details {
+                            .woocommerce-column {
+                                &__title {
+                                    @include font($secondary-font, $bold);
+                                    font-size: 20px;
+                                    color: $alt-font-color;
+                                }
+                                address {
+                                    background: rgba($grey, 0.1);
+                                    height: 100%;
+                                    padding: 20px;
+                                    font-size: 14px;
+                                    p {
+                                        font-size: 14px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

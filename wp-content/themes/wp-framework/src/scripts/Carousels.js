@@ -8,7 +8,7 @@ export default class Carousels {
             this.homeHero();
         }
 
-        if ($('.products-carousel').length) {
+        if ($('.products-carousel').length || $('#crossSells').length) {
             this.productCarousels();
         }
 
