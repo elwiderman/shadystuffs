@@ -56,33 +56,34 @@ export default class AppCommon {
     
     // all actions for the main nav
     nav() {
-        // if ($(window).width() > 1023) {
-        //     $('.navbar-collapse .dropdown').hover(function () {
-        //         $(this).toggleClass('show').find(' > .dropdown-menu').toggleClass('show');
-        //     });
-        //     $('.navbar-collapse .dropdown').click(function (e) {
-        //         e.stopPropagation();
-        //     });
-        // }
-        // // if there is a link then go to link
-        // $('.navbar-collapse .dropdown > a').click(function () {
-        //     location.href = this.href;
-        // });
-
-        // toggle off-canvas menu
-        // $('.header').find('.navbar-toggler').click(function () {
-        //     $('body').toggleClass('no-overflow').children('.no-overflow').toggleClass('show');
-        // });
-        // $('body .no-overflow').click(function () {
-        //     $('header .navbar-toggler').trigger('click');
-        // });
-
+        const navToggler    = $('.header .navbar-toggler'),
+            mainWrap        = $('.main-content-wrap'),
+            offCanvasMenu   = $('.header .header__main-menu');
 
         $('.header').on('click', '.navbar-toggler', e => {
             e.preventDefault();
-
-            console.log(e);
             $(e.currentTarget).toggleClass('open');
+            mainWrap.toggleClass('menu-open');
+            offCanvasMenu.toggleClass('open');
+            $('body').toggleClass('no-overflow');
+        });
+
+        $('body').find('.no-overflow').on('click', e => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            navToggler.removeClass('open');
+            offCanvasMenu.removeClass('open');
+            mainWrap.removeClass('menu-open');
+            $('body').removeClass('no-overflow');
+        });
+
+        $('header.header .dropdown').on('click', 'a.dropdown-toggle', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            if ($(e.currentTarget).attr('href') != '#') {
+                location.href = $(e.currentTarget).attr('href');
+            }
         });
     }
 
