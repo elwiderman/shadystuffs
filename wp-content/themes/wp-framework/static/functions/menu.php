@@ -6,8 +6,9 @@ require_once('bs4navwalker.php');
 // Register menus
 register_nav_menus(
     array(
-        'main-nav' => __('Main Menu', 'shady'),   // Main nav in header
-        'footer-links' => __('Footer Menu', 'shady')
+        'main-nav'      => __('Main Menu', 'shady'),
+        'second-nav'    => __('Second Menu', 'shady'),
+        'footer-links'  => __('Footer Menu', 'shady')
     )
 );
 
@@ -15,7 +16,7 @@ function main_menu() {
     wp_nav_menu(
         array(
             'container' => false,                                       // Remove nav container
-            'menu_class' => 'navbar-nav m-auto',                  // Adding custom nav class
+            'menu_class' => 'main-menu',                  // Adding custom nav class
             'items_wrap' => '<ul id="%1$s" class="%2$s">%3$s</ul>',
             'theme_location' => 'main-nav',                             // Where it's located in the theme
             'depth' => 5,                                               // Limit the depth of the nav
@@ -24,6 +25,20 @@ function main_menu() {
         )
     );
 }
+function second_menu() {
+    wp_nav_menu(
+        array(
+            'container'     => false,
+            'menu_class'    => 'second-menu',
+            'items_wrap'    => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+            'theme_location'=> 'second-nav',
+            'depth'         => 5,
+            'fallback_cb'   => 'bs4navwalker::fallback',
+            'walker'        => new bs4navwalker()
+        )
+    );
+}
+
 // The Top Menu
 function top_nav()
 {

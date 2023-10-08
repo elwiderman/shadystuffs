@@ -50,4 +50,14 @@ $logo       = get_field('logo_img', 'option');
 
         </div>
     </nav>
+
+    <nav class="header__main-menu">
+        <div class="header__main-menu--wrap">
+            <?php main_menu();?>
+            <div class="menu-bottom">
+                <?php second_menu();?>
+                <?php get_template_part('parts/header/socials');?>
+            </div>
+        </div>
+    </nav>
 </header>

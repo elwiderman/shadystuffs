@@ -219,3 +219,35 @@
         content: $icon-x-square;
     }
 }
+
+.icon-edit {
+    &:before {
+        content: $icon-edit;
+    }
+}
+
+.icon-facebook {
+    &:before {
+        content: $icon-facebook;
+        color: #1877f2;
+    }
+}
+
+.icon-instagram {
+    &:before {
+        content: $icon-instagram;
+        color: #e4405f;
+    }
+}
+
+.icon-x1 {
+    &:before {
+        content: $icon-x1;
+    }
+}
+
+.icon-twitter {
+    &:before {
+        content: $icon-twitter;
+    }
+}
