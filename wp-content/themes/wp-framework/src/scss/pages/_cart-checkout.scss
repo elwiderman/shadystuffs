@@ -224,5 +224,90 @@
                 }
             }
         }
+
+        &.checkout {
+            .section-block {
+                &.section-hero {
+                    padding: 20px 0 25px;
+                    .section-title {
+                        @include font($secondary-font, $bold);
+                        font-size: 35px;
+                    }
+                }
+
+                &.section-content {
+                    .customer-detail {
+                        padding-right: 40px;
+                        .woocommerce-billing-fields, .woocommerce-shipping-fields {
+                            h3 {
+                                @include font($secondary-font, $bold);
+                                font-size: 25px;
+                            }
+                        }
+        
+                        .woocommerce-shipping-fields {
+                            margin-top: 30px;
+                        }
+                    }
+                    .order-review {
+                        h3 {
+                            @include font($secondary-font, $bold);
+                            font-size: 25px;
+                        }
+                        .place-order {
+                            .btn-main {
+                                font-size: 25px;
+                                height: 60px;
+                                padding: 0 35px;
+                            }
+                        }
+                    }
+
+                    .woocommerce-order {
+                        margin-top: 30px;
+                        .woocommerce-notice {
+                            font-size: 25px;
+                        }
+                        .woocommerce-order-details {
+                            max-width: 750px;
+                            margin: 30px auto 50px;
+                            &__title {
+                                @include font($secondary-font, $bold);
+                                font-size: 25px;
+                                color: $alt-font-color;
+                                margin-bottom: 10px;
+                            }
+                            .woocommerce-table {
+                                &--order-details {
+                                    .wc-item-meta {
+                                        li {
+                                            @include flex-display;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .woocommerce-customer-details {
+                            .woocommerce-column {
+                                &__title {
+                                    @include font($secondary-font, $bold);
+                                    font-size: 20px;
+                                    color: $alt-font-color;
+                                }
+                                address {
+                                    background: rgba($grey, 0.1);
+                                    height: 100%;
+                                    padding: 20px;
+                                    font-size: 14px;
+                                    p {
+                                        font-size: 14px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

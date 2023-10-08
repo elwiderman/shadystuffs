@@ -11,19 +11,51 @@
             .woocommerce-input-wrapper {
                 display: flex;
                 width: 100%;
+                .select2-container {
+                    .select2-selection {
+                        height: 38px;
+                        &__rendered {
+                            line-height: 36px;
+                        }
+                        &__arrow {
+                            height: 38px;
+                        }
+                    }
+                }
             }
             .input-text {
-                font-size: $rem-14;
+                font-size: 14px;
                 height: 38px;
+                @include add-border(1px, $form-border, 'all');
+                border-radius: 5px;
                 padding: 0 6px;
             }
             textarea {
-
+                &.input-text  {
+                    min-height: 70px;
+                    max-height: 100px;
+                }
             }
+        }
+        .form-row-first, .form-row-last {
+            width: 49%;
         }
     }
 }
 
 .form-control {
     box-shadow: none !important;
+}
+
+.select2-container {
+    .select2-dropdown {
+        .select2-results {
+            &__option {
+                font-size: 14px;
+                &--highlighted {
+                    background: $secondary-color;
+                }
+            }
+        }
+    }
 }
