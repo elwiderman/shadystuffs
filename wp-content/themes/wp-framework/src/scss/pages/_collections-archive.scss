@@ -45,7 +45,10 @@
                                 }
                             }
                             &--title {
-                                font-size: 15px;
+                                @include font($secondary-font, $semi-bold);
+                                font-size: 17px;
+                                letter-spacing: 2px;
+                                text-transform: uppercase;
                                 text-align: center;
                                 margin: 8px 0 0;
                             }
