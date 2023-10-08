@@ -242,46 +242,20 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "table",
+            "layout": "row",
             "pagination": 0,
             "min": 0,
-            "max": 0,
+            "max": 5,
             "collapsed": "",
             "button_label": "Add Row",
             "rows_per_page": 20,
             "sub_fields": [
                 {
-                    "key": "field_64d163054d095",
-                    "label": "Image",
-                    "name": "image",
+                    "key": "field_652255318c308",
+                    "label": "Collection",
+                    "name": "collection_tax",
                     "aria-label": "",
-                    "type": "image",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "20",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "library": "all",
-                    "min_width": "",
-                    "min_height": "",
-                    "min_size": "",
-                    "max_width": "",
-                    "max_height": "",
-                    "max_size": "",
-                    "mime_types": "",
-                    "preview_size": "thumbnail",
-                    "parent_repeater": "field_64a1f5b3b9ee3"
-                },
-                {
-                    "key": "field_64d21707c4ff7",
-                    "label": "Title",
-                    "name": "title",
-                    "aria-label": "",
-                    "type": "text",
+                    "type": "taxonomy",
                     "instructions": "",
                     "required": 0,
                     "conditional_logic": 0,
@@ -290,47 +264,16 @@
                         "class": "",
                         "id": ""
                     },
-                    "default_value": "",
-                    "maxlength": "",
-                    "placeholder": "",
-                    "prepend": "",
-                    "append": "",
-                    "parent_repeater": "field_64a1f5b3b9ee3"
-                },
-                {
-                    "key": "field_64d274402d931",
-                    "label": "Title Background Color",
-                    "name": "title_bg_color",
-                    "aria-label": "",
-                    "type": "color_picker",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "default_value": "",
-                    "enable_opacity": 0,
-                    "return_format": "string",
-                    "parent_repeater": "field_64a1f5b3b9ee3"
-                },
-                {
-                    "key": "field_64d21712c4ff8",
-                    "label": "Link",
-                    "name": "link",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "20",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
+                    "taxonomy": "collection",
+                    "add_term": 0,
+                    "save_terms": 0,
+                    "load_terms": 0,
+                    "return_format": "object",
+                    "field_type": "select",
+                    "allow_null": 0,
+                    "bidirectional": 0,
+                    "multiple": 0,
+                    "bidirectional_target": [],
                     "parent_repeater": "field_64a1f5b3b9ee3"
                 }
             ]
@@ -621,5 +564,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1692111611
+    "modified": 1696748964
 }
