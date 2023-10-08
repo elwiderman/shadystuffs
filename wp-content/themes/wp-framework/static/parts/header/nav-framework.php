@@ -23,28 +23,22 @@ $logo       = get_field('logo_img', 'option');
             </a>
         </div>
         <div class="header__nav--right">
+            <div class="navbar-wishlist">
+                <a href="<?php echo get_permalink(get_page_by_path('wishlist')); ?>" title="<?php _e('My Wishlist','shady'); ?>">
+                    <i class="icon-heart"></i>
+                    <span><?php _e('Wishlist','shady'); ?></span>
+                </a>
+            </div>
             <div class="navbar-account">
-                <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" title="<?php _e('My Account','shady'); ?>"><i class="fas fa-user"></i></a>
+                <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" title="<?php _e('My Account','shady'); ?>">
+                    <i class="icon-user"></i>
+                    <span><?php _e('My Account','shady'); ?></span>
+                </a>
             </div>
             
             <?php if (function_exists('WC') && (!is_cart() && !is_checkout())) : ?>
             <div class="navbar-cart">
-                <div class="dropdown menu-cart">
-                    <button class="btn btn-transparent dropdown-toggle" type="button" id="menuCartBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-shopping-cart"></i>
-                        <?php
-                        $count = WC()->cart->get_cart_contents_count();
-                        if ($count > 0) {
-                            echo ' (<span class="red">'. $count .'</span>)';
-                        } else {
-                            echo '';
-                        }
-                        ?>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="menuCartBtn">
-                        <?php dynamic_sidebar('menu-cart');?>
-                    </div>
-                </div>
+                <?php dynamic_sidebar('menu-cart');?>
             </div>
             <?php endif;?>
 
