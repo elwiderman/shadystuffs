@@ -3,9 +3,9 @@ Contributors: wpdesk,piotrpo,marcinkolanko
 Donate link: https://www.wpdesk.net/flexible-invoices-woocommerce/
 Tags: invoice, eu vat, woocommerce pdf invoices, vat invoice, woocommerce invoices
 Requires at least: 5.0
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 7.2
-Stable tag: 5.6.17
+Stable tag: 5.6.19
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -298,6 +298,13 @@ There is still a lot of work ahead :) The Flexible PDF Invoices for WooCommerce 
 64. Send PDF invoices automatically for additional email recipients (PRO add-on).
 
 == Changelog ==
+
+= 5.6.19 - 2023-11-07 =
+* Added support for WordPress 6.4
+* Added support for WooCommerce 8.3
+
+= 5.6.18 - 2023-10-09 =
+* Added support for WooCommerce 8.2
 
 = 5.6.17 - 2023-08-28 =
 - Fixed invoice products duplicates on invoice update
