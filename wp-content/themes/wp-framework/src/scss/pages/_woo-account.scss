@@ -139,6 +139,46 @@
                                     }
                                 }
                             }
+                            .woocommerce-Addresses {
+                                margin-bottom: 20px;
+                                .woocommerce-Address {
+                                    header.title {
+                                        @include flex-display(row, space-between);
+                                        margin-bottom: 20px;
+                                        &:before {
+                                            display: none;
+                                        }
+                                        h5 {
+                                            @include font($secondary-font, $semi-bold);
+                                        }
+                                    }
+                                    address {
+                                        font-size: 15px;
+                                    }
+                                }
+                            }
+                            .address_book {
+                                margin-bottom: 20px;
+                                header {
+                                    @include flex-display(row, space-between);
+                                    border: none;
+                                    margin-bottom: 20px;
+                                    &:before {
+                                        display: none;
+                                    }
+                                    h5 {
+                                        @include font($secondary-font, $semi-bold);
+                                    }
+                                    a {
+                                        @extend .btn-main-ghost;
+                                    }
+                                }
+                                .wc-address-book-address {
+                                    address {
+                                        font-size: 15px;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
