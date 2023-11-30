@@ -30,8 +30,8 @@ class SupportMenuPage implements Hookable {
 		add_action( 'admin_menu', function () {
 			add_submenu_page(
 					RegisterPostType::POST_TYPE_MENU_URL,
-					esc_html__( 'Help & Support', 'flexible-invoices' ),
-					esc_html__( 'Help & Support', 'flexible-invoices' ),
+					esc_html__( 'Start Here', 'flexible-invoices' ),
+					esc_html__( 'Start Here', 'flexible-invoices' ),
 					'manage_options',
 					'wpdesk-marketing',
 					[ $this, 'render_page_action' ],

@@ -11,6 +11,7 @@ use WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Settings\Settings;
 use WPDeskFIVendor\WPDesk\Library\WPDeskOrder\Abstracts\OrderItem;
 use WPDeskFIVendor\WPDesk\Library\WPDeskOrder\OrderFormattedData;
 use WPDeskFIVendor\WPDeskWCInvoicesVendor\WPDesk\Library\FlexibleInvoicesCore\Integration\FlexibleQuantityIntegration;
+use WPDeskFIVendor\WPDesk\Library\WPDeskOrder\Abstracts\ProductOrderItem;
 /**
  * Get Order items for document.
  *
@@ -104,7 +105,7 @@ class OrderItems
             $item->set_name($title)->set_net_price($net_price)->set_net_price_sum($net_price_sum)->set_discount($discount)->set_gross_price($order_item->get_gross_price())->set_vat_rate($tax_rate['rate'] ?? 0)->set_vat_rate_name($tax_rate['name'] ?? 'VAT')->set_vat_type_index($tax_rate['index'] ?? '')->set_vat_sum($order_item->get_vat_price())->set_qty($order_item->get_qty())->set_unit($fq->get_item_unit($this->unit))->set_meta($order_item->get_meta_data());
             if (\is_a($item, \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Documents\Items\WooProductItem::class)) {
                 if ('yes' === $this->settings->get('woocommerce_get_sku')) {
-                    $item->set_sku($order_item->get_sku());
+                    $item->set_sku($this->get_sku($order_item));
                 }
                 $item->set_wc_order_item_id($order_item->get_item_id())->set_wc_product_id($order_item->get_product_id())->set_product_attributes($this->get_product_attributes($order_item->get_product_id()));
                 $show_meta = $this->settings->get('woocommerce_add_variant_info') === 'yes';
@@ -132,6 +133,20 @@ class OrderItems
             $items[] = \apply_filters('fi/core/order/data/product', $item->get(), $this->order);
         }
         return $items;
+    }
+    private function get_sku(\WPDeskFIVendor\WPDesk\Library\WPDeskOrder\Abstracts\ProductOrderItem $item) : string
+    {
+        $sku = $item->get_sku();
+        $variation_id = $item->get_variation_id();
+        // Only for product variation
+        if (!empty($variation_id)) {
+            $variation = \wc_get_product($variation_id);
+            $variation_sku = $variation->get_sku();
+            if (!empty($variation_sku)) {
+                $sku = $variation_sku;
+            }
+        }
+        return \is_string($sku) ? $sku : '';
     }
     /**
      * @return array

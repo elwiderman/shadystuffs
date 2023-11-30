@@ -19,7 +19,7 @@ class PdfHexString extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType
      * Parses a hexadecimal string object from the stream reader.
      *
      * @param StreamReader $streamReader
-     * @return bool|self
+     * @return false|self
      */
     public static function parse(\WPDeskFIVendor\setasign\Fpdi\PdfParser\StreamReader $streamReader)
     {

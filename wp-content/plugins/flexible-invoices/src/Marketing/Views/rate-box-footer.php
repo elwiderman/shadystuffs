@@ -18,7 +18,7 @@ if ( ! $rate_box ) {
 		$review_link,
 		sprintf(
 			// translator: %1$s icon,  %2$s open url tag, %3$s close url tag.
-			__( 'Created with %1$s by Heroes from %2$sWP Desk%3$s - if you like Flexible Invoices rate us &rarr;', 'flexible-invoices' ),
+			__( 'Created with %1$s by Sailors from %2$sWP Desk%3$s - if you like Flexible Invoices rate us &rarr;', 'flexible-invoices' ),
 			'<span class="love"><span class="dashicons dashicons-heart"></span></span>',
 			'<a target="_blank" href="' . $is_PL . '">',
 			'</a>'

@@ -13,9 +13,9 @@ echo \esc_attr($form->get_action());
 ?>">
 	<h2 style="display:none;"></h2>
 	<?php 
-$docs_link = 'https://docs.flexibleinvoices.com/article/1017-customizing-the-invoice-template?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=template';
+$docs_link = 'https://docs.flexibleinvoices.com/category/785-currencies?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=currency-rates';
 if (\get_locale() === 'pl_PL') {
-    $docs_link = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=template#szablon-faktury';
+    $docs_link = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=currency-rates#konfiguracja-walut';
 }
 $link = \sprintf('<a href="%s" target="_blank">%s</a>', \esc_url($docs_link), \esc_html__('Read user\'s manual &rarr;', 'flexible-invoices'));
 ?>

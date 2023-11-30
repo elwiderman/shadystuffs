@@ -37,6 +37,8 @@ $update_focus: #e7eccc; // Text on update button background
 
 $accent: #98aa36;
 
+$shadow: rgba(145, 191, 227, 0.3);
+
 $light_bg: #f5fafc;
 $light_border_color: #d7e3e7;
 $light_shadow: rgba(145, 191, 227, 0.11);
@@ -103,6 +105,8 @@ $wp_top_bar_mobile_size: 46px;
     --yith-delete-outline-focus: #{$delete_outline_focus};
 
     --yith-accent: #{$accent};
+
+    --yith-shadow: #{$shadow};
 
     --yith-light-bg: #{$light_bg};
     --yith-light-border-color: #{$light_border_color};

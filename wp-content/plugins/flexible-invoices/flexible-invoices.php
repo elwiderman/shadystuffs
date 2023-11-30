@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Flexible Invoices for WooCommerce and WordPress
  * Plugin URI: https://wordpress.org/plugins/flexible-invoices/
- * Description: Flexible Invoices for WooCommerce and WordPress made simple. Available <a href="https://www.flexibleinvoices.com/products/flexible-invoices-woocommerce/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=flexible-invoices-plugins-upgrade-link" target="_blank">PRO extension</a> with automations and different types of documents.
- * Version: 5.6.19
+ * Description: Flexible Invoices for WooCommerce and WordPress made simple. Available <a href="https://www.flexibleinvoices.com/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=flexible-invoices-plugins-upgrade-link&utm_content=plugin-list-description" target="_blank">PRO extension</a> with automations and different types of documents.
+ * Version: 5.6.21
  * Author: WP Desk
  * Author URI: https://www.flexibleinvoices.com/
  * Text Domain: flexible-invoices
@@ -38,8 +38,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /* THESE TWO VARIABLES CAN BE CHANGED AUTOMATICALLY */
-$plugin_version = '5.6.19';
-$plugin_release_timestamp = '2023-08-25 12:16';
+$plugin_version = '5.6.21';
+$plugin_release_timestamp = '2023-11-16 11:20';
 
 $plugin_name        = 'Flexible Invoices for WooCommerce and WordPress';
 $plugin_class_name  = '\WPDesk\FlexibleInvoices\PluginFactory';
@@ -50,8 +50,8 @@ $plugin_dir         = dirname( __FILE__ );
 
 /** Dummy plugin name and description - for translations only. */
 $dummy_name       = __( 'Flexible Invoices for WooCommerce and WordPress', 'flexible-invoices' );
-$dummy_desc       = __( 'Flexible Invoices for WooCommerce and WordPress made simple. Available <a href="https://www.flexibleinvoices.com/products/flexible-invoices-woocommerce/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=flexible-invoices-plugins-upgrade-link" target="_blank">PRO extension</a> with automations and different types of documents.', 'flexible-invoices' );
-$dummy_plugin_uri = __( 'https://www.flexibleinvoices.com/products/flexible-invoices-woocommerce/', 'flexible-invoices' );
+$dummy_desc       = __( 'Flexible Invoices for WooCommerce and WordPress made simple. Available <a href="https://www.flexibleinvoices.com/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=flexible-invoices-plugins-upgrade-link&utm_content=plugin-list-description" target="_blank">PRO extension</a> with automations and different types of documents.', 'flexible-invoices' );
+$dummy_plugin_uri = __( 'https://www.flexibleinvoices.com/', 'flexible-invoices' );
 $dummy_author_uri = __( 'https://flexibleinvoices.com/', 'flexible-invoices' );
 
 $requirements = [

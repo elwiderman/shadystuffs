@@ -7,6 +7,7 @@ namespace WPDeskFIVendor;
  */
 $price_label = $hideVat ? \esc_html__('Price', 'flexible-invoices') : \esc_html__('Net price', 'flexible-invoices');
 $amount_label = $hideVat ? \esc_html__('Amount', 'flexible-invoices') : \esc_html__('Net amount', 'flexible-invoices');
+$product_name_style = \true === $hideVat ? 'width: 50%' : 'width: 30%';
 ?>
 <table class="item-table">
 	<thead>
@@ -14,7 +15,9 @@ $amount_label = $hideVat ? \esc_html__('Amount', 'flexible-invoices') : \esc_htm
 		<th><h3><?php 
 \esc_html_e('#', 'flexible-invoices');
 ?></h3></th>
-		<th class="item-title"><h3><?php 
+		<th class="item-title" style="<?php 
+echo \esc_html($product_name_style);
+?>"><h3><?php 
 \esc_html_e('Name', 'flexible-invoices');
 ?></h3></th>
 		<?php 
@@ -99,7 +102,7 @@ foreach ($items as $index => $item) {
 			<?php 
     if (!$discountEmpty) {
         ?>
-				<td><?php 
+				<td class="discount number"><?php 
         if (isset($item['discount'])) {
             echo \esc_html($helper->discount_price($item));
         }

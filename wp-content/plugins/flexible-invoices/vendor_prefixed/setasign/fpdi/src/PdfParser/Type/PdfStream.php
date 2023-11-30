@@ -184,6 +184,25 @@ class PdfStream extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType
         return $buffer;
     }
     /**
+     * Get all filters defined for this stream.
+     *
+     * @return PdfType[]
+     * @throws PdfTypeException
+     */
+    public function getFilters()
+    {
+        $filters = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($this->value, 'Filter');
+        if ($filters instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNull) {
+            return [];
+        }
+        if ($filters instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray) {
+            $filters = $filters->value;
+        } else {
+            $filters = [$filters];
+        }
+        return $filters;
+    }
+    /**
      * Get the unfiltered stream data.
      *
      * @return string
@@ -193,14 +212,9 @@ class PdfStream extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType
     public function getUnfilteredStream()
     {
         $stream = $this->getStream();
-        $filters = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($this->value, 'Filter');
-        if ($filters instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNull) {
+        $filters = $this->getFilters();
+        if ($filters === []) {
             return $stream;
-        }
-        if ($filters instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray) {
-            $filters = $filters->value;
-        } else {
-            $filters = [$filters];
         }
         $decodeParams = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($this->value, 'DecodeParms');
         if ($decodeParams instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray) {
@@ -251,6 +265,16 @@ class PdfStream extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType
                     $filterObject = new \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\AsciiHex();
                     $stream = $filterObject->decode($stream);
                     break;
+                case 'Crypt':
+                    if (!$decodeParam instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary) {
+                        break;
+                    }
+                    // Filter is "Identity"
+                    $name = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($decodeParam, 'Name');
+                    if (!$name instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfName || $name->value !== 'Identity') {
+                        break;
+                    }
+                    throw new \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FilterException('Support for Crypt filters other than "Identity" is not implemented.', \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FilterException::UNSUPPORTED_FILTER);
                 default:
                     throw new \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FilterException(\sprintf('Unsupported filter "%s".', $filter->value), \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FilterException::UNSUPPORTED_FILTER);
             }

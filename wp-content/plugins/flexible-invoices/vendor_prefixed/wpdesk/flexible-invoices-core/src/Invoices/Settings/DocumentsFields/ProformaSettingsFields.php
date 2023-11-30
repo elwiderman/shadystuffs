@@ -41,7 +41,7 @@ final class ProformaSettingsFields implements \WPDeskFIVendor\WPDesk\Library\Fle
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\InvoicesIntegration::is_super()) {
             return \sprintf('<a href="%1$s" target="_blank">%2$s</a>', \esc_url(\get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=wp-admin-plugins&utm_medium=quick-link&utm_campaign=flexible-invoices-docs-link#proformy' : 'https://docs.flexibleinvoices.com/article/796-proforma-settings?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link', ['https']), \esc_html__('Check how to issue proforma invoices.', 'flexible-invoices'));
         } else {
-            return \sprintf('<a href="%1$s" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
+            return \sprintf('<a href="%1$s&utm_content=proforma" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
         }
     }
     /**

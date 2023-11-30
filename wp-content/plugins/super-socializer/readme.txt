@@ -3,8 +3,8 @@ Contributors: Heateor, kamirkhan, mohammadfarhankhan, the_champ, Hungarian Trans
 Donate link: https://www.heateor.com/donate?action=Super+Socializer
 Tags: social login, social share, line login, social commenting, social comments, social plugin, profile data, social analytics, online identity, social profile storage, single sign-on, social media follow, facebook login, twitter login, linkedin login, google login, vkontakte login, Windows Live Login, Microsoft Login, Wordpress login, Yahoo login, Spotify login, Dribbble login, Kakao login, Github login, Twitch login, Instagram login, dropbox login, foursquare login, disqus login, reddit login, amazon login, stackoverflow login, stack overflow login, discord login, mail.ru login, mailru login, mail ru login, gettr share, parler share, odnoklassniki login, yandex login, odnoklassniki, yandex, odnoklassniki login button, yandex login button, Rutube, Rutube share, Rutube sharing, youtube login, x, x login, x share, yelp, tiktok, threads, Google Maps, Google Translate, RSS Feed
 Requires at least: 2.5.0
-Tested up to: 6.3
-Stable tag: 7.13.59
+Tested up to: 6.4
+Stable tag: 7.13.63
 License: GPLv2 or later
 
 The unique Social Plugin to let you integrate Social Login, Social Share, Social Comments and Social Media follow at your website
@@ -213,6 +213,29 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 8. **Social Commenting**: Disqus Commenting selected
 
 == Changelog ==
+= 7.13.63 [13 November 2023] =
+* [Improvement] Social Avatars of the Facebook login users that are already saved in the website will not be replaced with the blank profile picture
+
+= 7.13.62 [13 November 2023] =
+* [Bugfix] Facebook login was showing broken profile picture because Facebook has stopped serving profile picture that used to come with other profile data
+
+= 7.13.61 [10 November 2023] =
+* [Bugfix] Previous update was breaking the website if PHP version was less than 8.0 and Twitter login was enabled
+
+= 7.13.60 [9 November 2023] =
+* [Bugfix] Linkedin share stopped working because of the changes in the Linkedin API
+* [Bugfix] Outlook logo was misaligned in the Outlook share icon
+* [Bugfix] Youtube icon in the Follow Icons widget was redirecting to the URL saved for the Facebook
+* [Bugfix] RSS Feed icon in the social share bar was not appearing in AMP
+* [Improvement] Name field in the BuddyPress Extended profile is now being saved when a new user registers via social login
+* [Improvement] Social Login event is now being registered in the BuddyPress activity stream
+* [Improvement] Updated the Facebook SDK being used throughout the plugin to the latest version 18.0
+* [Improvement] Improved Twitter login 
+* [Improvement] Title above the Social Commenting interface is not wrapped inside an H3 HTML tag now
+* [Improvement] Improved Pocket share icon
+* [Improvement] Plugin now triggers the action "user_register" when a new user registers via social login 
+* [Improvement] Minor improvements
+
 = 7.13.59 [29 August 2023] =
 * [Bugfix] Github login was not logging the users into the website 
 * [Bugfix] Save changes button was not visible at the plugin configuration page in some cases
@@ -2718,3 +2741,26 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 * [Bugfix] Github login was not logging the users into the website 
 * [Bugfix] Save changes button was not visible at the plugin configuration page in some cases
 * [Improvement] Minor improvements
+
+= 7.13.60 [9 November 2023] =
+* [Bugfix] Linkedin share stopped working because of the changes in the Linkedin API
+* [Bugfix] Outlook logo was misaligned in the Outlook share icon
+* [Bugfix] Youtube icon in the Follow Icons widget was redirecting to the URL saved for the Facebook
+* [Bugfix] RSS Feed icon in the social share bar was not appearing in AMP
+* [Improvement] Name field in the BuddyPress Extended profile is now being saved when a new user registers via social login
+* [Improvement] Social Login event is now being registered in the BuddyPress activity stream
+* [Improvement] Updated the Facebook SDK being used throughout the plugin to the latest version 18.0
+* [Improvement] Improved Twitter login 
+* [Improvement] Title above the Social Commenting interface is not wrapped inside an H3 HTML tag now
+* [Improvement] Improved Pocket share icon
+* [Improvement] Plugin now triggers the action "user_register" when a new user registers via social login 
+* [Improvement] Minor improvements
+
+= 7.13.61 [10 November 2023] =
+* [Bugfix] Previous update was breaking the website if PHP version was less than 8.0 and Twitter login was enabled
+
+= 7.13.62 [13 November 2023] =
+* [Bugfix] Facebook login was showing broken profile picture because Facebook has stopped serving profile picture that used to come with other profile data
+
+= 7.13.63 [13 November 2023] =
+* [Improvement] Social Avatars of the Facebook login users that are already saved in the website will not be replaced with the blank profile picture

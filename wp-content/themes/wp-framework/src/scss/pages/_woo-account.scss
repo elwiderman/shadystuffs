@@ -22,6 +22,11 @@
                                     &:not(:last-child) {
                                         @include add-border(1px, $grey, 'bottom');
                                     }
+                                    &.is-active {
+                                        a {
+                                            color: $secondary-color;
+                                        }
+                                    }
                                     a {
                                         font-size: 15px;
                                     }
