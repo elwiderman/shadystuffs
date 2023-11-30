@@ -78,6 +78,67 @@
                                     }
                                 }
                             }
+                            .pre-title {
+                                font-size: 20px;
+                                margin-bottom: 40px;
+                                mark {
+                                    background: $secondary-color;
+                                    color: $primary-bg;
+                                    &.order-status {
+                                        text-transform: uppercase;
+                                    }
+                                }
+                            }
+                            .woocommerce-order-details {
+                                &__title {
+                                    @extend h5;
+                                    @include font($secondary-font, $semi-bold);
+                                    background: $alt-grey;
+                                    padding: 10px 15px;
+                                    margin-bottom: 0;
+                                }
+                            }
+                            .woocommerce-table {
+                                &--order-details {
+                                    border-radius: 0;
+                                    th, td {
+                                        font-size: 16px;
+                                    }
+                                    .wc-item-meta {
+                                        @include flex-display;
+                                        @include add-border(1px, $alt-grey, 'top');
+                                        li {
+                                            @include flex-display;
+                                            strong, p {
+                                                line-height: 1.4;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .woocommerce-customer-details {
+                                .woocommerce-columns {
+                                    &--addresses {
+                                        width: 100%;
+                                        .woocommerce-column {
+                                            &--billing-address, &--shipping-address {
+                                                .address-wrap {
+                                                    height: 100%;
+                                                    width: 100%;
+                                                    @include flex-display(column, flex-start, flex-start);
+                                                    flex-wrap: nowrap;
+                                                    address {
+                                                        font-size: 14px;
+                                                        height: 100%;
+                                                        @include add-border(1px, $alt-grey, 'all');
+                                                        border-radius: 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
