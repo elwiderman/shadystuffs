@@ -122,15 +122,17 @@ class Plugin extends AbstractPlugin implements LoggerAwareInterface, HookableCol
 		unset( $links['0'] );
 		$is_pl        = 'pl_PL' === get_locale();
 		$support_url  = $is_pl ? 'https://wordpress.org/support/plugin/flexible-invoices/' : 'https://flexibleinvoices.com/support/';
+		$start_here_url = admin_url( 'edit.php?post_type=inspire_invoice&page=wpdesk-marketing' );
 		$settings_url = admin_url( 'edit.php?post_type=inspire_invoice&page=invoices_settings' );
 		$docs_url     = $is_pl ? 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/' : 'https://docs.flexibleinvoices.com/';
-		$pro_url      = $is_pl ? 'https://www.wpdesk.pl/sklep/faktury-woocommerce/' : 'https://www.flexibleinvoices.com/products/flexible-invoices-woocommerce/';
+		$pro_url      = $is_pl ? 'https://www.wpdesk.pl/sklep/faktury-woocommerce/' : 'https://www.flexibleinvoices.com/';
 		$pro_url      .= '?utm_source=wp-admin-plugins&utm_medium=quick-link&utm_campaign=flexible-invoices-plugins-upgrade-link';
 
+		$plugin_links['start-here'] = '<a href="' . $start_here_url . '" style="color:#005D47;font-weight:700;">' . esc_html__( 'Start Here', 'flexible-invoices' ) . '</a>';
 		$plugin_links['settings'] = '<a href="' . $settings_url . '">' . esc_html__( 'Settings', 'flexible-invoices' ) . '</a>';
 		$plugin_links['docs']     = '<a href="' . $docs_url . '" target="_blank">' . esc_html__( 'Docs', 'flexible-invoices' ) . '</a>';
-		$plugin_links['upgrade']  = '<a href="' . $pro_url . '" target="_blank" style="color:#d64e07;font-weight:bold;">' . esc_html__( 'Buy PRO →', 'flexible-invoices' ) . '</a>';
-		$plugin_links['support']  = '<a href="' . $support_url . '" target="_blank">' . esc_html__( 'Support', 'flexible-invoices' ) . '</a>';
+		$plugin_links['upgrade']  = '<a href="' . $pro_url . '" target="_blank" style="color:#d64e07;font-weight:bold;">' . esc_html__( 'Upgrade to PRO →', 'flexible-invoices' ) . '</a>';
+		//$plugin_links['support']  = '<a href="' . $support_url . '" target="_blank">' . esc_html__( 'Support', 'flexible-invoices' ) . '</a>';
 
 		return array_merge( $plugin_links, $links );
 	}

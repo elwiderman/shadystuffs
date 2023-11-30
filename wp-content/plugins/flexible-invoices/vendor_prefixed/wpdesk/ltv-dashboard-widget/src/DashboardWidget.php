@@ -6,6 +6,87 @@ final class DashboardWidget
 {
     const ID = 'flexible-invoices';
     const MUTEX_HOOK = 'wpdesk/ltvdashboard/initialized';
+    const PL_LOCALE = 'pl_PL';
+    /**
+     * 
+     * @var string
+     */
+    private $widget_title = '';
+    /**
+     * 
+     * @var bool
+     */
+    private $show_widget_header = \true;
+    /**
+     * 
+     * @var bool
+     */
+    private $show_widget_footer = \true;
+    /**
+     * 
+     * @var int
+     */
+    private $plugins_limit = 3;
+    /**
+     * 
+     * @var int
+     */
+    private $cache_timeout = 0;
+    /**
+     * 
+     * @var int
+     */
+    private $cache_retry_timeout = 0;
+    /**
+     * 
+     * @var string
+     */
+    private $locale;
+    /**
+     * 
+     * @var array
+     */
+    private $cache_data = [];
+    /**
+     * 
+     * @var string
+     */
+    private $utm_base = 'utm_source=dashboard-metabox&utm_campaign=dashboard-metabox';
+    public function __construct()
+    {
+        $this->widget_title = \__('Grow your business with WP Desk', 'flexible-invoices');
+        $this->cache_timeout = 24 * 60 * 60;
+        $this->cache_retry_timeout = 6 * 60 * 60;
+        $this->locale = \get_user_locale();
+    }
+    public function set_widget_title(string $title)
+    {
+        $this->widget_title = $title;
+    }
+    public function show_widget_header(bool $bool)
+    {
+        $this->show_widget_header = $bool;
+    }
+    public function show_widget_footer(bool $bool)
+    {
+        $this->show_widget_footer = $bool;
+    }
+    public function set_plugins_limit(int $limit)
+    {
+        $this->plugins_limit = $limit;
+    }
+    public function set_cache_timeout(int $timeout)
+    {
+        $this->cache_timeout = $timeout;
+    }
+    public function set_locale(string $locale)
+    {
+        $this->locale = $locale;
+    }
+    public function set_utm_base(string $utm_base)
+    {
+        $this->utm_base = $utm_base;
+    }
     public function hooks()
     {
         if (\apply_filters(self::MUTEX_HOOK, \false) === \false) {
@@ -15,7 +96,7 @@ final class DashboardWidget
     }
     public function add_widget()
     {
-        \wp_add_dashboard_widget(self::ID, \__('Grow your business with WP Desk', 'flexible-invoices'), [$this, 'widget_output'], null, null, 'normal', 'high');
+        \wp_add_dashboard_widget(self::ID, $this->widget_title, [$this, 'widget_output'], null, null, 'normal', 'high');
     }
     private function get_all_plugins_dirs() : array
     {
@@ -31,34 +112,67 @@ final class DashboardWidget
         $plugins = \array_filter($plugins, static function ($plugin) use($installed_plugins_dir) {
             return !\in_array($plugin['slug'], $installed_plugins_dir, \true);
         });
-        return \array_slice($plugins, 0, 3);
+        return \array_slice($plugins, 0, $this->plugins_limit);
     }
     private function get_server() : string
     {
-        $locale = \get_user_locale();
-        if ($locale === 'pl_PL') {
+        $locale = $this->locale;
+        if ($locale === self::PL_LOCALE) {
             return 'www.wpdesk.pl';
         }
         return 'www.wpdesk.net';
     }
-    private function get_utm_base() : string
+    private function has_cached_data() : string
     {
-        return 'utm_source=dashboard-metabox&utm_campaign=dashboard-metabox';
+        if ($this->cache_timeout <= 0) {
+            return \false;
+        }
+        $cache_data = $this->get_raw_cached_data();
+        return null === $cache_data || \is_array($cache_data);
+    }
+    private function get_cached_data_key() : string
+    {
+        return \sprintf('wpdesk_ltv_%1$s_%2$s', self::ID, $this->locale);
+    }
+    /**
+     * 
+     * @return mixed 
+     */
+    private function get_raw_cached_data()
+    {
+        return \get_transient($this->get_cached_data_key());
+    }
+    private function get_cached_data() : array
+    {
+        if (!empty($this->cache_data)) {
+            return $this->cache_data;
+        }
+        $cache_data = $this->get_raw_cached_data();
+        $this->cache_data = \is_array($cache_data) ? $cache_data : [];
+        return $this->cache_data;
+    }
+    /**
+     * 
+     * @param mixed $data 
+     * @param int $timeout 
+     * @return void 
+     */
+    private function set_data_to_cache($data, int $timeout)
+    {
+        $cache_key = $this->get_cached_data_key();
+        \set_transient($cache_key, $data, $timeout);
     }
     private function get_widget_data() : array
     {
-        $cache_key = \sprintf('wpdesk_ltv_%1$s_%2$s', self::ID, \get_user_locale());
-        $cache_data = \get_transient($cache_key);
-        if ($cache_data) {
-            return $cache_data;
-        } elseif ($cache_data === \false) {
-            $response_data = $this->get_widget_data_from_remote();
-            if ($response_data !== null) {
-                \set_transient($cache_key, $response_data, 24 * 60 * 60);
-                return $response_data;
-            } else {
-                \set_transient($cache_key, null, 6 * 60 * 60);
-            }
+        if ($this->has_cached_data()) {
+            return $this->get_cached_data();
+        }
+        $response_data = $this->get_widget_data_from_remote();
+        if ($response_data !== null) {
+            $this->set_data_to_cache($response_data, $this->cache_timeout);
+            return $response_data;
+        } else {
+            $this->set_data_to_cache(null, $this->cache_retry_timeout);
         }
         return [];
     }
@@ -81,10 +195,10 @@ final class DashboardWidget
     {
         $widget_data = $this->get_widget_data();
         $server = $this->get_server();
-        $utm_base = $this->get_utm_base();
+        $utm_base = $this->utm_base;
         if (!empty($widget_data)) {
             echo '<div class="wpdesk_ltv_dashboard_widget">';
-            if ($widget_data['header']) {
+            if ($this->show_widget_header && $widget_data['header']) {
                 echo \wp_kses_post($widget_data['header']);
             }
             echo '<ul class="ltv-rows">';
@@ -106,7 +220,7 @@ final class DashboardWidget
             }
             echo '</ul>';
             echo '<div class="ltv-footer">';
-            if ($widget_data['footer']) {
+            if ($this->show_widget_footer && $widget_data['footer']) {
                 echo \wp_kses_post($widget_data['footer']);
             }
             echo '</div>';

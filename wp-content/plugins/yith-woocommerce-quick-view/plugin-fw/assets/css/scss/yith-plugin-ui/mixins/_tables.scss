@@ -4,6 +4,7 @@
         visibility: hidden;
     }
 
+
     th.column-actions, td.column-actions {
         text-align: right;
     }
@@ -16,6 +17,17 @@
     tbody tr:hover .yith-plugin-fw__action-button:not(.yith-plugin-fw__action-button--visible) {
         opacity: 1;
     }
+
+    @media screen and (max-width: 782px) {
+
+        th.column-actions, td.column-actions {
+            text-align: left;
+        }
+
+        .yith-plugin-fw__action-button:not(.yith-plugin-fw__action-button--visible) {
+            opacity: 1;
+        }
+    }
 }
 
 @mixin wp-table-commons {
@@ -25,6 +37,7 @@
     }
 
     .check-column {
+        padding: 1em 0.5em;
         width: 2em;
     }
 
@@ -33,7 +46,6 @@
         color: inherit;
         display: inline-flex;
         align-items: center;
-        flex-wrap: wrap;
 
         &:hover {
             color: var(--yith-link);
@@ -92,6 +104,53 @@
         }
     }
 
+    @media screen and (max-width: 782px) {
+        tr:not(.inline-edit-row):not(.no-items) td.column-primary {
+            position: relative;
+            padding-right: 48px;
+        }
+
+        .column-primary {
+            .toggle-row {
+                position: absolute;
+                width: 40px;
+                height: 40px;
+                top: calc(50% - 20px);
+                right: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: none;
+                outline: none;
+                background: transparent;
+
+                &:before {
+                    position: static;
+                    content: "\f110";
+                    font-family: yith-icon;
+                    font-size: 13px;
+                    box-shadow: none;
+                }
+            }
+        }
+
+        .is-expanded {
+            .toggle-row {
+                &:before {
+                    content: "\f113";
+                }
+            }
+        }
+
+        tr:not(.inline-edit-row):not(.no-items) td.column-primary ~ td:not(.check-column) {
+            padding: 8px 15px 8px calc(30% + 15px + 8px);
+        }
+        tr:not(.inline-edit-row):not(.no-items) td:not(.column-primary)::before {
+            left: 15px;
+            width: 30%;
+        }
+    }
+
     @include table-action-buttons;
 }
 
@@ -120,6 +179,10 @@
         padding: 15px;
     }
 
+    thead tr, tbody tr, tfoot tr {
+        background: var(--yith-content-bg);
+    }
+
     tbody tr:hover {
         background: var(--yith-table-row-highlight);
     }
@@ -133,7 +196,6 @@
         background-color: var(--yith-table-row-striped);
     }
 }
-
 
 @mixin boxed-table {
     border: 0;
@@ -187,6 +249,53 @@
     }
 }
 
+@mixin boxed-table-h-scroll-wrapper($table_selector) {
+    padding: 0 1px;
+    margin: 20px -1px 0;
+
+    #{$table_selector} {
+        margin-top: -20px;
+
+        & > thead > tr {
+            & > th, & > td {
+                background: var(--yith-content-bg);
+            }
+        }
+
+        & > thead, & > tbody, & > tfoot {
+            & > tr > *:nth-child(1):not(.check-column),
+            & > tr > .check-column + *,
+            &#the-list > tr:last-child > *:nth-child(1):not(.check-column),
+            &#the-list > tr:last-child > .check-column + * {
+                padding-right: 25px;
+            }
+        }
+    }
+    @media screen and (min-width: 783px) {
+        &.yith-plugin-ui--is-scrolling {
+            #{$table_selector} {
+                & > thead, & > tbody, & > tfoot {
+                    & > tr > *:nth-child(1),
+                    & > tr > .check-column,
+                    & > tr > .check-column + * {
+                        transform: translateX(-1px);
+                    }
+                }
+            }
+        }
+    }
+
+    &.yith-plugin-ui--has-scrolling {
+        #{$table_selector} > tbody > tr {
+            box-shadow: 0 0 0 1px var(--yith-light-border-color), 0 2px 11px 4px var(--yith-light-shadow);
+        }
+    }
+
+    &:not(.yith-plugin-ui--has-scrolling) {
+        overflow: visible;
+    }
+}
+
 @mixin wp-list-table-views {
     .subsubsub {
         border-bottom: 1px solid var(--yith-table-border-light);
@@ -216,6 +325,39 @@
                     margin-left: 2px;
                 }
             }
+        }
+    }
+}
+
+@mixin wp-list-table-navs {
+    .tablenav {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        height: auto;
+
+        .actions {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            & > * {
+                margin: 0 !important;
+            }
+        }
+
+        .tablenav-pages {
+            margin-left: auto;
+        }
+    }
+
+    .tablenav.bottom {
+        display: none;
+
+        .yith-plugin-fw__list-table-blank-state {
+            display: flex;
         }
     }
 }

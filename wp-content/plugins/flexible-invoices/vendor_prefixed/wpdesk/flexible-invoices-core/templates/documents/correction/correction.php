@@ -52,6 +52,7 @@ $hideVatNumber = $settings->get('hide_vat_number') === 'yes' && !$correction->ge
 $translator::switch_lang($correction->get_user_lang());
 $translator::set_translate_lang($correction->get_user_lang());
 $currency_helper = new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Currency($correction->get_currency());
+$product_name_style = \true === $hideVat ? 'width: 50%' : 'width: 30%';
 ?>
 <!DOCTYPE HTML>
 <html lang="<?php 
@@ -312,7 +313,9 @@ $correction_colspan = 6;
             <th><?php 
 \esc_html_e('#', 'flexible-invoices');
 ?></th>
-            <th class="item-title"><?php 
+            <th class="item-title" style="<?php 
+echo \esc_html($product_name_style);
+?>"><?php 
 \esc_html_e('Name', 'flexible-invoices');
 ?></th>
             <?php 

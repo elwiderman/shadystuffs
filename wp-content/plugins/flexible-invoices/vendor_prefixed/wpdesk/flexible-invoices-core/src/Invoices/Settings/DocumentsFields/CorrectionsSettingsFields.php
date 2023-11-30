@@ -27,9 +27,9 @@ final class CorrectionsSettingsFields implements \WPDeskFIVendor\WPDesk\Library\
     private function get_doc_link()
     {
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\InvoicesIntegration::is_super()) {
-            return \sprintf('<a href="%1$s" target="_blank">%2$s</a>', \esc_url(\get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/docs/faktury-korygujace-woocommerce/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link' : 'https://www.wpdesk.net/docs/flexible-invoices-woocommerce-corrections-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link', ['https']), \esc_html__('Check how to issue corrective invoices.', 'flexible-invoices'));
+            return \sprintf('<a href="%1$s" target="_blank">%2$s</a>', \esc_url(\get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/docs/faktury-korygujace-woocommerce/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link' : 'https://docs.flexibleinvoices.com/article/802-manual-issuing-corrections?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link', ['https']), \esc_html__('Check how to issue corrective invoices.', 'flexible-invoices'));
         } else {
-            return \sprintf('<a href="%1$s" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
+            return \sprintf('<a href="%1$s&utm_content=correction" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
         }
     }
     private function get_beacon_translations() : string

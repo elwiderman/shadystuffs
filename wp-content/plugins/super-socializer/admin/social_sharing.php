@@ -860,7 +860,7 @@
 
 						<?php
 						$likeButtons = array('facebook_share', 'facebook_like', 'facebook_recommend', 'twitter_tweet', 'linkedin_share', 'pinterest_pin', 'buffer_share', 'xing_share', 'yummly_share', 'reddit_badge');
-						$sharingNetworks = array('facebook','youtube','rutube', 'gettr', 'gab','mastodon', 'twitter', 'Parler' , 'linkedin', 'print', 'email', 'reddit', 'digg', 'float_it', 'tumblr', 'vkontakte', 'pinterest', 'xing', 'whatsapp', 'instagram', 'yummly', 'buffer', 'AIM', 'Amazon_Wish_List', 'AOL_Mail', 'App.net', 'Balatarin', 'BibSonomy', 'Bitty_Browser', 'Blinklist', 'Blogger_Post', 'BlogMarks', 'Bookmarks.fr', 'Box.net', 'BuddyMarks', 'Care2_News', 'Comment', 'Copy_Link', 'Diary.Ru', 'Diaspora', 'Diigo', 'Douban', 'Draugiem', 'Evernote', 'Facebook_Messenger', 'Fark', 'Fintel', 'Flipboard', 'Folkd', 'GentleReader', 'Google_Bookmarks', 'Google_Classroom', 'Google_Gmail', 'Hacker_News', 'Hatena', 'Instapaper', 'Jamespot', 'Kakao', 'Kik', 'Kindle_It', 'Known', 'Line', 'LiveJournal', 'Mail.Ru', 'Mendeley', 'Meneame', 'MeWe', 'mix', 'Mixi', 'MySpace', 'Netvouz', 'Odnoklassniki', 'Outlook.com', 'Papaly', 'Pinboard', 'Plurk', 'Pocket', 'PrintFriendly', 'Protopage_Bookmarks', 'Pusha', 'Qzone', 'Rediff MyPage', 'Refind', 'Renren', 'Sina Weibo', 'SiteJot', 'Skype', 'Slashdot', 'SMS', 'StockTwits', 'Svejo', 'Symbaloo_Feeds', 'Telegram', 'Threema', 'Trello', 'Tuenti', 'Twiddla', 'TypePad_Post', 'Viadeo', 'Viber', 'Webnews', 'WordPress', 'Wykop', 'Yahoo_Mail', 'Yoolink', 'Google_News', 'rss', 'truth_social', 'snapchat', 'Goodreads', 'Google_Translate', 'X', 'teams');
+						$sharingNetworks = array('facebook','youtube','rutube', 'gettr', 'gab','mastodon', 'twitter', 'Parler' , 'linkedin', 'print', 'email', 'reddit', 'digg', 'float_it', 'tumblr', 'vkontakte', 'pinterest', 'xing', 'whatsapp', 'instagram', 'yummly', 'buffer', 'AIM', 'Amazon_Wish_List', 'AOL_Mail', 'App.net', 'Balatarin', 'BibSonomy', 'Bitty_Browser', 'Blinklist', 'Blogger_Post', 'BlogMarks', 'Bookmarks.fr', 'Box.net', 'BuddyMarks', 'Care2_News', 'Comment', 'Copy_Link', 'Diary.Ru', 'Diaspora', 'Diigo', 'Douban', 'Draugiem', 'Evernote', 'Facebook_Messenger', 'Fark', 'Fintel', 'Flipboard', 'Folkd', 'GentleReader', 'Google_Bookmarks', 'Google_Classroom', 'Google_Gmail', 'Hacker_News', 'Hatena', 'Instapaper', 'Jamespot', 'Kakao', 'Kik', 'Kindle_It', 'Known', 'Line', 'LiveJournal', 'Mail.Ru', 'Mendeley', 'Meneame', 'MeWe', 'mix', 'Mixi', 'MySpace', 'Netvouz', 'Odnoklassniki', 'Outlook.com', 'Papaly', 'Pinboard', 'Plurk', 'Pocket', 'PrintFriendly', 'Protopage_Bookmarks', 'Pusha', 'Qzone', 'Rediff MyPage', 'Refind', 'Renren', 'Sina Weibo', 'SiteJot', 'Skype', 'Slashdot', 'SMS', 'StockTwits', 'Svejo', 'Symbaloo_Feeds', 'Telegram', 'Threema', 'Trello', 'Tuenti', 'Twiddla', 'TypePad_Post', 'Viadeo', 'Viber', 'Webnews', 'WordPress', 'Wykop', 'Yahoo_Mail', 'Yoolink', 'Google_News', 'rss', 'truth_social', 'snapchat', 'Goodreads', 'Google_Translate', 'X', 'teams', 'minds');
 						?>
 						
 						<tr>
@@ -964,9 +964,9 @@
 							foreach($sharingNetworks as $sharingNetwork){
 								?>
 								<div class="theChampHorizontalSharingProviderContainer">
-								<input id="the_champ_<?php echo esc_attr($sharingNetwork) ?>" type="checkbox" <?php echo isset( $theChampSharingOptions['horizontal_re_providers'] ) && in_array($sharingNetwork, $theChampSharingOptions['horizontal_re_providers'] ) ? 'checked="checked"' : '';?> value="<?php echo esc_attr($sharingNetwork) ?>" />
+								<input id="the_champ_<?php echo esc_attr($sharingNetwork) ?>" type="checkbox" <?php echo isset( $theChampSharingOptions['horizontal_re_providers'] ) && in_array($sharingNetwork, $theChampSharingOptions['horizontal_re_providers'] ) ? 'checked="checked"' : '';?> <?php echo in_array($sharingNetwork, array('truth_social', 'snapchat', 'Goodreads', 'minds')) ? 'disabled' : ''; ?> value="<?php echo esc_attr($sharingNetwork) ?>" />
 								<label for="the_champ_<?php echo esc_attr($sharingNetwork) ?>"><i style="display:block;width:18px;height:18px;" class="theChampSharing theChamp<?php echo esc_attr(str_replace(array('_', '.', ' '), '', ucfirst($sharingNetwork))) ?>Background"><ss style="display:block;" class="theChampSharingSvg theChamp<?php echo str_replace(array('_', '.', ' '), '', ucfirst($sharingNetwork)) ?>Svg"></ss></i></label>
-								<label for="the_champ_<?php echo esc_attr($sharingNetwork) ?>" class="lblSocialNetwork"><?php echo esc_html(str_replace('_', ' ', ucfirst($sharingNetwork))) ?></label>
+								<label for="the_champ_<?php echo esc_attr($sharingNetwork) ?>" class="lblSocialNetwork"><?php echo (in_array($sharingNetwork, array('truth_social', 'snapchat', 'Goodreads', 'minds')) ? '<a href="https://www.heateor.com/comparison-between-sassy-social-share-pro-and-premium/" target="_blank">' : '') . esc_html(str_replace('_', ' ', ucfirst($sharingNetwork))) . (in_array($sharingNetwork, array('truth_social', 'snapchat', 'Goodreads', 'minds') ) ? '</a>' : '') ?></label>
 								</div>
 								<?php
 							}
@@ -1404,9 +1404,9 @@
 							foreach($sharingNetworks as $sharingNetwork){
 								?>
 								<div class="theChampVerticalSharingProviderContainer">
-								<input id="the_champ_vertical_sharing_<?php echo esc_attr($sharingNetwork) ?>" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_re_providers'] ) && in_array($sharingNetwork, $theChampSharingOptions['vertical_re_providers'] ) ? 'checked="checked"' : '';?> value="<?php echo esc_attr($sharingNetwork) ?>" />
+								<input id="the_champ_vertical_sharing_<?php echo esc_attr($sharingNetwork) ?>" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_re_providers'] ) && in_array($sharingNetwork, $theChampSharingOptions['vertical_re_providers'] ) ? 'checked="checked"' : '';?> <?php echo in_array($sharingNetwork, array('truth_social', 'snapchat', 'Goodreads', 'minds')) ? 'disabled' : ''; ?> value="<?php echo esc_attr($sharingNetwork) ?>" />
 								<label for="the_champ_vertical_sharing_<?php echo esc_attr($sharingNetwork) ?>"><i style="display:block;width:18px;height:18px;" class="theChampSharing theChamp<?php echo esc_attr(str_replace(array('_', '.', ' '), '', ucfirst($sharingNetwork))) ?>Background"><ss style="display:block;" class="theChampSharingSvg theChamp<?php echo esc_attr(str_replace(array('_', '.', ' '), '', ucfirst($sharingNetwork))) ?>Svg"></ss></i></label>
-								<label for="the_champ_vertical_sharing_<?php echo esc_attr($sharingNetwork) ?>" class="lblSocialNetwork"><?php echo esc_html(str_replace('_', ' ', ucfirst($sharingNetwork))) ?></label>
+								<label for="the_champ_vertical_sharing_<?php echo esc_attr($sharingNetwork) ?>" class="lblSocialNetwork"><?php echo (in_array($sharingNetwork, array('truth_social', 'snapchat', 'Goodreads', 'minds')) ? '<a href="https://www.heateor.com/comparison-between-sassy-social-share-pro-and-premium/" target="_blank">' : '') . esc_html(str_replace('_', ' ', ucfirst($sharingNetwork))) . (in_array($sharingNetwork, array('truth_social', 'snapchat', 'Goodreads', 'minds') ) ? '</a>' : '') ?></label>
 								</div>
 								<?php
 							}
@@ -1993,13 +1993,19 @@
 				<div class="clear"></div>
 				<div class="the_champ_left_column">
 				<div class="stuffbox">
-					<h3><label><?php _e('Facebook Sharing Troubleshooter', 'super-socializer');?></label></h3>
+					<h3><label><?php _e('Social Share Troubleshooter', 'super-socializer');?></label></h3>
 					<div class="inside">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="form-table editcomment menu_content_table">
 						<tr>
 							<td>
-							<?php _e('If Facebook sharing is not working fine, click at the following link and enter the problematic url (where Facebook sharing is not working properly) of your website in the text field. Click "Debug" button.', 'super-socializer') ?><br/>
-							<a style="text-decoration: none" target="_blank" href="https://developers.facebook.com/tools/debug">https://developers.facebook.com/tools/debug</a>
+							<p>
+								<?php _e('If Facebook sharing is not working fine, click at the following link and enter the problematic URL (where Facebook sharing is not working properly) of your website in the text field. Click "Debug" button.', 'super-socializer') ?><br/>
+								<a style="text-decoration: none" target="_blank" href="https://developers.facebook.com/tools/debug">https://developers.facebook.com/tools/debug</a>
+							</p>
+							<p>
+								<?php _e('If Linkedin share is not showing correct title, image and description, click at the following link and enter the problematic URL (where Linkedin share is not working properly) of your website in the text field. Click "Inspect" button.', 'super-socializer') ?><br/>
+								<a style="text-decoration: none" target="_blank" href="https://www.linkedin.com/post-inspector/">https://www.linkedin.com/post-inspector/</a>
+							</p>
 							</td>
 						</tr>
 					</table>

@@ -20,15 +20,15 @@ class PdfIndirectObject extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\Pdf
     /**
      * Parses an indirect object from a tokenizer, parser and stream-reader.
      *
-     * @param int $objectNumberToken
-     * @param int $objectGenerationNumberToken
+     * @param int $objectNumber
+     * @param int $objectGenerationNumber
      * @param PdfParser $parser
      * @param Tokenizer $tokenizer
      * @param StreamReader $reader
-     * @return bool|self
+     * @return self|false
      * @throws PdfTypeException
      */
-    public static function parse($objectNumberToken, $objectGenerationNumberToken, \WPDeskFIVendor\setasign\Fpdi\PdfParser\PdfParser $parser, \WPDeskFIVendor\setasign\Fpdi\PdfParser\Tokenizer $tokenizer, \WPDeskFIVendor\setasign\Fpdi\PdfParser\StreamReader $reader)
+    public static function parse($objectNumber, $objectGenerationNumber, \WPDeskFIVendor\setasign\Fpdi\PdfParser\PdfParser $parser, \WPDeskFIVendor\setasign\Fpdi\PdfParser\Tokenizer $tokenizer, \WPDeskFIVendor\setasign\Fpdi\PdfParser\StreamReader $reader)
     {
         $value = $parser->readValue();
         if ($value === \false) {
@@ -41,8 +41,8 @@ class PdfIndirectObject extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\Pdf
             $tokenizer->pushStack($nextToken);
         }
         $v = new self();
-        $v->objectNumber = (int) $objectNumberToken;
-        $v->generationNumber = (int) $objectGenerationNumberToken;
+        $v->objectNumber = (int) $objectNumber;
+        $v->generationNumber = (int) $objectGenerationNumber;
         $v->value = $value;
         return $v;
     }

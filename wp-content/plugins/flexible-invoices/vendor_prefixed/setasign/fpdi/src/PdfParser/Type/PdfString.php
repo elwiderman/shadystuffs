@@ -70,6 +70,21 @@ class PdfString extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType
         return \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::ensureType(self::class, $string, 'String value expected.');
     }
     /**
+     * Escapes sequences in a string according to the PDF specification.
+     *
+     * @param string $s
+     * @return string
+     */
+    public static function escape($s)
+    {
+        // Still a bit faster, than direct replacing
+        if (\strpos($s, '\\') !== \false || \strpos($s, ')') !== \false || \strpos($s, '(') !== \false || \strpos($s, "\r") !== \false || \strpos($s, "\n") !== \false || \strpos($s, "\t") !== \false || \strpos($s, "\x08") !== \false || \strpos($s, "\f") !== \false) {
+            // is faster than strtr(...)
+            return \str_replace(['\\', ')', '(', "\r", "\n", "\t", "\x08", "\f"], ['\\\\', '\\)', '\\(', '\\r', '\\n', '\\t', '\\b', '\\f'], $s);
+        }
+        return $s;
+    }
+    /**
      * Unescapes escaped sequences in a PDF string according to the PDF specification.
      *
      * @param string $s

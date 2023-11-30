@@ -38,7 +38,7 @@ class SendingTab extends FieldSettingsTab {
 		return [
 			( new Header() )
 				->set_name( 'no_value' )
-				->set_description( sprintf( '<a target="_blank" href="%1$s" >%2$s</a>', $pro_url, esc_html__( 'To automate emails with invoices to your accountant buy the add-on Advanced Sending for Flexible Invoices &rarr;', 'flexible-invoices' ) ) )
+				->set_description( sprintf( '<a target="_blank" href="%1$s" >%2$s</a><br><span>%3$s</span>', $pro_url, esc_html__( 'To automate emails with invoices to your accountant buy the add-on Advanced Sending for Flexible Invoices &rarr;', 'flexible-invoices' ), esc_html__( 'The add-on requires Flexible Invoices PRO.', 'flexible-invoices-core' ) ) )
 				->set_label( esc_html__( 'Sending invoices', 'flexible-invoices' ) )
 				->set_disabled(),
 			( new CheckboxField() )

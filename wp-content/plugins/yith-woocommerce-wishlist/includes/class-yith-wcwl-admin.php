@@ -36,14 +36,6 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
 		protected $panel = null;
 
 		/**
-		 * Link to landing page on yithemes.com
-		 *
-		 * @var string
-		 * @since 2.0.0
-		 */
-		public $premium_landing_url = 'https://yithemes.com/themes/plugins/yith-woocommerce-wishlist/';
-
-		/**
 		 * Tab name
 		 *
 		 * @var string
@@ -219,7 +211,7 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
 			return apply_filters(
 				'yith_wcwl_admin_panel_tabs',
 				array(
-					'settings'      => array(
+					'settings' => array(
 						'title' => _x( 'Settings', 'Settings tab name', 'yith-woocommerce-wishlist' ),
 						'icon'  => 'settings',
 					),
@@ -234,7 +226,6 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
 		 * @since 2.0.0
 		 */
 		public function register_panel() {
-
 			if ( ! empty( $this->panel ) ) {
 				return;
 			}
@@ -242,7 +233,7 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
 			$admin_tabs = $this->get_admin_panel_tabs();
 
 			$args = array(
-				'ui_version'       => 2,
+				'ui_version'         => 2,
 				'create_menu_page'   => true,
 				'parent_slug'        => '',
 				'page_title'         => 'YITH WooCommerce Wishlist',
@@ -273,7 +264,7 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
 						'url'  => array(
 							'en' => 'https://www.youtube.com/embed/oMnfyHo819M',
 							'it' => 'https://www.youtube.com/embed/9hM9PgBVNTg',
-							'es' => 'https://www.youtube.com/embed/GwQkNrrHFs4',
+							'es' => 'https://www.youtube.com/embed/5gi8SrEuip8',
 						),
 					),
 					'playlists'  => array(
@@ -288,21 +279,133 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
 			// registers premium tab.
 			if ( ! defined( 'YITH_WCWL_PREMIUM' ) ) {
 				$args['premium_tab'] = array(
-					'landing_page_url'          => $this->get_premium_landing_uri(),
-					'premium_features'          => array(
-						__( 'Enable the wishlist feature for all users or <b>only for registered users</b>', 'yith-woocommerce-wishlist' ),
-						__( 'Allow users to create <b>multiple wishlists</b> (Ex: Christmas, Birthday, etc.) <br>Users can choose the wishlist from a dropdown menu when they click on "Add to wishlist"', 'yith-woocommerce-wishlist' ),
-						__( 'Allow users to set <b>visibility options for each wishlist</b>, by making them either public (visible to everyone), private or shared (visible only to people it has been shared with)', 'yith-woocommerce-wishlist' ),
-						__( 'Choose between <b>different layouts</b> for the wishlist page and for the wishlist content', 'yith-woocommerce-wishlist' ),
-						__( '<b>Allow users to manage their wishlists:</b> rename and delete wishlists, move a product from one wishlist to another, change order of items, quantity, etc.', 'yith-woocommerce-wishlist' ),
-						__( 'Enable an <b>"Ask for an estimate" button</b> to let customers send the content of their wishlist to the admin and get a custom quote', 'yith-woocommerce-wishlist' ),
-						__( '<b>Show a wishlist widget</b> that lists all the products in the wishlists (available also with "mini-cart" style for the header)', 'yith-woocommerce-wishlist' ),
-						__( '<b>Send promotional emails to users</b> who have added specific products to their wishlist', 'yith-woocommerce-wishlist' ),
-						__( '<b>Send an automatic email to the wishlist owner</b> whenever a product in the list is back in stock or on sale', 'yith-woocommerce-wishlist' ),
-						'<b>' . __( 'Regular updates, Translations and Premium Support', 'yith-woocommerce-wishlist' ) . '</b>',
+					'features' => array(
+						array(
+							'title'       => __( 'Allow users to create multiple wishlists', 'yith-woocommerce-wishlist' ),
+							'description' => __( 'In the premium version, your customers can create a wishlist for their birthday, Christmas, a graduation party, etc.', 'yith-woocommerce-wishlist' ),
+						),
+						array(
+							'title'       => __( 'Advanced wishlist management', 'yith-woocommerce-wishlist' ),
+							'description' => __( 'Allow users to rename wishlists, choose whether to make them public or private, move products from one list to another, and more.', 'yith-woocommerce-wishlist' ),
+						),
+						array(
+							'title'       => __( 'Different wishlist layouts', 'yith-woocommerce-wishlist' ),
+							'description' => __( 'Choose which layout you prefer to display products in the wishlist for a more modern and 100% mobile-friendly user experience.', 'yith-woocommerce-wishlist' ),
+						),
+						array(
+							'title'       => __( 'Insert a wishlist widget in the header of your shop', 'yith-woocommerce-wishlist' ),
+							'description' => __( 'Give instant access to the wishlist and show a preview of the products added to it by inserting the widget in the site header.', 'yith-woocommerce-wishlist' ),
+						),
+						array(
+							'title'       => __( 'Analyze your customers\' wishlists and the most popular products in your shop', 'yith-woocommerce-wishlist' ),
+							'description' => __( 'In the premium version, you can analyze the wishlists of each user in your shop and get a clear overview of the most popular products in your shop.', 'yith-woocommerce-wishlist' ),
+						),
+						array(
+							'title'       => __( 'Create targeted promotions and take advantage of the wishlists to increase conversions', 'yith-woocommerce-wishlist' ),
+							'description' => __( 'The premium version of the plugin allows you to structure effective marketing strategies and increase conversions. Some examples? You can send promotional emails and offer a discount to all users who have a specific product on their wishlist, notify customers when a product on their wishlist is on sale, or notify them when an out-of-stock product is available again in your shop.', 'yith-woocommerce-wishlist' ),
+						),
 					),
-					'main_image_url'            => YITH_WCWL_URL . 'assets/images/premium/get-premium-wishlist.jpg',
-					'show_free_vs_premium_link' => true,
+				);
+			}
+
+			// Add "Your store tools" tab.
+			if ( defined( 'YITH_WCWL_PREMIUM' ) ) {
+				$args['your_store_tools'] = array(
+					'items' => array(
+						'gift-cards'             => array(
+							'name'           => 'Gift Cards',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/gift-cards.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-gift-cards/',
+							'description'    => _x(
+								'Sell gift cards in your shop to increase your earnings and attract new customers.',
+								'[YOUR STORE TOOLS TAB] Description for plugin YITH WooCommerce Gift Cards',
+								'yith-woocommerce-wishlist'
+							),
+							'is_active'      => defined( 'YITH_YWGC_PREMIUM' ),
+							'is_recommended' => true,
+						),
+						'ajax-product-filter'    => array(
+							'name'           => 'Ajax Product Filter',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/ajax-product-filter.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-ajax-product-filter/',
+							'description'    => _x(
+								'Help your customers to easily find the products they are looking for and improve the user experience of your shop.',
+								'[YOUR STORE TOOLS TAB] Description for plugin YITH WooCommerce Ajax Product Filter',
+								'yith-woocommerce-wishlist'
+							),
+							'is_active'      => defined( 'YITH_WCAN_PREMIUM' ),
+							'is_recommended' => true,
+						),
+						'booking'                => array(
+							'name'           => 'Booking and Appointment',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/booking.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-booking/',
+							'description'    => _x(
+								'Enable a booking/appointment system to manage renting or booking of services, rooms, houses, cars, accommodation facilities and so on.',
+								'[YOUR STORE TOOLS TAB] Description for plugin YITH Bookings',
+								'yith-woocommerce-wishlist'
+							),
+							'is_active'      => defined( 'YITH_WCBK_PREMIUM' ),
+							'is_recommended' => false,
+
+						),
+						'request-a-quote'        => array(
+							'name'           => 'Request a Quote',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/request-a-quote.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-request-a-quote/',
+							'description'    => _x(
+								'Hide prices and/or the "Add to cart" button and let your customers request a custom quote for every product.',
+								'[YOUR STORE TOOLS TAB] Description for plugin YITH WooCommerce Request a Quote',
+								'yith-woocommerce-wishlist'
+							),
+							'is_active'      => defined( 'YITH_YWRAQ_PREMIUM' ),
+							'is_recommended' => false,
+						),
+						'product-addons'         => array(
+							'name'           => 'Product Add-Ons & Extra Options',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/product-add-ons.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-product-add-ons/',
+							'description'    => _x(
+								'Add paid or free advanced options to your product pages using fields like radio buttons, checkboxes, drop-downs, custom text inputs, and more.',
+								'[YOUR STORE TOOLS TAB] Description for plugin YITH WooCommerce Product Add-Ons',
+								'yith-woocommerce-wishlist'
+							),
+							'is_active'      => defined( 'YITH_WAPO_PREMIUM' ),
+							'is_recommended' => false,
+						),
+						'dynamic-pricing'        => array(
+							'name'           => 'Dynamic Pricing and Discounts',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/dynamic-pricing-and-discounts.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-dynamic-pricing-and-discounts/',
+							'description'    => _x(
+								'Increase conversions through dynamic discounts and price rules, and build powerful and targeted offers.',
+								'[YOUR STORE TOOLS TAB] Description for plugin YITH WooCommerce Dynamic Pricing and Discounts',
+								'yith-woocommerce-wishlist'
+							),
+							'is_active'      => defined( 'YITH_YWDPD_PREMIUM' ),
+							'is_recommended' => false,
+						),
+						'customize-my-account'   => array(
+							'name'           => 'Customize My Account Page',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/customize-myaccount-page.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-customize-my-account-page/',
+							'description'    => _x( 'Customize the My Account page of your customers by creating custom sections with promotions and ad-hoc content based on your needs.', '[YOUR STORE TOOLS TAB] Description for plugin YITH WooCommerce Customize My Account', 'yith-woocommerce-wishlist' ),
+							'is_active'      => defined( 'YITH_WCMAP_PREMIUM' ),
+							'is_recommended' => false,
+						),
+						'recover-abandoned-cart' => array(
+							'name'           => 'Recover Abandoned Cart',
+							'icon_url'       => YITH_WCWL_URL . 'assets/images/plugins/recover-abandoned-cart.svg',
+							'url'            => '//yithemes.com/themes/plugins/yith-woocommerce-recover-abandoned-cart/',
+							'description'    => _x(
+								'Contact users who have added products to the cart without completing the order and try to recover lost sales.',
+								'[YOUR STORE TOOLS TAB] Description for plugin Recover Abandoned Cart',
+								'yith-woocommerce-wishlist'
+							),
+							'is_active'      => defined( 'YITH_YWRAC_PREMIUM' ),
+							'is_recommended' => false,
+						),
+					),
 				);
 			}
 
@@ -350,16 +453,6 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
 				}
 			}
 		}
-
-		/**
-		 * Get the premium landing uri
-		 *
-		 * @since   1.0.0
-		 * @return  string The premium landing link
-		 */
-		public function get_premium_landing_uri() {
-			return $this->premium_landing_url;
-		}
 	}
 }
 
@@ -369,7 +462,7 @@ if ( ! class_exists( 'YITH_WCWL_Admin' ) ) {
  * @return \YITH_WCWL_Admin
  * @since 2.0.0
  */
-function YITH_WCWL_Admin() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+function YITH_WCWL_Admin() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid, Universal.Files.SeparateFunctionsFromOO
 	if ( defined( 'YITH_WCWL_PREMIUM' ) ) {
 		$instance = YITH_WCWL_Admin_Premium::get_instance();
 	} elseif ( defined( 'YITH_WCWL_EXTENDED' ) ) {

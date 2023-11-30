@@ -25,5 +25,5 @@ class Fpdi extends \WPDeskFIVendor\setasign\Fpdi\Tfpdf\FpdfTpl
      *
      * @string
      */
-    const VERSION = '2.4.1';
+    const VERSION = '2.5.0';
 }

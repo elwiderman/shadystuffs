@@ -3,7 +3,7 @@
 Plugin Name: Super Socializer
 Plugin URI: https://super-socializer-wordpress.heateor.com
 Description: A complete 360 degree solution to provide all the social features like Social Login, Social Commenting, Social Sharing, Social Media follow and more
-Version: 7.13.59
+Version: 7.13.63
 Author: Team Heateor
 Author URI: https://www.heateor.com
 Text Domain: super-socializer
@@ -11,7 +11,7 @@ Domain Path: /languages
 License: GPL2+
 */
 defined('ABSPATH') or die("Cheating........Uh!!");
-define('THE_CHAMP_SS_VERSION', '7.13.59');
+define('THE_CHAMP_SS_VERSION', '7.13.63');
 
 // attributes to allow in the HTML of the social share and social media follow icons
 $heateorSsDefaultAttribs = array(
@@ -278,6 +278,7 @@ function the_champ_load_event(){
  * Check querystring variables
  */
 function the_champ_connect(){
+
 	global $theChampLoginOptions;
 
 	// verify email
@@ -718,7 +719,7 @@ function the_champ_connect(){
 		            $facebookLoginState = mt_rand();
 		            // save referrer url in state
 		            update_user_meta($facebookLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-		            wp_redirect("https://www.facebook.com/v16.0/dialog/oauth?scope=email&client_id=" . $theChampLoginOptions['fb_key'] . "&state=" . $facebookLoginState . "&redirect_uri=" . home_url() . "/?SuperSocializerAuth=Facebook");
+		            wp_redirect("https://www.facebook.com/v18.0/dialog/oauth?scope=email&client_id=" . $theChampLoginOptions['fb_key'] . "&state=" . $facebookLoginState . "&redirect_uri=" . home_url() . "/?SuperSocializerAuth=Facebook");
 		            die;
 		        }elseif(isset($_GET['code']) && isset($_GET['state']) && get_user_meta(sanitize_text_field($_GET['state']), 'super_socializer_redirect_to', true) !== false){
 		            $postData = array(
@@ -727,7 +728,7 @@ function the_champ_connect(){
 		                'client_id' => $theChampLoginOptions['fb_key'],
 		                'client_secret' => $theChampLoginOptions['fb_secret']
 		            );
-		            $response  = wp_remote_post("https://graph.facebook.com/v16.0/oauth/access_token", array(
+		            $response  = wp_remote_post("https://graph.facebook.com/v18.0/oauth/access_token", array(
 		                'method' => 'POST',
 		                'timeout' => 15,
 		                'redirection' => 5,
@@ -741,34 +742,42 @@ function the_champ_connect(){
 		            if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
 		                $body     = json_decode(wp_remote_retrieve_body($response));
 		                if(!empty($body->access_token)){
-			                $response = wp_remote_get("https://graph.facebook.com/me?fields=id,name,about,link,email,first_name,last_name,picture.width(60).height(60).as(picture_small),picture.width(320).height(320).as(picture_large)&access_token=" . $body->access_token, array(
+			                $verifyToken = wp_remote_get("https://graph.facebook.com/me?access_token=" . $body->access_token, array(
 			                    'timeout' => 15
 			                ));
-			                if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
-			                    $profileData = json_decode(wp_remote_retrieve_body($response));
-			                    if(is_object($profileData) && isset($profileData->id)){
-			                        $profileData           = the_champ_sanitize_profile_data($profileData, 'facebook');
-			                        $facebookLoginState    = sanitize_text_field($_GET['state']);
-			                        $facebook_redirect_url = get_user_meta($facebookLoginState, 'super_socializer_redirect_to', true);
-			                        delete_user_meta($facebookLoginState, 'super_socializer_redirect_to');
-			                        $response = the_champ_user_auth($profileData, 'faceboook', $facebook_redirect_url);
-			                        if($response == 'show form'){
-			                            return;
-			                        }
-			                        if(is_array($response) && isset($response['message']) && $response['message'] == 'register' && (!isset($response['url']) || $response['url'] == '')){
-			                            $redirectTo = the_champ_get_login_redirection_url($facebook_redirect_url, true);
-			                        }elseif(isset($response['message']) && $response['message'] == 'linked'){
-			                            $redirectTo = $facebook_redirect_url . (strpos($facebook_redirect_url, '?') !== false ? '&' : '?') . 'linked=1';
-			                        }elseif(isset($response['message']) && $response['message'] == 'not linked'){
-			                            $redirectTo = $facebook_redirect_url . (strpos($facebook_redirect_url, '?') !== false ? '&' : '?') . 'linked=0';
-			                        }elseif(isset($response['url']) && $response['url'] != ''){
-			                            $redirectTo = $response['url'];
-			                        }else{
-			                            $redirectTo = the_champ_get_login_redirection_url($facebook_redirect_url);
-			                        }
-			                        the_champ_close_login_popup($redirectTo);
+			                if(!is_wp_error($verifyToken) && isset($verifyToken['response']['code']) && 200 === $verifyToken['response']['code']){
+			                    $verifyTokenData = json_decode(wp_remote_retrieve_body($verifyToken));
+			                    if(is_object($verifyTokenData) && isset($verifyTokenData->id) && $verifyTokenData->id){
+			                    	$response = wp_remote_get("https://graph.facebook.com/me?fields=id,name,about,link,email,first_name,last_name&access_token=" . $body->access_token, array(
+					                    	'timeout' => 15
+					                ));
+					                if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
+					                    $profileData = json_decode(wp_remote_retrieve_body($response));
+					                    if(is_object($profileData) && isset($profileData->id)){
+					                        $profileData           = the_champ_sanitize_profile_data($profileData, 'facebook');
+					                        $facebookLoginState    = sanitize_text_field($_GET['state']);
+					                        $facebook_redirect_url = get_user_meta($facebookLoginState, 'super_socializer_redirect_to', true);
+					                        delete_user_meta($facebookLoginState, 'super_socializer_redirect_to');
+					                        $response = the_champ_user_auth($profileData, 'faceboook', $facebook_redirect_url);
+					                        if($response == 'show form'){
+					                            return;
+					                        }
+					                        if(is_array($response) && isset($response['message']) && $response['message'] == 'register' && (!isset($response['url']) || $response['url'] == '')){
+					                            $redirectTo = the_champ_get_login_redirection_url($facebook_redirect_url, true);
+					                        }elseif(isset($response['message']) && $response['message'] == 'linked'){
+					                            $redirectTo = $facebook_redirect_url . (strpos($facebook_redirect_url, '?') !== false ? '&' : '?') . 'linked=1';
+					                        }elseif(isset($response['message']) && $response['message'] == 'not linked'){
+					                            $redirectTo = $facebook_redirect_url . (strpos($facebook_redirect_url, '?') !== false ? '&' : '?') . 'linked=0';
+					                        }elseif(isset($response['url']) && $response['url'] != ''){
+					                            $redirectTo = $response['url'];
+					                        }else{
+					                            $redirectTo = the_champ_get_login_redirection_url($facebook_redirect_url);
+					                        }
+					                        the_champ_close_login_popup($redirectTo);
+					                    }
+					                }
 			                    }
-			                }
+				            }
 			            }
 		            }
 		        }
@@ -1108,35 +1117,36 @@ function the_champ_connect(){
 			
 			if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
 				$body = json_decode(wp_remote_retrieve_body($response));
-				$authorization = "Bearer ".$body->access_token;
-
-				$response = wp_remote_get("https://public-api.wordpress.com/rest/v1/me/", array('timeout' => 15, 'headers' =>  array('Accept' => 'application/json', 'Authorization' => $authorization )));
-					
-				if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
-					$profileData = json_decode(wp_remote_retrieve_body($response));
-					if(is_object($profileData) && isset($profileData->ID)){	
-						$profileData = the_champ_sanitize_profile_data($profileData, 'wordpress');
-						$wordpressLoginState  = sanitize_text_field($_GET['state']);
-						$wordpressRedirectUrl = get_user_meta($wordpressLoginState, 'super_socializer_redirect_to', true);
-						$response = the_champ_user_auth($profileData, 'wordpress', $wordpressRedirectUrl);
-						if($response == 'show form'){
-							return;
+				if(isset($body->access_token) && $body->access_token){
+					$authorization = "Bearer ". $body->access_token;
+					$response = wp_remote_get("https://public-api.wordpress.com/rest/v1/me/", array('timeout' => 15, 'headers' =>  array('Accept' => 'application/json', 'Authorization' => $authorization )));
+						
+					if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
+						$profileData = json_decode(wp_remote_retrieve_body($response));
+						if(is_object($profileData) && isset($profileData->ID)){	
+							$profileData = the_champ_sanitize_profile_data($profileData, 'wordpress');
+							$wordpressLoginState  = sanitize_text_field($_GET['state']);
+							$wordpressRedirectUrl = get_user_meta($wordpressLoginState, 'super_socializer_redirect_to', true);
+							$response = the_champ_user_auth($profileData, 'wordpress', $wordpressRedirectUrl);
+							if($response == 'show form'){
+								return;
+							}
+							delete_user_meta($wordpressLoginState, 'super_socializer_redirect_to', true);
+							if(is_array($response) && isset($response['message']) && $response['message'] == 'register' && (!isset($response['url']) || $response['url'] == '')){
+								$redirectTo = the_champ_get_login_redirection_url($wordpressRedirectUrl, true);
+							}elseif(isset($response['message']) && $response['message'] == 'linked'){
+								$redirectTo = $wordpressRedirectUrl.(strpos($wordpressRedirectUrl, '?') !== false ? '&' : '?').'linked=1';
+							}elseif(isset($response['message']) && $response['message'] == 'not linked'){
+								$redirectTo = $wordpressRedirectUrl.(strpos($wordpressRedirectUrl, '?') !== false ? '&' : '?').'linked=0';
+							}elseif(isset($response['url']) && $response['url'] != ''){
+								$redirectTo = $response['url'];
+							}else{
+								$redirectTo = the_champ_get_login_redirection_url($wordpressRedirectUrl);
+							}
+							the_champ_close_login_popup($redirectTo);
 						}
-						delete_user_meta($wordpressLoginState, 'super_socializer_redirect_to', true);
-						if(is_array($response) && isset($response['message']) && $response['message'] == 'register' && (!isset($response['url']) || $response['url'] == '')){
-							$redirectTo = the_champ_get_login_redirection_url($wordpressRedirectUrl, true);
-						}elseif(isset($response['message']) && $response['message'] == 'linked'){
-							$redirectTo = $wordpressRedirectUrl.(strpos($wordpressRedirectUrl, '?') !== false ? '&' : '?').'linked=1';
-						}elseif(isset($response['message']) && $response['message'] == 'not linked'){
-							$redirectTo = $wordpressRedirectUrl.(strpos($wordpressRedirectUrl, '?') !== false ? '&' : '?').'linked=0';
-						}elseif(isset($response['url']) && $response['url'] != ''){
-							$redirectTo = $response['url'];
-						}else{
-							$redirectTo = the_champ_get_login_redirection_url($wordpressRedirectUrl);
-						}
-						the_champ_close_login_popup($redirectTo);
+									
 					}
-								
 				}
 	 		}
 		}elseif(remove_query_arg(array('code', 'state'), esc_url_raw(the_champ_get_http().$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"])) == home_url().'/SuperSocializerAuth/Live'){
@@ -1964,26 +1974,21 @@ function the_champ_connect(){
         if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
             $body = json_decode(wp_remote_retrieve_body($response));
             if(isset($body->access_token)){
-            	$googleLoginState = sanitize_text_field($_GET['state']);
-            	$network          = get_user_meta($googleLoginState, 'super_socializer_temp_network', true);
-            	if($network == 'Google'){
-            		$api = 'https://www.googleapis.com/oauth2/v3/userinfo';
-            	}else{
-            		$api = 'https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&key='. $theChampLoginOptions['youtube_key'];
-            	}
-                $authorization = "Bearer " . $body->access_token;
-                $response      = wp_remote_get($api, array(
-                    'timeout' => 15,
-                    'headers' => array(
-                        'Accept' => 'application/json',
-                        'Authorization' => $authorization
-                    )
+            	$tokenInfo      = wp_remote_get('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token='. $body->access_token, array(
+                    'timeout' => 15
                 ));
-                if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
-                    $profileData = json_decode(wp_remote_retrieve_body($response));
-                    if($network == 'Youtube'){
+                if(!is_wp_error($tokenInfo) && isset($tokenInfo['response']['code']) && 200 === $tokenInfo['response']['code']){
+                    $tokenInfoData = json_decode(wp_remote_retrieve_body($tokenInfo));
+                    if(is_object($tokenInfoData) && isset($tokenInfoData->issued_to) && $tokenInfoData->issued_to == $theChampLoginOptions['google_key']){
+                    	$googleLoginState = sanitize_text_field($_GET['state']);
+		            	$network          = get_user_meta($googleLoginState, 'super_socializer_temp_network', true);
+		            	if($network == 'Google'){
+		            		$api = 'https://www.googleapis.com/oauth2/v3/userinfo';
+		            	}else{
+		            		$api = 'https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&mine=true&key='. $theChampLoginOptions['youtube_key'];
+		            	}
 		                $authorization = "Bearer " . $body->access_token;
-		                $response      = wp_remote_get('https://www.googleapis.com/oauth2/v3/userinfo', array(
+		                $response      = wp_remote_get($api, array(
 		                    'timeout' => 15,
 		                    'headers' => array(
 		                        'Accept' => 'application/json',
@@ -1991,33 +1996,46 @@ function the_champ_connect(){
 		                    )
 		                ));
 		                if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
-		                    $emailProfileData = json_decode(wp_remote_retrieve_body($response));
-		                    if(is_object($emailProfileData) && isset($emailProfileData->email_verified) && $emailProfileData->email_verified == 1 && isset($emailProfileData->email)){
-		                    	$profileData = (array) $profileData;
-		                    	$profileData['email'] = $emailProfileData->email;
-		                    	$profileData = (object) $profileData;
+		                    $profileData = json_decode(wp_remote_retrieve_body($response));
+		                    if($network == 'Youtube'){
+				                $authorization = "Bearer " . $body->access_token;
+				                $response      = wp_remote_get('https://www.googleapis.com/oauth2/v3/userinfo', array(
+				                    'timeout' => 15,
+				                    'headers' => array(
+				                        'Accept' => 'application/json',
+				                        'Authorization' => $authorization
+				                    )
+				                ));
+				                if(!is_wp_error($response) && isset($response['response']['code']) && 200 === $response['response']['code']){
+				                    $emailProfileData = json_decode(wp_remote_retrieve_body($response));
+				                    if(is_object($emailProfileData) && isset($emailProfileData->email_verified) && $emailProfileData->email_verified == 1 && isset($emailProfileData->email)){
+				                    	$profileData = (array) $profileData;
+				                    	$profileData['email'] = $emailProfileData->email;
+				                    	$profileData = (object) $profileData;
+				                    }
+				                }
+		                    }
+		                    if(is_object($profileData) && (($network == 'Google' && isset($profileData->sub)) || ($network == 'Youtube' && isset($profileData->etag) || (isset($profileData->items) && is_array($profileData->items) && isset($profileData->items[0]) && isset($profileData->items[0]->id))))){
+		                        $profileData           = the_champ_sanitize_profile_data($profileData, strtolower($network));
+			                    $googleRedirectUrl     = get_user_meta($googleLoginState, 'super_socializer_redirect_to', true);
+		                        $response 			   = the_champ_user_auth($profileData, strtolower($network), $googleRedirectUrl);
+		                        if($response == 'show form'){
+		                            return;
+		                        }
+		                        if(is_array($response) && isset($response['message']) && $response['message'] == 'register' && (!isset($response['url']) || $response['url'] == '')){
+		                            $redirectTo = the_champ_get_login_redirection_url($googleRedirectUrl, true);
+		                        }elseif(isset($response['message']) && $response['message'] == 'linked'){
+		                            $redirectTo = $googleRedirectUrl . (strpos($googleRedirectUrl, '?') !== false ? '&' : '?') . 'linked=1';
+		                        }elseif(isset($response['message']) && $response['message'] == 'not linked'){
+		                            $redirectTo = $googleRedirectUrl . (strpos($googleRedirectUrl, '?') !== false ? '&' : '?') . 'linked=0';
+		                        }elseif(isset($response['url']) && $response['url'] != ''){
+		                            $redirectTo = $response['url'];
+		                        }else{
+		                            $redirectTo = the_champ_get_login_redirection_url($googleRedirectUrl);
+		                        }
+		                        the_champ_close_login_popup($redirectTo);
 		                    }
 		                }
-                    }
-                    if(is_object($profileData) && (($network == 'Google' && isset($profileData->sub)) || ($network == 'Youtube' && isset($profileData->etag) || (isset($profileData->items) && is_array($profileData->items) && isset($profileData->items[0]) && isset($profileData->items[0]->id))))){
-                        $profileData           = the_champ_sanitize_profile_data($profileData, strtolower($network));
-	                    $googleRedirectUrl     = get_user_meta($googleLoginState, 'super_socializer_redirect_to', true);
-                        $response 			   = the_champ_user_auth($profileData, strtolower($network), $googleRedirectUrl);
-                        if($response == 'show form'){
-                            return;
-                        }
-                        if(is_array($response) && isset($response['message']) && $response['message'] == 'register' && (!isset($response['url']) || $response['url'] == '')){
-                            $redirectTo = the_champ_get_login_redirection_url($googleRedirectUrl, true);
-                        }elseif(isset($response['message']) && $response['message'] == 'linked'){
-                            $redirectTo = $googleRedirectUrl . (strpos($googleRedirectUrl, '?') !== false ? '&' : '?') . 'linked=1';
-                        }elseif(isset($response['message']) && $response['message'] == 'not linked'){
-                            $redirectTo = $googleRedirectUrl . (strpos($googleRedirectUrl, '?') !== false ? '&' : '?') . 'linked=0';
-                        }elseif(isset($response['url']) && $response['url'] != ''){
-                            $redirectTo = $response['url'];
-                        }else{
-                            $redirectTo = the_champ_get_login_redirection_url($googleRedirectUrl);
-                        }
-                        the_champ_close_login_popup($redirectTo);
                     }
                 }
             }
@@ -3893,7 +3911,7 @@ function the_champ_frontend_amp_css(){
 	}
 
 	// background color of amp icons
-	$css .= 'a.the_champ_amp{padding:0 4px;}div.the_champ_horizontal_sharing a amp-img{display:inline-block;margin:0 4px;}.the_champ_amp_parler img{background-color:#892E5E}.the_champ_amp_instagram img{background-color:#624E47}.the_champ_amp_yummly img{background-color:#E16120}.the_champ_amp_buffer img{background-color:#000}.the_champ_amp_teams img{background-color:#5059c9}.the_champ_amp_google_translate img{background-color:#528ff5}.the_champ_amp_rss img{background-color:#e3702d}.the_champ_amp_x img{background-color:#2a2a2a}.the_champ_amp_facebook img{background-color:#3C589A}.the_champ_amp_digg img{background-color:#006094}.the_champ_amp_email img{background-color:#649A3F}.the_champ_amp_float_it img{background-color:#53BEEE}.the_champ_amp_google img{background-color:#dd4b39}.the_champ_amp_google_plus img{background-color:#dd4b39}.the_champ_amp_linkedin img{background-color:#0077B5}.the_champ_amp_pinterest img{background-color:#CC2329}.the_champ_amp_print img{background-color:#FD6500}.the_champ_amp_reddit img{background-color:#FF5700}.the_champ_amp_stocktwits img{background-color: #40576F}.the_champ_amp_mix img{background-color:#ff8226}.the_champ_amp_tumblr img{background-color:#29435D}.the_champ_amp_twitter img{background-color:#55acee}.the_champ_amp_vkontakte img{background-color:#0077FF}.the_champ_amp_yahoo img{background-color:#8F03CC}.the_champ_amp_xing img{background-color:#00797D}.the_champ_amp_mastodon img{background-color:#2b90d9}.the_champ_amp_instagram img{background-color:#527FA4}.the_champ_amp_whatsapp img{background-color:#55EB4C}.the_champ_amp_aim img{background-color: #10ff00}.the_champ_amp_amazon_wish_list img{background-color: #ffe000}.the_champ_amp_aol_mail img{background-color: #2A2A2A}.the_champ_amp_app_net img{background-color: #5D5D5D}.the_champ_amp_balatarin img{background-color: #fff}.the_champ_amp_bibsonomy img{background-color: #000}.the_champ_amp_bitty_browser img{background-color: #EFEFEF}.the_champ_amp_blinklist img{background-color: #3D3C3B}.the_champ_amp_blogger_post img{background-color: #FDA352}.the_champ_amp_blogmarks img{background-color: #535353}.the_champ_amp_bookmarks_fr img{background-color: #E8EAD4}.the_champ_amp_box_net img{background-color: #1A74B0}.the_champ_amp_buddymarks img{background-color: #ffd400}.the_champ_amp_care2_news img{background-color: #6EB43F}.the_champ_amp_citeulike img{background-color: #2781CD}.the_champ_amp_comment img{background-color: #444}.the_champ_amp_diary_ru img{background-color: #E8D8C6}.the_champ_amp_diaspora img{background-color: #2E3436}.the_champ_amp_diigo img{background-color: #4A8BCA}.the_champ_amp_douban img{background-color: #497700}.the_champ_amp_draugiem img{background-color: #ffad66}.the_champ_amp_dzone img{background-color: #fff088}.the_champ_amp_evernote img{background-color: #8BE056}.the_champ_amp_facebook_messenger img{background-color: #0084FF}.the_champ_amp_fark img{background-color: #555}.the_champ_amp_fintel img{background-color:#087515}.the_champ_amp_flipboard img{background-color: #CC0000}.the_champ_amp_folkd img{background-color: #0F70B2}.the_champ_amp_google_classroom img{background-color: #FFC112}.the_champ_amp_google_bookmarks img{background-color: #CB0909}.the_champ_amp_google_gmail img{background-color: #E5E5E5}.the_champ_amp_hacker_news img{background-color: #F60}.the_champ_amp_hatena img{background-color: #00A6DB}.the_champ_amp_instapaper img{background-color: #EDEDED}.the_champ_amp_jamespot img{background-color: #FF9E2C}.the_champ_amp_kakao img{background-color: #FCB700}.the_champ_amp_kik img{background-color: #2A2A2A}.the_champ_amp_kindle_it img{background-color: #2A2A2A}.the_champ_amp_known img{background-color: #fff101}.the_champ_amp_line img{background-color: #00C300}.the_champ_amp_livejournal img{background-color: #EDEDED}.the_champ_amp_mail_ru img{background-color: #356FAC}.the_champ_amp_mendeley img{background-color: #A70805}.the_champ_amp_meneame img{background-color: #FF7D12}.the_champ_amp_mewe img{background-color: #007da1}.the_champ_amp_mixi img{background-color: #EDEDED}.the_champ_amp_myspace img{background-color: #2A2A2A}.the_champ_amp_netvouz img{background-color: #c0ff00}.the_champ_amp_odnoklassniki img{background-color: #F2720C}.the_champ_amp_outlook_com img{background-color: #0072C6}.the_champ_amp_papaly img{background-color: #3AC0F6}.the_champ_amp_pinboard img{background-color: #1341DE}.the_champ_amp_plurk img{background-color: #CF682F}.the_champ_amp_pocket img{background-color: #ee4056}.the_champ_amp_printfriendly img{background-color: #61D1D5}.the_champ_amp_protopage_bookmarks img{background-color: #413FFF}.the_champ_amp_pusha img{background-color: #0072B8}.the_champ_amp_qzone img{background-color: #2B82D9}.the_champ_amp_refind img{background-color: #1492ef}.the_champ_amp_rediff_mypage img{background-color: #D20000}.the_champ_amp_renren img{background-color: #005EAC}.the_champ_amp_sina_weibo img{background-color: #ff0}.the_champ_amp_sitejot img{background-color: #ffc800}.the_champ_amp_skype img{background-color: #00AFF0}.the_champ_amp_sms img{background-color: #6ebe45}.the_champ_amp_slashdot img{background-color: #004242}.the_champ_amp_svejo img{background-color: #fa7aa3}.the_champ_amp_symbaloo_feeds img{background-color: #6DA8F7}.the_champ_amp_telegram img{background-color: #3DA5f1}.the_champ_amp_trello img{background-color: #1189CE}.the_champ_amp_tuenti img{background-color: #0075C9}.the_champ_amp_twiddla img{background-color: #EDEDED}.the_champ_amp_typepad_post img{background-color: #2A2A2A}.the_champ_amp_viadeo img{background-color: #2A2A2A}.the_champ_amp_viber img{background-color: #8B628F}.the_champ_amp_wanelo img{background-color: #fff}.the_champ_amp_webnews img{background-color: #CC2512}.the_champ_amp_wordpress img{background-color: #464646}.the_champ_amp_wykop img{background-color: #367DA9}.the_champ_amp_yahoo_mail img{background-color: #400090}.the_champ_amp_yahoo_messenger img{background-color: #400090}.the_champ_amp_yoolink img{background-color: #A2C538}.the_champ_amp_threema img{background-color: #2A2A2A}.the_champ_amp_youmob img{background-color: #3B599D}.the_champ_amp_youtube img{background-color:red}.the_champ_amp_rutube img{background-color:#14191f}.the_champ_amp_gentlereader img{background-color: #46aecf}.the_champ_amp_goodreads img{background-color:#ce6f2d}.the_champ_amp_gab img{background-color:#25CC80}.the_champ_amp_gettr img{background-color:#E50000}';
+	$css .= 'a.the_champ_amp{padding:0 4px;}div.the_champ_horizontal_sharing a amp-img{display:inline-block;margin:0 4px;}.the_champ_amp_parler img{background-color:#892E5E}.the_champ_amp_instagram img{background-color:#624E47}.the_champ_amp_yummly img{background-color:#E16120}.the_champ_amp_buffer img{background-color:#000}.the_champ_amp_teams img{background-color:#5059c9}.the_champ_amp_google_translate img{background-color:#528ff5}.the_champ_amp_rss img{background-color:#e3702d}.the_champ_amp_x img{background-color:#2a2a2a}.the_champ_amp_facebook img{background-color:#3C589A}.the_champ_amp_digg img{background-color:#006094}.the_champ_amp_email img{background-color:#649A3F}.the_champ_amp_float_it img{background-color:#53BEEE}.the_champ_amp_google img{background-color:#dd4b39}.the_champ_amp_google_plus img{background-color:#dd4b39}.the_champ_amp_linkedin img{background-color:#0077B5}.the_champ_amp_pinterest img{background-color:#CC2329}.the_champ_amp_print img{background-color:#FD6500}.the_champ_amp_reddit img{background-color:#FF5700}.the_champ_amp_stocktwits img{background-color:#40576F}.the_champ_amp_mix img{background-color:#ff8226}.the_champ_amp_tumblr img{background-color:#29435D}.the_champ_amp_twitter img{background-color:#55acee}.the_champ_amp_vkontakte img{background-color:#0077FF}.the_champ_amp_yahoo img{background-color:#8F03CC}.the_champ_amp_xing img{background-color:#00797D}.the_champ_amp_mastodon img{background-color:#2b90d9}.the_champ_amp_instagram img{background-color:#527FA4}.the_champ_amp_whatsapp img{background-color:#55EB4C}.the_champ_amp_aim img{background-color:#10ff00}.the_champ_amp_amazon_wish_list img{background-color:#ffe000}.the_champ_amp_aol_mail img{background-color:#2A2A2A}.the_champ_amp_app_net img{background-color:#5D5D5D}.the_champ_amp_balatarin img{background-color:#fff}.the_champ_amp_bibsonomy img{background-color:#000}.the_champ_amp_bitty_browser img{background-color:#EFEFEF}.the_champ_amp_blinklist img{background-color:#3D3C3B}.the_champ_amp_blogger_post img{background-color:#FDA352}.the_champ_amp_blogmarks img{background-color:#535353}.the_champ_amp_bookmarks_fr img{background-color:#E8EAD4}.the_champ_amp_box_net img{background-color:#1A74B0}.the_champ_amp_buddymarks img{background-color:#ffd400}.the_champ_amp_care2_news img{background-color:#6EB43F}.the_champ_amp_citeulike img{background-color:#2781CD}.the_champ_amp_comment img{background-color:#444}.the_champ_amp_diary_ru img{background-color:#E8D8C6}.the_champ_amp_diaspora img{background-color:#2E3436}.the_champ_amp_diigo img{background-color:#4A8BCA}.the_champ_amp_douban img{background-color:#497700}.the_champ_amp_draugiem img{background-color:#ffad66}.the_champ_amp_dzone img{background-color:#fff088}.the_champ_amp_evernote img{background-color:#8BE056}.the_champ_amp_facebook_messenger img{background-color:#0084FF}.the_champ_amp_fark img{background-color:#555}.the_champ_amp_fintel img{background-color:#087515}.the_champ_amp_flipboard img{background-color:#CC0000}.the_champ_amp_folkd img{background-color:#0F70B2}.the_champ_amp_google_classroom img{background-color:#FFC112}.the_champ_amp_google_bookmarks img{background-color:#CB0909}.the_champ_amp_google_gmail img{background-color:#E5E5E5}.the_champ_amp_hacker_news img{background-color:#F60}.the_champ_amp_hatena img{background-color:#00A6DB}.the_champ_amp_instapaper img{background-color:#EDEDED}.the_champ_amp_jamespot img{background-color:#FF9E2C}.the_champ_amp_kakao img{background-color:#FCB700}.the_champ_amp_kik img{background-color:#2A2A2A}.the_champ_amp_kindle_it img{background-color:#2A2A2A}.the_champ_amp_known img{background-color:#fff101}.the_champ_amp_line img{background-color:#00C300}.the_champ_amp_livejournal img{background-color:#EDEDED}.the_champ_amp_mail_ru img{background-color:#356FAC}.the_champ_amp_mendeley img{background-color:#A70805}.the_champ_amp_meneame img{background-color:#FF7D12}.the_champ_amp_mewe img{background-color:#007da1}.the_champ_amp_mixi img{background-color:#EDEDED}.the_champ_amp_myspace img{background-color:#2A2A2A}.the_champ_amp_netvouz img{background-color:#c0ff00}.the_champ_amp_odnoklassniki img{background-color:#F2720C}.the_champ_amp_outlook_com img{background-color:#0072C6}.the_champ_amp_papaly img{background-color:#3AC0F6}.the_champ_amp_pinboard img{background-color:#1341DE}.the_champ_amp_plurk img{background-color:#CF682F}.the_champ_amp_pocket img{background-color:#ee4056}.the_champ_amp_printfriendly img{background-color:#61D1D5}.the_champ_amp_protopage_bookmarks img{background-color:#413FFF}.the_champ_amp_pusha img{background-color:#0072B8}.the_champ_amp_qzone img{background-color:#2B82D9}.the_champ_amp_refind img{background-color:#1492ef}.the_champ_amp_rediff_mypage img{background-color:#D20000}.the_champ_amp_renren img{background-color:#005EAC}.the_champ_amp_sina_weibo img{background-color:#ff0}.the_champ_amp_sitejot img{background-color:#ffc800}.the_champ_amp_skype img{background-color:#00AFF0}.the_champ_amp_sms img{background-color:#6ebe45}.the_champ_amp_slashdot img{background-color:#004242}.the_champ_amp_svejo img{background-color:#fa7aa3}.the_champ_amp_symbaloo_feeds img{background-color:#6DA8F7}.the_champ_amp_telegram img{background-color:#3DA5f1}.the_champ_amp_trello img{background-color:#1189CE}.the_champ_amp_tuenti img{background-color:#0075C9}.the_champ_amp_twiddla img{background-color:#EDEDED}.the_champ_amp_typepad_post img{background-color:#2A2A2A}.the_champ_amp_viadeo img{background-color:#2A2A2A}.the_champ_amp_viber img{background-color:#8B628F}.the_champ_amp_wanelo img{background-color:#fff}.the_champ_amp_webnews img{background-color:#CC2512}.the_champ_amp_wordpress img{background-color:#464646}.the_champ_amp_wykop img{background-color:#367DA9}.the_champ_amp_yahoo_mail img{background-color:#400090}.the_champ_amp_yahoo_messenger img{background-color:#400090}.the_champ_amp_yoolink img{background-color:#A2C538}.the_champ_amp_threema img{background-color:#2A2A2A}.the_champ_amp_youmob img{background-color:#3B599D}.the_champ_amp_youtube img{background-color:red}.the_champ_amp_rutube img{background-color:#14191f}.the_champ_amp_gentlereader img{background-color:#46aecf}.the_champ_amp_goodreads img{background-color:#ce6f2d}.the_champ_amp_gab img{background-color:#25CC80}.the_champ_amp_gettr img{background-color:#E50000}';
 
 	// css for horizontal sharing bar
 	if($theChampSharingOptions['horizontal_sharing_shape'] == 'round'){

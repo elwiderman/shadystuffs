@@ -39,9 +39,6 @@
 				<li style="margin-left:9px"><a style="margin:0; line-height:auto !important; height:23px" class="nav-tab" href="#tabs-1"><?php _e('Basic Configuration', 'super-socializer') ?></a></li>
 				<li style="margin-left:9px"><a style="margin:0; line-height:auto !important; height:23px" class="nav-tab" href="#tabs-2"><?php _e('Advanced Configuration', 'super-socializer') ?></a></li>
 				<li style="margin-left:9px"><a style="margin:0; line-height:auto !important; height:23px" class="nav-tab" href="#tabs-3"><?php _e('GDPR', 'super-socializer') ?></a></li>
-				<?php if($theChampIsBpActive){ ?>
-				<li style="margin-left:9px"><a style="margin:0; line-height:auto !important; height:23px" class="nav-tab" href="#tabs-4"><?php _e('XProfile Integration', 'super-socializer') ?></a></li>
-				<?php } ?>
 				<li style="margin-left:9px"><a style="margin:0; height:23px" class="nav-tab" href="#tabs-5"><?php _e('Shortcode & Widget', 'super-socializer') ?></a></li>
 				<li style="margin-left:9px"><a style="margin:0; height:23px" class="nav-tab" href="#tabs-6"><?php _e('FAQ', 'super-socializer') ?></a></li>
 			</ul>
@@ -2146,73 +2143,6 @@
 				</div>
 				<?php include 'help.php'; ?>
 			</div>
-
-			<?php if($theChampIsBpActive){
-				$profileFields = array(
-					'Social ID' => 'id',
-					'Social Network' => 'provider',
-					'Email' => 'email',
-					'Name' => 'name',
-					'Username' => 'user_name',
-					'First Name' => 'first_name',
-					'Last Name' => 'last_name',
-					'Bio' => 'bio',
-					'Social Profile Url' => 'link',
-					'Social Avatar Url' => 'avatar',
-					'Large Social Avatar Url' => 'large_avatar'
-				);
-			?>
-			<div class="menu_containt_div" id="tabs-4">
-				<div class="clear"></div>
-				<div class="the_champ_left_column">
-				<div class="stuffbox">
-					<h3><label><?php _e('XProfile Integration', 'super-socializer');?></label></h3>
-					<div class="inside">
-					<?php
-					global $wpdb;
-					$xprofileFields = $wpdb-> get_results("SELECT * FROM " . $wpdb-> prefix . "bp_xprofile_fields");
-					if($xprofileFields){
-						?>
-						<table width="100%" border="0" cellspacing="0" cellpadding="0" class="form-table editcomment menu_content_table">
-						<?php
-						foreach($xprofileFields as $field){
-							if($field-> id == 1){
-								continue;
-							}	
-							?>
-							<tr>
-								<td>
-									<label><?php _e($field-> name, 'super-socializer'); ?></label>
-								</td>
-								<td>
-									<select name="the_champ_login[xprofile_mapping][<?php echo $field-> name ?>]">
-										<option value="">--<?php _e('Select', 'super-socializer') ?>--</option>
-										<?php
-										foreach($profileFields as $key => $val){
-											?>
-											<option <?php echo isset($theChampLoginOptions['xprofile_mapping'][$field-> name]) && $theChampLoginOptions['xprofile_mapping'][$field-> name] == $val ? 'selected' : '' ?> value="<?php echo $val ?>"><?php echo ucfirst($key) ?></option>
-											<?php
-										}
-										?>
-									</select>
-								</td>
-							</tr>
-							<?php
-						}
-						?>
-						</table>
-						<?php
-					}
-					?>
-					</div>
-					<p class="submit">
-						<input style="margin-left:8px" type="submit" name="save" class="button button-primary" value="<?php _e("Save Changes", 'super-socializer'); ?>" />
-					</p>
-				</div>
-				</div>
-				<?php include 'help.php'; ?>
-			</div>
-			<?php } ?>
 			
 			<div class="menu_containt_div" id="tabs-5">
 				<div class="clear"></div>

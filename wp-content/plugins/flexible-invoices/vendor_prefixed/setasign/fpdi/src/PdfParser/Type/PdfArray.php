@@ -23,7 +23,7 @@ class PdfArray extends \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType
      *
      * @param Tokenizer $tokenizer
      * @param PdfParser $parser
-     * @return bool|self
+     * @return false|self
      * @throws PdfTypeException
      */
     public static function parse(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Tokenizer $tokenizer, \WPDeskFIVendor\setasign\Fpdi\PdfParser\PdfParser $parser)

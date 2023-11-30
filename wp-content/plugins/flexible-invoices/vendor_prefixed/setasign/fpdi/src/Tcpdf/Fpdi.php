@@ -43,7 +43,7 @@ class Fpdi extends \WPDeskFIVendor\TCPDF
      *
      * @string
      */
-    const VERSION = '2.4.1';
+    const VERSION = '2.5.0';
     /**
      * A counter for template ids.
      *
@@ -225,7 +225,7 @@ class Fpdi extends \WPDeskFIVendor\TCPDF
         if ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString) {
             $string = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString::unescape($value->value);
             $string = $this->_encrypt_data($this->currentObjectNumber, $string);
-            $value->value = \WPDeskFIVendor\TCPDF_STATIC::_escape($string);
+            $value->value = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString::escape($string);
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfHexString) {
             $filter = new \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\AsciiHex();
             $string = $filter->decode($value->value);

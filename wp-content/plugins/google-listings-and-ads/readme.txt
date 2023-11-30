@@ -2,10 +2,10 @@
 Contributors: automattic, google, woocommerce
 Tags: woocommerce, google, listings, ads
 Requires at least: 5.9
-Tested up to: 6.3
+Tested up to: 6.4
 Requires PHP: 7.4
 Requires PHP Architecture: 64 Bits
-Stable tag: 2.5.8
+Stable tag: 2.5.12
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,7 +60,7 @@ Create a new Google Ads account through Google Listings & Ads and a promotional 
 * PHP Architecture 64 bits
 * MySQL version 5.6 or greater
 
-Visit the [WooCommerce server requirements documentation](https://docs.woocommerce.com/document/server-requirements/) for a detailed list of server requirements.
+Visit the [WooCommerce server requirements documentation](https://woo.com/document/server-requirements/) for a detailed list of server requirements.
 
 = Automatic installation =
 
@@ -111,28 +111,22 @@ Yes, you can run both at the same time, and we recommend it! In the US, advertis
 
 == Changelog ==
 
-= 2.5.8 - 2023-10-03 =
-* Add - Privacy policy guide section.
-* Add - The missing tracking to onboarding when changing steps.
-* Dev - Adjust the conditions for loading JS and CSS assets, and configure them with lazy loading and code splitting.
-* Dev - E2E - Onboarding Step 4 - Complete your campaign.
-* Fix - Remove AttributeMapping new feature inbox notification.
-* Tweak - Add UTM parameters to documentation link.
-* Tweak - The properties of the gla_setup_mc and gla_setup_ads tracking events to reduce their confusion.
-* Tweak - WC 8.2 compatibility.
+= 2.5.12 - 2023-11-22 =
+* Dev - Fix E2E gtag events tests.
+* Dev - Update WordPress CS to 3.0.
+* Dev - Update phpunit polyfills to 1.1 for WP 6.4.
+* Tweak - Add filter to be able to build custom shipping method rate handers.
+* Tweak - Remove rewrite rules flush.
 
-= 2.5.7 - 2023-09-20 =
-* Dev - E2E - Ads a paid campaign Step 1 - Connect Ads Account.
-* Dev - E2E - Onboarding Step 2 - Configure product listings.
-* Dev - E2E - Onboarding Step 3 - Confirm store requirements.
-* Fix - Performance issue with GoogleAdsFailures::init.
+= 2.5.11 - 2023-11-07 =
+* Add - Record tracking events for moving steps on the campaign creation and editing pages.
+* Tweak - Add tracking for campaign count.
+* Tweak - WC 8.3 compatibility.
+* Tweak - WP 6.4 compatibility.
+* Update - Use new Woo.com domain.
 
-= 2.5.6 - 2023-09-14 =
-* Dev - E2E - Onboarding Step 1 - Set up accounts - Connect Merchant Center account.
-* FIx - Undesired margin in Paid Campaign Creation Success Modal.
-* Fix - Adjust target on click events preventing GLA ID to be Undefined.
-* Fix - Tweak E2E tests for WC 8.1.
-* Fix - WooCommerce Subscriptions compatibility: Fix the visible issue of the "Google Listings and Ads" tab and "Channel visibility" meta box for some unsupported product types.
-* Tweak - WC 8.1.0 compatibility.
+= 2.5.10 - 2023-10-18 =
+* Tweak - Add correct Destinations for Supported Countries in Coupons.
+* Tweak - Declare cart_checkout_blocks feature compatibility.
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/google-listings-and-ads/trunk/changelog.txt).

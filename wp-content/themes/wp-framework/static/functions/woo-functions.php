@@ -15,3 +15,4 @@ require_once(get_template_directory().'/functions/woo/woo-loop.php');
 require_once(get_template_directory().'/functions/woo/woo-shop.php');
 require_once(get_template_directory().'/functions/woo/woo-single.php');
 require_once(get_template_directory().'/functions/woo/woo-cart.php');
+require_once(get_template_directory().'/functions/woo/woo-account.php');

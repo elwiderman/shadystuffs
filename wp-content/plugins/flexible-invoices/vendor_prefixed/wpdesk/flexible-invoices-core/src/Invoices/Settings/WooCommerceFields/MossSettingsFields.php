@@ -54,7 +54,7 @@ final class MossSettingsFields implements \WPDeskFIVendor\WPDesk\Library\Flexibl
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\InvoicesIntegration::is_super()) {
             return \sprintf(\__('The EU OSS procedure is an extension of MOSS. From 07.2021 VAT on every transaction above €10.000 to other EU countries must be calculated based on the customer location, and you need to collect evidence of this (IP address and Billing Address). B2B transactions are subject to reverse charge. <a href="%s" target="_blank">Read this guide</a> for instructions on doing this.', 'flexible-invoices'), $this->get_moss_link());
         } else {
-            return \sprintf('<a href="%1$s" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
+            return \sprintf('<a href="%1$s&utm_content=oss" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
         }
     }
     /**
