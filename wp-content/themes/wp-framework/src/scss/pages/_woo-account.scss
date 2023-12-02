@@ -38,6 +38,11 @@
                             flex: 0 0 75%;
                             max-width: 75%;
                             width: unset;
+                            h2 {
+                                @include font($secondary-font, $semi-bold);
+                                font-size: 22px;
+                                margin-bottom: 20px;
+                            }
                             a {
                                 color: $secondary-color;
                             }
@@ -106,7 +111,7 @@
                                     }
                                     .wc-item-meta {
                                         @include flex-display;
-                                        @include add-border(1px, $alt-grey, 'top');
+                                        margin-top: 10px;
                                         li {
                                             @include flex-display;
                                             strong, p {
@@ -171,11 +176,64 @@
                                     }
                                     a {
                                         @extend .btn-main-ghost;
+                                        @include font($secondary-font, $semi-bold);
+                                        font-size: 14px;
+                                        text-transform: none;
+                                        height: 30px;
+                                        padding: 0 15px;
                                     }
                                 }
                                 .wc-address-book-address {
                                     address {
                                         font-size: 15px;
+                                    }
+                                }
+                            }
+                            .woo-shady-wishlist {
+                                .wishlist-title-container {
+                                    display: block;
+                                    width: 100%;
+                                    .wishlist-title-with-form.wishlist-title {
+                                        margin-bottom: 0;
+                                        h2 {
+                                            padding: 0;
+                                        }
+                                        .show-title-form {
+                                            display: none;
+                                        }
+                                    }
+                                }
+                                .wishlist_table {
+                                    border-radius: 0;
+                                    border-collapse: collapse;
+                                    .yith-wcqv-button {
+                                        display: none;
+                                    }
+                                    thead {
+                                        th {
+                                            font-size: 14px;
+                                            &.product-price, &.product-stock-status {
+                                                text-align: center;
+                                            }
+                                        }
+                                    }
+                                    tbody {
+                                        td {
+                                            .add_to_cart_button {
+                                                @extend .btn-main;
+                                                display: inline-flex !important;
+                                                font-size: 14px;
+                                                height: 35px;
+                                                padding: 0 14px;
+                                            }
+                                        }
+                                    }
+                                }
+                                .yith_wcwl_wishlist_footer {
+                                    .yith-wcwl-share-title {
+                                        @extend h6;
+                                        font-size: 20px;
+                                        margin-top: 0;
                                     }
                                 }
                             }
