@@ -106,7 +106,7 @@ ul {
     }
     .row {
         margin: 0 -12px;
-        & > [class^=col-] {
+        & > .col, & > [class*="col-"] {
             padding: 0 12px;
         }
     }

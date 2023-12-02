@@ -38,6 +38,11 @@
                             flex: 0 0 75%;
                             max-width: 75%;
                             width: unset;
+                            h2 {
+                                @include font($secondary-font, $semi-bold);
+                                font-size: 22px;
+                                margin-bottom: 20px;
+                            }
                             a {
                                 color: $secondary-color;
                             }
@@ -75,6 +80,160 @@
                                         &.woocommerce-orders-table__cell-order-actions {
                                             text-align: center;
                                         }
+                                    }
+                                }
+                            }
+                            .pre-title {
+                                font-size: 20px;
+                                margin-bottom: 40px;
+                                mark {
+                                    background: $secondary-color;
+                                    color: $primary-bg;
+                                    &.order-status {
+                                        text-transform: uppercase;
+                                    }
+                                }
+                            }
+                            .woocommerce-order-details {
+                                &__title {
+                                    @extend h5;
+                                    @include font($secondary-font, $semi-bold);
+                                    background: $alt-grey;
+                                    padding: 10px 15px;
+                                    margin-bottom: 0;
+                                }
+                            }
+                            .woocommerce-table {
+                                &--order-details {
+                                    border-radius: 0;
+                                    th, td {
+                                        font-size: 16px;
+                                    }
+                                    .wc-item-meta {
+                                        @include flex-display;
+                                        margin-top: 10px;
+                                        li {
+                                            @include flex-display;
+                                            strong, p {
+                                                line-height: 1.4;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .woocommerce-customer-details {
+                                .woocommerce-columns {
+                                    &--addresses {
+                                        width: 100%;
+                                        .woocommerce-column {
+                                            &--billing-address, &--shipping-address {
+                                                .address-wrap {
+                                                    height: 100%;
+                                                    width: 100%;
+                                                    @include flex-display(column, flex-start, flex-start);
+                                                    flex-wrap: nowrap;
+                                                    address {
+                                                        font-size: 14px;
+                                                        height: 100%;
+                                                        @include add-border(1px, $alt-grey, 'all');
+                                                        border-radius: 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .woocommerce-Addresses {
+                                margin-bottom: 20px;
+                                .woocommerce-Address {
+                                    header.title {
+                                        @include flex-display(row, space-between);
+                                        margin-bottom: 20px;
+                                        &:before {
+                                            display: none;
+                                        }
+                                        h5 {
+                                            @include font($secondary-font, $semi-bold);
+                                        }
+                                    }
+                                    address {
+                                        font-size: 15px;
+                                    }
+                                }
+                            }
+                            .address_book {
+                                margin-bottom: 20px;
+                                header {
+                                    @include flex-display(row, space-between);
+                                    border: none;
+                                    margin-bottom: 20px;
+                                    &:before {
+                                        display: none;
+                                    }
+                                    h5 {
+                                        @include font($secondary-font, $semi-bold);
+                                    }
+                                    a {
+                                        @extend .btn-main-ghost;
+                                        @include font($secondary-font, $semi-bold);
+                                        font-size: 14px;
+                                        text-transform: none;
+                                        height: 30px;
+                                        padding: 0 15px;
+                                    }
+                                }
+                                .wc-address-book-address {
+                                    address {
+                                        font-size: 15px;
+                                    }
+                                }
+                            }
+                            .woo-shady-wishlist {
+                                .wishlist-title-container {
+                                    display: block;
+                                    width: 100%;
+                                    .wishlist-title-with-form.wishlist-title {
+                                        margin-bottom: 0;
+                                        h2 {
+                                            padding: 0;
+                                        }
+                                        .show-title-form {
+                                            display: none;
+                                        }
+                                    }
+                                }
+                                .wishlist_table {
+                                    border-radius: 0;
+                                    border-collapse: collapse;
+                                    .yith-wcqv-button {
+                                        display: none;
+                                    }
+                                    thead {
+                                        th {
+                                            font-size: 14px;
+                                            &.product-price, &.product-stock-status {
+                                                text-align: center;
+                                            }
+                                        }
+                                    }
+                                    tbody {
+                                        td {
+                                            .add_to_cart_button {
+                                                @extend .btn-main;
+                                                display: inline-flex !important;
+                                                font-size: 14px;
+                                                height: 35px;
+                                                padding: 0 14px;
+                                            }
+                                        }
+                                    }
+                                }
+                                .yith_wcwl_wishlist_footer {
+                                    .yith-wcwl-share-title {
+                                        @extend h6;
+                                        font-size: 20px;
+                                        margin-top: 0;
                                     }
                                 }
                             }

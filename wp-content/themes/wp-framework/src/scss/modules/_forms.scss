@@ -2,43 +2,64 @@
 
 .woocommerce {
     form {
-        .form-row {
-            label {
-                font-size: 12px;
-                color: $dark-grey;
-                line-height: 1.1;
-            }
-            .woocommerce-input-wrapper {
-                display: flex;
-                width: 100%;
-                .select2-container {
-                    .select2-selection {
-                        height: 38px;
-                        &__rendered {
-                            line-height: 36px;
-                        }
-                        &__arrow {
-                            height: 38px;
-                        }
-                    }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            .form-label {
+                font-size: 13px;
+                font-weight: $semi-bold;
+                line-height: 1;
+                margin-bottom: 5px;
+                opacity: 0.5;
+                .required {
+                    color: $secondary-color;
                 }
             }
-            .input-text {
-                font-size: 14px;
+            .form-control {
                 height: 38px;
-                @include add-border(1px, $form-border, 'all');
-                border-radius: 5px;
-                padding: 0 6px;
+                background: $form-bg;
+                border-color: $form-border;
+                border-radius: 0;
+                box-shadow: none !important;
+                outline: 0 !important;
+                @include transition(0.2s);
+                &:focus {
+                    background: $primary-bg;
+                    border-color: #80bdff;
+                }
             }
-            textarea {
-                &.input-text  {
-                    min-height: 70px;
-                    max-height: 100px;
+            .field-info {
+                font-size: 13px;
+                line-height: 1.2;
+                margin-top: 10px;
+            }
+            .password-input {
+                .show-password-input {
+                    top: 0;
+                    right: 5px;
+                    height: 38px;
+                    @include flex-display;
+                    @include transition(0.3s);
+                    &:after {
+                        font-size: 15px;
+                    }
+                    &:hover {
+                        opacity: 0.5;
+                    }
+                }
+                .woocommerce-password-strength {
+                    font-size: 15px;
+                }
+                .woocommerce-password-hint {
+                    font-size: 13px;
                 }
             }
         }
-        .form-row-first, .form-row-last {
-            width: 49%;
+        fieldset {
+            legend {
+                @extend h6;
+                font-size: 20px;
+            }
         }
     }
 }
