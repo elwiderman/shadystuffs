@@ -30,12 +30,7 @@
 @import 'modules/woo';
 @import 'modules/carousels';
 
-/* LAYOUTS - layout overrides */
-@import 'layouts/desktop';
-@import 'layouts/tablet';
-@import 'layouts/mobile';
-
-
+/* PAGES - all pages styles */
 @import 'pages/home';
 @import 'pages/shop';
 @import 'pages/product-single';

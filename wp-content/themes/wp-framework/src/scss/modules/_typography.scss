@@ -82,3 +82,9 @@ p {
 .color-alt-dark {
     color: $alt-font-color;
 }
+
+.woocommerce-Price-amount {
+    .woocommerce-Price-currencySymbol {
+        font-size: 70%;
+    }
+}

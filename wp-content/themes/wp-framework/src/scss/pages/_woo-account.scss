@@ -38,13 +38,17 @@
                             flex: 0 0 75%;
                             max-width: 75%;
                             width: unset;
-                            h2 {
+                            h2, h3 {
                                 @include font($secondary-font, $semi-bold);
                                 font-size: 22px;
                                 margin-bottom: 20px;
                             }
                             a {
+                                font-weight: $semi-bold;
                                 color: $secondary-color;
+                                &:hover {
+                                    color: $primary-font-color;
+                                }
                             }
                             .woocommerce-orders-table {
                                 border: none;
@@ -184,8 +188,23 @@
                                     }
                                 }
                                 .wc-address-book-address {
+                                    @include add-border(1px, $alt-grey, 'all');
+                                    padding: 10px 15px;
+                                    @include transition(0.3s);
+                                    &:hover {
+                                        background: $alt-grey;
+                                    }
+                                    &:not(:last-child) {
+                                        margin-bottom: 20px;
+                                    }
                                     address {
                                         font-size: 15px;
+                                        margin-bottom: 0;
+                                    }
+                                    .wc-address-book-meta {
+                                        a {
+                                            font-size: 16px;
+                                        }
                                     }
                                 }
                             }
