@@ -57,7 +57,7 @@ function shady_woo_loop_thumb_wishlist_quickview() {
         <div class="product__reveal--wishlist">
             <?php echo do_shortcode('[yith_wcwl_add_to_wishlist]');?>
         </div>
-        <div class="product__reveal--quickview">
+        <div class="product__reveal--quickview d-none">
             <a class="yith-wcqv-button btn-square-white" data-product_id="<?php echo $product->get_id();?>" href="#">
                 <i class="fas fa-search-plus"></i>
             </a>
