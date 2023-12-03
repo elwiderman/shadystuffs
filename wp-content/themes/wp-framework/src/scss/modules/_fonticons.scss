@@ -226,6 +226,18 @@
     }
 }
 
+.icon-square {
+    &:before {
+        content: $icon-square;
+    }
+}
+
+.icon-circle {
+    &:before {
+        content: $icon-circle;
+    }
+}
+
 .icon-facebook {
     &:before {
         content: $icon-facebook;
