@@ -498,8 +498,8 @@
 
             &.section-product-more {
                 padding-top: 100px;
-                .related {
-                    h2 {
+                .related, .up-sells {
+                    .section-title {
                         @extend h4;
                         font-family: $primary-font;
                         line-height: 1;
