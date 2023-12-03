@@ -7,7 +7,7 @@ if (have_rows('socials_repeater', 'option')) :
     <div class='col-12 col-md-4 col-xl-auto'>
         <div class='footer__top--menu-block'>
             <h6 class='footer__top--menu-title'>{$social_title}</h6>
-            <ul class='footer__top--soicals'>
+            <ul class='footer__top--socials'>
     ";
 
     while (have_rows('socials_repeater', 'option')) : the_row();
