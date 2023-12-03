@@ -257,6 +257,92 @@
                                 }
                             }
                         }
+                        #customer_login {
+                            h2 {
+                                @extend h5;
+                                @include font($secondary-font, $semi-bold);
+                            }
+                            .woocommerce-form {
+                                border-radius: 0;
+                                margin-top: 0;
+                                .form-row {
+                                    padding: 0;
+                                }
+                                &__label {
+                                    line-height: 1;
+                                    position: relative;
+                                    padding-left: 5px;
+                                    cursor: pointer;
+                                    margin-bottom: 16px;
+                                }
+                                &__input-checkbox {
+                                    opacity: 0;
+                                    visibility: hidden;
+                                    & + span {
+                                        font-size: 15px;
+                                        &:before, &:after {
+                                            position: absolute;
+                                            top: 50%;
+                                            left: 0;
+                                            transform: translateY(-50%);
+                                            font-family: 'shadyicons';
+                                            font-size: 16px;
+                                            font-weight: $regular;
+                                            line-height: 1;
+                                            opacity: 0;
+                                            @include transition(0.2s);
+                                            @include respond-to-mob('medium') {
+                                                top: 6px;
+                                                transform: unset;
+                                            }
+                                        }
+                                        &:before {
+                                            content: '\e90c';
+                                        }
+                                        &:after {
+                                            content: '\e924';
+                                            opacity: 1;
+                                        }
+                                        &::selection {
+                                            background: transparent;
+                                            color: inherit;
+                                        }
+                                        &::-moz-selection {
+                                            background: transparent;
+                                            color: inherit;
+                                        }
+                                    }
+                                    &:checked + span {
+                                        &:before {
+                                            opacity: 1;
+                                        }
+                                        &:after {
+                                            opacity: 0;
+                                        }
+                                    }
+                                }
+                                .woocommerce-button {
+                                    @extend .btn-main;
+                                }
+                                .woocommerce-LostPassword {
+                                    margin-top: 20px;
+                                    a {
+                                        font-size: 16px;
+                                        font-weight: $semi-bold;
+                                        color: $primary-font-color;
+                                        &:hover {
+                                            color: $secondary-color;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .lost-password-page, .reset-password-page {
+                            width: 100%;
+                        }
+                        .woocommerce-message {
+                            width: 100%;
+                        }
                     }
                 }
             }
