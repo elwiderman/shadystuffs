@@ -1,7 +1,12 @@
 </div>
 
-<footer id="footer">
-<?php get_template_part('parts/footer/footer', 'framework'); ?>
+<footer class="footer">
+	<?php
+	get_template_part('parts/footer/footer', 'top');
+	get_template_part('parts/footer/footer', 'middle');
+	get_template_part('parts/footer/footer', 'bottom');
+	
+	?>
 </footer>
 
 <?php
