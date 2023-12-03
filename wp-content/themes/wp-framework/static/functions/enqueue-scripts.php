@@ -26,8 +26,7 @@ function framework_scripts() {
     }
 }
 
-function framework_styles()
-{
+function framework_styles() {
     global $wp_styles; // Call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
     $path = get_template_directory_uri();
 

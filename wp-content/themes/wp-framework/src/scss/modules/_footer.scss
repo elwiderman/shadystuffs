@@ -1,61 +1,110 @@
 /* Styles for Footer */
 
-footer {
-    background: rgba($primary-color, 0.7);
-    margin-top: $rem-50;
-    .footer-top {
-        font-size: $rem-16;
-        color: $primary-bg;
-        address {
-            margin-bottom: $rem-10;
-        }
-        a {
-            &:hover {
-                color: $primary-bg;
+.footer {
+    background: $primary-color;
+    color: $primary-bg;
+    margin-top: 70px;
+    &__top {
+        padding: 50px 0;
+        &--menu-block {
+            @include respond-to-mob('medium') {
+                margin-bottom: 20px;
             }
         }
-        .brand {
-            .logo {
-                width: $rem-40;
-                margin-right: $rem-10;
-            }
-            @include font($primary-font, $bold);
-            font-size: $rem-20;
-            color: $primary-bg;
-            line-height: $rem-30;
-            text-transform: uppercase;
-        }
-    }
-    .footer-bottom {
-        background: rgba($primary-color, 0.9);
-        font-size: $rem-14;
-        color: $grey;
-        .copy-info {
-            line-height: $rem-50;
-            .copy {
-                margin: 0;
-            }
-        }
-        .credits {
-            .links {
-                ul {
-                    text-align: right;
-                    li {
-                        display: inline-block;
-                        &:not(:last-child) {
-                            margin-right: $rem-10;
-                        }
-                        a {
-                            color: $grey;
-                            line-height: $rem-50;
-                            text-transform: uppercase;
-                            &:hover {
-                                color: $dark-grey;
-                            }
-                        }
+        &--menu {
+            li {
+                font-size: 0;
+                &:not(:last-child) {
+                    margin-bottom: 8px;
+                }
+                a {
+                    display: inline-block;
+                    font-size: 14px;
+                    color: $primary-bg;
+                    &:hover {
+                        color: $secondary-color;
                     }
                 }
             }
+        }
+        &--soicals {
+            @include flex-display;
+            li {
+                font-size: 0;
+                &:not(:last-child) {
+                    margin-right: 12px;
+                }
+                a {
+                    font-size: 25px;
+                    &:hover {
+                        opacity: 0.3;
+                    }
+                }
+            }
+        }
+        &--promo {
+            @include flex-display(row, flex-start, flex-start);
+            flex-wrap: nowrap;
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+            figure {
+                flex: 0 0 90px;
+                max-width: 90px;
+                padding-right: 10px;
+            }
+            .text {
+                font-size: 13px;
+            }
+        }
+    }
+    &__middle {
+        padding: 0 0 50px;
+        &--search-links {
+            @include flex-display;
+            li {
+                font-size: 0;
+                &:not(:last-child) {
+                    &:after {
+                        content: '|';
+                        font-size: 13px;
+                        color: rgba($primary-bg, 0.7);
+                        padding: 0 5px;
+                    }
+                }
+                a {
+                    font-size: 13px;
+                    color: $primary-bg;
+                    &:hover {
+                        color: $secondary-color;
+                    }
+                }
+            }
+        }
+        &--meta {
+            margin-top: 50px;
+            h2, h3, h4, h5, h6 {
+                @extend h6;
+            }
+            p, ul, ol {
+                font-size: 13px;
+                margin-bottom: calc(13px * 1.34);
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+            ul, ol {
+                padding-left: 30px;
+            }
+            ul {
+                list-style: circle;
+            }
+        }
+    }
+    &__bottom {
+        padding: 0 0 50px;
+        &--copy {
+            font-size: 11px;
         }
     }
 }

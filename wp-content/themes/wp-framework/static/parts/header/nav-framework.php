@@ -24,13 +24,13 @@ $logo       = get_field('logo_img', 'option');
         </div>
         <div class="header__nav--right">
             <div class="navbar-wishlist">
-                <a href="<?php echo get_permalink(get_page_by_path('wishlist')); ?>" title="<?php _e('My Wishlist','shady'); ?>">
+                <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>wishlist/" title="<?php _e('My Wishlist','shady'); ?>">
                     <i class="icon-heart"></i>
                     <span><?php _e('Wishlist','shady'); ?></span>
                 </a>
             </div>
             <div class="navbar-account">
-                <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" title="<?php _e('My Account','shady'); ?>">
+                <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" title="<?php _e('My Account','shady'); ?>">
                     <i class="icon-user"></i>
                     <span><?php _e('My Account','shady'); ?></span>
                 </a>
