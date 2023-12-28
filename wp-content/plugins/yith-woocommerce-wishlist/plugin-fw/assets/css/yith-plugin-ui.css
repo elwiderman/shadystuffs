@@ -110,7 +110,7 @@
   background: var(--yith-content-bg);
   border-radius: 5px;
   box-shadow: 0 2px 7px rgba(170, 198, 222, 0.5);
-  z-index: 10;
+  z-index: 9999;
   animation: yith-plugin-fw-appear-from-top .3s forwards;
 }
 
