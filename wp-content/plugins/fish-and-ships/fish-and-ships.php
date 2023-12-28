@@ -3,15 +3,15 @@
  * Plugin Name: Fish and Ships
  * Plugin URI: https://www.wp-centrics.com/
  * Description: A WooCommerce conditional table rate shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.
- * Version: 1.4.16
+ * Version: 1.4.17
  * Author: wpcentrics
  * Author URI: https://www.wp-centrics.com
  * Text Domain: fish-and-ships
  * Domain Path: /languages
  * Requires at least: 4.7
- * Tested up to: 6.3
+ * Tested up to: 6.4.2
  * WC requires at least: 3.0
- * WC tested up to: 8.0
+ * WC tested up to: 8.3.1
  * Requires PHP: 7.0
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 } else {
 
-	define ('WC_FNS_VERSION', '1.4.16' );
+	define ('WC_FNS_VERSION', '1.4.17' );
 	define ('WC_FNS_PATH', dirname(__FILE__) . '/' );
 	define ('WC_FNS_URL', plugin_dir_url( __FILE__ ) );
 

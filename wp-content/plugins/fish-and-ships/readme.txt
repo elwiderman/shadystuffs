@@ -1,12 +1,12 @@
 ﻿=== Fish and Ships - Most flexible shipping method table rate. A WooCommerce conditional shipping rate ===
 Contributors: wpcentrics
 Donate link: https://www.wp-centrics.com/
-Tags: shipping method, table rate, shipping rate, conditional shipping, shipping
+Tags: woocommerce shipping, table rate, shipping rate, conditional shipping, shipping method
 Requires at least: 4.7
-Tested up to: 6.3
+Tested up to: 6.4.2
 WC requires at least: 3.0
-WC tested up to: 8.0
-Stable tag: 1.4.16
+WC tested up to: 8.3.1
+Stable tag: 1.4.17
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -17,7 +17,8 @@ Best table rate shipping method for WooCommerce: easy and flexible table rate, a
 
 = The best WooCommerce shipping method =
 
-A conditional **shipping method for WooCommerce**: easy to understand and use. Allow you to setup weight based **shipping rates**, or whatever: price, volume, category... 
+A **conditional shipping method table rate for WooCommerce**: easy as eat fish and *ships*. Allow you to setup weight based **shipping rates**, or whatever: price, volume, quantity, category... 
+
 You can also configure conditional free shipping, conditional local pickup, conditional flat rate or any shipping rate parcels.
 
 https://www.youtube.com/watch?v=wRsoUYiHQRY
@@ -45,9 +46,9 @@ Most online shops set generic shipping rates: too much for some products and few
 
 ...any combination, nested as you need. Really!
 
-###Setup exact shipping rates easily
+###Setup exact shipping rates throug a shipping table rate
 
-Fish and Ships it's a **WooCommerce shipping** table-rate based method that help you to increase sales and avoid costs loss, throught an easy to use and understand shipping table rate cost, with multiple conditional options (as you need).
+Fish and Ships it's a **WooCommerce shipping table rate** based method that help you to increase sales and avoid costs loss, throught an easy to use and understand shipping table rate cost, with multiple conditional options (as you need).
 
 You can set multiple conditional rules on the table rate: based on price, weight, product quantity on cart, dimensions, volume, shipping class, product tag and product category.
 
@@ -285,6 +286,10 @@ Fish and Ships has widely tested with older and latest; our philosophy is to cov
 13. Apply coupons automatically (Pro)
 
 == Changelog ==
+
+= 1.4.17 - 11/12/2023 =
+* Checked for WordPress 6.4.2
+* Checked for WooCommerce 8.3
 
 = 1.4.16 - 29/08/2023 =
 * Checked for WordPress 6.3
