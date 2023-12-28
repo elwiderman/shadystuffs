@@ -53,9 +53,9 @@ echo "<div class=''>";
 						$query_obj = get_queried_object();
 
 						if (isset($query_obj->term_id)) :
-							$thumb_id = get_term_meta($query_obj->term_id, 'thumbnail_id', true);
+							$thumb_id = get_term_meta($query_obj->term_id, 'banner_for_the_archive_pages_img', true);
 
-							$thumb = ($thumb_id) ? wp_get_attachment_image_src($thumb_id, 'shop-banner')[0] : placeholder_src('shop-banner')['url'];
+							$thumb = ($thumb_id) ? wp_get_attachment_image_src($thumb_id, 'full')[0] : placeholder_src('shop-banner')['url'];
 						else :
 							$thumb = (has_post_thumbnail(get_the_ID())) ? get_the_post_thumbnail_url(get_the_ID(), 'shop-banner') : placeholder_src('shop-banner')['url'];
 						endif;
