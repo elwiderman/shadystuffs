@@ -1,0 +1,39 @@
+.single-page {
+    &.single-policies {
+        .section-block {
+            &.section-hero {
+                padding: 30px 0 20px;
+                h1 {
+                    @include font($secondary-font, $bold);
+                    font-size: 30px;
+                }
+            }
+            &.section-content {
+                .content-wrap {
+                    a {
+                        font-weight: $semi-bold;
+                        color: $secondary-color;
+                        &:hover {
+                            color: $primary-color;
+                        }
+                    }
+                    ul, ol {
+                        @extend p;
+                        padding-left: 25px;
+                    }
+                    ul {
+                        list-style: circle;
+                    }
+                    ol {
+                        list-style: decimal-leading-zero;
+                    }
+                    h2, h3, h4, h5, h6 {
+                        font-size: 80%;
+                        @include font($secondary-font, $bold);
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+}
