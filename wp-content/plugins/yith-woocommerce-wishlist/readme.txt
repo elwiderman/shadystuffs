@@ -4,12 +4,12 @@ Contributors: yithemes
 Tags: wishlist, woocommerce, products, yit, e-commerce, shop, ecommerce wishlist, yith, woocommerce wishlist, shop wishlist
 Requires at least: 6.2
 Tested up to: 6.4
-Stable tag: 3.27.0
+Stable tag: 3.28.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 YITH WooCommerce Wishlist add all Wishlist features to your website. Needs WooCommerce to work.
-WooCommerce 8.3.x compatible.
+WooCommerce 8.4.x compatible.
 
 == Description ==
 
@@ -112,6 +112,11 @@ Yes, of course you can. To avoid Wishlist page to show product prices, you can h
 
 
 == Changelog ==
+
+= 3.28.0 - Released on 20 December 2023 =
+
+* New: support for WooCommerce 8.4
+* Update: YITH plugin framework
 
 = 3.27.0 - Released on 14 November 2023 =
 
