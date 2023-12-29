@@ -1,61 +1,86 @@
 <?php
 /*
-	Template name: Page Contacts
+	Template name: Page Contact Us
 */
 get_header();
 
-get_template_part('parts/content/utilities/breadcrumb', '01');
-
-if (have_posts()):
-    while (have_posts()) : the_post();
-    list(
-        $page_title,
-        $feat_image,
-        $content,
-        $shortcode,
-    ) = array(
-        get_the_title(),
-        get_the_post_thumbnail_url($post->ID, 'page-header'),
-        get_the_content(),
-        rwmb_meta('shady_contact_shortcode'),
-    );
-    ?>
-        <section class="single-page single-contact">
-            <div class="container-wrap-lg">
-                <!-- featured image -->
-                <div class="featured-header">
-                    <img src="<?= $feat_image; ?>" class="img-fluid header-bg">
+$phone          = get_field('phone');
+$whatsapp       = get_field('whatsapp');
+$email          = get_field('email');
+$form           = get_field('form_shortcode');
+?>
+<div class="single-page single-contact">
+    <section class="section-block section-hero">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="page-title"><?php the_title();?></h1>
                 </div>
-                <!-- featured image -->
             </div>
-            <div class="container">
-                <!-- content-section -->
-                <div class="the-post pb-4">
-                    <div class="row justify-content-center mb-5">
-                        <div class="col-12 col-sm-7">
-                            <div class="page-title text-center">
-                                <h2><?= $page_title; ?></h2>
+        </div>
+    </section>
+
+    <section class="section-block section-contact">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-12 col-md-6 col-xl-5">
+                    <div class="content-wrap">
+                        <address><?php the_content();?></address>
+                        <?php
+                        if ($phone) :
+                            $no_space_phone = str_replace(' ', '', $phone);
+                            echo "
+                            <div class='content-wrap__links'>
+                                <i class='icon-phone-call'></i>
+                                <a href='tel:{$no_space_phone}' target='_blank'>{$phone}</a>
                             </div>
-                            <div class="description text-center">
-                                <?= $content; ?>
+                            ";
+                        endif;
+                        if ($whatsapp) :
+                            echo "
+                            <div class='content-wrap__links'>
+                                <i class='icon-whatsapp'></i>
+                                <a href='{$whatsapp}' target='_blank'>{$phone}</a>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <div class="col-12 col-sm-7 form-area contact-form">
-                            <?= do_shortcode($shortcode); ?>
-                        </div>
+                            ";
+                        endif;
+                        if ($email) :
+                            echo "
+                            <div class='content-wrap__links'>
+                                <i class='icon-mail'></i>
+                                <a href='mailto:{$email}' target='_blank'>{$email}</a>
+                            </div>
+                            ";
+                        endif;
+                        ?>
                     </div>
                 </div>
-                <!-- !.content-section -->
+                <div class="col-12 col-md-6 col-xl-5">
+                    <div class="form-area form-contact">
+                        <?php echo do_shortcode($form);?>
+                    </div>
+                </div>
             </div>
-        </section>
-
-        <div class="clearfix"></div>
-
-        <?php
-    endwhile;
-endif;
-wp_reset_query();
-
+        </div>
+    </section>
+</div>
+<?php
 get_footer();
+/*
+<div class="form-group">
+    [text* fullname class:form-control id:fullname placeholder "Name *"]
+</div>
+<div class="form-group">
+    [email* uemail class:form-control id:uemail placeholder "Email *"]
+</div>
+<div class="form-group form-radio">
+    <label for="shadySubject" class="form-label">Subject *</label>
+    [radio subject id:shadySubject class:form-radio-elem use_label_element "Bulk / Corporate orders" "Grievances" "Everything else..."]
+</div>
+<div class="form-group">
+    [textarea* message class:form-control id:message placeholder "Message *"]
+</div>
+<div class="form-submit d-flex justify-content-center justify-content-lg-end align-items-center">
+    <div class="wpcf7-spinner"></div><button class="btn-main wpcf7-submit d-inline-flex" type="submit">Send</button>
+</div>
+*/
