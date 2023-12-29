@@ -215,7 +215,8 @@
                     "choices": {
                         "icon-facebook": "Facebook",
                         "icon-instagram": "Instagram",
-                        "icon-twitter": "Twitter"
+                        "icon-twitter": "Twitter",
+                        "icon-whatsapp": "Whatsapp"
                     },
                     "default_value": false,
                     "return_format": "value",
@@ -500,5 +501,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1701615135
+    "modified": 1703863924
 }
