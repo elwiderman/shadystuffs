@@ -263,3 +263,16 @@
         content: $icon-twitter;
     }
 }
+
+.icon-whatsapp {
+    &:before {
+        content: $icon-whatsapp;
+        color: #25d366;
+    }
+}
+
+.icon-mail {
+    &:before {
+        content: $icon-mail;
+    }
+}

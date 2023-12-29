@@ -905,3 +905,6 @@ function shady_fix_serizliztion_issues() {
 add_filter( 'wpseo_metabox_prio', function() {
     return 'low';
 }, 10 );
+
+// remove the unwanted html from cf7 
+add_filter('wpcf7_autop_or_not', '__return_false');
