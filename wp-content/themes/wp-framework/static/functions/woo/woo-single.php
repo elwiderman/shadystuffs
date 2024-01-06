@@ -125,14 +125,15 @@ function shady_add_custom_product_tabs($tabs) {
     $pid = $product->get_id();
 
     // rename product description
-    $tabs['description']['title'] = __('Design Inspiration', 'shady');
+    $tabs['description']['title']       = __('What you are really getting', 'shady');
+    $tabs['description']['priority']    = 20;
 
     if (get_field('show_product_spec_bool', $pid)) :
         $title  = get_field('product_spec_title_text', $pid);
         // Add a custom tab
         $tabs['additional_information'] = array(
             'title'     => $title,
-            'priority'  => 20,
+            'priority'  => 10,
             'callback'  => 'shady_woo_product_spec_table_tab'
         );
     endif;
