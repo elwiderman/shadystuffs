@@ -58,7 +58,7 @@ if ( ! empty( $product_tabs ) ) : ?>
 					</h4>
 				</div>
 
-				<div id="<?php echo esc_attr( $key ); ?>-content" class="collapse <?php echo $collapse_show;?>" aria-labelledby="<?php echo esc_attr( $key ); ?>" data-parent="#productAccordion">
+				<div id="<?php echo esc_attr( $key ); ?>-content" class="<?php echo esc_attr( $key ); ?>-content collapse <?php echo $collapse_show;?>" aria-labelledby="<?php echo esc_attr( $key ); ?>" data-parent="#productAccordion">
 					<div class="card-body">
 						<?php
 						if ( isset( $product_tab['callback'] ) ) {

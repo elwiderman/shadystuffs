@@ -76,10 +76,39 @@
                     }
                     .price {
                         @extend h4;
+                        font-family: $secondary-font;
                         font-weight: $bold;
                         color: $primary-font-color;
                         .woocommerce-Price-currencySymbol {
                             font-size: 70%;
+                        }
+                        .woocommerce-price-suffix {
+                            font-size: 40%;
+                        }
+                        del, ins {
+                            text-decoration: none;
+                        }
+                        del {
+                            font-size: 80%;
+                            order: 1;
+                            padding-left: 10px;
+                            text-decoration: none;
+                            .amount {
+                                position: relative;
+                                &:before {
+                                    content: '';
+                                    position: absolute;
+                                    top: 52%;
+                                    left: 0;
+                                    transform: translateY(-50%);
+                                    width: 100%;
+                                    height: 2px;
+                                    background: $primary-font-color;
+                                }
+                                bdi {
+                                    opacity: 0.7;
+                                }
+                            }
                         }
                     }
                     .woocommerce-product-details {
@@ -146,9 +175,14 @@
                                 .woocommerce-variation-price {
                                     .price {
                                         @include flex-display();
+                                        font-family: $secondary-font;
+                                        font-weight: $bold;
                                         font-size: 35px;
                                         line-height: 1;
                                         margin-bottom: 15px;
+                                        ins {
+                                            text-decoration: none;
+                                        }
                                         del {
                                             font-size: 80%;
                                             order: 1;
@@ -159,7 +193,7 @@
                                                 &:before {
                                                     content: '';
                                                     position: absolute;
-                                                    top: 35%;
+                                                    top: 52%;
                                                     left: 0;
                                                     transform: translateY(-50%);
                                                     width: 100%;
@@ -170,9 +204,6 @@
                                                     opacity: 0.7;
                                                 }
                                             }
-                                        }
-                                        ins {
-                                            text-decoration: none;
                                         }
                                     }
                                 }
@@ -488,6 +519,42 @@
                                                 }
                                             }
                                         }
+                                    }
+                                }
+                            }
+                            .description-content {
+                                .card-body {
+                                    h3, h4, h5, h6 {
+                                        @include font($secondary-font, $bold);
+                                    }
+                                    h3 {
+                                        font-size: 24px;
+                                        font-weight: $bold !important;
+                                    }
+                                    h4 {
+                                        font-size: 20px;
+                                    }
+                                    h5 {
+                                        font-size: 18px;
+                                    }
+                                    h6 {
+                                        font-size: 14px;
+                                    }
+                                    em, i {
+                                        font-style: normal;
+                                    }
+                                    strong, b {
+                                        font-weight: $regular;
+                                    }
+                                    ul, ol {
+                                        @extend p;
+                                        padding-left: 20px;
+                                    }
+                                    ul {
+                                        list-style: circle;
+                                    }
+                                    ol {
+                                        list-style: decimal-leading-zero;
                                     }
                                 }
                             }
