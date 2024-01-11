@@ -15,9 +15,9 @@
 
                         .cart-table-wrap {
                             @include add-border(1px, $grey, 'all');
-                            border-radius: 8px;
+                            border-radius: 4px;
                             margin-top: 30px;
-                            padding: 20px;
+                            padding: 20px 20px 15px;
                             .cart-row {
                                 @include flex-display(row, flex-start, flex-start);
                                 margin: 0 -10px;
@@ -46,6 +46,7 @@
                                     }
                                     .product-price, .product-subtotal {
                                         @extend h5;
+                                        font-family: $secondary-font;
                                         font-size: 20px;
                                         color: $alt-font-color;
                                         margin-bottom: 15px;
@@ -75,11 +76,11 @@
                                                     background: rgba($alt-font-color, 0.1);
                                                 }
                                                 &.minus {
-                                                    border-radius: 30px 0 0 30px;
+                                                    border-radius: 4px 0 0 4px;
                                                     border-right: 0;
                                                 }
                                                 &.plus {
-                                                    border-radius: 0 30px 30px 0;
+                                                    border-radius: 0 4px 4px 0;
                                                     border-left: 0;
                                                 }
                                             }
@@ -131,11 +132,17 @@
                                             display: inline-block;
                                             width: unset;
                                             height: auto;
-                                            font-size: 14px;
-                                            color: #bababa !important;
+                                            font-size: 0;
+                                            visibility: hidden!important; /*hide everything*/
+                                            width: auto!important;
                                             &:hover {
                                                 background: transparent;
                                                 color: $dark-grey !important;
+                                            }
+                                            &:before {
+                                                content: 'Remove Item(s)';
+                                                font-size: 14px;
+                                                visibility: visible;
                                             }
                                         }
                                     }
@@ -144,39 +151,56 @@
                         }
 
                         .cart-footer {
-                            padding-left: 20px;
-                            margin: 60px 0 30px;
+                            @include flex-display(row, space-between, center);
+                            margin: 30px 0;
                             .coupon {
                                 display: flex;
                                 justify-content: flex-start;
                                 align-items: center;
-                                margin-bottom: 25px;
                                 .form-control {
                                     font-size: 15px;
                                     text-transform: uppercase;
                                     height: 35px;
                                     @include add-border(1px, $alt-font-color, 'all');
-                                    border-radius: 8px 0 0 8px;
+                                    border-radius: 4px 0 0 4px;
                                 }
                                 .btn-main-ghost {
                                     height: 35px;
                                     font-size: 15px;
                                     min-width: 150px;
                                     padding: 0 15px;
-                                    border-radius: 0 8px 8px 0;
+                                    border-radius: 0 4px 4px 0;
                                     box-shadow: none;
                                     margin-left: -1px;
                                 }
                             }
                             .update {
                                 @include flex-display(row, center);
+                                .btn-main-ghost {
+                                    padding-top: 0;
+                                }
                             }
                         }
 
                         .cart-totals {
                             padding-left: 20px;
-                            position: sticky;
-                            top: 110px;
+                            // position: sticky;
+                            // top: 110px; // turning this off for now
+                            .shop_table {
+                                @include add-border(1px, $grey, 'all');
+                                border-radius: 4px;
+                                margin-top: 30px;
+                                tbody {
+                                    th, td {
+                                        border-color: $grey;
+                                    }
+                                    tr.order-total {
+                                        .woocommerce-Price-amount {
+                                            font-size: 130%;
+                                        }
+                                    }
+                                }
+                            }
                             .woocommerce-shipping-totals {
                                 &.shipping {
                                     input[type='text'] {
@@ -191,6 +215,16 @@
                                         @extend .btn-main-ghost;
                                         height: 30px;
                                         font-size: 14px;
+                                        padding-top: 0;
+                                    }
+                                    .shipping-calculator-form {
+                                        .form-row {
+                                            display: block;
+                                            padding: 3px 0;
+                                            .input-text {
+                                                padding: 0 8px;
+                                            }
+                                        }
                                     }
                                 }
                             }

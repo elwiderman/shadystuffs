@@ -24,14 +24,18 @@ function framework_scripts() {
             'max_page' => $wp_query->max_num_pages
         ));
     }
+
+    if (is_cart()) {
+        wp_localize_script('site-scripts', 'WPURLS', array(
+            'ajaxurl'       => admin_url('admin-ajax.php'),
+            'cart_nonce'    => wp_create_nonce('update_cart_nonce'),
+        ));
+    }
 }
 
 function framework_styles() {
     global $wp_styles; // Call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
     $path = get_template_directory_uri();
-
-    // Register Custom Font
-    // wp_enqueue_style('site-font', '//fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:300&display=swap', '', '');
 
     // Register main stylesheet
     wp_enqueue_style('site-fontawesome', '//use.fontawesome.com/releases/v5.5.0/css/all.css', array(), '', 'all');

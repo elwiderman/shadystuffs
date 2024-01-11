@@ -5,15 +5,22 @@
     justify-content: center;
     align-items: center;
     height: 45px;
-    @include font($alt-font, $bold);
-    font-size: 18px;
-    line-height: 0.9;
+    @include font($secondary-font, $bold);
+    font-size: 16px;
+    line-height: 1;
     border: none;
-    border-radius: 45px;
+    border-radius: 4px;
     box-shadow: 3px 4px 9px rgba($primary-color, 0.45);
     outline: 0 !important;
     padding: 0 30px;
     @include transition(0.3s);
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        &:hover {
+            background: initial;
+        }
+    }
 }
 
 .btn-main {

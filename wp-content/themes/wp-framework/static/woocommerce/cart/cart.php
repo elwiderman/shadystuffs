@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 
 do_action( 'woocommerce_before_cart' ); ?>
 
-<div class="row cart-wrap">
+<div class="row cart-wrap" id="shadyCart">
 	<div class="col-12 col-md-7">
 		<h4 class="block-title">
 			<?php esc_html_e('My Bag', 'shady');?>&nbsp; 
@@ -147,7 +147,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 									);
 								?>
 							</div>
-						</div>						
+						</div>				
 					</div>
 					<?php
 				}
@@ -156,10 +156,10 @@ do_action( 'woocommerce_before_cart' ); ?>
 			</div>
 
 			<?php do_action( 'woocommerce_cart_contents' ); ?>
-	</div>
-	<div class="col-12 col-md-5">
 
-		<div class="shop_table shop_table_responsive cart woocommerce-cart-form__contents">
+			<?php do_action( 'woocommerce_cart_actions' ); ?>
+
+			
 			<div class="cart-footer">
 				<?php if ( wc_coupons_enabled() ) { ?>
 					<div class="coupon">
@@ -167,21 +167,21 @@ do_action( 'woocommerce_before_cart' ); ?>
 						<?php do_action( 'woocommerce_cart_coupon' ); ?>
 					</div>
 				<?php } ?>
-
+	
 				<div class="update">
-					<button type="submit" class="btn-main-ghost <?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>"><?php esc_html_e( 'Update cart', 'woocommerce' ); ?></button>
+					<button id="updateCart" type="submit" class="btn-main-ghost <?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>"><?php esc_html_e( 'Update cart', 'woocommerce' ); ?></button>
 				</div>
-
-				<?php do_action( 'woocommerce_cart_actions' ); ?>
-
-				<?php wp_nonce_field( 'woocommerce-cart', 'woocommerce-cart-nonce' ); ?>
 			</div>
+
+			<?php wp_nonce_field( 'woocommerce-cart', 'woocommerce-cart-nonce' ); ?>
+
 			<?php do_action( 'woocommerce_after_cart_contents' ); ?>
-		</div>
-		<?php do_action( 'woocommerce_after_cart_table' ); ?>
+			
+			<?php do_action( 'woocommerce_after_cart_table' ); ?>
 
 		</form>
-
+	</div>
+	<div class="col-12 col-md-5">
 		<?php do_action( 'woocommerce_before_cart_collaterals' ); ?>
 
 		<?php
@@ -193,6 +193,8 @@ do_action( 'woocommerce_before_cart' ); ?>
 			 */
 			do_action( 'woocommerce_cart_collaterals' );
 		?>
+
+		<div class="cross-sell-wrap"></div>
 	</div>
 </div>
 
