@@ -17,6 +17,7 @@ import AppCommon from './AppCommon';
 import Carousels from './Carousels';
 import Home from './Home';
 import Forms from './Forms';
+import Woo from './Woo';
 
 // get the libraries
 import 'bootstrap';
@@ -27,4 +28,5 @@ ready(() => {
     new AppCommon();
     new Carousels();
     new Forms();
+    new Woo();
 });

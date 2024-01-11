@@ -378,57 +378,6 @@ function shady_remove_from_search_filter($query)
 add_action('pre_get_posts', 'shady_remove_from_search_filter');
 
 
-/* Replacing default wp-gallery with custom lightbox gallery inside posts and pages */
-function shady_custom_gallery_shortcode($output = '', $atts, $instance)
-{
-    $return = $output; // fallback
-    /*echo '<pre>';
-    var_dump($atts);
-    echo '</pre>';*/
-    // exploding the list to form array
-    $image_ids = explode(',', $atts['ids']);
-    $gallery = <<<GALL
-        <div class="gallery-section">
-            <div class="gallery-carousel">
-GALL;
-    foreach ($image_ids as $img_id) {
-//        echo $img_id.'<br>';
-        $thumb = wp_get_attachment_image_src($img_id, 'full');
-        $thumb_sm = wp_get_attachment_image_src($img_id, 'generic-thumb');
-        $alt_text = get_post_meta($img_id, '_wp_attachment_image_alt', true);
-        // If not, Use the Caption
-        if (empty($alt_text)) {
-            $attachment = get_post($img_id);
-            $alt_text = trim(strip_tags($attachment->post_excerpt));
-        }
-        // Finally, use the title
-        if (empty($alt_text)) {
-            $attachment = get_post($img_id);
-            $alt_text = trim(strip_tags($attachment->post_title));
-        }
-
-        $gallery .= <<<LiGHTBOX
-                <div>
-                    <a class="gallery-img-url" href="{$thumb[0]}" data-lightbox="gallery-set" data-title="{$alt_text}">
-                        <img class="gallery-img img-fluid" src="{$thumb_sm[0]}" alt=""/>
-                    </a>
-                </div>
-LiGHTBOX;
-    }
-    $gallery .= <<<GALL
-            </div>
-        </div>
-
-GALL;
-
-    return $gallery;
-
-//    return $return;
-}
-
-add_filter('post_gallery', 'shady_custom_gallery_shortcode', 10, 3);
-
-
 /* Get Vimeo video Id */
 function vimeo_id($video)
 {

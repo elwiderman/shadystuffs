@@ -44,3 +44,16 @@ ul {
         margin: 0 0 2em;
     }
 }
+
+.wc-block-mini-cart {
+    &__title {
+        @include font($secondary-font, $bold);
+    }
+    &__badge {
+        background-color: $secondary-color;
+        color: $primary-bg;
+    }
+}
+.editor-styles-wrapper table.wc-block-cart-items .wc-block-cart-items__row .wc-block-cart-item__quantity .wc-block-cart-item__remove-link, table.wc-block-cart-items .wc-block-cart-items__row .wc-block-cart-item__quantity .wc-block-cart-item__remove-link {
+    color: #ff0000 !important;
+}
