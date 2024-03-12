@@ -115,7 +115,7 @@ trait FpdiTrait
      */
     protected function getPdfParserInstance(\WPDeskFIVendor\setasign\Fpdi\PdfParser\StreamReader $streamReader, array $parserParams = [])
     {
-        // note: if you get an exception here - turn off errors/warnings on not found for your autoloader.
+        // note: if you get an exception here - turn off errors/warnings on not found classes for your autoloader.
         // psr-4 (https://www.php-fig.org/psr/psr-4/) says: Autoloader implementations MUST NOT throw
         // exceptions, MUST NOT raise errors of any level, and SHOULD NOT return a value.
         /** @noinspection PhpUndefinedClassInspection */
@@ -474,7 +474,7 @@ trait FpdiTrait
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString) {
             $this->_put('(' . $value->value . ')', \false);
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfHexString) {
-            $this->_put('<' . $value->value . '>');
+            $this->_put('<' . $value->value . '>', \false);
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfBoolean) {
             $this->_put($value->value ? 'true ' : 'false ', \false);
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray) {
@@ -493,11 +493,8 @@ trait FpdiTrait
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfToken) {
             $this->_put($value->value);
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNull) {
-            $this->_put('null ');
+            $this->_put('null ', \false);
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfStream) {
-            /**
-             * @var $value PdfStream
-             */
             $this->writePdfType($value->value);
             $this->_put('stream');
             $this->_put($value->getStream());
@@ -512,12 +509,13 @@ trait FpdiTrait
             }
             $this->_put($this->objectMap[$this->currentReaderId][$value->value] . ' 0 R ', \false);
         } elseif ($value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfIndirectObject) {
-            /**
-             * @var PdfIndirectObject $value
-             */
             $n = $this->objectMap[$this->currentReaderId][$value->objectNumber];
             $this->_newobj($n);
             $this->writePdfType($value->value);
+            // add newline before "endobj" for all objects in view to PDF/A conformance
+            if (!($value->value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray || $value->value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary || $value->value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfToken || $value->value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfStream)) {
+                $this->_put("\n", \false);
+            }
             $this->_put('endobj');
         }
     }

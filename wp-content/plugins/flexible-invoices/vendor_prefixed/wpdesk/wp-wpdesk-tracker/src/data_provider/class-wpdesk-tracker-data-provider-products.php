@@ -30,7 +30,7 @@ if (!\class_exists('WPDeskFIVendor\\WPDesk_Tracker_Data_Provider_Products')) {
             $product_count = array();
             $product_count_data = \wp_count_posts('product');
             $product_count['total'] = $product_count_data->publish;
-            $product_statuses = \get_terms('product_type', array('hide_empty' => 0));
+            $product_statuses = \get_terms(array('taxonomy' => 'product_type', 'hide_empty' => \false));
             foreach ($product_statuses as $product_status) {
                 $product_count[$product_status->name] = $product_status->count;
             }

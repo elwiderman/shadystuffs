@@ -5,50 +5,52 @@ namespace WPDeskFIVendor\WPDesk\Dashboard;
 final class DashboardWidget
 {
     const ID = 'flexible-invoices';
+    const WP_DESK_CARE_ID = 296222;
+    const AUTOPAY_ID = 349143;
     const MUTEX_HOOK = 'wpdesk/ltvdashboard/initialized';
     const PL_LOCALE = 'pl_PL';
     /**
-     * 
+     *
      * @var string
      */
     private $widget_title = '';
     /**
-     * 
+     *
      * @var bool
      */
     private $show_widget_header = \true;
     /**
-     * 
+     *
      * @var bool
      */
     private $show_widget_footer = \true;
     /**
-     * 
+     *
      * @var int
      */
     private $plugins_limit = 3;
     /**
-     * 
+     *
      * @var int
      */
     private $cache_timeout = 0;
     /**
-     * 
+     *
      * @var int
      */
     private $cache_retry_timeout = 0;
     /**
-     * 
+     *
      * @var string
      */
     private $locale;
     /**
-     * 
+     *
      * @var array
      */
     private $cache_data = [];
     /**
-     * 
+     *
      * @var string
      */
     private $utm_base = 'utm_source=dashboard-metabox&utm_campaign=dashboard-metabox';
@@ -135,8 +137,8 @@ final class DashboardWidget
         return \sprintf('wpdesk_ltv_%1$s_%2$s', self::ID, $this->locale);
     }
     /**
-     * 
-     * @return mixed 
+     *
+     * @return mixed
      */
     private function get_raw_cached_data()
     {
@@ -152,10 +154,11 @@ final class DashboardWidget
         return $this->cache_data;
     }
     /**
-     * 
-     * @param mixed $data 
-     * @param int $timeout 
-     * @return void 
+     *
+     * @param mixed $data
+     * @param int $timeout
+     *
+     * @return void
      */
     private function set_data_to_cache($data, int $timeout)
     {
@@ -205,6 +208,16 @@ final class DashboardWidget
             foreach ($widget_data['plugins'] as $plugin) {
                 $plugin_url = \sprintf('%1$s?%2$s&utm_medium=more-info-button&utm_term=%3$s', $plugin['url'], $utm_base, $plugin['slug']);
                 $add_to_cart_url = \sprintf('https://%1$s/?add-to-cart=%2$s&%3$s&utm_medium=buy-now-button&utm_term=%4$s', $server, $plugin['add_to_cart_id'], $utm_base, $plugin['slug']);
+                $add_to_cart_button_label = \esc_html__('Buy now', 'flexible-invoices');
+                if ($plugin['add_to_cart_id'] === self::WP_DESK_CARE_ID) {
+                    $add_to_cart_button_label = \esc_html__('Learn more', 'flexible-invoices');
+                    $add_to_cart_url = $plugin_url;
+                } else {
+                    if ($plugin['add_to_cart_id'] === self::AUTOPAY_ID) {
+                        $add_to_cart_button_label = \esc_html__('Download', 'flexible-invoices');
+                        $add_to_cart_url = \esc_url("https://wpde.sk/autopay-wpdeskpl");
+                    }
+                }
                 echo '<li class="ltv-row">';
                 if ($plugin['image']) {
                     echo '<img src="' . \esc_url($plugin['image']) . '" alt="" />';
@@ -212,9 +225,7 @@ final class DashboardWidget
                 echo '<p><strong>' . \esc_html($plugin['name']) . '</strong></p>';
                 echo '<div class="ltv-row-description">' . \wp_kses_post($plugin['description']) . '</div>';
                 echo '<div class="ltv-buttons">';
-                echo '<a class="button button-primary button-large" href="' . \esc_url($plugin_url) . '" target="_blank">' . \esc_html__('More info', 'flexible-invoices') . '</a>';
-                echo '&nbsp;';
-                echo '<a class="button button-large" href="' . \esc_url($add_to_cart_url) . '" target="_blank">' . \esc_html__('Buy now', 'flexible-invoices') . '</a>';
+                echo '<a class="button button-primary button-large" href="' . \esc_url($add_to_cart_url) . '" target="_blank">' . $add_to_cart_button_label . '</a>';
                 echo '</div>';
                 echo '</li>';
             }
@@ -254,6 +265,11 @@ final class DashboardWidget
                 .wpdesk_ltv_dashboard_widget .ltv-buttons {
                     display: flex;
                     justify-content: space-around;
+                }
+
+                .ltv-buttons a.button.button-large {
+                    width: 100%;
+                    text-align: center;
                 }
 
                 .wpdesk_ltv_dashboard_widget .ltv-footer {

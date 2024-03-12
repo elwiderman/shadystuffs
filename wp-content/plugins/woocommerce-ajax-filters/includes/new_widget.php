@@ -162,6 +162,8 @@ class BeRocket_new_AAPF_Widget extends WP_Widget
                     }
                 }
                 echo '</select>';
+            } else {
+                echo '<a href="' . admin_url('edit.php?post_type=br_filters_group') . '">' . __('You do not have any groups yet. Please create some group first', 'BeRocket_AJAX_domain') . '</a>';
             }
             ?>
             <a target="_blank" class="berocket_aapf_edit_post_link" href="<?php echo $edit_link_current; ?>"<?php if( empty($edit_link_current) ) echo ' style="display: none;"'; ?>><?php _e('Edit', 'BeRocket_AJAX_domain'); ?></a>
@@ -341,6 +343,8 @@ class BeRocket_new_AAPF_Widget_single extends WP_Widget
                     }
                 }
                 echo '</select>';
+            } else {
+                echo '<a href="' . admin_url('edit.php?post_type=br_product_filter') . '">' . __('You do not have any filters yet. Please create some filter first', 'BeRocket_AJAX_domain') . '</a>';
             }
             ?>
             <a target="_blank" class="berocket_aapf_edit_post_link" href="<?php echo $edit_link_current; ?>"<?php if( empty($edit_link_current) ) echo ' style="display: none;"'; ?>><?php _e('Edit', 'BeRocket_AJAX_domain'); ?></a>
@@ -348,4 +352,3 @@ class BeRocket_new_AAPF_Widget_single extends WP_Widget
         <?php
     }
 }
-?>

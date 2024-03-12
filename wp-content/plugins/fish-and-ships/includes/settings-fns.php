@@ -3,7 +3,7 @@
  * The WC-way form for the shipping method options.
  *
  * @package Fish and Ships
- * @version 1.4.6
+ * @version 1.5
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -17,6 +17,13 @@ if ( !$Fish_n_Ships->im_pro() ) {
 						 array('strong'=>array())
 					);
 }
+
+$inner_help  = '<span class="woocommerce-fns-space-buttons">' . str_replace(array('(',')'), array('<a href="https://www.wp-centrics.com/help/fish-and-ships/" class="woocommerce-fns-help-popup button" data-fns-tip="main" target="_blank">','</a>'), __( 'Here is the (Main Help)', 'fish-and-ships') );
+$inner_help .= ' or you can ' . '<a href="#" class="button button-wc-fns-colors woocommerce-fns-case">Load a full example</a>' . ' or ' . '<a href="https://www.youtube.com/watch?v=sjQKbt2Nn7k" target="_blank" title="' . esc_html__('Watch 7 minutes video introduction on YouTube', 'fish-and-ships') . '" class="button woocommerce-fns-yt fns-show-videos"><span class="dashicons-before dashicons-video-alt3 fns-yt-on-button"></span>' . esc_html__('Watch video tutorials', 'fish-and-ships') . '</a></span>';
+$inner_help .= '<div class="fns-hidden-videos"><p><a href="https://www.youtube.com/watch?v=wRsoUYiHQRY&ab_channel=WpCentricsFishAndShips" target="_blank" alt="See video on YouTube" class="fns-video-link"><img src="' . WC_FNS_URL . 'assets/img/video-1.png" width="232" height="130" /><span>General overview</span></a>';
+$inner_help	.= '<a href="https://www.youtube.com/watch?v=sjQKbt2Nn7k&ab_channel=WpCentricsFishAndShips" target="_blank" alt="See video on YouTube" class="fns-video-link"><img src="' . WC_FNS_URL . 'assets/img/video-2.png" width="232" height="130" /><span>Short tutorial</span></a>';
+$inner_help .= '<a href="https://www.youtube.com/watch?v=y2EJFluXx9Q&ab_channel=WpCentricsFishAndShips" target="_blank" alt="See video on YouTube" class="fns-video-link"><img src="' . WC_FNS_URL . 'assets/img/video-3.png" width="232" height="130" /><span>Shipping boxes</span></a></p></div>';
+//			  . '</div>';
 
 $settings = array(
 
@@ -52,7 +59,7 @@ $settings = array(
 	'global_group_by' => array(
 		'title' 		=> _x( 'Global group-by', 'shorted, label for global group-by activation', 'fish-and-ships' ),
 		'type' 			=> 'checkbox',
-		'label'         => __( 'All the selection methods will use the same group product criterion (just below)', 'fish-and-ships') . ($Fish_n_Ships->im_pro() ? '' : '[PRO]'),
+		'label'         => __( 'All selection methods will use the same product grouping criterion.', 'fish-and-ships') . ($Fish_n_Ships->im_pro() ? '' : ' <span class="fns-pro-icon darker">PRO</span>'),
 		'description' 	=> __( 'Uncheck it and you can set the group-by option for every selector (a bit messy but much more powerful).', 'fish-and-ships' ) . $free . ' ' . __('Click to open detailed help about Group by.', 'fish-and-ships'),
 		'class'         => $Fish_n_Ships->im_pro() ? '' : 'onlypro',
 		'default' 		=> 'yes',
@@ -60,7 +67,7 @@ $settings = array(
 	),
 
 	'global_group_by_method' => array(
-		'title'         => _x( 'Group by [for all selectors]', 'shorted, label for global group-by method select', 'fish-and-ships' ),
+		'title'         => _x( '[for all selectors]', 'shorted, label for global group-by method select', 'fish-and-ships' ),
 		'description'   => __( 'It will determine how the cart products should be grouped (or not) before analyzing if they match the selection conditions.', 'fish-and-ships' ) . ' ' . __('Click to open detailed help about Group by.', 'fish-and-ships'),
 		'type'          => 'select',
 		//'class'         => 'wc-enhanced-select group-by-global-select',
@@ -85,10 +92,10 @@ $settings = array(
 	),
 
 	'special_rate' => array(
-		'title'         => _x( 'Shipping rules', 'the table title', 'fish-and-ships' ),
+		'title'         => '<strong>' . __( 'Shipping rules:', 'fish-and-ships') . '</strong> ' .  __('Set up the shipping rules below.', 'fish-and-ships' ),
 		'type'          => 'title',
-		'description'   => str_replace(array('(',')'), array('&nbsp; <a href="https://www.wp-centrics.com/help/fish-and-ships/" class="woocommerce-fns-help-popup button-primary" data-fns-tip="main" target="_blank">','</a>'), __( 'Set up the shipping rules below. Here is the (Main Help)', 'fish-and-ships') ) . '<a href="https://www.youtube.com/watch?v=sjQKbt2Nn7k" target="_blank" title="' . esc_html__('Watch 7 minutes video introduction on YouTube', 'fish-and-ships') . '" class="button" style="margin:0 10px"><span class="dashicons-before dashicons-video-alt3 fns-yt-on-button"></span>' . esc_html__('Watch introductory video', 'fish-and-ships') . '</a>',
-		'default'       => ''
+		'description'   => $inner_help,
+		'default'       => '',
 	),
 	
 	// since 1.1.6 multiple currency input
@@ -125,7 +132,7 @@ $settings = array(
 	'disallow_other' => array(
 		'title' 		=> '&nbsp;',
 		'type' 			=> 'checkbox',
-		'label'         => __( 'Disallow other shipping methods if this is free.', 'fish-and-ships') . ($Fish_n_Ships->im_pro() ? '' : ' [PRO]'),
+		'label'         => __( 'Disallow other shipping methods if this is free.', 'fish-and-ships') . ($Fish_n_Ships->im_pro() ? '' : ' <span class="fns-pro-icon darker">PRO</span>'),
 		'description' 	=> __( 'If this method is priced zero (free shipping), no other methods will be offered.', 'fish-and-ships' ),
 		'class'         => $Fish_n_Ships->im_pro() ? 'hide_others' : 'hide_others onlypro',
 		'default' 		=> '',

@@ -9,6 +9,7 @@
  */
 namespace WPDeskFIVendor\setasign\Fpdi\PdfReader;
 
+use WPDeskFIVendor\setasign\Fpdi\FpdiException;
 use WPDeskFIVendor\setasign\Fpdi\GraphicsState;
 use WPDeskFIVendor\setasign\Fpdi\Math\Vector;
 use WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FilterException;
@@ -241,84 +242,96 @@ class Page
      * origin is lower-left.
      *
      * @return array
-     * @throws CrossReferenceException
-     * @throws PdfParserException
-     * @throws PdfTypeException
      */
     public function getExternalLinks($box = \WPDeskFIVendor\setasign\Fpdi\PdfReader\PageBoundaries::CROP_BOX)
     {
-        $dict = $this->getPageDictionary();
-        $annotations = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($dict, 'Annots'), $this->parser);
+        try {
+            $dict = $this->getPageDictionary();
+            $annotations = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($dict, 'Annots'), $this->parser);
+        } catch (\WPDeskFIVendor\setasign\Fpdi\FpdiException $e) {
+            return [];
+        }
         if (!$annotations instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray) {
             return [];
         }
         $links = [];
         foreach ($annotations->value as $entry) {
-            $annotation = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve($entry, $this->parser);
-            $value = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'Subtype'), $this->parser);
-            if (!$value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfName || $value->value !== 'Link') {
-                continue;
-            }
-            $dest = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'Dest'), $this->parser);
-            if (!$dest instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNull) {
-                continue;
-            }
-            $action = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'A'), $this->parser);
-            if (!$action instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary) {
-                continue;
-            }
-            $actionType = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($action, 'S'), $this->parser);
-            if (!$actionType instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfName || $actionType->value !== 'URI') {
-                continue;
-            }
-            $uri = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($action, 'URI'), $this->parser);
-            if ($uri instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString) {
-                $uriValue = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString::unescape($uri->value);
-            } elseif ($uri instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfHexString) {
-                $uriValue = \hex2bin($uri->value);
-            } else {
-                continue;
-            }
-            $rect = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'Rect'), $this->parser);
-            if (!$rect instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray || \count($rect->value) !== 4) {
-                continue;
-            }
-            $rect = \WPDeskFIVendor\setasign\Fpdi\PdfReader\DataStructure\Rectangle::byPdfArray($rect, $this->parser);
-            if ($rect->getWidth() === 0 || $rect->getHeight() === 0) {
-                continue;
-            }
-            $bbox = $this->getBoundary($box);
-            $rotation = $this->getRotation();
-            $gs = new \WPDeskFIVendor\setasign\Fpdi\GraphicsState();
-            $gs->translate(-$bbox->getLlx(), -$bbox->getLly());
-            $gs->rotate($bbox->getLlx(), $bbox->getLly(), -$rotation);
-            switch ($rotation) {
-                case 90:
-                    $gs->translate(-$bbox->getWidth(), 0);
-                    break;
-                case 180:
-                    $gs->translate(-$bbox->getWidth(), -$bbox->getHeight());
-                    break;
-                case 270:
-                    $gs->translate(0, -$bbox->getHeight());
-                    break;
-            }
-            $normalizedRect = \WPDeskFIVendor\setasign\Fpdi\PdfReader\DataStructure\Rectangle::byVectors($gs->toUserSpace(new \WPDeskFIVendor\setasign\Fpdi\Math\Vector($rect->getLlx(), $rect->getLly())), $gs->toUserSpace(new \WPDeskFIVendor\setasign\Fpdi\Math\Vector($rect->getUrx(), $rect->getUry())));
-            $quadPoints = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'QuadPoints'), $this->parser);
-            $normalizedQuadPoints = [];
-            if ($quadPoints instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray) {
-                $quadPointsCount = \count($quadPoints->value);
-                if ($quadPointsCount % 8 === 0) {
-                    for ($i = 0; $i + 1 < $quadPointsCount; $i += 2) {
-                        $x = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNumeric::ensure(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve($quadPoints->value[$i], $this->parser));
-                        $y = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNumeric::ensure(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve($quadPoints->value[$i + 1], $this->parser));
-                        $v = $gs->toUserSpace(new \WPDeskFIVendor\setasign\Fpdi\Math\Vector($x->value, $y->value));
-                        $normalizedQuadPoints[] = $v->getX();
-                        $normalizedQuadPoints[] = $v->getY();
+            try {
+                $annotation = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve($entry, $this->parser);
+                $value = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'Subtype'), $this->parser);
+                if (!$value instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfName || $value->value !== 'Link') {
+                    continue;
+                }
+                $dest = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'Dest'), $this->parser);
+                if (!$dest instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNull) {
+                    continue;
+                }
+                $action = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'A'), $this->parser);
+                if (!$action instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary) {
+                    continue;
+                }
+                $actionType = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($action, 'S'), $this->parser);
+                if (!$actionType instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfName || $actionType->value !== 'URI') {
+                    continue;
+                }
+                $uri = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($action, 'URI'), $this->parser);
+                if ($uri instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString) {
+                    $uriValue = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfString::unescape($uri->value);
+                } elseif ($uri instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfHexString) {
+                    $uriValue = \hex2bin($uri->value);
+                } else {
+                    continue;
+                }
+                $rect = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'Rect'), $this->parser);
+                if (!$rect instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray || \count($rect->value) !== 4) {
+                    continue;
+                }
+                $rect = \WPDeskFIVendor\setasign\Fpdi\PdfReader\DataStructure\Rectangle::byPdfArray($rect, $this->parser);
+                if ($rect->getWidth() === 0 || $rect->getHeight() === 0) {
+                    continue;
+                }
+                $bbox = $this->getBoundary($box);
+                $rotation = $this->getRotation();
+                $gs = new \WPDeskFIVendor\setasign\Fpdi\GraphicsState();
+                $gs->translate(-$bbox->getLlx(), -$bbox->getLly());
+                $gs->rotate($bbox->getLlx(), $bbox->getLly(), -$rotation);
+                switch ($rotation) {
+                    case 90:
+                        $gs->translate(-$bbox->getWidth(), 0);
+                        break;
+                    case 180:
+                        $gs->translate(-$bbox->getWidth(), -$bbox->getHeight());
+                        break;
+                    case 270:
+                        $gs->translate(0, -$bbox->getHeight());
+                        break;
+                }
+                $normalizedRect = \WPDeskFIVendor\setasign\Fpdi\PdfReader\DataStructure\Rectangle::byVectors($gs->toUserSpace(new \WPDeskFIVendor\setasign\Fpdi\Math\Vector($rect->getLlx(), $rect->getLly())), $gs->toUserSpace(new \WPDeskFIVendor\setasign\Fpdi\Math\Vector($rect->getUrx(), $rect->getUry())));
+                $quadPoints = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfDictionary::get($annotation, 'QuadPoints'), $this->parser);
+                $normalizedQuadPoints = [];
+                if ($quadPoints instanceof \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfArray) {
+                    $quadPointsCount = \count($quadPoints->value);
+                    if ($quadPointsCount % 8 === 0) {
+                        for ($i = 0; $i + 1 < $quadPointsCount; $i += 2) {
+                            $x = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNumeric::ensure(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve($quadPoints->value[$i], $this->parser));
+                            $y = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfNumeric::ensure(\WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::resolve($quadPoints->value[$i + 1], $this->parser));
+                            $v = $gs->toUserSpace(new \WPDeskFIVendor\setasign\Fpdi\Math\Vector($x->value, $y->value));
+                            $normalizedQuadPoints[] = $v->getX();
+                            $normalizedQuadPoints[] = $v->getY();
+                        }
                     }
                 }
+                // we remove unsupported/unneeded values here
+                unset($annotation->value['P'], $annotation->value['NM'], $annotation->value['AP'], $annotation->value['AS'], $annotation->value['Type'], $annotation->value['Subtype'], $annotation->value['Rect'], $annotation->value['A'], $annotation->value['QuadPoints'], $annotation->value['Rotate'], $annotation->value['M'], $annotation->value['StructParent'], $annotation->value['OC']);
+                // ...and flatten the PDF object to eliminate any indirect references.
+                // Indirect references are a problem when writing the output in FPDF
+                // because FPDF uses pre-calculated object numbers while FPDI creates
+                // them at runtime.
+                $annotation = \WPDeskFIVendor\setasign\Fpdi\PdfParser\Type\PdfType::flatten($annotation, $this->parser);
+                $links[] = ['rect' => $normalizedRect, 'quadPoints' => $normalizedQuadPoints, 'uri' => $uriValue, 'pdfObject' => $annotation];
+            } catch (\WPDeskFIVendor\setasign\Fpdi\FpdiException $e) {
+                continue;
             }
-            $links[] = ['rect' => $normalizedRect, 'quadPoints' => $normalizedQuadPoints, 'uri' => $uriValue, 'pdfObject' => $annotation];
         }
         return $links;
     }

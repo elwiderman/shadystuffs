@@ -110,6 +110,55 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
     $this->msg['class'] = '';
 
     if ($pg_v1_pay_response->get_success() == false) {
+      switch($pg_v1_pay_response->get_code()){
+        case PPEX_PG_Constants::INTERNAL_SECURITY_BLOCK_1:
+          if($pg_v1_pay_response->get_data()['Transacting_URL'] != null && $pg_v1_pay_response->get_data()['Onboarding_URL'] != null){
+            $transactingUrlString = $pg_v1_pay_response->get_data()['Transacting_URL'];
+            $onboardingUrlData = $pg_v1_pay_response->get_data()['Onboarding_URL'];
+
+            if(is_array($onboardingUrlData)){
+              // If it's an array, join the URLs with commas to create a single string
+              $onboardingUrlString = implode(', ', $onboardingUrlData);
+            }else{
+              // If it's a single URL, assign it to the onboardingUrlString
+              $onboardingUrlString = $onboardingUrlData;
+            }
+            $order->add_order_note("PhonePe Payment Solutions:  Payment Request Failed" . " \n error message: " . $pg_v1_pay_response->get_message() . "\n Transacting URL: " . $transactingUrlString . "\n Onboarding URL: " . $onboardingUrlString);
+          }
+          break;
+
+        case PPEX_PG_Constants::INTERNAL_SECURITY_BLOCK_2:
+          if($pg_v1_pay_response->get_data()['Transacting_IP_Address'] != null && $pg_v1_pay_response->get_data()['Onboarding_IP_Address'] != null){
+            $transactingIPString = $pg_v1_pay_response->get_data()['Transacting_IP_Address'];
+            $onboardingIPData = $pg_v1_pay_response->get_data()['Onboarding_IP_Address'];
+
+            if(is_array($onboardingIPData)){
+              $onboardingIPString = implode(', ', $onboardingIPData);
+            }else{
+              $onboardingIPString = $onboardingIPData;
+            }
+            $order->add_order_note("PhonePe Payment Solutions: Payment Request Failed " . "\n error message: " . $pg_v1_pay_response->get_message() . "\n Transacting IP Address: " . $transactingIPString . " \n Onboarding IP Address: " . $onboardingIPString);
+          }
+
+          break;
+
+        case PPEX_PG_Constants::INTERNAL_SECURITY_BLOCK_4:
+          if($pg_v1_pay_response->get_data()['Transacting_Package_Name'] != null && $pg_v1_pay_response->get_data()['Onboarding_Package_Name'] != null){
+            $transactingPackageString = $pg_v1_pay_response->get_data()['Transacting_Package_Name'];
+            $onboardingPackageData = $pg_v1_pay_response->get_data()['Onboarding_Package_Name'];
+
+            if(is_array($onboardingPackageData)){
+              $onboardingPackageString = implode(', ', $onboardingPackageData);
+            }else{
+              $onboardingPackageString = $onboardingPackageData;
+            }
+            $order->add_order_note("PhonePe Payment Solutions: Payment Request Failed " . "\n Error Message: " . $pg_v1_pay_response->get_message() . "\n Transacting Package Name: " . $transactingPackageString . " \n Onboarding Package Name: " . $onboardingPackageString);
+          }
+          break;
+        
+        default:  $order->add_order_note("PhonePe Payment Solutions: Payment Request Failed " . "\n error message: " . $pg_v1_pay_response->get_message()); 
+        break;
+      }
       if ($pg_v1_pay_response->get_code() != null) {
         $msg = 'Transaction could not be initiated because of ' . $pg_v1_pay_response->get_code() . '. Please try again.';
       } else {

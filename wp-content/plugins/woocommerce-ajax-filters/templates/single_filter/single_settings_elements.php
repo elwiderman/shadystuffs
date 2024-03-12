@@ -29,6 +29,7 @@ if( ! class_exists('braapf_single_filter_edit_elements') ) {
             add_action('braapf_single_filter_additional', array(__CLASS__, 'min_max_price_values'), 600, 2);
             add_action('braapf_single_filter_additional', array(__CLASS__, 'text_before_after_price'), 700, 2);
             add_action('braapf_single_filter_additional', array(__CLASS__, 'specific_number_styles'), 800, 2);
+            add_action('braapf_single_filter_additional', array(__CLASS__, 'price_value_position'), 900, 2);
             //SELECTED FILTERS AREA
             add_action('braapf_single_filter_additional', array(__CLASS__, 'selected_filters_area'), 800, 2);
             //RESET BUTTON
@@ -71,17 +72,21 @@ if( ! class_exists('braapf_single_filter_edit_elements') ) {
                 $attribute = br_get_value_from_array($braapf_filter_settings, 'attribute', '');
                 echo '<div class="braapf_attribute braapf_half_select_full">';
                     echo '<label for="braapf_attribute">' . __('Attribute', 'BeRocket_AJAX_domain') . '</label>';
-                    echo '<select id="braapf_attribute" name="'.$settings_name.'[attribute]">';
-                    foreach ( $attributes_list as $value => $data ) {
-                        echo '<option';
-                        foreach($data as $data_key => $data_val) {
-                            if( $data_val !== "" ) {
-                                echo ' data-'.$data_key.'="'.$data_val.'"';
+                    if( ! empty($attributes_list) && is_array($attributes_list) && count($attributes_list) > 0 ) {
+                        echo '<select id="braapf_attribute" name="'.$settings_name.'[attribute]">';
+                        foreach ( $attributes_list as $value => $data ) {
+                            echo '<option';
+                            foreach($data as $data_key => $data_val) {
+                                if( $data_val !== "" ) {
+                                    echo ' data-'.$data_key.'="'.$data_val.'"';
+                                }
                             }
+                            echo ( $attribute == $value ? ' selected' : '' ) . ' value="' . $value . '">' . $data['name'] . '</option>';
                         }
-                        echo ( $attribute == $value ? ' selected' : '' ) . ' value="' . $value . '">' . $data['name'] . '</option>';
+                        echo '</select>';
+                    } else {
+                        echo '<div style="font-size: 18px;text-align: center;">' . __('No attributes has been created', 'BeRocket_AJAX_domain') . '</div>';
                     }
-                    echo '</select>';
                 echo '</div>';
                 do_action('braapf_single_filter_filter_type', $settings_name, $braapf_filter_settings);
                 //CUSTOM TAXONOMY
@@ -600,6 +605,23 @@ if( ! class_exists('braapf_single_filter_edit_elements') ) {
                     $number_style_decimal_number = br_get_value_from_array($braapf_filter_settings, 'number_style_decimal_number', '');
                     echo '<label for="braapf_number_style_decimal_number">'.__('Number of digits after decimal point', 'BeRocket_AJAX_domain').'</label>';
                     echo '<input min=0 id="braapf_number_style_decimal_number" type="number" name="' . $settings_name . '[number_style_decimal_number]" value="'.$number_style_decimal_number.'">';
+                echo '</div>';
+            echo '</div>';
+        }
+        static function price_value_position($settings_name, $braapf_filter_settings) {
+            echo '<div class="braapf_attribute_setup_flex">';
+                echo '<div class="braapf_price_value_position braapf_full_select_full">';
+                    $price_value_position = br_get_value_from_array($braapf_filter_settings, 'price_value_position', '');
+                    echo '<label for="braapf_color_image_checked">' . __('Position for slider values', 'BeRocket_AJAX_domain') . '</label>';
+                    echo '<select id="braapf_color_image_checked" name="'.$settings_name.'[price_value_position]">';
+                    $price_value_positions = array(
+                        'top'    => __('Top', 'BeRocket_AJAX_domain'),
+                        'bottom' => __('Bottom', 'BeRocket_AJAX_domain'),
+                    );
+                    foreach($price_value_positions as $price_value_position_id => $price_value_position_name) {
+                        echo '<option value="'.$price_value_position_id.'"'.($price_value_position == $price_value_position_id ? ' selected' : '').'>' . $price_value_position_name . '</option>';
+                    }
+                    echo '</select>';
                 echo '</div>';
             echo '</div>';
         }

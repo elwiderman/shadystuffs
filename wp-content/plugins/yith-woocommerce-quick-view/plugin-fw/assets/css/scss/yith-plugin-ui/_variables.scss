@@ -35,6 +35,13 @@ $update_hover: darken($update, 5%); // Update button - hover
 $update_text: #ffffff; // Text on update button background
 $update_focus: #e7eccc; // Text on update button background
 
+$tertiary_text: #333333;
+$tertiary_border: #b5b5b5;
+$tertiary_border_hover: #979797;
+$tertiary_bg: #e6e7e9;
+$tertiary_bg_hover: #eeefef;
+$tertiary_focus: #eef1f1;
+
 $accent: #98aa36;
 
 $shadow: rgba(145, 191, 227, 0.3);
@@ -103,6 +110,13 @@ $wp_top_bar_mobile_size: 46px;
     --yith-delete-outline-bg-hover: #{$delete_outline_bg_hover};
     --yith-delete-outline-border-hover: #{$delete_outline_border_hover};
     --yith-delete-outline-focus: #{$delete_outline_focus};
+
+    --yith-tertiary-text: #{$tertiary_text};
+    --yith-tertiary-border: #{$tertiary_border};
+    --yith-tertiary-bg: #{$tertiary_bg};
+    --yith-tertiary-bg-hover: #{$tertiary_bg_hover};
+    --yith-tertiary-border-hover: #{$tertiary_border_hover};
+    --yith-tertiary-focus: #{$tertiary_focus};
 
     --yith-accent: #{$accent};
 

@@ -1542,12 +1542,23 @@
 
 							if(function_exists('is_bbpress')){
 								?>
-								<br/>
 								<input id="the_champ_vertical_bb_forum" name="the_champ_sharing[vertical_bb_forum]" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_bb_forum'] ) ? 'checked="checked"' : '';?> value="1" />
 								<label for="the_champ_vertical_bb_forum"><?php _e('BBPress forum', 'super-socializer') ?></label>
 								<br/>
 								<input id="the_champ_vertical_bb_topic" name="the_champ_sharing[vertical_bb_topic]" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_bb_topic'] ) ? 'checked="checked"' : '';?> value="1" />
-								<label for="the_champ_vertical_bb_topic"><?php _e('BBPress topic', 'super-socializer') ?></label>
+								<label for="the_champ_vertical_bb_topic"><?php _e('BBPress topic', 'super-socializer') ?></label><br/>
+								<?php
+							}
+							if(heateor_ss_is_plugin_active('woocommerce/woocommerce.php')){
+								?>
+								<input id="the_champ_vertical_woocom_shop" name="the_champ_sharing[vertical_woocom_shop]" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_woocom_shop'] ) ? 'checked="checked"' : '';?> value="1" />
+								<label for="the_champ_vertical_woocom_shop"><?php _e('After individual product at WooCommerce Shop page', 'super-socializer') ?></label>
+								<br/>
+								<input id="the_champ_vertical_woocom_product" name="the_champ_sharing[vertical_woocom_product]" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_woocom_product'] ) ? 'checked="checked"' : '';?> value="1" />
+								<label for="the_champ_vertical_woocom_product"><?php _e('WooCommerce Product Page', 'super-socializer') ?></label>
+								<br/>
+								<input id="the_champ_vertical_woocom_thankyou" name="the_champ_sharing[vertical_woocom_thankyou]" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_woocom_thankyou'] ) ? 'checked="checked"' : '';?> value="1" />
+								<label for="the_champ_vertical_woocom_thankyou"><?php _e('WooCommerce Thankyou Page', 'super-socializer') ?></label>
 								<?php
 							}
 							?>

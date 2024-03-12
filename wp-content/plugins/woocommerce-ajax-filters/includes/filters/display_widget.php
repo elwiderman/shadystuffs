@@ -110,6 +110,8 @@ class BeRocket_AAPF_Widget {
     /**
      * Constructor
      */
+    public $id;
+    public $number;
     function __construct( $instance, $args = array() ) {
         if( ! empty($args['widget_id']) ) {
             $this->id = $args['widget_id'];
@@ -594,6 +596,7 @@ class BeRocket_AAPF_Widget {
         $set_query_var_title['slug_urls']                   = ! empty($br_options['slug_urls']);
         $set_query_var_title['first_page_jump'] = '1';
         $set_query_var_title['icon_before_value'] = (isset($icon_before_value) ? $icon_before_value : null);
+        $set_query_var_title['price_value_position'] = (isset($price_value_position) ? $price_value_position : false);
         $set_query_var_title['icon_after_value'] = (isset($icon_after_value) ? $icon_after_value : null);
         $set_query_var_title['single_selection'] = ! empty($single_selection);
 

@@ -10,6 +10,8 @@ class BeRocket_aapf_filter_add_settings_filters {
         add_filter('berocket_aapf_get_terms_args', array(__CLASS__, 'get_terms_args'), 100, 3);
         add_filter('berocket_aapf_get_terms_additional', array(__CLASS__, 'get_terms_additional'), 100, 3);
         add_filter('BeRocket_AAPF_template_single_item', array(__CLASS__, 'disable_empty_values'), 1000, 4);
+        add_filter('brapf_paid_recount_filter', array(__CLASS__, 'paid_recount_filter'), 1000, 2);
+        add_filter('bapf_paid_stock_sale_terms_ready', array(__CLASS__, 'paid_recount_terms'), 1000, 2);
     }
     function new_step($steps) {
         $steps = berocket_insert_to_array(
@@ -41,6 +43,11 @@ class BeRocket_aapf_filter_add_settings_filters {
                 echo '<input placeholder="'.__('Default', 'BeRocket_AJAX_domain').'" type="number" value="'.$get_terms_number.'" id="braapf_get_terms_number_attributes" name="'.$settings_name.'[get_terms_number]">';
             echo '</div>';
         echo '</div>';
+        ?>
+        <script>
+        berocket_show_element('.brsbs_filter_add_settings', '{.braapf_widget_type input[type=radio]} == "filter" && {#braapf_filter_type} != "price" && {#braapf_filter_type} != "date"');
+        </script>
+        <?php
     }
     static function options_get_terms_additional($settings_name, $braapf_filter_settings) {
         echo '<div class="braapf_attribute_setup_flex">';
@@ -121,6 +128,35 @@ class BeRocket_aapf_filter_add_settings_filters {
             }
         }
         return $template;
+    }
+    static function paid_recount_filter($result, $instance) {
+        if( ! empty($instance['get_terms_disable_recount']) ) {
+            if( $instance['get_terms_disable_recount'] == 'on' ) {
+                return false;
+            } elseif( $instance['get_terms_disable_recount'] == 'off' ) {
+                return true;
+            }
+        }
+        return $result;
+    }
+    static function paid_recount_terms($terms, $instance) {
+        if( ! empty($instance['get_terms_hide_empty']) || ! empty($instance['get_terms_disable_hide_empty']) ) {
+            $terms_correct = array();
+            foreach($terms as $term) {
+                if( ! ($term->count == 0 
+                && ((! empty($instance['get_terms_hide_empty']) && $instance['get_terms_hide_empty'] == 'on')
+                || (! empty($instance['get_terms_disable_hide_empty']) && $instance['get_terms_disable_hide_empty'] == 'on')) ) ) {
+                    $terms_correct[] = $term;
+                }
+            }
+            $terms = $terms_correct;
+        }
+        if( ! empty($instance['get_terms_number']) && intval($instance['get_terms_number']) ) {
+            if( count($terms) > intval($instance['get_terms_number']) ) {
+                $terms = array_slice($terms, 0, intval($instance['get_terms_number']));
+            }
+        }
+        return $terms;
     }
 }
 new BeRocket_aapf_filter_add_settings_filters();

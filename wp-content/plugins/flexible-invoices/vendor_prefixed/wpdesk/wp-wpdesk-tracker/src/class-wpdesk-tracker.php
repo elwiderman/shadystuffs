@@ -17,6 +17,7 @@ if (!\defined('ABSPATH')) {
 if (!\class_exists('WPDeskFIVendor\\WPDesk_Tracker')) {
     class WPDesk_Tracker implements \WPDesk_Tracker_Interface
     {
+        const WPDESK_TRACKER_NOTICE = 'wpdesk-tracker-notice';
         /**
          * @var string
          */
@@ -154,6 +155,10 @@ if (!\class_exists('WPDeskFIVendor\\WPDesk_Tracker')) {
         }
         public function wp_ajax_wpdesk_tracker_notice_handler()
         {
+            \wp_verify_nonce(\sanitize_text_field($_REQUEST['security'] ?? ''), self::WPDESK_TRACKER_NOTICE);
+            if (!\current_user_can('manage_woocommerce')) {
+                die;
+            }
             $option = \get_option('wpdesk_helper_options');
             if (!$option) {
                 \add_option('wpdesk_helper_options', array());
@@ -229,6 +234,9 @@ if (!\class_exists('WPDeskFIVendor\\WPDesk_Tracker')) {
         public function admin_notices()
         {
             if (!$this->should_enable_wpdesk_tracker()) {
+                return;
+            }
+            if (!\current_user_can('manage_woocommerce')) {
                 return;
             }
             $screen = \get_current_screen();

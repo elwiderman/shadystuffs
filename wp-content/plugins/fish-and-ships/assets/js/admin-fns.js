@@ -2,7 +2,7 @@
  * Javascript for the shipping method functionality.
  *
  * @package Fish and Ships
- * @version 1.4.13
+ * @version 1.5
  */
 
 jQuery(document).ready(function($) {
@@ -250,9 +250,12 @@ jQuery(document).ready(function($) {
 				
 				if (name.substr(0, 25) == 'woocommerce_fish_n_ships_') name = name.substr(25);
 				val = $(el).val();
-								
+				
+				//console.log( name + ': ' + val + '(' + typeof (val) + ')' );
+				
 				// Lovely JS... value attr should get only on checked case!
-				if ( $(el).is(':checkbox') && !$(el).is(":checked") ) val = '';
+				// if ( $(el).is(':checkbox') && !$(el).is(":checked") ) val = '';
+				if ( $(el).is(':checkbox') && !$(el).is(":checked") ) return;
 				
 				// ...and radio buttons? ignore not checked
 				if ( $(el).is(':radio') && !$(el).is(":checked") ) return;
@@ -266,7 +269,7 @@ jQuery(document).ready(function($) {
 						i++;
 					}
 				} else {
-					
+
 					// Support for WC decimal separator: comma, point or whatever will be replaced by point
 					if ( $(el).hasClass('wc_fns_input_positive_decimal') || $(el).hasClass('wc_fns_input_decimal') )
 					{
@@ -320,7 +323,7 @@ jQuery(document).ready(function($) {
 		});
 
 		$('body').addClass('fns-popup');
-		$('.ui-dialog .ui-dialog-buttonset button').attr('class', 'button button-primary button-large');
+		$('.ui-dialog .ui-dialog-buttonset button').not('.ui-dialog-fns-samples button').attr('class', 'button button-primary button-large');
 		$('#fns_dialog').dialog('open');
 		
 		$('.export_wrapper').html(data).click( function () {
@@ -401,7 +404,7 @@ jQuery(document).ready(function($) {
 		});
 
 		$('body').addClass('fns-popup');
-		$('.ui-dialog .ui-dialog-buttonset button').attr('class', 'button button-primary button-large');
+		$('.ui-dialog .ui-dialog-buttonset button').not('.ui-dialog-fns-samples button').attr('class', 'button button-primary button-large');
 		$('#fns_dialog').dialog('open');
 		$('<p class="fns-tabbed"><em>'+wcfns_data.i18n_import_att+'</em></p>').insertAfter('.ui-dialog-buttonset');
 
@@ -459,17 +462,18 @@ jQuery(document).ready(function($) {
 				val = $(el).val();
 				
 				// Lovely JS... value attr should get only on checked case!
-				if ( $(el).is(':checkbox') && !$(el).is(":checked") ) val = '';
+				// if ( $(el).is(':checkbox') && !$(el).is(":checked") ) val = '';
+				if ( $(el).is(':checkbox') ) return;
 
 				// Checkboxes not be copied in any case
 				shorted_name = name;
 				if ( name.substr(0, 25) == 'woocommerce_fish_n_ships_' ) shorted_name = name.substr(25);
-				if ( $.inArray( shorted_name, checks ) == -1 ) {
+				//if ( $.inArray( shorted_name, checks ) == -1 ) {
 					
 					if ( $( '[name="'+name+'"]', '#fns_recreate_form' ).length == 0 ) {
 						$('#fns_recreate_form').append('<input type="hidden" name="' + name + '" value="' + val + '" />');
 					}
-				}
+				//}
 			}
 		});
 		
@@ -602,12 +606,12 @@ jQuery(document).ready(function($) {
 
 			// Remove dropdown
 			if ($.fn.dropdownSubmenu) {
-				$(cloned).find('.dropdown-submenu-tunned').dropdownSubmenu('destroy');
+				$(cloned).find('.dropdown-submenu-tuned').dropdownSubmenu('destroy');
 			}
 
 			$(cloned).appendTo(wrapper);
 		});	
-
+		
 		// Fix select values (jQuery bug at clone), with select multiple support
 		$("#shipping-rules-table-fns select").each(function(index, element) {
 
@@ -805,6 +809,15 @@ jQuery(document).ready(function($) {
 		// restart tips
 		$( document.body ).trigger( 'init_tooltips' );
 	}
+	
+	// Tune [PRO] text in selectors
+	$(document).on('dropdown-submenu-newfield', function( e, newfield) {
+		$('.only_pro', newfield).each( function( idx, el ) {
+			text = $(el).text();
+			html = text.toString().replace('[PRO]', '<span class="fns-pro-icon">PRO</span>');
+			$(el).html(html);
+		});
+	});
 
 	/* multicurrency swithcing fields */
 		
@@ -989,7 +1002,7 @@ jQuery(document).ready(function($) {
 		var volumetric = false;
 		var required   = false; // not required for math expressions
 		$('#shipping-rules-table-fns select.wc-fns-selection-method').each(function(index, element) {
-			if ($(element).val()=='volumetric') {
+			if( $(element).val()=='volumetric' || $(element).val()=='volumetric-set' ) {
 				volumetric = true;
 				required   = true;
 			}
@@ -1011,6 +1024,7 @@ jQuery(document).ready(function($) {
 	check_volumetric();
 
 	// Show or hide the global group method field
+	var global_when_loaded_method = $( '#woocommerce_fish_n_ships_global_group_by' ).is( ':checked' );
 	function check_global_group_by() {
 		if( $( '#woocommerce_fish_n_ships_global_group_by' ).is( ':checked' ) ) {
 			// Global group
@@ -1030,6 +1044,12 @@ jQuery(document).ready(function($) {
 			} else {
 				$( '#woocommerce_fish_n_ships_global_group_by_method' ).closest( 'tr' ).hide();
 				$( '#shipping-rules-table-fns .field-group_by' ).css('display','block');
+				if( global_when_loaded_method )
+				{
+					// Set each of them to the previous global value (same operation)
+					var prev_groupby = $('#woocommerce_fish_n_ships_global_group_by_method').val();
+					$( '#shipping-rules-table-fns .field-group_by select').val( prev_groupby );
+				}
 			}
 		}
 	}
@@ -1038,8 +1058,10 @@ jQuery(document).ready(function($) {
 	});
 	check_global_group_by();
 	
-	/* change the comparison options on MIN/MAX fields */
-	
+	$( '#woocommerce_fish_n_ships_global_group_by').closest('tr').addClass('fns-no-bottom-padding');
+	$( '#woocommerce_fish_n_ships_global_group_by_method').closest('tr').addClass('fns-no-top-padding');
+
+	/* change the comparison options on MIN/MAX fields */	
 	$('#shipping-rules-table-fns > tbody').on({
 		click: function () {
 			set_comparison_option(this, 'ge');
@@ -1368,6 +1390,23 @@ jQuery(document).ready(function($) {
 		semaphore_slider = false;
     }
 
+	// Suport for the special action add-boxes (since x.x.x)
+	$( document ).on( 'change', '.fns-add-boxes-mode', function()
+	{
+		wrapper = $(this).closest('.fns_fields_popup');
+		if( $(this).val() == 'auto' )
+		{
+			$( '.fns-add-boxes-manual', wrapper ).hide();
+			$( '.fns-add-boxes-max', wrapper ).show();
+			//$( '.fns-add-boxes-max-asterix', wrapper ).css('opacity', '1');
+		}
+		else
+		{
+			$( '.fns-add-boxes-manual', wrapper ).show();
+			$( '.fns-add-boxes-max', wrapper ).hide();
+			//$( '.fns-add-boxes-max-asterix', wrapper ).css('opacity', '0');
+		}			
+	});
 
 	/*******************************************************
 	    3. Logs
@@ -1674,8 +1713,8 @@ jQuery(document).ready(function($) {
 			  // close dialog by clicking the overlay behind it
 			  $('.ui-widget-overlay').bind('click', function(){
 				//$(the_dialog).dialog('close');
-				close_popup_dialog();
-			  })
+			  });
+			  $('.fns-add-boxes-mode:checked').trigger('change'); // add-boxes (since x.x.x)
 			},
 			create: function () {
 			  // style fix for WordPress admin
@@ -1702,7 +1741,19 @@ jQuery(document).ready(function($) {
 		$('.ui-widget-overlay').css('opacity', 0).animate({opacity:1});
 		$('body').addClass('fns-popup');
 		
-		$('.ui-dialog .ui-dialog-buttonset button').attr('class', 'button button-primary button-large');
+		$('.ui-dialog .ui-dialog-buttonset button').not('.ui-dialog-fns-samples button').attr('class', 'button button-primary button-large');
+		
+		// autosize textarea
+		$('#fns_dialog textarea').each( function( idx, ta ) {
+			h = ta.scrollHeight;
+			if (h > 45 && h < 200 ) {
+				jQuery(ta).height(h);
+			} else if ( h >= 200 ) {
+				jQuery(ta).height(200);
+			} else {
+				jQuery(ta).css('height', 'auto');
+			}
+		});
 		
 		return false;
 	});
@@ -1743,7 +1794,7 @@ jQuery(document).ready(function($) {
 		show_help( 'sel_conditions', false, wcfns_data['admin_lang'] );
 		return false;
 	});
-	
+		
 	/* help popups */
 	$(document).on('click', 'a.woocommerce-fns-help-popup', function () {
 
@@ -1780,6 +1831,8 @@ jQuery(document).ready(function($) {
 	$(document).on('click', 'nav.wc_fns_nav_popup a, nav.lang_switch a, a.wc_fns_nav_popup', function () {
 
 		tip = $(this).attr('data-fns-tip');
+		if (typeof(tip)=='undefined')
+			return;
 		
 		lang = $(this).attr('data-fns-lang');
 		if (typeof lang !== typeof undefined && lang !== false) {
@@ -1844,11 +1897,14 @@ jQuery(document).ready(function($) {
 		if (!$concatenated) {
 			$('.ui-widget-overlay').css('opacity', 0).animate({opacity:1});
 		}
+
+		$('body').addClass('fns-popup-opening');
 		
 		$.ajax({
 			url: ajaxurl,
 			data: { action: 'wc_fns_help', lang: $lang, what: $what },
 			error: function (xhr, status, error) {
+				$('body').removeClass('fns-popup-opening');
 		    	var errorMessage = xhr.status + ': ' + xhr.statusText
 				alert('Fns Help Error - ' + errorMessage);
 				$('.ui-widget-overlay.fns-loading').remove();
@@ -1928,9 +1984,9 @@ jQuery(document).ready(function($) {
 				});
 		
 				$('#fns_help').dialog('open');
-				$('body').addClass('fns-popup');
+				$('body').addClass('fns-popup').removeClass('fns-popup-opening');
 				$('.ui-widget-overlay.fns-loading').remove();
-				$('.ui-dialog .ui-dialog-buttonset button').attr('class', 'button button-primary button-large');
+				$('.ui-dialog .ui-dialog-buttonset button').not('.ui-dialog-fns-samples button').attr('class', 'button button-primary button-large');
 			},
 			dataType: 'html'
 		});
@@ -2067,6 +2123,420 @@ jQuery(document).ready(function($) {
 	}
 	update_free_shipping();
 
+
+	/*******************************************************
+	    8. Wizard case studies & snippets
+	 *******************************************************/
+	
+	// Move restart button
+	if( $('.woocommerce-layout__activity-panel-tabs').length > 0 )
+	{
+		$('.woocommerce-layout__activity-panel-tabs').prepend( $('#activity-panel-tab-restart-fns') );
+		
+		if( $('.wc-fns-wizard').length == 0 ) 
+			$('#activity-panel-tab-restart-fns').css('display','flex');
+	}
+	
+	/* switch tabs samples */
+	$(document).on('click', '.fns-samples-wizard nav a', function () {
+		var cont = $(this).closest('.fns-samples-wizard');
+		$( '.wc_fns_nav_popup a', cont).unwrap('strong');
+		tab = $(this).wrap('<strong>').attr('data-fns-tab');
+		$( '.wc_fns_tab', cont ).hide();
+		$( '.wc_fns_tab_' + tab, cont ).show();
+		
+		if( $(this).closest('.ui-dialog').length == 1 ) {
+			if( $(this).index( $( '.wc_fns_nav_popup a', cont) ) == 0 ) {
+				$('.ui-dialog .fns-add-sel-snippets').hide();
+			} else {
+				$('.ui-dialog .fns-add-sel-snippets').show();
+				setTimeout( check_snippets, 10 ); // Wait a few to open the dialog first
+			}
+		}
+		return false;
+	});
+	
+	/* open / close group of cases */
+	$(document).on('click', '.fns-samples-wizard .fns-case-wrapper > h2', function() {
+		cont = $(this).closest('.fns-case-wrapper');
+		if( $(cont).hasClass('open') )
+		{
+			$('.sample-list', cont).stop().slideUp();
+			$(cont).removeClass('open');
+		}
+		else
+		{
+			$('.sample-list', cont).stop().slideDown();
+			$(cont).addClass('open');
+		}
+		return false;
+	});
+	
+	/* open / close sample case */
+	$(document).on('click', '.fns-samples-wizard .sample-list label', function() {
+		cont = $(this).closest('li');
+		if( $(cont).hasClass('open') )
+		{
+			$('.case', cont).stop().slideUp();
+			$(cont).removeClass('open');
+		}
+		else
+		{
+			$('.case', cont).stop().slideDown();
+			$(cont).addClass('open');
+		}
+		return false;
+	});
+	
+	/* samples on wizard 
+	if( $('.wc-fns-wizard-notice-4').length > 0 )
+	{
+		html = $('.fns-samples-wizard').prop('outerHTML');
+		//html = '<form method="post" action="">' + html + '</div>';
+		$('.wc-fns-wizard-notice-4 .fns-samples-wizard-insert').html( html );
+
+		// Empty table rules? Remove the case warning
+		if( $('select.wc-fns-selection-method').length == 1 && $('select.wc-fns-selection-method').val() == '' ) {
+			$('.wc-fns-wizard-notice-4 .warning').remove();
+		}
+	}*/
+	
+	/* prepare samples & snippets popup */
+	$('body').append('<div id="fns_samples"><div class="popup_scroll_control"></div></div>');
+	$('#fns_samples .popup_scroll_control').append( $('form .fns-samples-wizard') );
+
+	// Samples dialog will be created at body onload, to keep the samples AJAX loaded if the dialog is opened twice
+	$('#fns_samples').dialog({
+		title: 'Add Snippets or Full case examples',
+		dialogClass: 'wp-dialog',
+		autoOpen: false,
+		draggable: true,
+		width: $('#wpcontent').width() * 0.95,
+		height: $(window).height() * 0.7,
+		modal: true,
+		resizable: true,
+		closeOnEscape: true,
+		position: {
+		  my: "center",
+		  at: "center",
+		  of: window
+		},
+		open: function () {
+		  // close dialog by clicking the overlay behind it
+		  $('.ui-widget-overlay').bind('click', function(){
+			//$(the_dialog).dialog('close');
+			close_popup_samples();
+		  })
+		},
+		create: function () {
+		  // style fix for WordPress admin
+		  $('.ui-dialog-titlebar-close').addClass('ui-button');
+		},
+		buttons: [
+			{
+				text:   wcfns_data.i18n_close_bt,
+				click:  close_popup_samples
+			}
+		],
+		close: function() {
+			close_popup_help()
+		}
+	});
+	
+	$('#fns_samples').closest('.ui-dialog').addClass('ui-dialog-fns-samples');
+		
+	$('.ui-dialog-fns-samples .ui-dialog-buttonset').prepend( $('.ui-dialog .fns-add-sel-snippets') );
+	$('.ui-dialog-fns-samples .ui-dialog-buttonset button').addClass('button button-large');
+
+	// Open at button click
+	$('a.wc-fns-add-snippet').click( function() {
+		case_show_hide_warning();
+		$('.ui-dialog .wc_fns_nav_popup a').eq(1).trigger('click');
+		$('#fns_samples').dialog('open');
+		load_samples();
+		$('body').addClass('fns-popup');
+		return false;
+	});
+	
+	$('a.woocommerce-fns-case').click( function() {
+		case_show_hide_warning();
+		$('.ui-dialog .wc_fns_nav_popup a').eq(0).trigger('click');
+		$('#fns_samples').dialog('open');
+		load_samples();
+		$('body').addClass('fns-popup');
+		return false;
+	});
+	
+	function load_samples()
+	{
+		if( $('.snippets-ajax-loading').length == 0 )
+			return;
+		
+		$.ajax({
+			url: ajaxurl,
+			data: { action: 'wc_fns_samples' },
+            dataType: 'json',
+			error: function (xhr, status, error) {
+				var errorMessage = xhr.status + ': ' + xhr.statusText
+				alert('Error loading samples - ' + errorMessage);
+			},
+			success: function (data) {
+				
+				console.log(data);
+				
+                $('.snippets-ajax-loading').replaceWith(data.snippets);
+                $('.fullsamples-ajax-loading').replaceWith(data.fullsamples);
+            },
+		});
+	}
+	
+	function case_show_hide_warning() {
+		// Empty table rules? Hide the case warning
+		if( is_table_rules_empty() ) {
+			$('#fns_samples .warning').hide();
+		} else {
+			$('#fns_samples .warning').show();
+		}
+	}
+	
+	function is_table_rules_empty() {
+		
+		return $('select.wc-fns-selection-method').length == 1 && $('select.wc-fns-selection-method').val() == '';
+	}
+
+	function close_popup_samples() {
+
+		$('body.fns-popup .ui-dialog, .ui-widget-overlay').fadeOut(function () {
+
+			$('body').removeClass('fns-popup');
+			if ($('#fns_samples').length==0) return;
+			
+			$('#fns_samples')
+				.dialog('close');
+				//.remove();
+		});
+	}
+	
+	$('.fns-samples-wizard').show();
+	
+	// Snippets checkboxes
+	$(document).on('change','.wc_fns_tab_snippets input[type="checkbox"]', function() {
+				
+		if( ! check_snippets( true ) && $(this).is(':checked') )
+		{
+			$(this).prop('checked', false);
+			check_snippets( false ); // Should re-activate the Add snippets button?
+		}
+	});
+
+	
+	function check_snippets( alert_errors )
+	{
+		// Default true:
+		alert_errors = typeof alert_errors !== 'undefined' ? alert_errors : true;
+		
+		var any_group_by = true;
+		var compatibles_group_by = new Array();
+		var its_ok = true;
+				
+		// Check compatiblilty of selected snippets for free version
+		$('.wc_fns_tab_snippets input[type="checkbox"]:checked').each( function( idx, el )
+		{
+			restriction = $(el).attr('data-restrict-group_by');
+			if( typeof restriction !== 'undefined' && restriction !== false )
+			{
+				// Turn into array
+				restriction = restriction.toString().split(',');
+				if( any_group_by )
+				{
+					any_group_by = false;
+					compatibles_group_by = restriction;
+				}
+				else
+				{
+					// Array intersection
+					compatibles_group_by = compatibles_group_by.filter(function(n) {
+						return restriction.indexOf(n) !== -1;
+					});
+				}
+			}
+		});
+		
+		// Incompatible group-by in the selected snippets?
+		if( ! any_group_by && compatibles_group_by.length < 1 )
+		{
+			show_groupby_requeriments();
+			var message = "Sorry. The selected snippets needs distinct group-by strategies.";
+			message += "\n\nDistinct group-by strategies in the same shipping method is only available in Fish and Ships Pro";
+			if( alert_errors ) alert(message);
+			// $(this).prop('checked', false);
+			its_ok = false;
+		}
+		
+		// We must change the group-by setting?
+		else if( ! any_group_by && ! is_table_rules_empty() )
+		{
+			var current_setting = $('#woocommerce_fish_n_ships_global_group_by_method option:selected').val();
+			
+			if( compatibles_group_by.indexOf( current_setting ) == -1 )
+			{
+				show_groupby_requeriments();
+				
+				if( compatibles_group_by.length == 1 )
+				{
+					var message = "Group-by must be set to: ";
+				}
+				else
+				{
+					var message = "Group-by must be set to one of this: ";
+				}
+
+				$(compatibles_group_by).each( function( idx, req )
+				{
+					if( idx > 0 ) message += ' or ';
+					message +=  humanize_group_by( req ) ;
+				});
+
+				message += "\n\nYour snippet selection needs a group-by strategy change in the shipping method settings.";
+				message += "\n\nTo address this, please, close the samples popup and locate the 'Global group-by' option in the top area of the settings page. Please, check if your rules will continue working with this change before do it.";
+				
+				message += "\n\nDistinct group-by strategies in the same shipping method is only available in Fish and Ships Pro";
+				if( alert_errors ) alert(message);
+				//$(this).prop('checked', false);
+				its_ok = false;
+			}
+		}
+		
+		// Mark selected 
+		$('.wc_fns_tab_snippets .case-sel').removeClass('case-sel');
+		$('.wc_fns_tab_snippets input:checked').each( function( idx, el ) {
+			$(el).closest('li').addClass('case-sel');
+		});
+		
+		// Count selecteds
+		$('.fns-case-wrapper').each( function( idx, el ) {
+			count = $('input:checked', el).length;
+			if( count == 0 )
+			{
+				$('h2 .counter', el).html('');
+			}
+			else
+			{
+				$('h2 .counter', el).html( ' (' + count + ')' );
+			}
+		});
+		
+		// Enable / disable the "Add selected snippets" button
+		var sel   = $('.wc_fns_tab_snippets input:checked').length;
+
+		if( ! its_ok || sel == 0) {
+			$('.ui-dialog-fns-samples .fns-add-sel-snippets').addClass('disabled');
+		} else {
+			$('.ui-dialog-fns-samples .fns-add-sel-snippets').removeClass('disabled');
+		}
+		
+		return its_ok;
+	}
+	
+	// Snippets add button click
+	$(document).on('click','.fns-add-sel-snippets', function() {
+		
+		if ( $(this).closest('.wc_fns_tab').length == 1 ) {
+			// Obsolete?
+			var cont  = $(this).closest('.wc_fns_tab');
+			alert('1');
+		} else {
+			var cont  = $('.ui-dialog .wc_fns_tab_snippets');
+		}
+		
+		if ( $('input:checked', cont).length == 0 ) return false;
+		
+		$('#shipping-rules-table-fns input, #shipping-rules-table-fns select').removeAttr('required');
+
+		// Copying select values
+		$('select', cont).each( function(idx, el) {
+			$('#mainform').append( '<input type="hidden" name="' + $(el).attr('name') + '" value="' + $(el).val() + '" />' );
+		});
+
+		$('#mainform')
+			.append( $('input:checked', cont).clone() )
+			.append( '<input type="hidden" name="keep_current" value="1" />' )
+			.find('.woocommerce-save-button').trigger('click');
+			
+		return false;
+	});
+	
+	// Full case add button click
+	$(document).on('click','.wc_fns_tab_fullsamples button', function() {
+
+		if( $(this).closest('li').length < 1 )
+			return false;
+
+		var key   = $(this).attr('value');		
+		var cont  = $(this).closest('.case');
+		
+		$('#shipping-rules-table-fns input, #shipping-rules-table-fns select').removeAttr('required');
+		
+		// Copying select values
+		$('select', cont).each( function(idx, el) {
+			$('#mainform').append( '<input type="hidden" name="' + $(el).attr('name') + '" value="' + $(el).val() + '" />' );
+		});
+
+		$('#mainform')
+			.append( $('select', cont).clone() )
+			.append( '<input type="hidden" name="wc-fns-samples[]" value="'+key+'" />' )
+			.append( '<input type="hidden" name="keep_current" value="0" />' )
+			.find('.woocommerce-save-button').trigger('click');
+			
+		return false;
+	});
+	
+	// Only in case of group-by snippets incompatibility, we will show it
+	function show_groupby_requeriments() {
+		
+		if( $('.fns-req-group-by').length > 0 ) return;
+		
+		$('.wc_fns_tab_snippets input[type="checkbox"]').each( function( idx, el )
+		{
+			restriction = $(el).attr('data-restrict-group_by');
+			if( ( ! $(el).closest('li').hasClass('only_pro') ) && typeof restriction !== 'undefined' && restriction !== false )
+			{
+				html_info = '';
+				casewrap  = $(el).closest('.case');
+				
+				// Turn into array
+				restriction = restriction.toString().split(',');
+				
+				if( restriction.length == 1 )
+				{
+					html_info = 'Requires group-by set as: ';
+				} else {
+					html_info = 'Requires group-by set as one of this: ';
+				}
+				
+				$(restriction).each( function( idx, req )
+				{
+					html_info += '<span>' + humanize_group_by( req ) + '</span>';
+				});
+				
+				$(casewrap).append('<p class="fns-req-group-by">' + html_info + '</p>');
+			}
+		});
+		
+	}
+	
+	function humanize_group_by( req )
+	{
+		if( req == 'none' ) req = 'None';
+		if( req == 'id_sku' ) req = 'ID/SKU';
+		if( req == 'product_id' ) req = 'Per product';
+		if( req == 'class' ) req = 'Shipping class';
+		if( req == 'all' ) req = 'All together';
+		
+		return req;
+	}
+
+	/* FINALLY, REFRESH RULES: */
 	refresh_rules();
 });
 /*
@@ -2128,5 +2598,6 @@ jQuery(document).ready(function($) {
 		$(el).fadeOut(function () {
 			$(el).remove();
 		});
+		return false;
 	});
 });

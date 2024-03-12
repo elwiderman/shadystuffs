@@ -76,6 +76,8 @@ class ET_Builder_Module_br_filters_group extends ET_Builder_Module {
             foreach($posts as $post_id) {
                 $filter_list[$post_id] = get_the_title($post_id) . ' (ID:' . $post_id . ')';
             }
+        } else {
+            $filter_list = array('0' => __('--Please create group first--', 'BeRocket_AJAX_domain'));
         }
         $fields = array(
             'group_id' => array(

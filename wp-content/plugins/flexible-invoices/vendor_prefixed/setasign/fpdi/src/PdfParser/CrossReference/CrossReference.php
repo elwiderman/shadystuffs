@@ -63,7 +63,7 @@ class CrossReference
                 // sometimes the file header offset is part of the byte offsets, so let's retry by resetting it to zero.
                 if ($e->getCode() === \WPDeskFIVendor\setasign\Fpdi\PdfParser\CrossReference\CrossReferenceException::INVALID_DATA && $this->fileHeaderOffset !== 0) {
                     $this->fileHeaderOffset = 0;
-                    $reader = $this->readXref($offset + $this->fileHeaderOffset);
+                    $reader = $this->readXref($offset);
                 } else {
                     throw $e;
                 }

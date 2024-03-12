@@ -465,6 +465,7 @@ class BeRocket_AAPF_Widget_functions {
         $terms = self::get_terms_for_filter($br_filter);
         $set_query_var_color = array();
         $set_query_var_color['terms'] = $terms;
+        $set_query_var_color['taxonomy'] = braapf_get_data_taxonomy_from_post($br_filter);
         $set_query_var_color['type'] = $type;
         $set_query_var_color['load_script'] = $load_script;
         set_query_var( 'berocket_query_var_color', $set_query_var_color );
@@ -476,9 +477,15 @@ class BeRocket_AAPF_Widget_functions {
         if( isset( $color_values ) ) {
             if ( current_user_can( 'manage_woocommerce' ) ) {
                 if( apply_filters('bapf_widget_func_color_listener_save', true, $br_filter, $type, $color_values) ) {
+                    $terms_id = array();
                     foreach( $color_values as $key => $value ) {
                         if( $type == 'color' ) {
                             foreach($value as $term_key => $term_val) {
+                                if( $key == 'color' ) {
+                                    $terms_id[$term_key] = $term_key;
+                                } elseif( $key == 'color_gradient' && isset($terms_id[$term_key]) ) {
+                                    unset($terms_id[$term_key]);
+                                }
                                 if( !empty($term_val) ) {
                                     update_metadata( 'berocket_term', $term_key, $key, $term_val );
                                 } else {
@@ -489,6 +496,9 @@ class BeRocket_AAPF_Widget_functions {
                             update_metadata( 'berocket_term', $key, $type, $value );
                         }
                     }
+                    foreach($terms_id as $term_key => $term_id) {
+                        delete_metadata( 'berocket_term', $term_key, 'color_gradient' );
+                    }
                 }
             }
         }
@@ -497,6 +507,7 @@ class BeRocket_AAPF_Widget_functions {
         $terms = self::get_terms_for_filter($br_filter);
         $set_query_var_exclude_list = array();
         $set_query_var_exclude_list['terms'] = $terms;
+        $set_query_var_exclude_list['taxonomy'] = braapf_get_data_taxonomy_from_post($br_filter);
         $set_query_var_exclude_list['selected'] = $selected;
         set_query_var( 'berocket_var_exclude_list', $set_query_var_exclude_list );
         ob_start();

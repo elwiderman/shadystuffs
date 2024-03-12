@@ -1,15 +1,15 @@
-# Copyright (C) 2023 WooCommerce
+# Copyright (C) 2024 WooCommerce
 # This file is distributed under the same license as the Google Listings and Ads plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Google Listings and Ads 2.5.14\n"
+"Project-Id-Version: Google Listings and Ads 2.6.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/google-listings-and-ads\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-12-18T21:58:52+00:00\n"
+"POT-Creation-Date: 2024-03-12T07:19:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: google-listings-and-ads\n"
@@ -38,28 +38,29 @@ msgstr ""
 msgid "No action matching %s was found."
 msgstr ""
 
-#: src/Admin/Admin.php:202
+#: src/Admin/Admin.php:208
 #: src/Menu/Settings.php:25
 #: js/build/commons.js:34
 #: js/build/index.js:17
 msgid "Settings"
 msgstr ""
 
-#: src/Admin/Admin.php:208
+#: src/Admin/Admin.php:214
+#: js/build/blocks.js:1
 msgid "Get Started"
 msgstr ""
 
-#: src/Admin/Admin.php:215
+#: src/Admin/Admin.php:221
 msgid "Documentation"
 msgstr ""
 
 #. translators: 1) HTML anchor open tag 2) HTML anchor closing tag
-#: src/Admin/Admin.php:276
+#: src/Admin/Admin.php:282
 msgid "By using this extension, you may be storing personal data or sharing data with an external service. %1$sLearn more about what data is collected by Google and what you may want to include in your privacy policy%2$s."
 msgstr ""
 
 #: src/Admin/Input/BooleanSelect.php:20
-#: src/Admin/Product/Attributes/AttributesForm.php:120
+#: src/Admin/Product/Attributes/AttributesForm.php:139
 msgid "Default"
 msgstr ""
 
@@ -81,12 +82,14 @@ msgstr ""
 msgid "Enter your value"
 msgstr ""
 
-#: src/Admin/Input/SelectWithTextInput.php:115
+#: src/Admin/Input/SelectWithTextInput.php:106
+#: src/Admin/Input/SelectWithTextInput.php:156
 msgid "Enter a custom value"
 msgstr ""
 
 #: src/Admin/MetaBox/ChannelVisibilityMetaBox.php:73
 #: src/Admin/MetaBox/CouponChannelVisibilityMetaBox.php:78
+#: src/Admin/ProductBlocksService.php:185
 msgid "Channel visibility"
 msgstr ""
 
@@ -228,6 +231,26 @@ msgstr ""
 msgid "The cut of the item. Recommended for apparel items."
 msgstr ""
 
+#: src/Admin/ProductBlocksService.php:148
+#: src/Menu/Dashboard.php:41
+#: src/Menu/Dashboard.php:58
+#: src/Menu/Dashboard.php:62
+#: src/Menu/GetStarted.php:41
+#: src/Menu/GetStarted.php:58
+#: src/Menu/GetStarted.php:62
+#: src/MultichannelMarketing/GLAChannel.php:95
+#: views/attributes/variations-form.php:22
+#: views/meta-box/channel_visibility.php:92
+#: views/meta-box/coupon_channel_visibility.php:160
+#: js/build/index.js:17
+msgid "Google Listings & Ads"
+msgstr ""
+
+#: src/Admin/ProductBlocksService.php:204
+#: views/attributes/tab-panel.php:20
+msgid "Product attributes"
+msgstr ""
+
 #. translators: 1: is a numeric account ID
 #: src/Ads/AccountService.php:109
 msgid "Ads account %1$d already connected."
@@ -336,19 +359,19 @@ msgid "Error editing campaign: %s"
 msgstr ""
 
 #. translators: %s Error message
-#: src/API/Google/AdsCampaign.php:339
+#: src/API/Google/AdsCampaign.php:342
 msgid "Error deleting campaign: %s"
 msgstr ""
 
-#: src/API/Google/AdsCampaign.php:342
+#: src/API/Google/AdsCampaign.php:345
 msgid "This campaign has already been deleted"
 msgstr ""
 
-#: src/API/Google/AdsCampaign.php:602
+#: src/API/Google/AdsCampaign.php:605
 msgid "Invalid campaign ID"
 msgstr ""
 
-#: src/API/Google/AdsCampaign.php:618
+#: src/API/Google/AdsCampaign.php:621
 msgid "Invalid geo target location ID"
 msgstr ""
 
@@ -482,27 +505,27 @@ msgid "Error linking account"
 msgstr ""
 
 #. translators: 1: current date in the format Y-m-d
-#: src/API/Google/Middleware.php:501
+#: src/API/Google/Middleware.php:503
 msgid "Account %1$s"
 msgstr ""
 
-#: src/API/Google/Middleware.php:549
+#: src/API/Google/Middleware.php:551
 msgid "Invalid response getting account review status"
 msgstr ""
 
-#: src/API/Google/Middleware.php:555
+#: src/API/Google/Middleware.php:557
 msgid "Error getting account review status"
 msgstr ""
 
-#: src/API/Google/Middleware.php:600
+#: src/API/Google/Middleware.php:602
 msgid "Invalid response getting requesting a new review."
 msgstr ""
 
-#: src/API/Google/Middleware.php:607
+#: src/API/Google/Middleware.php:609
 msgid "A new review has been successfully requested"
 msgstr ""
 
-#: src/API/Google/Middleware.php:614
+#: src/API/Google/Middleware.php:616
 msgid "Error requesting a new review."
 msgstr ""
 
@@ -522,7 +545,7 @@ msgstr ""
 
 #: src/API/Site/Controllers/Ads/AccountController.php:149
 #: src/API/Site/Controllers/Google/AccountController.php:151
-#: src/API/Site/Controllers/Jetpack/AccountController.php:160
+#: src/API/Site/Controllers/Jetpack/AccountController.php:169
 msgid "Successfully disconnected."
 msgstr ""
 
@@ -663,53 +686,53 @@ msgstr ""
 msgid "Campaign %s"
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:160
+#: src/API/Site/Controllers/Ads/CampaignController.php:184
 msgid "Campaign is not available."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:187
+#: src/API/Site/Controllers/Ads/CampaignController.php:211
 msgid "Invalid edit data."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:197
+#: src/API/Site/Controllers/Ads/CampaignController.php:241
 msgid "Successfully edited campaign."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:218
+#: src/API/Site/Controllers/Ads/CampaignController.php:276
 msgid "Successfully deleted campaign."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:260
+#: src/API/Site/Controllers/Ads/CampaignController.php:318
 msgid "Exclude removed campaigns."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:277
+#: src/API/Site/Controllers/Ads/CampaignController.php:335
 #: src/API/Site/Controllers/Ads/ReportsController.php:145
 msgid "ID number."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:283
+#: src/API/Site/Controllers/Ads/CampaignController.php:341
 msgid "Descriptive campaign name."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:291
+#: src/API/Site/Controllers/Ads/CampaignController.php:349
 #: src/API/Site/Controllers/Ads/ReportsController.php:156
 msgid "Campaign status."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:298
+#: src/API/Site/Controllers/Ads/CampaignController.php:356
 msgid "Campaign type."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:304
+#: src/API/Site/Controllers/Ads/CampaignController.php:362
 msgid "Daily budget amount in the local currency."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:311
+#: src/API/Site/Controllers/Ads/CampaignController.php:369
 msgid "Country code of sale country in ISO 3166-1 alpha-2 format."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/CampaignController.php:319
+#: src/API/Site/Controllers/Ads/CampaignController.php:377
 msgid "The locations that an Ads campaign is targeting in ISO 3166-1 alpha-2 format."
 msgstr ""
 
@@ -769,7 +792,7 @@ msgstr ""
 msgid "Conversions."
 msgstr ""
 
-#: src/API/Site/Controllers/Ads/SetupCompleteController.php:51
+#: src/API/Site/Controllers/Ads/SetupCompleteController.php:85
 msgid "Successfully marked Ads setup as completed."
 msgstr ""
 
@@ -867,11 +890,11 @@ msgstr ""
 msgid "The URL for making a connection to Google."
 msgstr ""
 
-#: src/API/Site/Controllers/Jetpack/AccountController.php:138
+#: src/API/Site/Controllers/Jetpack/AccountController.php:147
 msgid "Indicates the next page name mapped to the redirect URL when back from Jetpack authorization."
 msgstr ""
 
-#: src/API/Site/Controllers/Jetpack/AccountController.php:249
+#: src/API/Site/Controllers/Jetpack/AccountController.php:268
 msgid "The URL for making a connection to Jetpack (wordpress.com)."
 msgstr ""
 
@@ -1196,7 +1219,7 @@ msgstr ""
 msgid "Whether the phone number, email, and/or address are visible on the website."
 msgstr ""
 
-#: src/API/Site/Controllers/MerchantCenter/SettingsSyncController.php:74
+#: src/API/Site/Controllers/MerchantCenter/SettingsSyncController.php:91
 msgid "Successfully synchronized settings with Google."
 msgstr ""
 
@@ -1411,20 +1434,6 @@ msgstr ""
 msgid "Attribute Mapping"
 msgstr ""
 
-#: src/Menu/Dashboard.php:41
-#: src/Menu/Dashboard.php:58
-#: src/Menu/Dashboard.php:62
-#: src/Menu/GetStarted.php:41
-#: src/Menu/GetStarted.php:58
-#: src/Menu/GetStarted.php:62
-#: src/MultichannelMarketing/GLAChannel.php:95
-#: views/attributes/variations-form.php:22
-#: views/meta-box/channel_visibility.php:95
-#: views/meta-box/coupon_channel_visibility.php:160
-#: js/build/index.js:17
-msgid "Google Listings & Ads"
-msgstr ""
-
 #: src/Menu/Dashboard.php:73
 #: js/build/commons.js:34
 #: js/build/index.js:17
@@ -1609,15 +1618,15 @@ msgstr ""
 msgid "You're just a few steps away from reaching new shoppers across Google. Finish connecting your account, create your campaign, pick your budget, and easily measure the impact of your ads."
 msgstr ""
 
-#: src/Notes/SetupCouponSharing.php:58
+#: src/Notes/SetupCouponSharing.php:59
 msgid "Show your store coupons on your Google listings"
 msgstr ""
 
-#: src/Notes/SetupCouponSharing.php:60
+#: src/Notes/SetupCouponSharing.php:61
 msgid "Sync your store promotions and coupons directly with Google to showcase on your product listings across the Google Shopping tab. <br/><br/>When creating a coupon, you’ll see a Channel Visibility settings box on the right; select \"Show coupon on Google\" to enable."
 msgstr ""
 
-#: src/Notes/SetupCouponSharing.php:73
+#: src/Notes/SetupCouponSharing.php:74
 msgid "Go to coupons"
 msgstr ""
 
@@ -1834,8 +1843,14 @@ msgstr ""
 msgid "20 minutes"
 msgstr ""
 
-#: views/attributes/tab-panel.php:20
-msgid "Product attributes"
+#: src/Value/ChannelVisibility.php:74
+#: js/build/product-feed.js:5
+#: js/build/product-feed.js:9
+msgid "Sync and show"
+msgstr ""
+
+#: src/Value/ChannelVisibility.php:75
+msgid "Don't Sync and show"
 msgstr ""
 
 #: views/attributes/tab-panel.php:21
@@ -1860,6 +1875,7 @@ msgstr ""
 
 #: views/meta-box/channel_visibility.php:28
 #: views/meta-box/coupon_channel_visibility.php:60
+#: js/build/blocks.js:1
 msgid "Issues detected"
 msgstr ""
 
@@ -1872,29 +1888,22 @@ msgstr ""
 msgid "Google Listing & Ads"
 msgstr ""
 
-#: views/meta-box/channel_visibility.php:67
-#: js/build/product-feed.js:5
-#: js/build/product-feed.js:9
-msgid "Sync and show"
-msgstr ""
-
-#: views/meta-box/channel_visibility.php:68
-msgid "Don't Sync and show"
-msgstr ""
-
-#: views/meta-box/channel_visibility.php:80
+#: views/meta-box/channel_visibility.php:77
+#: js/build/blocks.js:1
 msgid "Google sync status"
 msgstr ""
 
-#: views/meta-box/channel_visibility.php:84
+#: views/meta-box/channel_visibility.php:81
+#: js/build/blocks.js:1
 msgid "Issues"
 msgstr ""
 
-#: views/meta-box/channel_visibility.php:96
+#: views/meta-box/channel_visibility.php:93
+#: js/build/blocks.js:1
 msgid "Complete setup to get your products listed on Google for free."
 msgstr ""
 
-#: views/meta-box/channel_visibility.php:98
+#: views/meta-box/channel_visibility.php:95
 #: views/meta-box/coupon_channel_visibility.php:163
 #: js/build/commons.js:21
 #: js/build/setup-mc.js:3
@@ -2137,6 +2146,10 @@ msgstr ""
 
 #: js/build/attribute-mapping.js:5
 msgid "Manage attributes"
+msgstr ""
+
+#: js/build/blocks.js:1
+msgid "This product cannot be shown on any channel because it is hidden from your store catalog. To enable this option, please change this product to be shown in the product catalog, and save the changes."
 msgstr ""
 
 #: js/build/commons.js:1
@@ -5191,4 +5204,29 @@ msgstr ""
 
 #: js/build/setup-mc.js:3
 msgid "Complete your campaign"
+msgstr ""
+
+#: js/build/product-channel-visibility/block.json
+msgctxt "block title"
+msgid "Product channel visibility"
+msgstr ""
+
+#: js/build/product-date-time-field/block.json
+msgctxt "block title"
+msgid "Product date and time fields"
+msgstr ""
+
+#: js/build/product-onboarding-prompt/block.json
+msgctxt "block title"
+msgid "Product onboarding prompt"
+msgstr ""
+
+#: js/build/product-select-field/block.json
+msgctxt "block title"
+msgid "Product select field"
+msgstr ""
+
+#: js/build/product-select-with-text-field/block.json
+msgctxt "block title"
+msgid "Product select with text field"
 msgstr ""

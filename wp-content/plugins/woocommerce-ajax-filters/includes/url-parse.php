@@ -887,6 +887,8 @@ if( ! class_exists('BeRocket_url_parse_page') ) {
                     $filter['errors'][] = $values['error'];
                 }
             } elseif(is_a($taxonomy, 'WP_Error') ) {
+                $filter['taxonomy'] = false;
+                $filter['type']     = 'none';
                 if( empty($filter['errors']) || ! is_array($filter['errors']) ) {
                     $filter['errors'] = array();
                 }
@@ -951,7 +953,7 @@ if( ! class_exists('BeRocket_url_parse_page') ) {
             }
             $tax_query = array();
             if( ! empty($filter['type']) && ( $filter['type'] == 'attribute' || $filter['type'] == 'taxonomy' ) ) {
-                if( count($filter['val_arr']) > 0 ) {
+                if( ! empty($filter['val_arr']) && is_array($filter['val_arr']) && count($filter['val_arr']) > 0 ) {
                     $tax_query = $this->func_generate_tq_single($filter['val_arr'], $filter);
                 }
                 $filter['tax_query'] = $tax_query;

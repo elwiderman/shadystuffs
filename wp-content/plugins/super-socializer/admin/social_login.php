@@ -1672,6 +1672,23 @@
 							</td>
 						</tr>
 
+						<tr>
+							<th>
+							<label for="the_champ_sl_save_avatar"><?php _e("Save avatar locally", 'super-socializer'); ?></label><img id="the_champ_sl_save_avatar_help" class="the_champ_help_bubble" src="<?php echo plugins_url('../images/info.png', __FILE__) ?>" />
+							</th>
+							<td>
+							<input id="the_champ_sl_save_avatar" name="the_champ_login[save_avatar]" type="checkbox" <?php echo isset($theChampLoginOptions['save_avatar']) ? 'checked' : '';?> value="1" />
+							</td>
+						</tr>
+						
+						<tr class="the_champ_help_content" id="the_champ_sl_save_avatar_help_cont">
+							<td colspan="2">
+							<div>
+							<?php _e('Save and serve avatar from your website server instead of serving from the social network', 'super-socializer') ?>
+							</div>
+							</td>
+						</tr>
+
 						<?php if($theChampIsBpActive){ ?>
 						<tr>
 							<th>

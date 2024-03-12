@@ -3,7 +3,7 @@
  * The Pluggable table rules stuff 
  *
  * @package Fish and Ships
- * @version 1.4.13
+ * @version 1.5
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,9 +12,9 @@ defined( 'ABSPATH' ) || exit;
  * Filter to get all selection methods
  *
  * @since 1.0.0
- * @version 1.4.8
+ * @version 1.5
  *
- * @param $methods (array) maybe incomming  a pair method-id / method-name array
+ * @param $methods (array) maybe incomming a pair method-id / method-name array
  *
  * @return $methods (array) a pair method-id / method-name array
  *
@@ -34,6 +34,7 @@ function wc_fns_get_selection_methods_fn($methods = array()) {
 	$methods['by-weight']          = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Weight', 'shorted, select-by conditional', 'fish-and-ships'));
 	$methods['by-volume']          = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Volume', 'shorted, select-by conditional', 'fish-and-ships'));
 	$methods['volumetric']         = array('onlypro' => true,  'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Volumetric', 'shorted, select-by conditional', 'fish-and-ships'));
+	$methods['volumetric-set']     = array('onlypro' => true,  'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Volumetric set', 'shorted, select-by conditional', 'fish-and-ships'));
 
 	$methods['min-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Min dimension', 'shorted, select-by conditional', 'fish-and-ships'));
 	$methods['mid-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Mid dimension', 'shorted, select-by conditional', 'fish-and-ships'));
@@ -152,7 +153,7 @@ function wc_fns_get_html_details_method_fn($html, $rule_nr, $sel_nr, $method_id,
  * Filter to sanitize one selection criterion and his auxiliary fields prior to save in the database (centralised for all methods)
  *
  * @since 1.0.0
- * @version 1.4.0
+ * @version 1.5
  *
  * @param $rule_sel (array) 
  *
@@ -179,7 +180,6 @@ function wc_fns_sanitize_selection_fields_fn($rule_sel) {
 	switch ($rule_sel['method']) {
 
 		case 'by-price':
-		case 'cart-total':
 						
 			$allowed = array( 'min_comp', 'max_comp', 'group_by' );
 			
@@ -294,6 +294,9 @@ function wc_fns_sanitize_selection_fields_fn($rule_sel) {
 
 			case 'in-class':
 			case 'not-in-class':
+	
+				if( ! isset( $rule_sel['values']['classes'] ) )
+					$rule_sel['values']['classes'] = array();
 	
 				if ( !is_array($rule_sel['values']['classes']) ) {
 					unset ( $rule_sel['values']['classes'] );
@@ -614,7 +617,7 @@ function wc_fns_get_html_price_fields_fn($html, $rule_nr, $values) {
  * Filter to sanitize cost
  *
  * @since 1.0.0
- * @version 1.1.6
+ * @version 1.2.7
  *
  * @param $rule_cost (array) 
  *
@@ -995,17 +998,6 @@ function wc_fns_get_translatable_action_fn($translatables, $action_id) {
 		
 	switch ($action_id) {
 
-		case 'notice':
-			$translatables[] = 'message';
-			break;
-
-		case 'rename':
-			$translatables[] = 'name';
-			break;
-
-		case 'description':
-			$translatables[] = 'description';
-			break;
 	}
 	return $translatables;
 }

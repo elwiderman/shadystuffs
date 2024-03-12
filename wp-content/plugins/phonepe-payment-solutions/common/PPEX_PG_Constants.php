@@ -20,5 +20,10 @@ if (!class_exists('PPEX_PG_Constants')) {
     const PG_V1_PAY_ENDPOINT                    = "/pg/v1/pay";
     const PG_V1_STATUS_ENDPOINT                 = "/pg/v1/status/";
     const INGEST_EVENT_ENDPOINT                 = "/plugin/ingest-event";
+
+    const INTERNAL_SECURITY_BLOCK_1             = "INTERNAL_SECURITY_BLOCK_1";
+    const INTERNAL_SECURITY_BLOCK_2             = "INTERNAL_SECURITY_BLOCK_2";
+    const INTERNAL_SECURITY_BLOCK_4             = "INTERNAL_SECURITY_BLOCK_4";
+
   }
 }

@@ -162,32 +162,33 @@ function the_champ_login_user($userId, $profileData = array(), $socialId = '', $
 	}
 	$user = get_user_by('id', $userId);
 	if($update && !get_user_meta($userId, 'thechamp_dontupdate_avatar', true)){
+		global $theChampLoginOptions;
 		if(isset($profileData['avatar']) && $profileData['avatar'] != ''){
-			if($profileData['provider'] == 'linkedin'){
-				$localAvatarUrl = heateor_ss_save_social_avatar($profileData['avatar'], $profileData['id']);
-				if($localAvatarUrl){
-					update_user_meta($userId, 'thechamp_avatar', $localAvatarUrl);
-				}
-			}elseif($profileData['provider'] == 'facebook'){
+			if($profileData['provider'] == 'facebook'){
 				$dir = wp_upload_dir();
 			 	if(!file_exists($dir['basedir']. '/heateor/'. $profileData['id'] .'.jpeg')){
 			        update_user_meta($userId, 'thechamp_avatar', $profileData['avatar']);
 			    }
+			}elseif($profileData['provider'] == 'linkedin' || isset($theChampLoginOptions['save_avatar'])){
+				$localAvatarUrl = heateor_ss_save_social_avatar($profileData['avatar'], $profileData['id']);
+				if($localAvatarUrl){
+					update_user_meta($userId, 'thechamp_avatar', $localAvatarUrl);
+				}
 			}else{
 				update_user_meta($userId, 'thechamp_avatar', $profileData['avatar']);
 			}
 		}
 		if(isset($profileData['large_avatar']) && $profileData['large_avatar'] != ''){
-			if($profileData['provider'] == 'linkedin'){
-				$localLargeAvatarUrl = heateor_ss_save_social_avatar($profileData['large_avatar'], $profileData['id'] . '_large');
-				if($localLargeAvatarUrl){
-					update_user_meta($userId, 'thechamp_large_avatar', $localLargeAvatarUrl);
-				}
-			}elseif($profileData['provider'] == 'facebook'){
+			if($profileData['provider'] == 'facebook'){
 				$dir = wp_upload_dir();
 			 	if(!file_exists($dir['basedir']. '/heateor/'. $profileData['id'] .'_large.jpeg')){
 			        update_user_meta($userId, 'thechamp_large_avatar', $profileData['large_avatar']);
 			    }
+			}elseif($profileData['provider'] == 'linkedin' || isset($theChampLoginOptions['save_avatar'])){
+				$localLargeAvatarUrl = heateor_ss_save_social_avatar($profileData['large_avatar'], $profileData['id'] . '_large');
+				if($localLargeAvatarUrl){
+					update_user_meta($userId, 'thechamp_large_avatar', $localLargeAvatarUrl);
+				}
 			}else{
 				update_user_meta($userId, 'thechamp_large_avatar', $profileData['large_avatar']);
 			}
@@ -196,7 +197,7 @@ function the_champ_login_user($userId, $profileData = array(), $socialId = '', $
 	if($socialId != ''){
 		update_user_meta($userId, 'thechamp_current_id', $socialId);
 	}
-	global $theChampLoginOptions, $theChampIsBpActive;
+	global $theChampIsBpActive;
 	if(isset($theChampLoginOptions['gdpr_enable'])){
 		update_user_meta($userId, 'thechamp_gdpr_consent', 'yes');
 	}

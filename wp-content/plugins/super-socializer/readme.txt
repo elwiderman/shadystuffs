@@ -1,10 +1,10 @@
 ﻿=== Social Share, Social Login and Social Comments Plugin - Super Socializer ===
-Contributors: Heateor, kamirkhan, mohammadfarhankhan, the_champ, Hungarian Translator: László Tavaszi http://kerekmese.hu, Chinese Translator: CalmSmile calmsmile.org, Portuguese Translator: Paulo Purkyt https://www.linkedin.com/in/ppurkyt, Italian Translator: FG3D (Freedom's Gate) https://fg3d.net, Spanish translator: Ignacio Iglesias http://trespies.com, Arabic Translator: http://www.ArabsSM.com, Russian/Ukrainian Translator: Nicholas Lagunov
+Contributors: Heateor, kamirkhan, mohammadfarhankhan, the_champ
 Donate link: https://www.heateor.com/donate?action=Super+Socializer
-Tags: social login, social share, line login, social commenting, social comments, social plugin, profile data, social analytics, online identity, social profile storage, single sign-on, social media follow, facebook login, twitter login, linkedin login, google login, vkontakte login, Windows Live Login, Microsoft Login, Wordpress login, Yahoo login, Spotify login, Dribbble login, Kakao login, Github login, Twitch login, Instagram login, dropbox login, foursquare login, disqus login, reddit login, amazon login, stackoverflow login, stack overflow login, discord login, mail.ru login, mailru login, mail ru login, gettr share, parler share, odnoklassniki login, yandex login, odnoklassniki, yandex, odnoklassniki login button, yandex login button, Rutube, Rutube share, Rutube sharing, youtube login, x, x login, x share, yelp, tiktok, threads, Google Maps, Google Translate, RSS Feed
+Tags: social login, social share, facebook comments, single sign-on, social media, facebook login, twitter login, linkedin login, google login, vkontakte login, Windows Live Login, Microsoft Login, Wordpress login, Yahoo login, Spotify login, Dribbble login, Kakao login, Github login, Twitch login, Instagram login, dropbox login, foursquare login, disqus login, reddit login, amazon login, stackoverflow login, stack overflow login, discord login, mail.ru login, mailru login, mail ru login, gettr share, parler share, odnoklassniki login, yandex login, odnoklassniki, yandex, odnoklassniki login button, yandex login button, Rutube, Rutube share, Rutube sharing, youtube login, x, x login, x share, yelp, tiktok, threads, Google Maps, Google Translate, RSS Feed, line, mastodon, mastodon share
 Requires at least: 2.5.0
-Tested up to: 6.4
-Stable tag: 7.13.63
+Tested up to: 6.4.3
+Stable tag: 7.13.64
 License: GPLv2 or later
 
 The unique Social Plugin to let you integrate Social Login, Social Share, Social Comments and Social Media follow at your website
@@ -213,6 +213,19 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 8. **Social Commenting**: Disqus Commenting selected
 
 == Changelog ==
+= 7.13.64 [2 March 2024] =
+* [New] Added Line in the Follow Icons widget and shortcode
+* [New] Added Mastodon in the Follow Icons widget and shortcode
+* [New] Added option to save and serve social avatar from the website instead of serving it from the social network
+* [Bugfix] Floating follow icons were not sticking to the bottom in the mobile screen
+* [Bugfix] Options to show Floating share bar at the WooCommerce product pages were not present in the Placement option in the Floating Interface section at the Social Sharing configuration page
+* [Improvement] Fixed an Stored XSS vulnerability in the Follow Icons widget
+* [Improvement] Improved Gettr social share and social follow icon
+* [Improvement] Improved Facebook social share and social follow icons
+* [Improvement] Improved Vkontakte icon in the Follow Icons shortcode and widget
+* [Improvement] Updated the official Facebook SDK being used throughout the plugin to the latest version 19.0
+* [Improvement] Minor improvements
+
 = 7.13.63 [13 November 2023] =
 * [Improvement] Social Avatars of the Facebook login users that are already saved in the website will not be replaced with the blank profile picture
 
@@ -2764,3 +2777,16 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 
 = 7.13.63 [13 November 2023] =
 * [Improvement] Social Avatars of the Facebook login users that are already saved in the website will not be replaced with the blank profile picture
+
+= 7.13.64 [2 March 2024] =
+* [New] Added Line in the Follow Icons widget and shortcode
+* [New] Added Mastodon in the Follow Icons widget and shortcode
+* [New] Added option to save and serve social avatar from the website instead of serving it from the social network
+* [Bugfix] Floating follow icons were not sticking to the bottom in the mobile screen
+* [Bugfix] Options to show Floating share bar at the WooCommerce product pages were not present in the Placement option in the Floating Interface section at the Social Sharing configuration page
+* [Improvement] Fixed an Stored XSS vulnerability in the Follow Icons widget
+* [Improvement] Improved Gettr social share and social follow icon
+* [Improvement] Improved Facebook social share and social follow icons
+* [Improvement] Improved Vkontakte icon in the Follow Icons shortcode and widget
+* [Improvement] Updated the official Facebook SDK being used throughout the plugin to the latest version 19.0
+* [Improvement] Minor improvements
