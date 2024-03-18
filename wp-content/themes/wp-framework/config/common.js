@@ -17,7 +17,7 @@ module.exports = {
 	entry: {
 		app: ['@babel/polyfill', './src/scripts/index.js', './src/scss/app.scss'],
 		admin: ['./src/scripts/admin.js', './src/scss/admin.scss'],
-		// metabox: ['./src/scripts/metabox.js', './src/scss/metabox.scss'],
+		shadyWoo: ['./src/scripts/indexWoo.js'],
 	},
 	output: {
 		path: path.resolve(__root, '../shady-theme/assets'),

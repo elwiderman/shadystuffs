@@ -12,19 +12,8 @@ if (typeof jQuery != 'undefined') {
 }
 
 import ready from 'domready';
-
-import AppCommon from './AppCommon';
-import Carousels from './Carousels';
-import Home from './Home';
-import Forms from './Forms';
-
-// get the libraries
-import 'bootstrap';
-import 'slick-carousel';
-import 'simplebar';
+import Woo from './Woo';
 
 ready(() => {
-    new AppCommon();
-    new Carousels();
-    new Forms();
+    new Woo();
 });

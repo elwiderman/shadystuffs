@@ -53,7 +53,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 					?>
 					<div class="woocommerce-cart-form__cart-item cart-row <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 						
-						<div class="product-info">
+						<div class="product-info" id="key-<?php echo $cart_item_key;?>">
 							<div class="product-name">
 								<?php
 								if ( ! $product_permalink ) {
@@ -113,9 +113,11 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 							<div class="product-subtotal">
 								<span class="small">Subtotal </span>
-								<?php
-									echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
-								?>
+								<span class="product-subtotal__price">
+									<?php
+										echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // PHPCS: XSS ok.
+									?>
+								</span>
 							</div>
 						</div>
 						<div class="product-image">
@@ -169,7 +171,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 				<?php } ?>
 	
 				<div class="update">
-					<button id="updateCart" type="submit" class="btn-main-ghost <?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>"><?php esc_html_e( 'Update cart', 'woocommerce' ); ?></button>
+					<button id="updateCart" type="submit" class="btn-main-ghost d-none <?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ? ' ' . wc_wp_theme_get_element_class_name( 'button' ) : '' ); ?>" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'woocommerce' ); ?>"><?php esc_html_e( 'Update cart', 'woocommerce' ); ?></button>
 				</div>
 			</div>
 

@@ -26,12 +26,12 @@ h3 {
     }
 }
 h4 {
-    @include font($alt-font, $regular);
+    @include font($secondary-font, $regular);
     font-size: 30px;
     line-height: 1.2;
 }
 h5 {
-    @include font($alt-font, $regular);
+    @include font($secondary-font, $regular);
     font-size: 25px;
     line-height: 1.2;
 }
