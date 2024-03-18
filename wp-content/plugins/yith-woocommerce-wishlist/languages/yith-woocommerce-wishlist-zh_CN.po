@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: YITH WooCommerce Wishlist\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/yith-woocommerce-"
 "wishlist\n"
-"POT-Creation-Date: 2023-11-14 14:53:18+00:00\n"
+"POT-Creation-Date: 2024-02-20 12:03:37+00:00\n"
 "PO-Revision-Date: 2020-10-16 14:07+0200\n"
 "Last-Translator: 李明軒 <eggeggxuan@gmail.com>\n"
 "Language-Team: Your Inspiration Themes <plugins@yithemes.com>\n"
@@ -1421,7 +1421,7 @@ msgid "Shows a list of products in wishlist"
 msgstr ""
 
 #. translators: 1. % of reduction/increase in price.
-#: includes/class-yith-wcwl-wishlist-item.php:478
+#: includes/class-yith-wcwl-wishlist-item.php:490
 msgctxt ""
 "Part of the template that shows price variation since addition to list; "
 "placeholder will be replaced with a percentage"
@@ -1429,7 +1429,7 @@ msgid "Price is %1$s%%"
 msgstr ""
 
 #. translators: 2: original product price.
-#: includes/class-yith-wcwl-wishlist-item.php:480
+#: includes/class-yith-wcwl-wishlist-item.php:492
 msgctxt ""
 "Part of the template that shows price variation since addition to list; "
 "placeholder will be replaced with a price"

@@ -53,7 +53,7 @@
         ));
     }
     if($filters_correct == 0) {
-        echo '<p>' . __('No filter has been created. First Create a Filter', 'BeRocket_AJAX_domain')
+        echo '<p style="font-size: 24px;">' . __('No filter has been created. First ', 'BeRocket_AJAX_domain')
         . ' <a href="' . admin_url('post-new.php?post_type=br_product_filter') . '">' . __('Create a Filter', 'BeRocket_AJAX_domain') . '</a></p>';
     }
     $popup_text = '<p style="font-size:24px;">'

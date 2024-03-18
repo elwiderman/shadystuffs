@@ -19,6 +19,10 @@ class Assets implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookable
      */
     private $scripts_version;
     /**
+     * @var string
+     */
+    private $assets_url;
+    /**
      * @param string $assets_url
      */
     public function __construct(string $assets_url)

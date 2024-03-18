@@ -3,15 +3,15 @@
  * Plugin Name: Fish and Ships
  * Plugin URI: https://www.wp-centrics.com/
  * Description: A WooCommerce conditional table rate shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.
- * Version: 1.4.17
+ * Version: 1.5
  * Author: wpcentrics
  * Author URI: https://www.wp-centrics.com
  * Text Domain: fish-and-ships
  * Domain Path: /languages
  * Requires at least: 4.7
- * Tested up to: 6.4.2
+ * Tested up to: 6.4.3
  * WC requires at least: 3.0
- * WC tested up to: 8.3.1
+ * WC tested up to: 8.6.1
  * Requires PHP: 7.0
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 } else {
 
-	define ('WC_FNS_VERSION', '1.4.17' );
+	define ('WC_FNS_VERSION', '1.5' );
 	define ('WC_FNS_PATH', dirname(__FILE__) . '/' );
 	define ('WC_FNS_URL', plugin_dir_url( __FILE__ ) );
 
@@ -52,6 +52,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 	class Fish_n_Ships {
 			
+		public  $id             		  = 'fish_n_ships';
 		private $terms_cached           = array();
 		private $options                = array();
 		private $im_pro                 = false;
@@ -67,27 +68,21 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		private $user_texts_translated  = NULL;
 		
 		public  $shipping_calculated    = false;   // Shipping rates calculated?
-		public  $cart_totals_calc_status 	= 0;     // 0 = no calculated, 1 = before, 2 = after. Infinite looping prevent.
 		
 		/**
 		 * Constructor.
 		 *
 		 * @since 1.0.0
-		 * @version 1.4.13
+		 * @version 1.5
 		 */
 		public function __construct() {
 
-			$this->id = 'fish_n_ships';
-			
-			$this->load_options();
+			// $this->load_options();
 
 			// The selection methods
 			require WC_FNS_PATH . 'includes/settings-form-fns.php';
-
 			require WC_FNS_PATH . 'includes/date-settings-form-fns.php';
-
 			require WC_FNS_PATH . 'includes/address-settings-form-fns.php';
-
 			require WC_FNS_PATH . 'includes/boxes-settings-form-fns.php';
 			
 			// Add Fish n Ships method to the shipping methods list
@@ -103,7 +98,6 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			add_action( 'wp_ajax_wc_fns_help',         array($this, 'wc_fns_help') );
 			add_action( 'wp_ajax_wc_fns_logs',         array($this, 'wc_fns_logs') );
 			add_action( 'wp_ajax_wc_fns_logs_pane',    array($this, 'wc_fns_logs_pane') );
-			add_action( 'wp_ajax_wc_fns_wizard',       array($this, 'wc_fns_wizard') );
 			add_action( 'wp_ajax_wc_fns_fields',       array($this, 'wc_fns_fields') );
 			add_action( 'wp_ajax_wc_fns_freemium',     array($this, 'wc_fns_freemium') );
 			
@@ -122,44 +116,89 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			// extra parameters on WC_Shipping_Rate / for 3rd party plugins
 			add_filter( 'woocommerce_shipping_method_add_rate', array( $this, 'extra_params_shipping_rate'), 10, 3 );
 			add_filter( 'wpw_currency_switcher_adjust_package_rate', array( $this, 'alg_cs_maybe_disable_conversion_package_rate' ), 10, 2 ); 
-			
-			// Cart totals status
-			add_action( 'woocommerce_before_calculate_totals',  array($this, 'wc_before_calculate_totals') );
-			add_action( 'woocommerce_after_calculate_totals',   array($this, 'wc_after_calculate_totals') );
 		}
 		
 		/**
 		 * Load options at plugin initialization, and maybe first install.
 		 *
+		 * Since 1.5, the wizard, 5-stars and news & pointer settings are per each user saved separately
+		 *
 		 * @since 1.0.0
-		 * @version 1.3
+		 * @version 1.5
 		 */
 		public function load_options() {
 			
 			$should_update = false;
 			
-			// Set default options, for first installation
-			$options = array(
+			// Set default options, for first installation (common for all users)
+			$common_options = array(
 				'first_version'    => WC_FNS_VERSION,
-				'show_wizard'      => time() - 1, // now
 				'first_install'    => time(),
-				'five_stars'       => time() + (60 * 60 * 24 * 5), // five days
 				'current_version'  => '',
 				'anytime_pro'      => 0,
 				'serial'           => '',
 				'close_freemium'   => 0,
+				'next_read_news'     => 0,
+				'boxes'              => array(),
+				//'show_wizard'      => time() - 1, // now
+				//'closed_news'      => array(),
+				//'five_stars'       => time() + (60 * 60 * 24 * 5), // five days
+				'user_opts_default'  => date( 'Y-m-d H:i:s' ), // Switching time to new user notices system will be saved
+			);
+
+			$user_options_default = array(
+				'show_wizard'      => time() - 1, // now
+				'five_stars'       => time() + (DAY_IN_SECONDS * 5), // five days
 				'closed_news'      => array(),
-				'next_read_news'   => 0,
-				'boxes'            => array()
 			);
 			
-			// Load options from DB and overwrite defaults
+			// Load common options from DB and overwrite defaults
+			// For legacy, new user-related settings will be kept, and saved as default
 			$opt_db = get_option( 'fish-and-ships-woocommerce', array() );
-			if (is_array($opt_db)) {
-				foreach ($opt_db as $key=>$value) {
-					$options[$key] = $value;
+			if( is_array($opt_db) ) {
+				foreach( $opt_db as $key=>$value ) {
+					if( in_array( $key, array( 'show_wizard', 'five_stars', 'closed_news' ) ) )
+					{
+						$user_options_default[$key] = $value;
+						$should_update = true;
+					}
+					else
+					{
+						$common_options[$key] = $value;
+					}
 				}
 			}
+
+			// For legacy, new user-related settings will be kept, and saved as default
+			if ($should_update) {
+				update_option( 'fish-and-ships-woocommerce-user-default', $user_options_default, false );
+			}
+			
+			$user_options = false;
+			
+			if( current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' ) )
+			{
+				// We will look for saved user options
+				$user_options = get_user_meta( get_current_user_id(), 'fish-and-ships-woocommerce', true );
+
+				if( ! is_array( $user_options ) )
+				{
+					// User registered before 1.5 new user message system? get previously common settings
+					$user = wp_get_current_user();
+					if( $user->user_registered < $common_options[ 'user_opts_default' ] )
+					{
+						$user_options = get_option( 'fish-and-ships-woocommerce-user-default', $user_options_default );
+					}
+					$should_update = true; // Save in any case
+				}
+			}
+
+			// We will set as defaults as fallback: can't manage options, not logged or new user
+			if( ! is_array( $user_options ) )
+				$user_options = $user_options_default;
+
+			// Now we will mix the common and user related settings. Later will be saved separately if needed
+			$options = array_merge( $common_options, $user_options );
 
 			// First install?
 			if ($options['current_version'] == '') {
@@ -181,7 +220,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			
 			// Five stars Remind later bug (previous releases)
 			if ( $options['five_stars'] > time() * 2 ) {
-				$options['five_stars'] = time() + 60 * 60 * 24;
+				$options['five_stars'] = time() + DAY_IN_SECONDS;
 				$should_update = true;
 			}
 			
@@ -198,29 +237,73 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			}
 		}
 		
+		/**
+		 * Get all options. Memcached
+		 *
+		 * @since 1.0.0
+		 * @version 1.5
+		 */
 		public function get_options() {
+			
+			//First time? Let's load it from DDBB
+			if( count( $this->options ) == 0 )
+				$this->load_options();
 			
 			return $this->options;
 		}
 
+		/**
+		 * Get one option.
+		 *
+		 * @version 1.5
+		 */
 		public function get_option( $opt ) {
 			
-			return isset($this->options[$opt]) ? $this->options[$opt] : false;
+			$options = $this->get_options();
+			
+			return isset($options[$opt]) ? $options[$opt] : false;
 		}
 
+		/**
+		 * Set all options
+		 *
+		 * Since 1.5, the wizard, 5-stars and news & pointer settings are per each user saved separately
+		 *
+		 * @since 1.0.0
+		 * @version 1.5
+		 */
 		public function set_options($options) {
 
-			update_option( 'fish-and-ships-woocommerce', $options, true );
+			// Store in memory all options together: common + user
 			$this->options = $options;
+			
+			// Save the user-specific settings
+			$user_settings = array();
+			$user_settings['closed_news'] = isset( $options['closed_news'] ) ? $options['closed_news'] : array();
+			$user_settings['show_wizard'] = isset( $options['show_wizard'] ) ? $options['show_wizard'] : 0;
+			$user_settings['five_stars']  = isset( $options['five_stars'] )  ? $options['five_stars']  : 0;
+			update_user_meta( get_current_user_id(), 'fish-and-ships-woocommerce', $user_settings );
+						
+			// Remove user-specific settings and save common ones
+			if( isset( $options['closed_news'] ) ) unset( $options['closed_news'] );
+			if( isset( $options['show_wizard'] ) ) unset( $options['show_wizard'] );
+			if( isset( $options['five_stars'] ) )  unset( $options['five_stars'] );
+			update_option( 'fish-and-ships-woocommerce', $options, true );
 		}
 
+		/**
+		 * Set an unique option.
+		 *
+		 * @version 1.5
+		 */
 		public function set_option( $opt, $value ) {
 			
-			if ( !isset( $this->options[$opt] ) ) return false;
+			$options = $this->get_options();
 			
-			$this->options[$opt] = $value;
+			if ( !isset( $options[$opt] ) ) return false;
 
-			update_option( 'fish-and-ships-woocommerce', $this->options, true );
+			$options[$opt] = $value;
+			$this->set_options( $options );
 			
 			return true;
 		}
@@ -246,17 +329,20 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 		/**
 		 * Admin-side styles and scripts
-		 *
+		 * Since 1.5 the CSS and JS will be loaded minfied
+		 * @version 1.5
 		 */
 		public function admin_load_styles_and_scripts () {
 
-			wp_register_script( 'wcfns_admin_script_light', WC_FNS_URL . 'assets/js/admin-fns-light.js', array( 'jquery' ), WC_FNS_VERSION );
+			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+			wp_register_script( 'wcfns_admin_script_light',  WC_FNS_URL . 'assets/js/admin-fns-light' . $min . '.js', array( 'jquery' ), WC_FNS_VERSION );
 			wp_register_style( 'wcfns_admin_style', WC_FNS_URL . 'assets/css/admin-fns.css', array(), WC_FNS_VERSION );
 
-			// Only on WC settings > shipping tab we will load the admin script, for performance reasons
-			if ( isset($_GET['page'] ) && $_GET['page'] == 'wc-settings' && isset( $_GET['tab'] ) &&  $_GET['tab'] == 'shipping' ) {
-							
-				wp_register_script( 'wcfns_admin_script', WC_FNS_URL . 'assets/js/admin-fns.js', array( 'jquery-ui-dialog', 'jquery-ui-sortable' ), WC_FNS_VERSION );
+			// Only in WC settings > shipping tab we will load the admin script, for performance reasons
+			if ( isset($_GET['page'] ) && $_GET['page'] == 'wc-settings' && isset( $_GET['tab'] ) &&  $_GET['tab'] == 'shipping' )
+			{				
+				wp_register_script( 'wcfns_admin_script',         WC_FNS_URL . 'assets/js/admin-fns' . $min . '.js', array( 'jquery-ui-dialog', 'jquery-ui-sortable' ), WC_FNS_VERSION );
 				wp_register_script( 'wcfns_admin_dropdown',       WC_FNS_URL . 'assets/js/dropdown-submenu/dropdown-submenu.min.js', array( 'jquery' ), WC_FNS_VERSION );
 				wp_register_style(  'wcfns_admin_dropdown_style', WC_FNS_URL . 'assets/js/dropdown-submenu/dropdown-submenu-dist.css', array(), WC_FNS_VERSION );
 
@@ -403,10 +489,11 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Check PHP version and WooCommerce
 		 *
 		 * @since 1.0.0
+		 * @version 1.5
 		 */
 		function is_wc() {
-			if ( version_compare( phpversion(), '5.5', '<') ) return false;
-			if ( !function_exists('WC') || version_compare( WC()->version, '2.6.0', '<') ) return false;
+			if ( version_compare( phpversion(), '7', '<') ) return false;
+			if ( !function_exists('WC') || version_compare( WC()->version, '3.0.0', '<') ) return false;
 			return true;
 		}
 
@@ -1178,30 +1265,6 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		}
 
 		/*****************************************************************
-			Cart totals status
-		 *****************************************************************/
-		
-		/**
-		 * Update cart total status
-		 *
-		 * @since 1.4.15
-		 */
-		function wc_before_calculate_totals()
-		{
-			$this->cart_totals_calc_status = 1;
-		}
-		
-		/**
-		 * Update cart total status
-		 *
-		 * @since 1.4.15
-		 */
-		function wc_after_calculate_totals()
-		{
-			$this->cart_totals_calc_status = 2;
-		}
-
-		/*****************************************************************
 			Sanitization
 		 *****************************************************************/
 		 
@@ -1251,7 +1314,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Sanitize the shipping rules from the admin options form (save)
 		 *
 		 * @since 1.0.0
-		 * @version 1.4.0
+		 * @version 1.5
 		 *
 		 * @param $raw_shipping_rules raw stuff from the $_POST object
 		 *
@@ -1362,6 +1425,14 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 					$shipping_rules[] = array('type' => $rule_type, 'sel' => $rule_sel, 'cost' => $rule_costs, 'actions' => $rule_actions);
 				}
 			}
+
+			// Ensure that any extra rule it's under any normal rule (required for new snippets wizard)
+			usort($shipping_rules, function ($a, $b) {
+				if( $a['type'] == $b['type'] ) return 0;
+				if( $a['type'] == 'normal' ) return -1;
+				return 1;
+			});
+
 			return $shipping_rules;
 		}
 
@@ -1433,7 +1504,24 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			 return sanitize_textarea_field( wp_unslash( $field ) );
 		 }
 
-
+		/**
+		 * Sanitize array of keys
+		 *
+		 * @since 1.5
+		 *
+		 * @param $array (array) 
+		 *
+		 * @return sanitizied array of keys (array)
+		 *
+		 */
+		 
+		 public function sanitize_array_of_keys( $array ) {
+			 
+			 if( ! is_array( $array ) )
+				 return array();
+			 
+			 return array_map( 'sanitize_key', $array );
+		 }
 
 		/**
 		 * Sanitize the numbers from form fields in the same way as WC does prior to database storage
@@ -2715,36 +2803,11 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			exit();
 		}
 
-		/**
-		 * Ajax wizard / five stars / news dimiss buttons, from AJAX call.
-		 *
-		 * @since 1.0.0
-		 * @version 1.1.2
-		 */
-		function wc_fns_wizard() {
-
-			$what  = isset($_GET['ajax'])  ? sanitize_key ( $_GET['ajax'] )  : '';
-			$key   = isset($_GET['key'])   ? sanitize_key ( $_GET['key'] )   : '';
-			$when  = isset($_GET['param']) ? sanitize_key ( $_GET['param'] ) : '';
-			
-			// Dimiss news
-			if ( $this->im_pro() && $what == 'fns-news') {
-				
-				$this->update_news_opts($key, $when, true);
-			}
-			
-			// Dimiss wizard / five stars (here key is not used) 
-			if ( !in_array($what, array('wizard', 'five-stars'), true ) || !in_array($when, array('now', 'later', 'off'), true ) ) {
-				echo '0';
-				exit();
-			}
-			
-			$this->update_wizard_opts($what, $when, true);
-		}
 
 		/**
 		 * Ajax freemium: open / close panel
 		 *
+		 * @version 1.5
 		 */
 		function wc_fns_freemium() {
 
@@ -2755,16 +2818,15 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 				
 				if ($opened === '1') {
 
-					$this->options['close_freemium'] = time()-1;
+					$this->set_option('close_freemium', time()-1 );
 				
 				} elseif ($opened === '0') {
 		
 					$days_delay = 31; // 1 month
-					if ( $this->im_pro() ) $days_delay * 11 * 31; // 11 months
-					$this->options['close_freemium'] = time() + 60*60*24 * $days_delay;
+					if ( $this->im_pro() ) $days_delay = $days_delay * 11; // 11 months
+					$this->set_option('close_freemium', time() + DAY_IN_SECONDS * $days_delay );
 				}
 
-				$this->set_options($this->options);
 				echo '1';
 				exit();
 
@@ -2792,52 +2854,6 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			exit();
 		}
 
-		/**
-		 * Ajax or URL
-		 *
-		 * @version 1.3
-		 *
-		 * @param $what: wizard | five-stars
-		 * @param $when: now | later | off
-		 * @param $ajax: boolean
-		 */
-		function update_wizard_opts($what, $when, $ajax = false) {
-
-			$options = $this->options;
-
-			// We should show now / later / hide wizard forever?
-			if ($what == 'wizard') {
-			
-				// Request 5 stars now can irritate (bug solved on 1.3)
-				$five_stars_time = time() + 60*60*24;
-			
-				if ($when=='now') $options['show_wizard'] = time() -1; // Now
-			
-				if ($when=='off') $options['show_wizard'] = time() * 2; // Hide forever
-
-				if ($when=='later') {
-					$options['show_wizard'] = time() + 60*60*24*7; // a week (bug solved on 1.3)
-					$five_stars_time = time() + 60*60*24*8; // 8 days (bug solved on 1.3)
-				}
-				
-				if ( $options['five_stars'] < $five_stars_time) $options['five_stars'] = $five_stars_time;
-			
-				$this->set_options($options);
-
-			// We should show later / hide five stars forever? (failed AJAX)
-			} elseif ($what == 'five-stars') {
-			
-				if ($when=='off')   $options['five_stars'] = time() * 2; // Hide forever
-				if ($when=='later') $options['five_stars'] = time() + 60*60*24*7; // a week (bug solved on 1.3)
-			
-				$this->set_options($options);
-			}
-			
-			if ($ajax) {
-				echo '1';
-				exit();
-			}
-		}
 		
 		/*****************************************************************
 			Admin nav small things
@@ -2846,11 +2862,12 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		/**
 		* Add link on the plugin list, to re-start the wizard
 		*
+		* @version: 1.5
 		*/
 		public static function add_plugin_action_link( $links ){
 		
 			$start_link = array(
-				'<a href="'. admin_url( 'admin.php?page=wc-settings&tab=shipping&wc-fns-wizard=now' )
+				'<a href="'. admin_url( 'admin.php?page=wc-settings&tab=shipping&wc-fns-wizard=restart' )
 				 .'" style="color: #a16696; font-weight: bold;">'. esc_html__( 'Start: run wizard', 'fish-and-ships') .'</a>',
 			);
 		
@@ -2903,7 +2920,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 						'<p>&gt; <a href="https://www.wp-centrics.com/help/fish-and-ships/" target="_blank">' . esc_html__('Go to online help documentation', 'fish-and-ships') . '</a></p>' .
 						'<p>&gt; <a href="https://wordpress.org/support/plugin/fish-and-ships/" target="_blank">' . esc_html__('Get support on WordPress repository', 'fish-and-ships') . '</a></p>' .
 						
-						'<p style="padding-top:1em;"><a href="' . admin_url('admin.php?page=wc-settings&tab=shipping&wc-fns-wizard=now') . '" class="button-primary">' . esc_html__('Start wizard', 'fish-and-ships') . '</a> &nbsp;<a href="https://www.wp-centrics.com/contact-support/" class="button" target="_blank">' . esc_html__('Get support about Fish and Ships Pro', 'fish-and-ships') . '</a></p>',
+							'<p style="padding-top:1em;"><a href="' . admin_url('admin.php?page=wc-settings&tab=shipping&wc-fns-wizard=now') . '" class="button button-wc-fns-colors">' . esc_html__('Restart wizard', 'fish-and-ships') . '</a> &nbsp;<a href="https://www.wp-centrics.com/contact-support/" class="button" target="_blank">' . esc_html__('Get support about Fish and Ships Pro', 'fish-and-ships') . '</a></p>',
 				)
 			);
 			}

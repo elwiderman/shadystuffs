@@ -3,10 +3,10 @@ Contributors: wpcentrics
 Donate link: https://www.wp-centrics.com/
 Tags: woocommerce shipping, table rate, shipping rate, conditional shipping, shipping method
 Requires at least: 4.7
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 WC requires at least: 3.0
-WC tested up to: 8.3.1
-Stable tag: 1.4.17
+WC tested up to: 8.6.1
+Stable tag: 1.5
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,48 +15,52 @@ Best table rate shipping method for WooCommerce: easy and flexible table rate, a
 
 == Description ==
 
-= The best WooCommerce shipping method =
+###The best WooCommerce shipping method table rate
 
-A **conditional shipping method table rate for WooCommerce**: easy as eat fish and *ships*. Allow you to setup weight based **shipping rates**, or whatever: price, volume, quantity, category... 
+A **conditional shipping method table rate for WooCommerce**: It allows you to set up weight-based **shipping rates** or any other criteria such as price, volume, quantity, or category
 
-You can also configure conditional free shipping, conditional local pickup, conditional flat rate or any shipping rate parcels.
+You can also configure conditional free shipping, conditional local pickup, conditional flat rate or any shipping rate.
 
 https://www.youtube.com/watch?v=wRsoUYiHQRY
 
-= Exact fit shipping rates on your WooCommerce shop =
-Most online shops set generic shipping rates: too much for some products and fewer for another... are you?
+###A WooCommerce shipping method easy as eat fish and *ships*
 
-###A flexible shipping table rate, anything can be set & combined
+NOW WITH +60 SAMPLES READY TO USE: Choose from 25 fullcases and 38 snippets, making it easy to select and customize according to your needs.
+
+= Exact fit shipping rates for your WooCommerce shop =
+Most online shops set generic shipping rates: too much for some products and too low for others... are you?
+
+###A flexible shipping table rate where anything can be set & combined
 
 - **Conditional shipping**
 - **Free shipping** 
-- **Weight based shipping**
-- Volume based shipping
-- Price based shipping
-- Cart product quantity based shipping
-- Cart totals based shipping
-- Dimensions based shipping (width, height and/or length)
-- Conditional local pickup reduced cost or free
-- Any shipping rate parcels can be set manually
-- Shipping rates per product category
-- Shipping rates per tag category
-- Per user role: customer, subscriber, etc. [NEW!]
+- **Weight-based shipping**
+- Volume-based shipping
+- Price-based shipping
+- Cart product quantity-based shipping
+- Cart totals-based shipping [PRO]
+- Dimensions-based shipping (width, height and/or length)
+- Conditional local pickup reduced rates or free
+- Any shipping rate parcels can be set manually (not API connected)
+- Shipping rates per shipping class
+- Shipping rates per product category or tag category [PRO]
+- Built-in packer algorithm [PRO]
+- Extra fees, handling, discounts after shipping rate calculation [PRO]
+- Per user role, ZIP/Postcode and much more [PRO]
 
-- Extra fees, handling, discounts after shipping rate calculation [NEW!]
+...any combination, nested as needed. Really!
 
-...any combination, nested as you need. Really!
+###Setup exact shipping rates through a shipping table rate
 
-###Setup exact shipping rates throug a shipping table rate
+Fish and Ships is a **WooCommerce shipping table rate** based method that helps you to increase sales and avoid costs losses, through an easy-to-use shipping table rate cost, with multiple conditional options (as needed).
 
-Fish and Ships it's a **WooCommerce shipping table rate** based method that help you to increase sales and avoid costs loss, throught an easy to use and understand shipping table rate cost, with multiple conditional options (as you need).
+You can set multiple conditional rules on the table rate: based on price, weight, product quantity on cart, dimensions, volume, shipping class, product tag, and product category.
 
-You can set multiple conditional rules on the table rate: based on price, weight, product quantity on cart, dimensions, volume, shipping class, product tag and product category.
+While there are other table rate-based shipping rate calculation plugins, only Fish and Ships allows you to add multiple criteria selections to every rule:
 
-There is a few plugins table rate-based shipping rates calculation, but only Fish and Ships allow you to add on every rule multiple criteria selection:
+*(condition #1 AND condition #2 AND condition #3)*, or (condition #1 OR condition #2 OR condition #3)... as you needed, on every rule!
 
-*(condition #1 AND condition #2 AND condition #3)*, or (condition #1 OR condition #2 OR condition #3)... as you need, on every rule!
-
-...from the simplest to the most complex selection criteria, any need can be fulfilled. Based on the WooCommerce shiping zones.
+...from the simplest to the most complex selection criteria, any need can be fulfilled!
 
 = Here is the list of all selection methods: =
 
@@ -83,9 +87,9 @@ There is a few plugins table rate-based shipping rates calculation, but only Fis
 
 = Group by =
 
-You can set an agroupation of the items cart before analize the conditions:
+You can establish a grouping of items in the basket before analysing the conditions by following one of these strategies:
 
-* None (every item will be analised alone)
+* None (every item will be analyzed alone)
 * Per ID / SKU (same item will be grouped)
 * Per product (variations will be grouped)
 * Per shipping class grouping
@@ -123,7 +127,7 @@ Add custom messages, rename the woocommerce shipping method or add extra info on
 * Add subtitle (text under title) [PRO]
 * Auto-apply coupons (with custom messages and more) [PRO]
 * Math expressions parser to calculate shipping rates [PRO]
-* Shipping boxes bin packer [PRO]
+* Shipping boxes packer algorithm [PRO]
 * Hide shipping methods (FnS, WC native and third party) [PRO]
 * NEW: Cart total messages (when there isn't shipping options available) [PRO]
 
@@ -259,9 +263,9 @@ Sure. Any combination of rules can be achieved: nested weight, volume, dimension
 
 Fish and Ships has widely tested with older and latest; our philosophy is to cover the maximum releases (when are viable) and obviously cover all future releases.
 
-* PHP: from 5.5 to current release (tested up to 8.0.x).
-* WordPress: from 4.4, all posterior releases (tested up to 6.0).
-* WooCommerce: from 2.6, all posterior releases (tested up to 7.0).
+* PHP: from 7.0 to current release (tested up to 8.3).
+* WordPress: from 4.7, all posterior releases (tested up to 6.4).
+* WooCommerce: from 3.0, all posterior releases (tested up to 8.6).
 * WPML: Tested the contemporary releases with the WooCommerce / WP releases.
 
 = Fish and Ships Free vs Pro? =
@@ -273,19 +277,32 @@ Fish and Ships has widely tested with older and latest; our philosophy is to cov
 
 1. Shipping rules order diagram
 2. Shipping rules table
-3. Simple or multiple criteria selection
-4. The selection options (Free and Pro)
-5. Simple / composite price calculation
-6. Group-by options
+3. The selection options (Free and Pro)
+4. 25 Full case/samples ready-to-use and customise
+5. 38 Snippets that you can pick and mix
+6. Simple / composite price calculation
 7. Special Actions options (Free and Pro)
-8. Custom shipping rates for different currencies
-9. Well-documented help
-10. You can activate logs calculation
-11. Setting custom messages on admin (Pro)
-12. Cart with the custom messages (Pro)
-13. Apply coupons automatically (Pro)
+8. Simple or multiple criteria selection
+9. Group-by options
+10. Custom shipping rates for different currencies
+11. Well-documented help
+12. You can activate logs calculation for easy debug & quick support
+13. Setting custom messages on admin (Pro)
+14. Cart with the custom messages (Pro)
+15. Apply coupons automatically (Pro)
 
 == Changelog ==
+
+= 1.5 - 11/03/2023 =
+* New samples & snippets wizard: +60 cases/samples ready to use
+* Performance: CSS and JS are loaded minfied
+* Enharced welcome/wizard: dismiss notices per each wp-admin user. Added wp-pointers
+* New method: volumetric-set. Will calculate the volumetric weight for all products together (global product volume vs global weight) [PRO]
+* Checked for WordPress 6.4.3
+* Checked for WooCommerce 8.6
+* Bug solved: Allow spaces in the postcode/zip fields (Pro)
+* Bug solved: lite/simple HTML tag support for the special action Method subtitle (Pro)
+* Bug solved: Issues in the order notes when shipping boxes are used (Pro)
 
 = 1.4.17 - 11/12/2023 =
 * Checked for WordPress 6.4.2

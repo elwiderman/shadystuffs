@@ -5,6 +5,38 @@
             .section-block {
                 &.section-content {
                     .cart-wrap {
+                        position: relative;
+                        z-index: 0;
+                        &.loading {
+                            &:before {
+                                content: '';
+                                position: absolute;
+                                top: 0;
+                                left: 50%;
+                                transform: translateX(-50%);
+                                width: calc(100% - 20px);
+                                height: 100%;
+                                background: rgba($primary-color, 0.5);
+                                z-index: 1;
+                            }
+                            &:after {
+                                content: '';
+                                position: absolute;
+                                top: calc(50% - 20px);
+                                left: calc(50% - 20px);
+                                width: 40px;
+                                height: 40px;
+                                border-radius: 100%;
+                                border: 2px solid;
+                                border-top-color: rgba($secondary-color, 0.80);
+                                border-bottom-color: rgba($primary-bg, 1);
+                                border-left-color: rgba($secondary-color, 0.80);
+                                border-right-color: rgba($primary-bg, 1);
+                                -webkit-animation: loader 0.8s linear infinite;
+                                animation: loader 1.0s linear infinite;
+                                z-index: 2;
+                            }
+                        }
                         .block-title {
                             @include font($secondary-font, $bold);
                             font-size: 24px;
@@ -241,6 +273,7 @@
                         }
 
                         .cross-sells {
+                            padding-left: 20px;
                             margin-top: 40px;
                             .products-carousel {
                                 width: 100%;
@@ -252,6 +285,12 @@
                                         }
                                     }
                                 }
+                            }
+                        }
+
+                        .woocommerce-cart-form {
+                            .cross-sells {
+                                display: none;
                             }
                         }
                     }
@@ -284,7 +323,7 @@
                             margin-top: 30px;
                         }
                     }
-                    .order-review {
+                    .order-review, #order_review {
                         h3 {
                             @include font($secondary-font, $bold);
                             font-size: 25px;
@@ -312,15 +351,17 @@
                             border-radius: 0;
                             .wc_payment_methods {
                                 label {
+                                    font-size: 15px;
+                                    @include flex-display(column, flex-start, flex-start);
                                     position: relative;
                                     cursor: pointer;
-                                    padding-left: 10px;
+                                    padding-left: 30px;
                                     margin-bottom: 0;
                                     &:before, &:after {
                                         position: absolute;
-                                        top: 50%;
-                                        left: -20px;
-                                        transform: translateY(-50%);
+                                        top: 6px;
+                                        left: 0px;
+                                        // transform: translateY(-50%);
                                         font-family: 'shadyicons';
                                         font-size: 18px;
                                         line-height: 1;
@@ -348,6 +389,7 @@
                                     }
                                 }
                                 input[type="radio"] {
+                                    display: none;
                                     opacity: 0;
                                     visibility: hidden;
                                     margin: 0;
@@ -362,6 +404,16 @@
                                 }
                             }
                             .place-order {
+                                a {
+                                    font-weight: $semi-bold;
+                                    color: $secondary-color;
+                                }
+                                .woocommerce-terms-and-conditions {
+                                    h4, h5, h6 {
+                                        @include font($secondary-font, $semi-bold);
+                                        font-size: 17px;
+                                    }
+                                }
                                 .btn-main {
                                     font-size: 25px;
                                     height: 60px;

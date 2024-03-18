@@ -44,10 +44,10 @@ function shady_display_quantity_minus() {
 // -------------
 // 2. Trigger update quantity script
   
-add_action( 'wp_footer', 'shady_add_cart_quantity_plus_minus' );  
+// add_action( 'wp_footer', 'shady_add_cart_quantity_plus_minus' );  
 function shady_add_cart_quantity_plus_minus() {
  
-   if ( ! is_product() && ! is_cart() ) return;
+   if (!is_product() && !is_cart()) return;
     
    wc_enqueue_js( "   
            
@@ -61,18 +61,17 @@ function shady_add_cart_quantity_plus_minus() {
  
          if ( $( this ).is( '.plus' ) ) {
             if ( max && ( max <= val ) ) {
-               qty.val( max ).change();
+               qty.val( max ).trigger('change');
             } else {
-               qty.val( val + step ).change();
+               qty.val( val + step ).trigger('change');
             }
          } else {
             if ( min && ( min >= val ) ) {
-               qty.val( min ).change();
+               qty.val( min ).trigger('change');
             } else if ( val > 1 ) {
-               qty.val( val - step ).change();
+               qty.val( val - step ).trigger('change');
             }
          }
- 
       });
         
    " );

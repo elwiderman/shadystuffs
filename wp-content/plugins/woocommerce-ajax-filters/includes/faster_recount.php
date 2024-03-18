@@ -266,7 +266,7 @@ class BeRocket_AAPF_faster_attribute_recount {
     static function wpml_query($query, $taxonomy_data, $terms) {
         global $wpdb;
         extract($taxonomy_data);
-        if( defined( 'WCML_VERSION' ) && defined('ICL_LANGUAGE_CODE') ) {
+        if( defined( 'WCML_VERSION' ) && defined('ICL_LANGUAGE_CODE') && apply_filters( 'wpml_is_translated_taxonomy', null, $taxonomy ) ) {
             $query['join']['wpml']  = " INNER JOIN {$wpdb->prefix}icl_translations as wpml_lang ON ( {$wpdb->posts}.ID = wpml_lang.element_id )";
             $query['where']['wpml'] = " AND wpml_lang.language_code = '".ICL_LANGUAGE_CODE."' AND wpml_lang.element_type = 'post_product'";
         }

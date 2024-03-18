@@ -194,7 +194,7 @@ if( ! class_exists('BeRocket_aapf_admin_bar_debug') ) {
 		}
 		function get_css() {
 			$html = '<style>#wp-admin-bar-bapf_debug_bar .ab-submenu .ab-item {height:initial!important;line-height:1em;}
-			#wp-admin-bar-bapf_debug_bar .ab-item {display: flex;align-items: center;}
+			#wp-admin-bar-bapf_debug_bar .ab-item {display: flex!important;align-items: center;flex-direction: column;}
 			#wp-admin-bar-bapf_debug_bar.brapf_admin_error_alert .ab-item .dashicons.dashicons-info-outline {margin-left: 5px;font-family: dashicons;font-size: 24px;line-height:32px;cursor:pointer;color: red; transform: rotate(180deg);}
 			#wp-admin-bar-bapf_debug_bar .ab-submenu .ab-item *{line-height:1em;color:#ccc;}
 			#wp-admin-bar-bapf_debug_bar .ab-submenu .ab-item h2{color:white;font-size: 1.5em;text-align:center;}

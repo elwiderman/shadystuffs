@@ -535,6 +535,29 @@
     text-align: center;
     line-height: 41px;
 }
+.braapf_attribute_setup_flex .berocket_ranges_block .berocket_ranges .berocket_ranges_from input {
+    
+}
+.berocket_ranges_block_header .berocket_ranges_label,
+.berocket_ranges_block_header .berocket_ranges_from,
+.berocket_ranges_block_header .berocket_ranges_to,
+.berocket_ranges_block_header .berocket_ranges_glue {
+    display: inline-block;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+}
+.berocket_ranges_block_header .berocket_ranges_glue {
+    width: 30px;
+}
+.berocket_ranges_block_header .berocket_ranges_label {
+    width: 250px;
+    margin-left: 10px;
+}
+.berocket_ranges_block_header .berocket_ranges_from,
+.berocket_ranges_block_header .berocket_ranges_to {
+    width: 100px;
+}
 .braapf_attribute_setup_flex .berocket_ranges_block .berocket_ranges input {
     display: inline-block;
     font-size: 1.5em;
@@ -543,7 +566,13 @@
     font-weight: bold;
     padding: 0;
     margin: 0;
-    max-width: 200px;
+    max-width: 100px;
+}
+.braapf_attribute_setup_flex .berocket_ranges_block .berocket_ranges .berocket_ranges_label {
+    margin-left: 10px;
+}
+.braapf_attribute_setup_flex .berocket_ranges_block .berocket_ranges .berocket_ranges_label input {
+    max-width: 250px;
 }
 @media screen and (max-width: 768px) {
     .braapf_attribute_setup_flex .berocket_ranges_block .berocket_ranges input {
@@ -553,10 +582,10 @@
 }
 .berocket_ranges .berocket_ranges_glue {
     background-color: #444;
-    height: 7px;
-    width: 30px;
+    height: 5px;
+    width: 20px;
     padding: 0;
-    margin: 0 10px;
+    margin: 0 5px;
 }
 .berocket_ranges .berocket_remove_ranges {
     width: 38px;

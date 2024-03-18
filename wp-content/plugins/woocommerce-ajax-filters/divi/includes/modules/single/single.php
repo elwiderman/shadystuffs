@@ -63,7 +63,7 @@ class ET_Builder_Module_br_filter_single extends ET_Builder_Module {
                 $filter_list[$post_id] = get_the_title($post_id) . ' (ID:' . $post_id . ')';
             }
         } else {
-            $filter_list = array('0' => __('--Please create filter--', 'BeRocket_AJAX_domain'));
+            $filter_list = array('0' => __('--Please create filter first--', 'BeRocket_AJAX_domain'));
         }
 
         $fields = array(

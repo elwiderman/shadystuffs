@@ -5,7 +5,7 @@
  * This is the shipping class that extends WC
  *
  * @package Fish and Ships
- * @version 1.4.13
+ * @version 1.5
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -33,7 +33,11 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		$this->option_name           = 'woocommerce_'. $Fish_n_Ships->id .'_'. $this->instance_id .'_settings';
 
 		$this->method_title          = $Fish_n_Ships->im_pro() ? 'Fish and Ships Pro' : 'Fish and Ships';
-		$this->method_description    = __('A WooCommerce shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.', 'fish-and-ships');
+
+		// Since WC 8.4 the method type has been removed.
+		$mt = version_compare( WC()->version, '8.4.0', '<') ? '' : $this->method_title . '. ';
+
+		$this->method_description    = $mt . __('A WooCommerce shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.', 'fish-and-ships');
 		$this->supports              = array(
 			'shipping-zones',
 			'instance-settings',
@@ -104,11 +108,11 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * The new shipping rules will be saved if we are editing this
 	 *
 	 * @since 1.0.0
-	 * @version 1.2.5
+	 * @version 1.5
 	 */
 	public function process_admin_options(){
 
-		global $Fish_n_Ships;
+		global $Fish_n_Ships, $Fish_n_Ships_Wizard;
 
 		// The standard fields will be saved by WC
 		parent::process_admin_options();
@@ -125,7 +129,13 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 			update_option($this->option_name , $settings );
 			$this->shipping_rules = $shipping_rules;
 			
-			$Fish_n_Ships->save_translatables($shipping_rules);
+			// Maybe must add samples
+			$Fish_n_Ships_Wizard->create_sample_settings( $this );
+
+			// Useful for sample creation
+			// error_log( print_r( $settings, true ) );
+			
+			$Fish_n_Ships->save_translatables( $this->shipping_rules );
 		}
 		
 		// Reset the cached previous shipping costs (since version 1.0.4)
@@ -405,7 +415,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 							}
 							
 							// Only this selection methods has group capabilities
-							$groupable_sm = apply_filters('wc-fns-groupable-selection-methods', array('by-weight', 'by-price', 'by-volume', 'volumetric', 'quantity', 'n-groups') );
+							$groupable_sm = apply_filters('wc-fns-groupable-selection-methods', array('by-weight', 'by-price', 'by-volume', 'volumetric', 'volumetric-set', 'quantity', 'n-groups') );
 							if ( in_array($selector['method'], $groupable_sm) ) {
 								
 								if ('yes' === $this->global_group_by) {
@@ -823,7 +833,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		} while (false !== get_transient($name) );
 		
 		// save log in transient
-		set_transient($name, $this->log_calculate, 60*60*24 * (defined('WC_FNS_DAYS_LOG') ? WC_FNS_DAYS_LOG : 7) );
+		set_transient($name, $this->log_calculate, DAY_IN_SECONDS * ( defined('WC_FNS_DAYS_LOG') ? WC_FNS_DAYS_LOG : 7 ) );
 		
 		$logs_index[] = array(
 						'time' => time(),

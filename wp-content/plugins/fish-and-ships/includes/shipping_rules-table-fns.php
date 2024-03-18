@@ -4,12 +4,12 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.4.0
+ * @version 1.5
  */
  
 defined( 'ABSPATH' ) || exit;
 
-global $Fish_n_Ships;
+global $Fish_n_Ships, $Fish_n_Ships_Wizard;
 
 $errors = array();
 
@@ -286,6 +286,7 @@ $html .= '
 				<a href="#" class="button add-rule-extra"><span class="dashicons dashicons-plus"></span> ' . esc_html__('Extra fee / discount', 'fish-and-ships') . '</a>
 				<a href="#" class="button duplicate-rules"><span class="dashicons dashicons-admin-page"></span> ' . esc_html__('Duplicate selected rules', 'fish-and-ships') . '</a>
 				<a href="#" class="button delete-rules"><span class="dashicons dashicons-no"></span> ' . esc_html__('Delete selected rules', 'fish-and-ships') . '</a>
+				<a href="#" class="button wc-fns-add-snippet button-wc-fns-colors"><span class="dashicons dashicons-plus"></span> ' . esc_html__('Add snippet', 'fish-and-ships') . '</a>
 			</td>
 		</tr>
 	</tfoot>
@@ -318,3 +319,7 @@ if (count($errors) > 0) {
 	
 	$html = $err_message . $html;
 }
+
+// Put the samples helper
+$html .= $Fish_n_Ships_Wizard->get_samples_helper();
+

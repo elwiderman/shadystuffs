@@ -2,7 +2,7 @@
 <div class="br_accordion">
     <h3><?php if( $type == 'color' ) { _e('Selection of color', 'BeRocket_AJAX_domain'); } elseif( $type == 'image' ) { _e('Selection of Image', 'BeRocket_AJAX_domain'); } ?></h3>
     <div>
-<?php if ( is_array(berocket_isset($terms)) ) { 
+<?php if ( is_array(berocket_isset($terms)) && count($terms) > 0 ) { 
     if( $type == 'color' ) {?>
 <table>
     <?php 
@@ -72,6 +72,15 @@
     </table>
     <?php
     }
+} else {
+    $taxonomy_data = get_taxonomy($taxonomy);
+    $taxonomy_name = '';
+    if( is_a($taxonomy_data, 'WP_Taxonomy') ) {
+        $taxonomy_name = $taxonomy_data->label;
+    }
+    echo '<div style="font-size: 18px;text-align: center;">';
+    printf(__('Attribute "%s" do not have values. Please add values for attribute "%s"', 'BeRocket_AJAX_domain'), $taxonomy_name, $taxonomy_name);
+    echo '</div>';
 }
 ?>
 </div>

@@ -5,7 +5,7 @@
  * @package automattic/jetpack-autoloader
  */
 
-namespace Automattic\Jetpack\Autoloader\jp8c2b8d69fc399e93aadffa6f47d0ad76\al2_12_0;
+namespace Automattic\Jetpack\Autoloader\jpf5d792942004e9483018be005ffee7e9\al3_0_2;
 
  // phpcs:ignore
 
@@ -39,7 +39,7 @@ class Plugin_Locator {
 	 */
 	public function find_current_plugin() {
 		// Escape from `vendor/__DIR__` to root plugin directory.
-		$plugin_directory = dirname( dirname( __DIR__ ) );
+		$plugin_directory = dirname( __DIR__, 2 );
 
 		// Use the path processor to ensure that this is an autoloader we're referencing.
 		$path = $this->path_processor->find_directory_with_autoloader( $plugin_directory, array() );

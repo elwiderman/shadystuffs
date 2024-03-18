@@ -196,7 +196,7 @@ if ( ! function_exists( 'br_is_term_selected' ) ) {
             $filter_data = $berocket_parse_page_obj->get_current();
             if( isset($filter_data['filters']) && is_array($filter_data['filters']) ) {
                 foreach($filter_data['filters'] as $filter) {
-                    $is_checked_correct = $filter['taxonomy'] == $term_taxonomy && in_array($term->term_id, $filter['val_ids']);
+                    $is_checked_correct = ! empty($filter['taxonomy']) && $filter['taxonomy'] == $term_taxonomy && in_array($term->term_id, $filter['val_ids']);
                     if( apply_filters('br_is_term_selected_checked_each', $is_checked_correct, $term_taxonomy, $term, $checked, $child_parent, $depth, $filter, $additional) ) {
                         $is_checked = true;
                     }
@@ -325,7 +325,7 @@ function br_widget_is_hide( $attribute, $widget_is_hide = false ) {
         $term_ids = array();
         if( isset($filter_data['filters']) && is_array($filter_data['filters']) ) {
             foreach($filter_data['filters'] as $filter) {
-                if($filter['taxonomy'] == $attribute || $filter['attr'] == $attribute) {
+                if( (! empty($filter['taxonomy']) && $filter['taxonomy'] == $attribute) || (! empty($filter['attr']) && $filter['attr'] == $attribute) ) {
                     return false;
                 }
             }

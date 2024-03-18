@@ -7,7 +7,7 @@ function framework_scripts() {
     wp_deregister_script('bootstrap'); // to prevent clash with plugins calling bootstrap 3
 
     // Adding scripts file in the footer
-    wp_enqueue_script('site-scripts', $path . '/assets/scripts/app.min.js', '', '', false);
+    wp_enqueue_script('site-scripts', $path . '/assets/scripts/app.min.js', '', '', ['defer', true]);
 
     if (is_front_page()) {
         wp_localize_script('site-scripts', 'WPURLS', array(
@@ -26,7 +26,10 @@ function framework_scripts() {
     }
 
     if (is_cart()) {
-        wp_localize_script('site-scripts', 'WPURLS', array(
+
+        wp_enqueue_script('shady-woo', $path . '/assets/scripts/shadyWoo.min.js', ['jquery', 'wc-cart'], '', ['defer', true]);
+
+        wp_localize_script('shady-woo', 'WPURLS', array(
             'ajaxurl'       => admin_url('admin-ajax.php'),
             'cart_nonce'    => wp_create_nonce('update_cart_nonce'),
         ));

@@ -4,12 +4,15 @@
  * Plugin Name: PhonePe Payment Solutions
  * Plugin URI: https://github.com/PhonePe/
  * Description: Using this plugin you can accept payments through PhonePe. After activating this plugin, you can see the PhonePe option linked to the checkout page of woocommerce site. On configuring with the provided Merchant credentials, you can enable this plugin in Preprod/Prod environment.
- * Version: 2.0.9
+ * Version: 2.0.11
  * Author: PhonePe
  * Requires PHP: 5.6
  */
 
 require_once __DIR__ . '/debug.php';
+
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+
 
 $woocommerce_b2bpg_configs_json = file_get_contents(__DIR__ . '/config.json');
 $woocommerce_b2bpg_configs = json_decode($woocommerce_b2bpg_configs_json, true);
@@ -82,6 +85,7 @@ function ppex_woocommerce_phonepe_init() {
 
 
       $this->has_fields = false;
+      $this->supports = ['products'];
       $this->init_form_fields();
       $this->init_settings();
 
@@ -223,7 +227,7 @@ function ppex_woocommerce_phonepe_init() {
       wp_enqueue_style('phonepe-styles', WP_PLUGIN_URL . "/" . plugin_basename(dirname(__FILE__)) . '/style.css');
     }
 
-    /**w
+    /**
      *  There are no payment fields for phonepe, but we want to show the description if set.
      **/
     public function payment_fields() {
@@ -305,6 +309,44 @@ function ppex_woocommerce_phonepe_init() {
   }
 
   add_filter('woocommerce_payment_gateways', 'add_phonepe_gateway_to_payment_options');
+
+
+  /**
+   * Declare compatibility to checkout blocks
+   */
+
+  add_action('before_woocommerce_init', 'ppex_declare_cart_checkout_blocks_compatibility');
+  function ppex_declare_cart_checkout_blocks_compatibility() {
+    // Check if the required class exists
+    if (class_exists('\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+      // Declare compatibility for 'cart_checkout_blocks'
+      \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('cart_checkout_blocks', __FILE__, true);
+    }
+  }
+
+
+  //   Hook the custom function to the 'woocommerce_blocks_loaded' action
+  add_action('woocommerce_blocks_loaded', 'ppex_register_order_approval_payment_method_type');
+
+  function ppex_register_order_approval_payment_method_type() {
+    if (!class_exists('Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType')) {
+      return;
+    }
+
+    // Include the custom Blocks Checkout class
+    require_once plugin_dir_path(__FILE__) . 'block/PPEX_WC_BLOCK_CHECKOUT.php';
+
+    // Hook the registration function to the 'woocommerce_blocks_payment_method_type_registration' action
+    add_action(
+      'woocommerce_blocks_payment_method_type_registration',
+      function (Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry $payment_method_registry) {
+        // Register an instance of PPEX_WC_BLOCK_CHECKOUT
+        $payment_method_registry->register(new PPEX_WC_BLOCK_CHECKOUT);
+      }
+    );
+  }
+
+
 
   /*
     ** To create shortcut to PhonePe plugin specific settings for marchants 
@@ -684,8 +726,6 @@ function ppex_woocommerce_phonepe_init() {
       echo 'Failed to create the zip file.';
     }
   }
-
-
 
   function dashboard_status() {
     $plugin_dir = plugin_dir_url(__FILE__);

@@ -51,18 +51,9 @@ class Flate implements \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FilterInte
                 if ($data) {
                     return $data;
                 }
-                // Try this fallback
-                $tries = 0;
-                $oDataLen = \strlen($oData);
-                while ($tries < 6 && ($data === \false || \strlen($data) < $oDataLen - $tries - 1)) {
-                    $data = @\gzinflate(\substr($oData, $tries));
-                    $tries++;
-                }
-                // let's use this fallback only if the $data is longer than the original data
-                if (\strlen($data) > $oDataLen - $tries - 1) {
-                    return $data;
-                }
-                if (!$data) {
+                // Try this fallback (remove the zlib stream header)
+                $data = @\gzinflate(\substr($oData, 2));
+                if ($data === \false) {
                     throw new \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FlateException('Error while decompressing stream.', \WPDeskFIVendor\setasign\Fpdi\PdfParser\Filter\FlateException::DECOMPRESS_ERROR);
                 }
             }

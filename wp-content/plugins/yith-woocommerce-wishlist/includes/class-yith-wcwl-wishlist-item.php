@@ -242,7 +242,19 @@ if ( ! class_exists( 'YITH_WCWL_Wishlist_Item' ) ) {
 		 * @return int Quantity
 		 */
 		public function get_quantity( $context = 'view' ) {
-			return max( 1, (int) $this->get_prop( 'quantity', $context ) );
+			/**
+			 * APPLY_FILTERS: yith_wcwl_min_item_quantity
+			 *
+			 * Filter the minimum wishlist item quantity.
+			 *
+			 * @param int Minimum quantity
+			 *
+			 * @return int
+			 */
+			$min_quantity = apply_filters( 'yith_wcwl_min_item_quantity', 1 );
+			$quantity     = (int) $this->get_prop( 'quantity', $context );
+
+			return max( $min_quantity, $quantity );
 		}
 
 		/**

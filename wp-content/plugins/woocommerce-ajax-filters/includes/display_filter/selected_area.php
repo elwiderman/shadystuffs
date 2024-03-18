@@ -9,6 +9,7 @@ class BeRocket_AAPF_display_filters_selected_area_type extends BeRocket_AAPF_dis
         'selected_area_show' => '0',
         'hide_selected_arrow' => '0',
         'selected_is_hide' => '0',
+        'sfa_hide_attribute_name' => '0',
     );
     function init() {
         static::$type_name = __('Selected Filters area', 'BeRocket_AJAX_domain');

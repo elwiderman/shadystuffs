@@ -547,7 +547,7 @@ class BeRocket_aapf_variations_tables_addon extends BeRocket_framework_addon_lib
         $start_id = intval($run_data['start_id']);
         $min_id = intval($run_data['min_id']);
         $max_id = intval($run_data['max_id']);
-        $end_id = $start_id + apply_filters('berocket_insert_table_braapf_product_variation_attributes_end', 10000);
+        $end_id = $start_id + apply_filters('berocket_insert_table_braapf_product_variation_attributes_end', 5000);
         global $wpdb;
         $table_name = $wpdb->prefix . 'braapf_product_variation_attributes';
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -611,6 +611,31 @@ class BeRocket_aapf_variations_tables_addon extends BeRocket_framework_addon_lib
                 $this->save_query_error($sql);
             }
         }
+        
+        
+        $sql_select = "SELECT 
+            0 as post_id, 
+            {$wpdb->posts}.post_parent as parent_id, 
+            MIN({$wpdb->term_taxonomy}.taxonomy) as meta_key, 
+            {$wpdb->term_taxonomy}.term_id as meta_value_id,
+            0 as stock_status
+        FROM {$wpdb->postmeta}
+        JOIN {$wpdb->posts} ON {$wpdb->postmeta}.post_id = {$wpdb->posts}.ID
+        JOIN {$wpdb->term_relationships} ON {$wpdb->posts}.post_parent = {$wpdb->term_relationships}.object_id
+        JOIN {$wpdb->term_taxonomy} ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.term_taxonomy_id AND CONCAT('attribute_', {$wpdb->term_taxonomy}.taxonomy) = {$wpdb->postmeta}.meta_key
+        LEFT JOIN {$table_name} ON {$table_name}.parent_id = {$wpdb->posts}.post_parent AND {$table_name}.meta_value_id = {$wpdb->term_taxonomy}.term_id
+        WHERE {$wpdb->postmeta}.meta_id >= {$start_id} AND {$wpdb->postmeta}.meta_id < {$end_id}
+        AND {$wpdb->postmeta}.meta_key LIKE 'attribute_pa_%' AND {$table_name}.parent_id IS NULL
+        GROUP BY {$wpdb->posts}.post_parent, {$wpdb->term_taxonomy}.term_id";
+        $test_row = $wpdb->get_row($sql_select);
+        if( ! empty($test_row) ) {
+            $sql = "INSERT IGNORE INTO {$table_name} {$sql_select}";
+            $query_status = $wpdb->query($sql);
+            if( $query_status === FALSE ) {
+                $this->save_query_error($sql);
+            }
+        }
+
         $status = max(0, min(100, (($end_id - $min_id) / (($max_id - $min_id) == 0 ? 1 : ($max_id - $min_id)) * 100)));
         if( $end_id <= $max_id ) {
             $this->set_current_create_position_data(array(

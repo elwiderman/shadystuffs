@@ -475,7 +475,7 @@ function braapf_filtered_filters_set() {
         }
         var query_arr = [],
             page = 1,
-            string_regex = the_ajax_script.pagination_base+'\\/(\\d+)',
+            string_regex = the_ajax_script.pagination_base+'\\/(\\d+)/?',
             regex_var = new RegExp(string_regex),
             search_page = link.match(regex_var);
         if( search_page && typeof(search_page[1]) == 'string' ) {
@@ -803,7 +803,7 @@ function braapf_filtered_filters_set() {
                     html2 += '<ul>';
                     var html2_elements = '';
                     $.each(taxonomy.values, function(i2, val) {
-                        html2_elements += berocket_apply_filters('default_selected_filters_area_single', '<li><a href="#unselect_'+val.value+'" class="braapf_unselect" data-taxonomy="'+taxonomy.taxonomy+'" data-value="'+val.value+'"><i class="fa fa-times"></i>'+val.html+'</a></li>', val);
+                        html2_elements += berocket_apply_filters('default_selected_filters_area_single', '<li><a href="#unselect_'+val.value+'" class="braapf_unselect" data-taxonomy="'+taxonomy.taxonomy+'" data-value="'+val.value+'"><i class="fa fa-times"></i> '+val.html+'</a></li>', val);
                     });
                     html2 += html2_elements;
                     html2 += '</ul></div>';
@@ -1571,6 +1571,9 @@ jQuery(document).ready(function() {
         }
     }
     jQuery(document).on('berocket_ajax_filtering_on_update', function() {
+        if( typeof(jQuery('.bapf_sfilter .bapf_select2').select2) == 'function' ) {
+            jQuery('.bapf_sfilter .bapf_select2').select2('close');
+        }
         bapf_select2_disable_for_parent(jQuery(document));
     });
     function bapf_select2_berocket_add_filter() {

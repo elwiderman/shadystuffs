@@ -150,10 +150,7 @@ jQuery(document).ready(function($){
 
         var close_qv = function() {
             qv_modal.removeClass('open').removeClass('loading');
-
-            setTimeout(function () {
-                qv_content.html('');
-            }, 1000);
+            qv_content.html('');
         }
     };
 

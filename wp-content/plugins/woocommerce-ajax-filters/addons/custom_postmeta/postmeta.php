@@ -30,7 +30,7 @@ class BeRocket_aapf_add_postmeta_filters {
                     'name' => __('Custom Post Meta', 'BeRocket_AJAX_domain'),
                     'sameas' => 'custom_postmeta',
                     'optionsameas' => 'custom_taxonomy',
-                    'templates' => array('checkbox', 'slider', 'new_slider', 'select', 'datepicker'),
+                    'templates' => array('checkbox', 'select'),
                     'specific'  => array('', 'color', 'image')
                 ),
             )
