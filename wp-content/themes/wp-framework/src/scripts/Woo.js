@@ -57,7 +57,7 @@ export default class Woo {
         }
     }
 
-
+    // update the cart info in the cart page on changing of quantity
     ajaxUpdateCart() {
         $('body').on('change', '.quantity input.qty', (e) => {
             let $this = $(e.currentTarget);
