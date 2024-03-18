@@ -31,6 +31,9 @@ if ( ! class_exists( 'YITH_WCWL_Wishlist_Factory' ) ) {
 			}
 
 			try {
+				if ( is_array( $wishlist_id ) ) {
+					$wishlist_id = $wishlist_id[0];
+				}
 				return new YITH_WCWL_Wishlist( $wishlist_id );
 			} catch ( Exception $e ) {
 				wc_caught_exception( $e, __FUNCTION__, func_get_args() );
