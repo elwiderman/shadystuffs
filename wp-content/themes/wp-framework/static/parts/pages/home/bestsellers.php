@@ -9,12 +9,12 @@ if (get_field('show_bestsellers_bool')) :
         <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-auto">
-                    <h2 class="section-title mb-0 color-grey text-lowercase"><?php echo $section_title;?></h2>
+                    <h2 class="section-title mb-md-0 color-grey text-lowercase"><?php echo $section_title;?></h2>
                 </div>
 
                 <?php if ($cta) : ?>
                 <div class="col-auto">
-                    <a href="<?php echo $cta['url'];?>" target='<?php echo $cta['target'];?>' class="btn-main"><?php echo $cta['title'];?></a>
+                    <a href="<?php echo $cta['url'];?>" target='<?php echo $cta['target'];?>' class="btn-main mb-4 mb-md-0"><?php echo $cta['title'];?></a>
                 </div>
                 <?php endif;?>
             </div>

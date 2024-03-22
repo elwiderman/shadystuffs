@@ -78,8 +78,14 @@
         .slide {
             height: 100%;
             margin-right: 25px;
+            @include respond-to-mob('medium') {
+                margin-right: 17px;
+            }
             .loop-product-thumb {
                 width: 250px;
+                @include respond-to-mob('medium') {
+                    width: 210px;
+                }
             }
         }
     }

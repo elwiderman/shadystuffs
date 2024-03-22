@@ -6,6 +6,9 @@ function framework_scripts() {
     // Load site libs js files in footer
     wp_deregister_script('bootstrap'); // to prevent clash with plugins calling bootstrap 3
 
+    // Adding lottie
+    wp_enqueue_script('lottie-scripts', '//unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js', '', '', false);
+
     // Adding scripts file in the footer
     wp_enqueue_script('site-scripts', $path . '/assets/scripts/app.min.js', '', '', ['defer', true]);
 

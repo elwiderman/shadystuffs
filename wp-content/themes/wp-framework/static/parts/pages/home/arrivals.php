@@ -5,10 +5,13 @@ if (get_field('show_new_arrivals_bool')) :
     ?>
 
     <section class="section-block section-arrivals">
+        <div class="arrivals-blob">
+            <lottie-player src="https://lottie.host/d0a99084-05ba-403d-8b38-9fd9de12ecde/0Rfy7lu9yT.json" background="transparent" speed="1" direction="1" playMode="normal" loop autoplay></lottie-player>
+        </div>
         <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-auto">
-                    <h2 class="section-title mb-0 color-grey text-lowercase"><?php echo $section_title;?></h2>
+                    <h2 class="section-title mb-md-0 color-grey text-lowercase"><?php echo $section_title;?></h2>
                 </div>
 
                 <?php if ($cta) : ?>
