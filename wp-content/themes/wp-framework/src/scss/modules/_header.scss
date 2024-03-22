@@ -14,6 +14,9 @@
         @include flex-display(row, space-between, center);
         height: 100%;
         padding: 0 25px;
+        @include respond-to-mob('medium') {
+            padding: 0 12px;
+        }
         &--brand {
             .navbar-brand {
                 display: block;
@@ -21,14 +24,26 @@
                 margin: 0;
                 img {
                     height: 60px;
+                    @include respond-to-mob('medium') {
+                        height: 40px;
+                        max-width: max-content;
+                    }
                 }
             }
         }
         &--left, &--right {
             flex: 0 0 30vw;
             max-width: 30vw;
+            @include respond-to-mob('medium') {
+                flex: 0 0 auto;
+                width: auto;
+                max-width: 100%;
+            }
         }
         &--left {
+            @include respond-to-mob('medium') {
+                order: 2;
+            }
             .navbar-toggler {
                 @include flex-display;
                 border: 0;
@@ -37,6 +52,10 @@
                     position: relative;
                     width: 35px;
                     height: 24px;
+                    @include respond-to-mob('medium') {
+                        width: 28px;
+                        height: 17px;
+                    }
                     & > span {
                         position: absolute;
                         left: 0;
@@ -61,6 +80,9 @@
                     text-align: left;
                     margin-left: 10px;
                     position: relative;
+                    @include respond-to-mob('medium') {
+                        display: none
+                    }
                     &--open, &--close {
                         @include transition(0.3s);
                     }
@@ -105,12 +127,18 @@
         }
         &--right {
             @include flex-display(row, flex-end, center);
+            @include respond-to-mob('medium') {
+                order: 1;
+            }
             .navbar-wishlist, .navbar-account {
                 margin-right: 15px;
                 a {
                     @include flex-display(column, center, center);
                     span {
                         font-size: 10px;
+                        @include respond-to-mob('medium') {
+                            display: none;
+                        }
                     }
                 }
             }
@@ -120,6 +148,26 @@
                     padding: 0;
                     &:after {
                         display: none;
+                    }
+                }
+                .widget-box {
+                    &.widget_block {
+                        .wc-block-mini-cart {
+                            @include respond-to-mob('medium') {
+                                &__button {
+                                    padding: 0;
+                                }
+                                &__icon {
+                                    height: 30px;
+                                    width: 30px;
+                                    margin-top: 7px;
+                                }
+                                &__badge {
+                                    transform: translateX(-50%) scale(0.6);
+                                    margin-left: 4%;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -136,6 +184,9 @@
         transform: translateX(-100%);
         @include transition(0.3s);
         padding: 25px;
+        @include respond-to-mob('medium') {
+            width: 100vw;
+        }
         &.open {
             transform: translateX(0);
         }
@@ -144,9 +195,11 @@
             height: 100%;
         }
         .main-menu {
-            @include flex-display(row, space-between, flex-start);
+            @include flex-display(column, flex-start, flex-start);
             width: 100%;
             .nav-item {
+                display: block;
+                width: 100%;
                 &:not(:last-child) {
                     margin-bottom: 12px;
                 }
@@ -170,12 +223,33 @@
                         float: none;
                         border: none;
                         padding-top: 0;
-                        @include flex-display(column, flex-start, flex-start);
+                        display: block;
+                        column-count: 2;
+                        column-gap: 15px;
                         .dropdown-item {
                             font-size: 15px;
                             color: $dark-grey;
                             letter-spacing: 1px;
                             text-transform: uppercase;
+                            position: relative;
+                            @include respond-to-mob('medium') {
+                                font-size: 14px;
+                                padding: 0.25rem 10px 0.25rem 15px;
+                            }
+                            &:before {
+                                content: '';
+                                position: absolute;
+                                top: 50%;
+                                left: 0;
+                                transform: translateY(-50%);
+                                width: 7px;
+                                height: 5px;
+                                background: $secondary-color;
+                                border-radius: 5px;
+                                @include respond-to('x-large') {
+                                    left: 6px;
+                                }
+                            }
                             &:hover, &.active {
                                 color: $secondary-color;
                                 background: transparent;
