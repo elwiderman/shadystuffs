@@ -27,9 +27,13 @@ final class CorrectionsSettingsFields implements \WPDeskFIVendor\WPDesk\Library\
     private function get_doc_link()
     {
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\InvoicesIntegration::is_super()) {
-            return \sprintf('<a href="%1$s" target="_blank">%2$s</a>', \esc_url(\get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/docs/faktury-korygujace-woocommerce/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link' : 'https://docs.flexibleinvoices.com/article/802-manual-issuing-corrections?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link', ['https']), \esc_html__('Check how to issue corrective invoices.', 'flexible-invoices'));
+            $docs_link = 'https://docs.flexibleinvoices.com/article/802-manual-issuing-corrections?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link';
+            if (\get_locale() === 'pl_PL') {
+                $docs_link = 'https://www.wpdesk.pl/docs/faktury-korygujace-woocommerce/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=settings-docs-link';
+            }
+            return \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>');
         } else {
-            return \sprintf('<a href="%1$s&utm_content=correction" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
+            return \sprintf('<a href="%1$s&utm_content=correction" target="_blank" style="color: #8f0350; font-weight: 700;">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
         }
     }
     private function get_beacon_translations() : string

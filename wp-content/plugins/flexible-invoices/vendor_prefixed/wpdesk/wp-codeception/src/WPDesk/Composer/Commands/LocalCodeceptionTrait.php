@@ -35,6 +35,7 @@ trait LocalCodeceptionTrait
         $this->executeWpCliAndOutput('config set WP_SITEURL ' . $configuration->getWptestsUrl(), $output, $apache_document_root);
         $this->executeWpCliAndOutput('config set WP_AUTO_UPDATE_CORE false --raw', $output, $apache_document_root);
         $this->executeWpCliAndOutput('config set AUTOMATIC_UPDATER_DISABLED false --raw', $output, $apache_document_root);
+        $this->executeWpCliAndOutput('config set FS_METHOD direct', $output, $apache_document_root);
         $this->executeWpCliAndOutput('rewrite structure \'/%postname%/\'', $output, $apache_document_root);
         $this->replace_in_file($apache_document_root . '/wp-config.php', 'if ( isset( $_SERVER[\'HTTP_X_FORWARDED_PROTO\'] ) && \'https\' === $_SERVER[\'HTTP_X_FORWARDED_PROTO\'] ) { $_SERVER[\'HTTPS\'] = \'on\'; }', '');
         $this->replace_in_file($apache_document_root . '/wp-config.php', '<?php', '<?php if ( isset( $_SERVER[\'HTTP_X_FORWARDED_PROTO\'] ) && \'https\' === $_SERVER[\'HTTP_X_FORWARDED_PROTO\'] ) { $_SERVER[\'HTTPS\'] = \'on\'; }');
@@ -166,7 +167,7 @@ trait LocalCodeceptionTrait
         $this->executeWpCliAndOutput('db reset --yes', $output, $configuration->getApacheDocumentRoot());
         $this->executeWpCliAndOutput('core install --url=' . $configuration->getWptestsIp() . ' --title=Woo-tests --admin_user=admin --admin_password=admin --admin_email=grola@seostudio.pl --skip-email', $output, $configuration->getApacheDocumentRoot());
         $commands = array('theme activate storefront-wpdesk-tests', 'plugin activate woocommerce');
-        $commands = \array_merge($commands, $this->prepareWcOptionsCommands(), $this->prepareTaxes(), $this->prepareShippingMethods(), $this->prepareWooCommercePages(), $this->prepareCustomer(), $this->prepareDisableRESTApiPermissions(), $this->prepareCreateProductsCommands(), $configuration->getPrepareDatabase());
+        $commands = \array_merge($commands, $this->prepareWcOptionsCommands(), $this->prepareTaxes(), $this->prepareShippingMethods(), $this->prepareWooCommercePages(), $this->prepareCustomer(), $this->prepareDisableRESTApiPermissions(), $this->prepareCreateProductsCommands(), $this->revertCartAndCheckoutToOldVersion($configuration->getApacheDocumentRoot()), $configuration->getPrepareDatabase());
         foreach ($commands as $command) {
             $this->executeWpCliAndOutput($command, $output, $configuration->getApacheDocumentRoot());
         }
@@ -269,5 +270,9 @@ trait LocalCodeceptionTrait
                 throw new \WPDeskFIVendor\Composer\Downloader\FilesystemException('Error copying theme file: ' . $theme_file);
             }
         }
+    }
+    private function revertCartAndCheckoutToOldVersion(string $apache_document_root) : array
+    {
+        return ['post update $(wp post list --field="ID" --post_type="page" --name="checkout" --allow-root --path=' . $apache_document_root . ') --post_content="[woocommerce_checkout]"', 'post update $(wp post list --field="ID" --post_type="page" --name="cart" --allow-root --path=' . $apache_document_root . ') --post_content="[woocommerce_cart]"'];
     }
 }

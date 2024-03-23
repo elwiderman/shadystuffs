@@ -99,7 +99,7 @@ if (!empty($items)) {
         } else {
             ?>
 								<input type="text" class="item_input_name" name="product[name][]" value="<?php 
-            echo \esc_html($item_name);
+            echo \esc_attr($item_name);
             ?>">
 							<?php 
         }

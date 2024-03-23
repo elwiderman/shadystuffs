@@ -13,7 +13,7 @@ namespace WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers;
 class BBCodes
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $bbcodes = [];
     public function __construct()
@@ -28,29 +28,20 @@ class BBCodes
         $this->add_bbcode('~\\[url=(.*?)\\](.*?)\\[/url\\]~s', '<a href="$1" target="_blank">$2</a>');
         $this->add_bbcode('~\\[img(.*?)\\](.*?)\\[/img\\]~s', '<img $1 src="$2" />');
     }
-    /**
-     * @param string $regex
-     * @param string $output
-     */
-    public function add_bbcode(string $regex, string $output)
+    public function add_bbcode(string $regex, string $output) : void
     {
         $this->bbcodes[$regex] = $output;
     }
     /**
+     * @deprecated 1.1.3 Never used outside this class.
      * @return array
      */
     public function get_bbcodes() : array
     {
         return $this->bbcodes;
     }
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
     public function replace(string $string) : string
     {
-        $bbcodes = $this->get_bbcodes();
-        return (string) \preg_replace(\array_keys($bbcodes), \array_values($bbcodes), $string);
+        return (string) \preg_replace(\array_keys($this->bbcodes), \array_values($this->bbcodes), $string);
     }
 }

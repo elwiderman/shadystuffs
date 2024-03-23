@@ -16,46 +16,41 @@ class Box implements \WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Abstracts\Bo
 {
     const TYPE = 'simple';
     /**
-     * @var array
+     * @var array{
+     *   title: string,
+     *   slug: string,
+     *   type: string,
+     *   description: string,
+     *   links: array,
+     *   className: array,
+     *   open_row: array,
+     *   close_row: array,
+     *   button: array
+     * }
      */
-    public $box = ['title' => '', 'slug' => '', 'type' => '', 'description' => '', 'links' => [], 'className' => [], 'open_row' => [], 'close_row' => [], 'button' => []];
-    /**
-     * @var Renderer
-     */
+    public $box;
+    /** @var Renderer */
     public $renderer;
     /**
      * @param array    $box
-     * @param Renderer $renderer
      */
     public function __construct(array $box, \WPDeskFIVendor\WPDesk\View\Renderer\Renderer $renderer)
     {
         $this->box = $box;
         $this->renderer = $renderer;
     }
-    /**
-     * @return string
-     */
     public function get_title() : string
     {
         return \is_string($this->box['title']) ? $this->box['title'] : '';
     }
-    /**
-     * @return string
-     */
     public function get_slug() : string
     {
         return \is_string($this->box['slug']) ? $this->box['slug'] : '';
     }
-    /**
-     * @return string
-     */
     public function get_type() : string
     {
         return static::TYPE;
     }
-    /**
-     * @return string
-     */
     public function get_description() : string
     {
         return \is_string($this->box['description']) ? $this->box['description'] : '';
@@ -65,34 +60,20 @@ class Box implements \WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Abstracts\Bo
      */
     public function get_links() : array
     {
-        return \is_array($this->box['links']) ? $this->box['links'] : array();
+        return \is_array($this->box['links']) ? $this->box['links'] : [];
     }
-    /**
-     * @return string
-     */
     public function get_class() : string
     {
         return \is_string($this->box['className']) ? $this->box['className'] : '';
     }
-    /**
-     * @param string $slug
-     *
-     * @return mixed
-     */
     public function get_field(string $slug)
     {
         return $this->box[$slug] ?? '';
     }
-    /**
-     * @return bool
-     */
     public function get_row_open() : bool
     {
         return isset($this->box['open_row'][0]) && 'yes' === $this->box['open_row'][0];
     }
-    /**
-     * @return bool
-     */
     public function get_row_close() : bool
     {
         return isset($this->box['close_row'][0]) && 'yes' === $this->box['close_row'][0];
@@ -102,12 +83,10 @@ class Box implements \WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Abstracts\Bo
      */
     public function get_button() : array
     {
-        return \is_array($this->box['button']) ? $this->box['button'] : array();
+        return \is_array($this->box['button']) ? $this->box['button'] : [];
     }
     /**
      * @param array $args
-     *
-     * @return string
      */
     public function render(array $args = []) : string
     {

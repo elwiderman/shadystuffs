@@ -11,22 +11,11 @@ use WPDeskFIVendor\WPDesk\View\Resolver\DirResolver;
  */
 class RateBox
 {
-    /**
-     * @var Renderer
-     */
+    /** @var Renderer */
     private $renderer;
-    public function __construct()
+    public function __construct(?\WPDeskFIVendor\WPDesk\View\Renderer\Renderer $renderer = null)
     {
-        $this->init_render();
-    }
-    /**
-     * @return void
-     */
-    private function init_render()
-    {
-        $resolver = new \WPDeskFIVendor\WPDesk\View\Resolver\ChainResolver();
-        $resolver->appendResolver(new \WPDeskFIVendor\WPDesk\View\Resolver\DirResolver(\trailingslashit(__DIR__) . 'Views/'));
-        $this->renderer = new \WPDeskFIVendor\WPDesk\View\Renderer\SimplePhpRenderer($resolver);
+        $this->renderer = $renderer ?? new \WPDeskFIVendor\WPDesk\View\Renderer\SimplePhpRenderer(new \WPDeskFIVendor\WPDesk\View\Resolver\DirResolver(__DIR__ . '/Views/'));
     }
     /**
      * @param string $url

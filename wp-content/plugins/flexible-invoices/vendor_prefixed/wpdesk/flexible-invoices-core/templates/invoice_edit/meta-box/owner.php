@@ -85,7 +85,7 @@ echo \esc_attr($seller->get_name());
 ?></label>
             <div class="media-input-wrapper" id="image_picker">
                 <input type="hidden" class="image-field-value" value="<?php 
-echo \esc_html($seller->get_logo());
+echo \esc_attr($seller->get_logo());
 ?>"
                        name="owner[logo]"
                        id="inspire_invoices_owner_logo"/>

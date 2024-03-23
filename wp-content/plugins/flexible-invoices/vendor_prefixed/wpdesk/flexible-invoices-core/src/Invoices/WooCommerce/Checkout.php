@@ -96,7 +96,7 @@ class Checkout implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookable
     {
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\Translator::is_wpml_active()) {
             global $sitepress;
-            echo '<input type="hidden" class="input-hidden" name="wpml_user_lang" id="wpml_user_lang" value="' . \esc_html($sitepress->get_current_language()) . '">';
+            echo '<input type="hidden" class="input-hidden" name="wpml_user_lang" id="wpml_user_lang" value="' . \esc_attr($sitepress->get_current_language()) . '">';
         }
     }
     /**

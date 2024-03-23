@@ -47,14 +47,16 @@ class DeleteDocumentRelation implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plu
         $type = '_' . $document->get_type();
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\RegisterPostType::POST_TYPE_NAME === $post_type) {
             $is_correction = (int) \get_post_meta($id, $type, \true) === 1;
-            if ($is_correction) {
-                $order_id = \get_post_meta($id, '_wc_order_id', \true);
-                \delete_post_meta($order_id, $type . '_corrections');
-                \delete_post_meta($order_id, $type . '_generated');
-            } else {
-                $order_id = \get_post_meta($id, '_wc_order_id', \true);
-                \delete_post_meta($order_id, $type . '_generated');
+            $order_id = \get_post_meta($id, '_wc_order_id', \true);
+            $order = \wc_get_order($order_id);
+            if (!$order) {
+                return;
             }
+            if ($is_correction) {
+                $order->delete_meta_data($type . '_corrections');
+            }
+            $order->delete_meta_data($type . '_generated');
+            $order->save();
         }
     }
 }

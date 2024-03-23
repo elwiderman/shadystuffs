@@ -66,7 +66,8 @@ class PostDocumentDataSource extends \WPDeskFIVendor\WPDesk\Library\FlexibleInvo
      */
     public function get_date_of_paid() : int
     {
-        return (int) \strtotime($this->source->param('post.date_paid')->get());
+        $paid_time = $this->source->param('post.date_paid')->get() ?? \date('Y-m-d H:i:s', \time());
+        return (int) \strtotime($paid_time);
     }
     /**
      * @return int

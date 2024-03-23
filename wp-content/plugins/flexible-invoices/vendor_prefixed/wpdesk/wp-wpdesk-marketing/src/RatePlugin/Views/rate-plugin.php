@@ -2,18 +2,19 @@
 
 namespace WPDeskFIVendor;
 
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers\Markers;
-$url = $params['url'] ?? '#';
-$description = $params['description'] ?? null;
-$header = $params['header'] ?? null;
-$footer = $params['footer'] ?? null;
+/**
+ * @var string $url
+ * @var string $description
+ * @var string $header
+ * @var string $footer
+ */
 ?>
 <section class="rate-plugin-wrapper wpdesk-rate-icons">
 	<?php 
 if ($header) {
     ?>
 		<header><?php 
-    echo $header;
+    echo \wp_kses_post($header);
     ?></header>
 	<?php 
 }
@@ -22,7 +23,7 @@ if ($header) {
 if ($description) {
     ?>
 		<p class="description"><?php 
-    echo $description;
+    echo \wp_kses_post($description);
     ?></p>
 	<?php 
 }
@@ -40,7 +41,7 @@ echo \esc_url($url);
 if ($footer) {
     ?>
 		<footer><?php 
-    echo $footer;
+    echo \wp_kses_post($footer);
     ?></footer>
 	<?php 
 }

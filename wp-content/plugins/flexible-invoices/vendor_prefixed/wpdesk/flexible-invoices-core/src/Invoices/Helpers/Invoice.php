@@ -36,6 +36,7 @@ class Invoice
         return \admin_url('admin-ajax.php?action=fiw_get_document&id=' . $document->get_id() . '&hash=' . $hash . '&save_file=1');
     }
     /**
+     * @deprecated
      * @param int    $order_id
      * @param string $type
      *

@@ -21,7 +21,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "7.0"
+            "php": "7.3.3"
         },
         "allow-plugins": {
             "cweagans\/composer-patches": true,
@@ -30,7 +30,7 @@
         }
     },
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.3",
         "psr\/log": "^1.1.3",
         "psr\/container": "^1",
         "wpdesk\/flexible-invoices-abstracts": "^1.3",

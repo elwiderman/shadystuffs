@@ -81,25 +81,25 @@ if (!empty($items)) {
         $item_total_price = $product['total_price'] ?? 0.0;
         ?>
 				<tr class="product_row">
-				<td>
+					<td>
 						<div class="product_select_name" style="width: 90%; float: left;">
 							<?php 
         if ($is_woocommerce_active) {
             ?>
-							<div class="select-product">
-								<select name="product[name][]" class="refresh_product wide-input">
-									<option value="<?php 
+								<div class="select-product">
+									<select name="product[name][]" class="refresh_product wide-input">
+										<option value="<?php 
             echo \esc_attr($item_name);
             ?>"><?php 
             echo \esc_html($item_name);
             ?></option>
-								</select>
-							</div>
+									</select>
+								</div>
 							<?php 
         } else {
             ?>
 								<input type="text" class="item_input_name" name="product[name][]" value="<?php 
-            echo \esc_html($item_name);
+            echo \esc_attr($item_name);
             ?>">
 							<?php 
         }
@@ -116,10 +116,10 @@ if (!empty($items)) {
 					<td>
 						<label>
 							<input
-									type="text"
-									name="product[sku][]"
-									class="sku hs-beacon-search"
-									value="<?php 
+								type="text"
+								name="product[sku][]"
+								class="sku hs-beacon-search"
+								value="<?php 
         echo \esc_attr($item_sku);
         ?>"
 							/>
@@ -128,10 +128,10 @@ if (!empty($items)) {
 					<td>
 						<label>
 							<input
-									type="text"
-									name="product[unit][]"
-									class="unit hs-beacon-search"
-									value="<?php 
+								type="text"
+								name="product[unit][]"
+								class="unit hs-beacon-search"
+								value="<?php 
         echo \esc_attr($item_unit);
         ?>"
 							/>
@@ -140,24 +140,24 @@ if (!empty($items)) {
 					<td>
 						<label>
 							<input
-									type="text"
-									name="product[quantity][]"
-									value="<?php 
+								type="text"
+								name="product[quantity][]"
+								value="<?php 
         echo \esc_attr($item_qty);
         ?>"
-									class="quantity hs-beacon-search refresh_net_price_sum"
+								class="quantity hs-beacon-search refresh_net_price_sum"
 							/>
 						</label>
 					</td>
 					<td>
 						<label>
 							<input
-									type="text"
-									name="product[net_price][]"
-									value="<?php 
+								type="text"
+								name="product[net_price][]"
+								value="<?php 
         echo \esc_attr($item_net_price);
         ?>"
-									class="net_price hs-beacon-search refresh_net_price_sum"
+								class="net_price hs-beacon-search refresh_net_price_sum"
 							/>
 						</label>
 					</td>
@@ -167,10 +167,10 @@ if (!empty($items)) {
 						<td class="discount">
 							<label>
 								<input
-										type="text"
-										name="product[discount][]"
-										class="hs-beacon-search refresh_vat_sum discount"
-										value="<?php 
+									type="text"
+									name="product[discount][]"
+									class="hs-beacon-search refresh_vat_sum discount"
+									value="<?php 
             echo \esc_attr($item_discount);
             ?>"
 								/>
@@ -182,12 +182,12 @@ if (!empty($items)) {
 					<td>
 						<label>
 							<input
-									type="text"
-									name="product[net_price_sum][]"
-									value="<?php 
+								type="text"
+								name="product[net_price_sum][]"
+								value="<?php 
         echo \esc_attr($item_net_price_sum);
         ?>"
-									class="hs-beacon-search refresh_vat_sum net_price_sum"
+								class="hs-beacon-search refresh_vat_sum net_price_sum"
 							/>
 						</label>
 					</td>
@@ -255,24 +255,24 @@ if (!empty($items)) {
 					<td>
 						<label>
 							<input
-									type="text"
-									name="product[vat_sum][]"
-									value="<?php 
+								type="text"
+								name="product[vat_sum][]"
+								value="<?php 
         echo \esc_attr($item_vat_sum);
         ?>"
-									class="vat_sum hs-beacon-search refresh_total_price"
+								class="vat_sum hs-beacon-search refresh_total_price"
 							/>
 						</label>
 					</td>
 					<td>
 						<label>
 							<input
-									type="text"
-									name="product[total_price][]"
-									value="<?php 
+								type="text"
+								name="product[total_price][]"
+								value="<?php 
         echo \esc_attr($item_total_price);
         ?>"
-									class="total_price hs-beacon-search refresh_total"
+								class="total_price hs-beacon-search refresh_total"
 							/>
 						</label>
 					</td>
@@ -306,13 +306,13 @@ if (!empty($items)) {
 				<?php 
 if ($is_woocommerce_active) {
     ?>
-				<div class="select-product">
-					<label>
-						<select name="product[name][]" class="refresh_product wide-input">
-							<option value=""></option>
-						</select>
-					</label>
-				</div>
+					<div class="select-product">
+						<label>
+							<select name="product[name][]" class="refresh_product wide-input">
+								<option value=""></option>
+							</select>
+						</label>
+					</div>
 				<?php 
 } else {
     ?>
@@ -332,21 +332,20 @@ echo $is_woocommerce_active ? '' : 'display:none;';
 		<td>
 			<label>
 				<input
-
-						class="hs-beacon-search"
-						type="text"
-						name="product[sku][]"
-						value=""
+					class="hs-beacon-search"
+					type="text"
+					name="product[sku][]"
+					value=""
 				/>
 			</label>
 		</td>
 		<td>
 			<label>
 				<input
-						class="hs-beacon-search"
-						type="text"
-						name="product[unit][]"
-						value="<?php 
+					class="hs-beacon-search"
+					type="text"
+					name="product[unit][]"
+					value="<?php 
 echo \esc_attr_x('item', 'Units Of Measure For Items In Inventory', 'flexible-invoices');
 ?>"
 				/>
@@ -355,22 +354,20 @@ echo \esc_attr_x('item', 'Units Of Measure For Items In Inventory', 'flexible-in
 		<td>
 			<label>
 				<input
-
-						name="product[quantity][]"
-						type="text"
-						value="1"
-						class="refresh_net_price_sum hs-beacon-search"
+					name="product[quantity][]"
+					type="text"
+					value="1"
+					class="quantity hs-beacon-search refresh_net_price_sum"
 				/>
 			</label>
 		</td>
 		<td>
 			<label>
 				<input
-
-						type="text"
-						name="product[net_price][]"
-						value="0.0"
-						class="hs-beacon-search refresh_net_price_sum"
+					type="text"
+					name="product[net_price][]"
+					value="0.0"
+					class="net_price hs-beacon-search refresh_net_price_sum"
 				/>
 			</label>
 		</td>
@@ -380,11 +377,10 @@ if ($show_discount && \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Invoic
 			<td class="discount">
 				<label>
 					<input
-
-							class="hs-beacon-search refresh_vat_sum"
-							type="text"
-							name="product[discount][]"
-							value="0.0"
+						class="hs-beacon-search refresh_vat_sum discount"
+						type="text"
+						name="product[discount][]"
+						value="0.0"
 					/>
 				</label>
 			</td>
@@ -394,21 +390,18 @@ if ($show_discount && \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Invoic
 		<td>
 			<label>
 				<input
-
-						type="text"
-						name="product[net_price_sum][]"
-						value="0.0"
-						class="hs-beacon-search refresh_vat_sum"
+					type="text"
+					name="product[net_price_sum][]"
+					value="0.0"
+					class="hs-beacon-search refresh_vat_sum net_price_sum"
 				/>
 			</label>
 		</td>
 		<td>
 			<label>
 				<select
-						name="product[vat_type][]"
-						class="refresh_vat_sum"
-
-						class="hs-beacon-search"
+					name="product[vat_type][]"
+					class="refresh_vat_sum refresh_vat_sum vat_type hs-beacon-search"
 				>
 					<?php 
 foreach ($vat_types as $index => $vatType) {
@@ -427,19 +420,19 @@ foreach ($vat_types as $index => $vatType) {
 		<td><label>
 				<input
 
-						type="text"
-						name="product[vat_sum][]"
-						value="0.0"
-						class="hs-beacon-search refresh_total_price"
+					type="text"
+					name="product[vat_sum][]"
+					value="0.0"
+					class="vat_sum hs-beacon-search refresh_total_price"
 				/>
 			</label></td>
 		<td><label>
 				<input
 
-						type="text"
-						name="product[total_price][]"
-						value="0.0"
-						class="hs-beacon-search refresh_total"
+					type="text"
+					name="product[total_price][]"
+					value="0.0"
+					class="total_price hs-beacon-search refresh_total"
 				/>
 			</label></td>
 		<td>

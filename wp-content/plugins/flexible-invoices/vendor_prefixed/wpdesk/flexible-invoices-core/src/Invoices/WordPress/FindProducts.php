@@ -9,6 +9,7 @@ namespace WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress;
 
 use WC_Tax;
 use WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\WooCommerce;
+use WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Settings\Settings;
 use WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookable;
 /**
  * Find products item.
@@ -17,6 +18,14 @@ use WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookable;
  */
 class FindProducts implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookable
 {
+    /**
+     * @var Settings
+     */
+    private $settings;
+    public function __construct(\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Settings\Settings $settings)
+    {
+        $this->settings = $settings;
+    }
     public function hooks()
     {
         if (!\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\WooCommerce::is_active()) {
@@ -45,7 +54,7 @@ class FindProducts implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookab
                     $items = \maybe_unserialize($row->meta_value);
                     foreach ($items as $item) {
                         if (\preg_match('/' . $name . '/i', $item['name'])) {
-                            $finded_items[] = ['id' => $item['wc_product_id'], 'text' => $item['name'], 'price' => $item['net_price_sum'], 'net_price' => $item['net_price_sum'], 'gross_price' => $item['total_price'], 'tax' => $item['vat_sum'], 'sku' => $item['sku'], 'qty' => $item['quantity'], 'tax_amount' => $item['vat_sum'], 'tax_rate' => $item['vat_type'], 'type' => $item['type'], 'unit' => \esc_html_x('item', 'Units Of Measure For Items In Inventory', 'flexible-invoices')];
+                            $finded_items[] = ['id' => $item['wc_product_id'], 'text' => $item['name'], 'price' => $item['net_price_sum'], 'net_price' => $item['net_price_sum'], 'gross_price' => $item['total_price'], 'tax' => $item['vat_sum'], 'sku' => $this->settings->get('woocommerce_get_sku') === 'yes' ? $item['sku'] : '', 'qty' => $item['quantity'], 'tax_amount' => $item['vat_sum'], 'tax_rate' => $item['vat_type'], 'type' => $item['type'], 'unit' => \esc_html_x('item', 'Units Of Measure For Items In Inventory', 'flexible-invoices')];
                         }
                     }
                     \wp_send_json(['items' => \array_values($finded_items)]);

@@ -31,7 +31,7 @@ echo \esc_attr($field->get_name());
 echo \esc_attr($field->get_id());
 ?>"
             value="<?php 
-echo \esc_html($field->get_label());
+echo \esc_attr($field->get_label());
 ?>"
             <?php 
 if ($field->is_required()) {

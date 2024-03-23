@@ -76,8 +76,8 @@ final class InvoiceTemplate extends \WPDeskFIVendor\WPDesk\Library\FlexibleInvoi
             $docs_link2 = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=gtu-invoice#gtu-na-fakturach';
             $docs_link3 = '';
         }
-        $output .= \sprintf(\__('Also, learn how to <a href="%s" target="_blank">adjust the invoice template</a>, add <a href="%s" target="_blank">more data</a> and <a href="%s" target="_blank">manage translations</a>.', 'flexible-invoices'), $docs_link1, $docs_link2, $docs_link3);
-        return $output;
+        $output .= \sprintf(\__('Also, learn how to <a href="%s" target="_blank" style="color: #4BB04E; font-weight: 700;">adjust the invoice template</a>, add <a href="%s" target="_blank" style="color: #4BB04E; font-weight: 700;">more data</a> and <a href="%s" target="_blank" style="color: #4BB04E; font-weight: 700;">manage translations</a>.', 'flexible-invoices'), $docs_link1, $docs_link2, $docs_link3);
+        return '<span style="color: #4BB04E; font-weight: 700;">' . $output . '</span>';
     }
     /**
      * @return array|Field[]
@@ -88,7 +88,7 @@ final class InvoiceTemplate extends \WPDeskFIVendor\WPDesk\Library\FlexibleInvoi
         $pro_url = \get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sklep/zaawansowane-szablony-faktur-woocommerce/?utm_source=wp-admin-plugins&utm_medium=button&utm_campaign=flexible-invoices-advanced-templates' : 'https://flexibleinvoices.com/products/advanced-templates-for-flexible-invoices/?utm_source=wp-admin-plugins&utm_medium=button&utm_campaign=flexible-invoices-advanced-templates';
         $pro_description = '';
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::is_template_addon_is_disabled()) {
-            $pro_description = \sprintf('<a target="_blank" href="%1$s" >%2$s</a>', $pro_url, \esc_html__('To customize PDF layout of your invoices, buy the Advanced Templates for Flexible Invoices add-on &rarr;', 'flexible-invoices'));
+            $pro_description = \sprintf(\esc_html__('To customize PDF layout of your invoices, buy the %1$sAdvanced Sending add-on for Flexible Invoices →%2$s', 'flexible-invoices'), '<a href="' . $pro_url . '" target="_blank" style="color: #8f0350; font-weight: 700;">', '</a>');
             if (!\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\InvoicesIntegration::is_super()) {
                 $pro_description .= '<br><span>' . \esc_html__('The add-on requires Flexible Invoices PRO.', 'flexible-invoices') . '</span>';
             }

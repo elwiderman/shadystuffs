@@ -28,12 +28,10 @@ jQuery.noConflict();
 		userDataAndPayment: function () {
 			$( 'body.post-type-inspire_invoice .get_user_data' ).click( function ( e ) {
 				if ( fi_session.search_user_data.length !== 0 ) {
-					console.log( fi_session.search_user_data );
 					for ( i in fi_session.search_user_data ) {
 						let field = $( '[name=client\\[' + i + '\\]]' );
 						let name = field.attr( 'name' );
 						if ( i === 'country' ) {
-							console.log( fi_session.search_user_data[ i ] );
 							field.val( fi_session.search_user_data[ i ] ).change();
 						} else {
 							field.val( fi_session.search_user_data[ i ] );

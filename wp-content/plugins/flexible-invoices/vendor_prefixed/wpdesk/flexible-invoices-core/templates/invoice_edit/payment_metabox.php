@@ -37,7 +37,7 @@ $document_type = isset($_REQUEST['document_type']) ? $_REQUEST['document_type'] 
 echo \esc_attr($document_type);
 ?>"/>
 			<input type="hidden" name="number" value="<?php 
-echo \esc_html($document->get_number());
+echo \esc_attr($document->get_number());
 ?>"/>
 			<input type="hidden" name="formatted_number" value="<?php 
 echo \esc_attr($document->get_formatted_number());
@@ -74,7 +74,7 @@ if ($document->get_type() !== 'proforma') {
 foreach ($payment_statuses as $val => $name) {
     ?>
 					<option value="<?php 
-    echo \esc_html($val);
+    echo \esc_attr($val);
     ?>" <?php 
     if ($document->get_payment_status() === $val) {
         ?>selected="selected"<?php 

@@ -2,7 +2,6 @@ var invoice_ask_field = jQuery( '#billing_invoice_ask' );
 var vat_number_field = jQuery( '#billing_vat_number' );
 if ( invoice_ask_field.length ) {
 	invoice_ask_field.change( function () {
-		console.log( invoice_ask_field );
 		var vat_number_p = vat_number_field.closest( 'p' );
 		if ( invoice_ask_field.is( ':checked' ) ) {
 			vat_number_p.show();

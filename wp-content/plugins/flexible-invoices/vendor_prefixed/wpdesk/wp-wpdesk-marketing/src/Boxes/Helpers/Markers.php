@@ -13,36 +13,28 @@ namespace WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers;
 class Markers
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $placeholders = [];
     public function __construct()
     {
         $this->add_placeholder('{siteurl}', \get_site_url() . '/');
     }
-    /**
-     * @param string $placeholder
-     * @param string $value
-     */
-    public function add_placeholder(string $placeholder, string $value)
+    public function add_placeholder(string $placeholder, string $value) : void
     {
         $this->placeholders[$placeholder] = $value;
     }
     /**
-     * @return array
+     * @deprecated 1.1.3 Never used outside this class.
+     * @return array<string, string>
      */
     public function get_placeholders() : array
     {
         return $this->placeholders;
     }
-    /**
-     * @param string $string
-     *
-     * @return string
-     */
     public function replace(string $string) : string
     {
-        foreach ($this->get_placeholders() as $placeholder => $value) {
+        foreach ($this->placeholders as $placeholder => $value) {
             $string = \str_replace($placeholder, $value, $string);
         }
         return $string;

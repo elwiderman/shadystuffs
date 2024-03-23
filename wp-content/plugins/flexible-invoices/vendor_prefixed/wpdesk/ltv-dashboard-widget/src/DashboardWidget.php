@@ -105,16 +105,21 @@ final class DashboardWidget
         $all_plugins = \array_keys(\get_plugins());
         return \array_map('dirname', $all_plugins);
     }
-    private function filter_plugins_to_show(array $plugins) : array
+    private function filter_plugins_to_show(array $plugins, int $limit, bool $for_free = \false) : array
     {
+        if ($limit === 0) {
+            return [];
+        }
         \usort($plugins, static function ($a, $b) {
             return \strnatcmp($a['priority'], $b['priority']);
         });
         $installed_plugins_dir = $this->get_all_plugins_dirs();
-        $plugins = \array_filter($plugins, static function ($plugin) use($installed_plugins_dir) {
-            return !\in_array($plugin['slug'], $installed_plugins_dir, \true);
+        $plugins = \array_filter($plugins, static function ($plugin) use($installed_plugins_dir, $for_free) {
+            $slug = $for_free ? $plugin['free_plugin_slug'] ?? "" : $plugin['slug'];
+            $installed = \in_array($slug, $installed_plugins_dir, \true);
+            return $for_free ? $installed : !$installed;
         });
-        return \array_slice($plugins, 0, $this->plugins_limit);
+        return \array_slice($plugins, 0, $limit);
     }
     private function get_server() : string
     {
@@ -124,7 +129,7 @@ final class DashboardWidget
         }
         return 'www.wpdesk.net';
     }
-    private function has_cached_data() : string
+    private function has_cached_data() : bool
     {
         if ($this->cache_timeout <= 0) {
             return \false;
@@ -192,43 +197,21 @@ final class DashboardWidget
         if (!$ret || !\is_array($ret)) {
             return null;
         }
-        return ['header' => $ret['header'] ?? null, 'plugins' => $this->filter_plugins_to_show($ret['plugins'] ?? []), 'footer' => $ret['footer'] ?? null];
+        $for_free_plugins = $this->filter_plugins_to_show($ret['for_free_plugins'] ?? [], $this->plugins_limit, \true);
+        $plugins = $this->filter_plugins_to_show($ret['plugins'] ?? [], $this->plugins_limit - \count($for_free_plugins), \false);
+        return ['header' => $ret['header'] ?? null, 'for_free_plugins' => $for_free_plugins, 'plugins' => $plugins, 'footer' => $ret['footer'] ?? null];
     }
     public function widget_output()
     {
         $widget_data = $this->get_widget_data();
-        $server = $this->get_server();
-        $utm_base = $this->utm_base;
         if (!empty($widget_data)) {
             echo '<div class="wpdesk_ltv_dashboard_widget">';
             if ($this->show_widget_header && $widget_data['header']) {
                 echo \wp_kses_post($widget_data['header']);
             }
             echo '<ul class="ltv-rows">';
-            foreach ($widget_data['plugins'] as $plugin) {
-                $plugin_url = \sprintf('%1$s?%2$s&utm_medium=more-info-button&utm_term=%3$s', $plugin['url'], $utm_base, $plugin['slug']);
-                $add_to_cart_url = \sprintf('https://%1$s/?add-to-cart=%2$s&%3$s&utm_medium=buy-now-button&utm_term=%4$s', $server, $plugin['add_to_cart_id'], $utm_base, $plugin['slug']);
-                $add_to_cart_button_label = \esc_html__('Buy now', 'flexible-invoices');
-                if ($plugin['add_to_cart_id'] === self::WP_DESK_CARE_ID) {
-                    $add_to_cart_button_label = \esc_html__('Learn more', 'flexible-invoices');
-                    $add_to_cart_url = $plugin_url;
-                } else {
-                    if ($plugin['add_to_cart_id'] === self::AUTOPAY_ID) {
-                        $add_to_cart_button_label = \esc_html__('Download', 'flexible-invoices');
-                        $add_to_cart_url = \esc_url("https://wpde.sk/autopay-wpdeskpl");
-                    }
-                }
-                echo '<li class="ltv-row">';
-                if ($plugin['image']) {
-                    echo '<img src="' . \esc_url($plugin['image']) . '" alt="" />';
-                }
-                echo '<p><strong>' . \esc_html($plugin['name']) . '</strong></p>';
-                echo '<div class="ltv-row-description">' . \wp_kses_post($plugin['description']) . '</div>';
-                echo '<div class="ltv-buttons">';
-                echo '<a class="button button-primary button-large" href="' . \esc_url($add_to_cart_url) . '" target="_blank">' . $add_to_cart_button_label . '</a>';
-                echo '</div>';
-                echo '</li>';
-            }
+            $this->show_plugins($widget_data['for_free_plugins'] ?? [], \true);
+            $this->show_plugins($widget_data['plugins'] ?? [], \false);
             echo '</ul>';
             echo '<div class="ltv-footer">';
             if ($this->show_widget_footer && $widget_data['footer']) {
@@ -282,6 +265,44 @@ final class DashboardWidget
                 }
             </style>
             <?php 
+        }
+    }
+    private function show_plugins(array $plugins, bool $for_free = \false)
+    {
+        $server = $this->get_server();
+        $utm_base = $this->utm_base;
+        foreach ($plugins as $plugin) {
+            $slug = $plugin['slug'];
+            if ($for_free && isset($plugin['free_plugin_slug'])) {
+                $slug = $plugin['free_plugin_slug'];
+            }
+            $plugin_url = \sprintf('%1$s?%2$s&utm_medium=more-info-button&utm_term=%3$s', $plugin['url'], $utm_base, $slug);
+            $add_to_cart_url = \sprintf('https://%1$s/?add-to-cart=%2$s&%3$s&utm_medium=buy-now-button&utm_term=%4$s', $server, $plugin['add_to_cart_id'], $utm_base, $slug);
+            $add_to_cart_button_label = \esc_html__('Buy now', 'flexible-invoices');
+            if ($plugin['add_to_cart_id'] === self::WP_DESK_CARE_ID) {
+                $add_to_cart_button_label = \esc_html__('Learn more', 'flexible-invoices');
+                $add_to_cart_url = $plugin_url;
+            } else {
+                if ($plugin['add_to_cart_id'] === self::AUTOPAY_ID) {
+                    $add_to_cart_button_label = \esc_html__('Download', 'flexible-invoices');
+                    $add_to_cart_url = \esc_url("https://wpde.sk/autopay-wpdeskpl");
+                }
+            }
+            echo '<li class="ltv-row">';
+            if ($plugin['image']) {
+                echo '<img src="' . \esc_url($plugin['image']) . '" alt="" />';
+            }
+            echo '<p><strong>' . \esc_html($plugin['name']) . '</strong></p>';
+            echo '<div class="ltv-row-description">' . \wp_kses_post($plugin['description']) . '</div>';
+            echo '<div class="ltv-buttons">';
+            if ($for_free) {
+                echo '<a class="button button-primary" href="' . \esc_url($plugin_url) . '" target="_blank">' . \esc_html__('More info', 'flexible-invoices') . '</a>';
+                echo '<a class="button button-secondary" href="' . \esc_url($add_to_cart_url) . '" target="_blank">' . $add_to_cart_button_label . '</a>';
+            } else {
+                echo '<a class="button button-primary button-large" href="' . \esc_url($add_to_cart_url) . '" target="_blank">' . $add_to_cart_button_label . '</a>';
+            }
+            echo '</div>';
+            echo '</li>';
         }
     }
 }

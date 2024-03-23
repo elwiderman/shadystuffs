@@ -316,7 +316,7 @@ class InvoicesIntegration implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin
         $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\Dashboard($this->document_factory, $this->strategy, $capabilities, $this->renderer, $this->settings));
         $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\BulkActions());
         $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\User());
-        $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\FindProducts());
+        $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\FindProducts($this->settings));
         $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\DuplicatesNotice());
         $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\Reports\GenerateReport($this->get_settings(), $this->document_factory, $this->renderer, $this->library_info));
         $this->add_hookable(new \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\Reports\ReportsMenuPage($this->library_info->get_template_dir()));

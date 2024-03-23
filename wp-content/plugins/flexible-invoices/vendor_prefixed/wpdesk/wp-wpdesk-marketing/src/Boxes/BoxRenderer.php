@@ -12,70 +12,32 @@ use WPDeskFIVendor\WPDesk\View\Resolver\DirResolver;
  */
 class BoxRenderer
 {
-    /**
-     * @var array
-     */
+    /** @var array<string, array{type: string}> */
     private $boxes;
-    /**
-     * @var Renderer
-     */
+    /** @var Renderer */
     private $renderer;
-    /**
-     * @var Helpers\BBCodes
-     */
+    /** @var Helpers\BBCodes */
     private $bbcodes;
-    /**
-     * @var Helpers\Markers
-     */
+    /** @var Helpers\Markers */
     private $markers;
-    /**
-     * @param array $boxes
-     */
-    public function __construct(array $boxes)
+    /** @param array<string, array{type: string}> $boxes */
+    public function __construct(array $boxes, \WPDeskFIVendor\WPDesk\View\Renderer\Renderer $renderer = null)
     {
         $this->boxes = $boxes;
-        $this->init_render();
-        $this->init_helpers();
-    }
-    /**
-     * @return void
-     */
-    protected function init_render()
-    {
-        $resolver = new \WPDeskFIVendor\WPDesk\View\Resolver\ChainResolver();
-        $resolver->appendResolver(new \WPDeskFIVendor\WPDesk\View\Resolver\DirResolver(\trailingslashit(__DIR__) . 'Views/'));
-        $this->renderer = new \WPDeskFIVendor\WPDesk\View\Renderer\SimplePhpRenderer($resolver);
-    }
-    /**
-     * @return void
-     */
-    protected function init_helpers()
-    {
+        $this->renderer = $renderer ?? new \WPDeskFIVendor\WPDesk\View\Renderer\SimplePhpRenderer(new \WPDeskFIVendor\WPDesk\View\Resolver\DirResolver(__DIR__ . '/Views/'));
         $this->bbcodes = new \WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers\BBCodes();
         $this->markers = new \WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers\Markers();
     }
-    /**
-     * @return bool
-     */
     public function has_boxes() : bool
     {
         return !empty($this->boxes);
     }
-    /**
-     * @param string $box_id
-     *
-     * @return bool
-     */
     public function has_box(string $box_id) : bool
     {
         return isset($this->boxes[$box_id]);
     }
     /**
      * Get single marketing box.
-     *
-     * @param string $box_id
-     *
-     * @return string
      */
     public function get_single(string $box_id) : string
     {
@@ -87,17 +49,13 @@ class BoxRenderer
     }
     /**
      * Get all marketing boxes (displays all boxes in the layout).
-     *
-     * @return string
      */
     public function get_all() : string
     {
         return $this->renderer->render('all', ['boxes' => $this->boxes, 'renderer' => $this->renderer, 'plugin' => $this, 'bbcodes' => $this->bbcodes, 'markers' => $this->markers]);
     }
     /**
-     * @param array $box
-     *
-     * @return BoxInterface
+     * @param array{type: string} $box
      */
     public function get_box_type(array $box) : \WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Abstracts\BoxInterface
     {

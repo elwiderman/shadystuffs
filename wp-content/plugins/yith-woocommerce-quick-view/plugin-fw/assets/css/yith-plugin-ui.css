@@ -110,7 +110,6 @@
   display: none;
   flex-direction: column;
   width: max-content;
-  right: 0;
   margin: 5px 0 0 0;
   padding: 8px 0;
   background: var(--yith-content-bg);

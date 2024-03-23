@@ -2,46 +2,34 @@
 
 namespace WPDeskFIVendor;
 
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers\BBCodes;
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers\Markers;
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\MarketingBoxes;
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\BoxRenderer;
-use WPDeskFIVendor\WPDesk\View\Renderer\Renderer;
 /**
  * @var array $boxes
+ * @var \WPDesk\Library\Marketing\Boxes\BoxRenderer $plugin
+ * @var \WPDesk\Library\Marketing\Boxes\Helpers\BBCodes $bbcodes
+ * @var \WPDesk\Library\Marketing\Boxes\Helpers\Markers $markers
+ * @var \WPDesk\View\Renderer\Renderer $renderer
  */
-$boxes = $params['boxes'] ?? [];
-/**
- * @var Renderer $renderer ;
- */
-$renderer = $params['renderer'];
-/**
- * @var BoxRenderer $plugin
- */
-$plugin = $params['plugin'];
-/**
- * @var BBCodes $bbcodes
- */
-$bbcodes = $params['bbcodes'];
-/**
- * @var Markers $markers
- */
-$markers = $params['markers'];
 ?>
 <div class="wpdm-box-wrapper">
-    <?php 
+	<?php 
 foreach ($boxes as $box) {
     $box = $plugin->get_box_type($box);
     $type = $box->get_type();
     if ($box->get_row_open()) {
-        echo $renderer->render('row_open', []);
-    }
-    echo '<div class="col-xs">' . $box->render(['bbcodes' => $bbcodes, 'markers' => $markers]) . '</div>';
-    if ($box->get_row_close()) {
-        echo $renderer->render('row_close', []);
+        $renderer->output_render('row_open');
     }
     ?>
-    <?php 
+		<div class="col-xs">
+			<?php 
+    echo \wp_kses_post($box->render(['bbcodes' => $bbcodes, 'markers' => $markers]));
+    ?>
+		</div>
+		<?php 
+    if ($box->get_row_close()) {
+        $renderer->output_render('row_close');
+    }
+    ?>
+		<?php 
 }
 ?>
 </div>
