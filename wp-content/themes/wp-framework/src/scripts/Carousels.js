@@ -89,6 +89,18 @@ export default class Carousels {
             asNavFor: '#productSingleCarouselMain',
             prevArrow: '<button class="slick-prev slick-arrow"><i class="icon-chevron-up"></i></button>',
             nextArrow: '<button class="slick-next slick-arrow"><i class="icon-chevron-down"></i></button>',
+            responsive: [{
+                breakpoint: 768,
+                settings: {
+                    infinite: true,
+                    autoplay: true,
+                    autoplaySpeed: 5000,
+                    centerMode: true,
+                    vertical: false,
+                    prevArrow: '<button class="slick-prev slick-arrow"><i class="icon-chevron-left"></i></button>',
+                    nextArrow: '<button class="slick-next slick-arrow"><i class="icon-chevron-right"></i></button>',
+                }
+            }]
         });
     }
 }

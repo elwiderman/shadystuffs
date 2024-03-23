@@ -28,8 +28,7 @@ function framework_scripts() {
         ));
     }
 
-    if (is_cart()) {
-
+    if (is_cart() || is_product()) {
         wp_enqueue_script('shady-woo', $path . '/assets/scripts/shadyWoo.min.js', ['jquery', 'wc-cart'], '', ['defer', true]);
 
         wp_localize_script('shady-woo', 'WPURLS', array(

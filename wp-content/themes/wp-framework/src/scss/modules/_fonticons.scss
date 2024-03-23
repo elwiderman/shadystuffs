@@ -238,6 +238,18 @@
     }
 }
 
+.icon-mail {
+    &:before {
+        content: $icon-mail;
+    }
+}
+
+.icon-filter {
+    &:before {
+        content: $icon-filter;
+    }
+}
+
 .icon-facebook {
     &:before {
         content: $icon-facebook;
@@ -268,11 +280,5 @@
     &:before {
         content: $icon-whatsapp;
         color: #25d366;
-    }
-}
-
-.icon-mail {
-    &:before {
-        content: $icon-mail;
     }
 }

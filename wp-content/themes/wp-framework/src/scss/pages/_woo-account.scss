@@ -16,11 +16,28 @@
                             float: unset;
                             flex: 0 0 25%;
                             max-width: 25%;
+                            @include respond-to-mob('medium') {
+                                flex: 0 0 100%;
+                                max-width: 100%;
+                                @include add-border(1px, $grey, 'bottom');
+                                padding-bottom: 8px;
+                                margin-bottom: 25px;
+                            }
                             ul {
                                 padding-right: 30px;
+                                @include respond-to-mob('medium') {
+                                    @include flex-display(row, center);
+                                    padding-right: 0;
+                                }
                                 li {
+                                    @include respond-to-mob('medium') {
+                                        padding: 0 15px;
+                                    }
                                     &:not(:last-child) {
                                         @include add-border(1px, $grey, 'bottom');
+                                        @include respond-to-mob('medium') {
+                                            border: none;
+                                        }
                                     }
                                     &.is-active {
                                         a {
@@ -38,6 +55,13 @@
                             flex: 0 0 75%;
                             max-width: 75%;
                             width: unset;
+                            @include respond-to-mob('medium') {
+                                flex: 0 0 100%;
+                                max-width: 100%;
+                                // @include add-border(1px, $grey, 'bottom');
+                                // padding-bottom: 8px;
+                                // margin-bottom: 25px;
+                            }
                             h2, h3 {
                                 @include font($secondary-font, $semi-bold);
                                 font-size: 22px;
@@ -93,6 +117,7 @@
                                 mark {
                                     background: $secondary-color;
                                     color: $primary-bg;
+                                    padding: 0 0.2em;
                                     &.order-status {
                                         text-transform: uppercase;
                                     }
@@ -144,6 +169,11 @@
                                                     }
                                                 }
                                             }
+                                            &--shipping-address {
+                                                @include respond-to-mob('medium') {
+                                                    margin-top: 15px;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -154,20 +184,36 @@
                                     header.title {
                                         @include flex-display(row, space-between);
                                         margin-bottom: 20px;
-                                        &:before {
+                                        &:before, &:after {
                                             display: none;
                                         }
                                         h5 {
                                             @include font($secondary-font, $semi-bold);
                                         }
+                                        @include respond-to-mob('medium') {
+                                            margin-bottom: 10px;
+                                            h5, a {
+                                                font-size: 17px;
+                                                line-height: 1;
+                                            }
+                                        }
                                     }
                                     address {
                                         font-size: 15px;
+                                        @include respond-to-mob('medium') {
+                                            font-size: 14px;
+                                            background: #f7f7f7;
+                                            border-radius: 4px;
+                                            padding: 5px 10px;
+                                        }
                                     }
                                 }
                             }
                             .address_book {
                                 margin-bottom: 20px;
+                                @include respond-to-mob('medium') {
+                                    margin-bottom: 10px;
+                                }
                                 header {
                                     @include flex-display(row, space-between);
                                     border: none;
@@ -186,11 +232,25 @@
                                         height: 30px;
                                         padding: 0 15px;
                                     }
+                                    @include respond-to-mob('medium') {
+                                        margin-bottom: 10px;
+                                        h5{
+                                            font-size: 17px;
+                                            line-height: 1;
+                                        }
+                                        .add-new-address {
+                                            padding-left: 0;
+                                        }
+                                    }
                                 }
                                 .wc-address-book-address {
                                     @include add-border(1px, $alt-grey, 'all');
+                                    border-radius: 4px;
                                     padding: 10px 15px;
                                     @include transition(0.3s);
+                                    @include respond-to-mob('medium') {
+                                        padding: 5px 10px;
+                                    }
                                     &:hover {
                                         background: $alt-grey;
                                     }
@@ -200,15 +260,28 @@
                                     address {
                                         font-size: 15px;
                                         margin-bottom: 0;
+                                        @include respond-to-mob('medium') {
+                                            font-size: 12px;
+                                        }
                                     }
                                     .wc-address-book-meta {
+                                        text-align: right;
                                         a {
                                             font-size: 16px;
+                                            @include respond-to-mob('medium') {
+                                                font-size: 15px;
+                                            }
                                         }
                                     }
                                 }
                             }
                             .woo-shady-wishlist {
+                                @include respond-to-mob('medium') {
+                                    form {
+                                        display: block;
+                                        width: 100%;
+                                    }
+                                }
                                 .wishlist-title-container {
                                     display: block;
                                     width: 100%;
@@ -247,12 +320,177 @@
                                             }
                                         }
                                     }
+
+                                    @include respond-to-mob('medium') {
+                                        li {
+                                            padding: 8px 15px;
+                                            &:nth-child(even) {
+                                                background: #f7f7f7;
+                                            }
+                                            .item-wrapper {
+                                                width: 100%;
+                                                .item-details {
+                                                    .product-name {
+                                                        h3 {
+                                                            font-size: 14px;
+                                                            margin-bottom: 5px;
+                                                            a {
+                                                                color: $primary-color;
+                                                            }
+                                                        }
+                                                    }
+                                                    .item-details-table {
+                                                        tbody {
+                                                            tr {
+                                                                td {
+                                                                    &.label {
+                                                                        display: none;
+                                                                    }
+                                                                    &.value {
+                                                                        text-align: left;
+                                                                        padding: 0;
+                                                                        small {
+                                                                            display: none;
+                                                                        }
+                                                                        .amount {
+                                                                            font-size: 20px;
+                                                                            .woocommerce-Price-currencySymbol {
+                                                                                font-size: 70%;
+                                                                            }
+                                                                        }
+                                                                        del, ins {
+                                                                            text-decoration: none;
+                                                                        }
+                                                                        del {
+                                                                            text-decoration: none;
+                                                                            .amount {
+                                                                                font-size: 80%;
+                                                                                position: relative;
+                                                                                &:before {
+                                                                                    content: '';
+                                                                                    position: absolute;
+                                                                                    top: 52%;
+                                                                                    left: 0;
+                                                                                    transform: translateY(-50%);
+                                                                                    width: 100%;
+                                                                                    height: 2px;
+                                                                                    background: $primary-font-color;
+                                                                                }
+                                                                                bdi {
+                                                                                    opacity: 0.7;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            .additional-info-wrapper {
+                                                @include flex-display(row, space-between);
+                                                .additional-info {
+                                                    margin-bottom: 0 !important;
+                                                    tbody {
+                                                        tr {
+                                                            td {
+                                                                &.label {
+                                                                    display: none;
+                                                                }
+                                                                &.value {
+                                                                    padding: 0
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                .product-add-to-cart {
+                                                    margin-bottom: 0 !important;
+                                                    a {
+                                                        display: inline-flex !important;
+                                                        justify-content: center;
+                                                        align-items: center;
+                                                        @include font($secondary-font, $bold);
+                                                        font-size: 13px;
+                                                        color: $primary-bg;
+                                                        background: $secondary-color;
+                                                        text-transform: lowercase;
+                                                        height: 35px;
+                                                        border: none;
+                                                        border-radius: 4px;
+                                                        box-shadow: 3px 4px 9px rgba($primary-color, 0.45);
+                                                        outline: 0 !important;
+                                                        padding: 0 10px;
+                                                        margin: 0 auto !important;
+                                                        &:hover {
+                                                            background: darken($secondary-color, 10);
+                                                            color: $primary-bg;
+                                                            box-shadow: none;
+                                                        }
+                                                        &:disabled, &.disabled {
+                                                            box-shadow: none;
+                                                        }
+                                                    }
+                                                }
+                                                .product-remove {
+                                                    margin-bottom: 0 !important;
+                                                    a {
+                                                        display: inline-flex !important;
+                                                        justify-content: center;
+                                                        align-items: center;
+                                                        @include font($secondary-font, $bold);
+                                                        font-size: 12px;
+                                                        color: $primary-font-color;
+                                                        background: transparent;
+                                                        text-transform: lowercase;
+                                                        height: 35px;
+                                                        @include add-border(1px, $primary-font-color, 'all');
+                                                        border-radius: 4px;
+                                                        box-shadow: 3px 4px 9px rgba($primary-color, 0.45);
+                                                        outline: 0 !important;
+                                                        padding: 0 15px;
+                                                        margin: 0 auto !important;
+                                                        &:hover {
+                                                            background: darken($secondary-color, 10);
+                                                            color: $primary-bg;
+                                                            box-shadow: none;
+                                                        }
+                                                        &:disabled, &.disabled {
+                                                            box-shadow: none;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                                 .yith_wcwl_wishlist_footer {
                                     .yith-wcwl-share-title {
                                         @extend h6;
                                         font-size: 20px;
                                         margin-top: 0;
+                                    }
+                                }
+                            }
+
+                            .my_account_orders.account-orders-table {
+                                @include respond-to-mob('medium') {
+                                    tbody {
+                                        tr {
+                                            &:not(:last-child) {
+                                                margin-bottom: 10px;
+                                            }
+                                            &:nth-child(even) {
+                                                background: #f7f7f7;
+                                            }
+                                            td {
+                                                padding: 8px 13px;
+                                                &:first-child {
+                                                    border-top: none;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }

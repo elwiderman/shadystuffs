@@ -40,6 +40,9 @@ $mob_img    = get_field('hero_banner_mob_img');
     </section>
 
     <section class="section-block section-collections">
+        <div class="collections-blob">
+            <lottie-player src="https://lottie.host/09e6f70e-a2c2-43d8-bf49-2c1f4210dc11/F1f3KUiLh1.json" background="transparent" speed="1" loop autoplay direction="1" mode="normal"></lottie-player>
+        </div>
         <div class="container">
             <div class="row collections-grid">
                 <?php
@@ -58,7 +61,7 @@ $mob_img    = get_field('hero_banner_mob_img');
                         $alt        = $thumb ? $thumb['alt'] : $title;
 
                         echo "
-                        <div class='col-12 col-md-4 col-xl-3'>
+                        <div class='col-6 col-md-4 col-xl-3'>
                             <div class='collection'>
                                 <a href='{$perma}' class='collection__perma'>
                                     <figure class='collection__perma--img'>

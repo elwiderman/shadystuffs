@@ -218,6 +218,9 @@
                             padding-left: 20px;
                             // position: sticky;
                             // top: 110px; // turning this off for now
+                            @include respond-to-mob('medium') {
+                                padding-left: 0;
+                            }
                             .shop_table {
                                 @include add-border(1px, $grey, 'all');
                                 border-radius: 4px;
@@ -275,6 +278,9 @@
                         .cross-sells {
                             padding-left: 20px;
                             margin-top: 40px;
+                            @include respond-to-mob('medium') {
+                                padding-left: 0;
+                            }
                             .products-carousel {
                                 width: 100%;
                                 overflow: hidden;
@@ -312,10 +318,17 @@
                     padding-top: 15px;
                     .customer-detail {
                         padding-right: 40px;
+                        @include respond-to-mob('medium') {
+                            padding-right: 0;
+                            margin-bottom: 30px;
+                        }
                         .woocommerce-billing-fields, .woocommerce-shipping-fields {
                             h3 {
                                 @include font($secondary-font, $bold);
                                 font-size: 25px;
+                                @include respond-to-mob('medium') {
+                                    font-size: 24px;
+                                }
                             }
                         }
         
