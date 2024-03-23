@@ -52,9 +52,9 @@ p {
 }
 
 .lead {
-    @include font($primary-font, $regular);
-    font-size: $rem-16;
-    line-height: $rem-24;
+    @include font($secondary-font, $medium);
+    font-size: 16px;
+    line-height: 1.4;
 }
 .text-muted {
     color: $secondary-color;

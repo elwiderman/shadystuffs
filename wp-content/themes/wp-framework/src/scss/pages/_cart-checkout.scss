@@ -318,10 +318,17 @@
                     padding-top: 15px;
                     .customer-detail {
                         padding-right: 40px;
+                        @include respond-to-mob('medium') {
+                            padding-right: 0;
+                            margin-bottom: 30px;
+                        }
                         .woocommerce-billing-fields, .woocommerce-shipping-fields {
                             h3 {
                                 @include font($secondary-font, $bold);
                                 font-size: 25px;
+                                @include respond-to-mob('medium') {
+                                    font-size: 24px;
+                                }
                             }
                         }
         
