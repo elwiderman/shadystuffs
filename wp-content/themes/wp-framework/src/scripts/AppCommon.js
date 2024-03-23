@@ -16,6 +16,10 @@ export default class AppCommon {
         this.fancyLightbox();
         this.postGallery();
         this.sizeChartTrigger();
+
+        if ($('#mobiSidebar').length) {
+            this.sidebarToggle();
+        }
     }
 
     // page loading anim
@@ -128,5 +132,32 @@ export default class AppCommon {
                 }
             });
         }
+    }
+
+    // do the toggle for the sidebar 
+    sidebarToggle() {
+        // remove filter off canvas open if more than mobile 
+        $(window).on('load resize', e => {
+            if ($(window).width() > 768) {
+                $('#mobiSidebar, #filterToggle').removeClass('open');
+                $('body').removeClass('no-overflow');
+            }
+        });
+
+        // do the toggle magic
+        $('#filterToggle').on('click', e => {
+            let $this = $(e.currentTarget),
+                target = $this.data('target');
+
+            if ($this.hasClass('open')) {
+                $this.removeClass('open');
+                $(target).removeClass('open');
+                $('body').removeClass('no-overflow');
+            } else {
+                $this.addClass('open');
+                $(target).addClass('open');
+                $('body').addClass('no-overflow');
+            }
+        });
     }
 }

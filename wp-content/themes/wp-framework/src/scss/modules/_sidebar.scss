@@ -3,12 +3,15 @@
 #sideBar {
     &.sidebar {
         margin-top: 30px;
+        @include respond-to-mob('medium') {
+            display: none;
+        }
         .widget-box {
             &.widget_block {
                 margin-bottom: 30px;
                 .wp-block-heading, .widget-title {
-                    @include font($alt-font, $regular);
-                    font-size: 20px;
+                    @include font($secondary-font, $regular);
+                    font-size: 17px;
                     background: #f0f0f0;
                     line-height: 2; 
                     padding: 0 20px;
@@ -67,6 +70,203 @@
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+}
+
+#mobiSidebar {
+    @extend #sideBar;
+    display: none;
+    @include respond-to-mob('medium') {
+        display: block;
+        position: fixed;
+        top: 80px;
+        right: 0;
+        width: 90vw;
+        height: calc(100% - 80px);
+        transform: translate(100%);
+        background: $primary-bg;
+        padding: 40px 10px 20px;
+        margin-top: 0;
+        overflow-y: auto;
+        @include transition(0.2s);
+        z-index: 2;
+        &.open {
+            transform: translate(0);
+        }
+
+        .widget-box {
+            &.widget_block {
+                padding: 0 10px;
+                margin-bottom: 10px;
+                .wp-block-heading, .widget-title {
+                    font-size: 15px;
+                    line-height: 2; 
+                    background: #f0f0f0;
+                    padding: 0 20px;
+                }
+                .dgwt-wcas-search-wrapp {
+                    .dgwt-wcas-sf-wrapp {
+                        padding: 10px 0;
+                        .dgwt-wcas-search-input {
+                            font-size: 14px;
+                            border-width: 1px;
+                            border-radius: 4px;
+                            padding: 9px 14px 9px 38px;
+                        }
+                        button.dgwt-wcas-search-submit {
+                            top: 16px;
+                            left: 8px;
+                            svg {
+                                width: 13px;
+                                height: 13px;
+                            }
+                        }
+                    }
+                }
+                .wp-block-woocommerce-product-categories {
+                    padding: 0 20px;
+                    .wc-block-product-categories-list {
+                        display: block;
+                        column-gap: 8px;
+                        column-count: 2;
+                        .wc-block-product-categories-list-item {
+                            &__name {
+                                font-size: 13px;
+                                font-weight: $semi-bold;
+                                color: rgba($primary-font-color, 0.5);
+                            }
+                        }
+                    }
+                }
+                .wp-block-woocommerce-filter-wrapper {
+                    .wp-block-woocommerce-attribute-filter {
+                        padding: 0 20px;
+                        .wc-block-checkbox-list {
+                            @include flex-display(row, flex-start, flex-start);
+                            margin: 0 -4px;
+                            &__checkbox {
+                                margin-top: 0;
+                                margin-bottom: 8px;
+                            }
+                            li {
+                                flex: 0 0 50%;
+                                max-width: 50%;
+                                padding: 0 4px;
+                                .wc-block-components-checkbox {
+                                    &__label {
+                                        font-size: 13px;
+                                        font-weight: $semi-bold;
+                                        color: rgba($primary-font-color, 0.5);
+                                    }
+                                    &__input {
+                                        min-height: 15px;
+                                        min-width: 15px;
+                                        width: 17px;
+                                        height: 17px;
+                                        border-color: rgba($primary-font-color, 0.5);
+                                        margin-right: 10px;
+                                    }
+                                    &__mark {
+                                        left: -2px;
+                                        top: -1px;
+                                        height: 15px;
+                                        width: 14px;
+                                        fill: $secondary-color;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .wc-blocks-filter-wrapper {
+                    .wp-block-woocommerce-stock-filter {
+                        padding: 0 20px;
+                        .wc-block-checkbox-list {
+                            @include flex-display(row, flex-start, flex-start);
+                            margin: 0 -4px;
+                            &__checkbox {
+                                margin-top: 0;
+                                margin-bottom: 8px;
+                            }
+                            li {
+                                flex: 0 0 50%;
+                                max-width: 50%;
+                                padding: 0 4px;
+                                .wc-block-components-checkbox {
+                                    &__label {
+                                        font-size: 13px;
+                                        font-weight: $semi-bold;
+                                        color: rgba($primary-font-color, 0.5);
+                                    }
+                                    &__input {
+                                        min-height: 15px;
+                                        min-width: 15px;
+                                        width: 17px;
+                                        height: 17px;
+                                        border-color: rgba($primary-font-color, 0.5);
+                                        margin-right: 10px;
+                                    }
+                                    &__mark {
+                                        left: -2px;
+                                        top: -1px;
+                                        height: 15px;
+                                        width: 14px;
+                                        fill: $secondary-color;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .wp-block-woocommerce-price-filter {
+                        .wc-block-price-slider {
+                            padding: 0 20px;
+                            .wc-block-price-filter {
+                                &__range-input-wrapper {
+                                    margin: 20px 0;
+                                }
+                                &__controls {
+                                    .wc-block-components-price-slider {
+                                        &__amount {
+                                            font-size: 14px;
+                                            max-width: 120px;
+                                            padding: 5px 8px;
+                                            &:last-child {
+                                                text-align: right;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.filter-toggler {
+    display: none;
+    @include respond-to-mob('medium') {
+        display: block;
+        position: fixed;
+        top: 80px;
+        right: 12px;
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+        color: $primary-bg;
+        background: $secondary-color;
+        border: none;
+        border-radius: 4px;
+        z-index: 3;
+        &.open {
+            i {
+                &:before {
+                    content: $icon-x;
                 }
             }
         }

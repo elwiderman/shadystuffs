@@ -5,6 +5,9 @@
         .main-wrapper {
             .content-area {
                 padding-left: 50px;
+                @include respond-to-mob('medium') {
+                    padding-left: 0;
+                }
                 .site-main {
                     .product-wrap {
                         width: 100%;
@@ -95,7 +98,9 @@
                                 max-width: 100%;
                             }
                             .woocommerce-result-count {
-                                // margin-bottom: 0;
+                                @include respond-to-mob('medium') {
+                                    font-size: 11px;
+                                }
                             }
                             .woocommerce-ordering {
                                 min-width: 165px;
@@ -111,6 +116,10 @@
                                             @extend p;
                                             color: $primary-color;
                                             margin-bottom: 0;
+                                            @include respond-to-mob('medium') {
+                                                font-size: 11px;
+                                                line-height: 20px;
+                                            }
                                         }
                                         &__arrow {
                                             height: 19px;
@@ -125,6 +134,9 @@
                                                 @extend p;
                                                 font-size: 12px;
                                                 margin-bottom: 0;
+                                                @include respond-to-mob('medium') {
+                                                    font-size: 11px;
+                                                }
                                                 &--selectable {
                                                 }
                                                 &--highlighted {
