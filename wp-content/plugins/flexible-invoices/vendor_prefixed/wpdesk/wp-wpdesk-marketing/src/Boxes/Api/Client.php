@@ -14,33 +14,21 @@ use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\MarketingBoxes;
 class Client
 {
     const URL = 'https://marketing.wpdesk.org/json/' . \WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\MarketingBoxes::VERSION . '/boxes/';
-    /**
-     * @var string
-     */
-    protected $plugin_slug = '';
-    /**
-     * @var string
-     */
-    protected $version = '';
-    /**
-     * @var array
-     */
-    protected $args = [];
-    /**
-     * @param string $plugin_slug
-     */
+    /** @var string */
+    private $plugin_slug;
     public function __construct(string $plugin_slug)
     {
         $this->plugin_slug = $plugin_slug;
     }
     /**
-     * @return string
+     * @param string $endpoint
      */
     private function get_api_url($endpoint) : string
     {
         return self::URL . \trailingslashit($this->plugin_slug) . $endpoint . '.json';
     }
     /**'
+     *
      * @param array $args
      *
      * @return array

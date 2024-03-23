@@ -12,12 +12,12 @@ echo \esc_attr($form->get_method());
 echo \esc_attr($form->get_action());
 ?>">
 	<h2 style="display:none;"></h2>
-	<?php 
+<?php 
 $docs_link = 'https://docs.flexibleinvoices.com/category/785-currencies?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=currency-rates';
 if (\get_locale() === 'pl_PL') {
     $docs_link = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=currency-rates#konfiguracja-walut';
 }
-$link = \sprintf('<a href="%s" target="_blank">%s</a>', \esc_url($docs_link), \esc_html__('Read user\'s manual &rarr;', 'flexible-invoices'));
+$link = \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>');
 ?>
 	<div class="support-url-wrapper"><?php 
 echo $link;

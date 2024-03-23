@@ -1347,6 +1347,7 @@ body.yith-plugin-fw-panel.yith-plugin-fw-panel--version-1 #yith-plugin-fw__panel
   font-weight: 600;
   color: #A36A19;
   text-align: center;
+  text-wrap: balance;
 }
 
 #yith-plugin-fw__panel__premium-tab .main-content .landing .landing__pricing {

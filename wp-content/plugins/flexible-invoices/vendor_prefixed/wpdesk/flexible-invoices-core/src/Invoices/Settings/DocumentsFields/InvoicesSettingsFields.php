@@ -36,9 +36,13 @@ final class InvoicesSettingsFields implements \WPDeskFIVendor\WPDesk\Library\Fle
     /**
      * @return string
      */
-    private function get_doc_link()
+    private function get_doc_link() : string
     {
-        return \sprintf('<a href="%s" target="_blank">%s</a>', \esc_url(\get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=wp-admin-plugins&utm_medium=quick-link&utm_campaign=flexible-invoices-docs-link#faktury' : 'https://docs.flexibleinvoices.com/article/794-invoice-settings?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link', ['https']), \esc_html__('Check how to issue invoices.', 'flexible-invoices'));
+        $docs_link = 'https://docs.flexibleinvoices.com/article/794-invoice-settings?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link';
+        if (\get_locale() === 'pl_PL') {
+            $docs_link = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=wp-admin-plugins&utm_medium=quick-link&utm_campaign=flexible-invoices-docs-link#faktury';
+        }
+        return \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>');
     }
     private function get_beacon_translations() : string
     {

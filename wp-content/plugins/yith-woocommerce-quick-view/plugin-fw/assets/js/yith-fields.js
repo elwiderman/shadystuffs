@@ -1,4 +1,4 @@
-/* globals yith_framework_fw_fields, wp, yith */
+/* globals yith_framework_fw_fields, wp, yith, isRtl */
 ( function ( $ ) {
 
 	/* Upload */
@@ -940,9 +940,10 @@
 			if ( actionButtons.observable.openedMenu && actionButtons.observable.button ) {
 				var buttonEl   = actionButtons.observable.button.get( 0 ),
 					buttonRect = buttonEl.getBoundingClientRect(),
+					leftOffset = isRtl ? 0 : buttonRect.width - actionButtons.observable.openedMenu.outerWidth(),
 					props      = {
 						top : buttonRect.top + buttonRect.height + 8,
-						left: buttonRect.left + buttonRect.width - actionButtons.observable.openedMenu.outerWidth()
+						left: buttonRect.left + leftOffset
 					};
 
 				actionButtons.observable.openedMenu.css( props )

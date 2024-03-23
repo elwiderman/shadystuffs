@@ -2,6 +2,7 @@
 
 namespace WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WooCommerce;
 
+use Automattic\WooCommerce\Utilities\OrderUtil;
 use WC_Order;
 use WP_Post;
 use WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Settings\Settings;
@@ -67,7 +68,7 @@ class SequentialOrderNumber implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plug
      */
     public function order_number_filter(string $order_number, \WC_Order $order) : string
     {
-        $replaced_num = $order->get_meta(self::META_NAME_ORDER_NUMBER, \true);
+        $replaced_num = $order->get_meta(self::META_NAME_ORDER_NUMBER);
         if (!empty($replaced_num)) {
             return $replaced_num;
         }
@@ -98,8 +99,8 @@ class SequentialOrderNumber implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plug
      *
      * Set order num action
      *
-     * @param int     $post_id Post ID.
-     * @param object $post    Post object.
+     * @param int $post_id Post ID.
+     * @param     $post_or_order
      *
      * @internal You should not use this directly from another application
      */
@@ -109,14 +110,18 @@ class SequentialOrderNumber implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plug
             return;
         }
         $order = \wc_get_order($post_id);
+        if (!$order) {
+            return;
+        }
         $order_number = $order->get_meta(self::META_NAME_ORDER_NUMBER, \true);
         if (!$order_number) {
-            if ($this->settings->get('woocommerce_sequential_orders') === 'yes') {
-                $this->is_hpos_active() ? $this->insert_order_number_to_order($order) : $this->insert_order_number_to_post($order);
-            } else {
-                $order->update_meta_data(self::META_NAME_ORDER_NUMBER, $order->get_id());
-                $order->save();
-            }
+            return;
+        }
+        if ($this->settings->get('woocommerce_sequential_orders') === 'yes') {
+            $this->is_hpos_active() ? $this->insert_order_number_to_order($order) : $this->insert_order_number_to_post($order);
+        } else {
+            $order->update_meta_data(self::META_NAME_ORDER_NUMBER, $order->get_id());
+            $order->save();
         }
     }
     private function insert_order_number_to_post($order)
@@ -149,7 +154,7 @@ class SequentialOrderNumber implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plug
             }
         }
     }
-    private function is_hpos_active()
+    private function is_hpos_active() : bool
     {
         if (\class_exists('\\Automattic\\WooCommerce\\Utilities\\OrderUtil')) {
             return \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled();
@@ -170,7 +175,7 @@ class SequentialOrderNumber implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plug
             $orders = \wc_get_orders(['numberposts' => '', 'nopaging' => \true]);
             if (\is_array($orders)) {
                 foreach ($orders as $order) {
-                    if ($order->get_meta(self::META_NAME_ORDER_NUMBER, \true) === '') {
+                    if ($order->get_meta(self::META_NAME_ORDER_NUMBER) === '') {
                         $order->add_meta_data(self::META_NAME_ORDER_NUMBER, $order->get_id());
                         $order->save();
                     }

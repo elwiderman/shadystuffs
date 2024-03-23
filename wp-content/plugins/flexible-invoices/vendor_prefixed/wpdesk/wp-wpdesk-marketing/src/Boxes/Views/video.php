@@ -2,24 +2,14 @@
 
 namespace WPDeskFIVendor;
 
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Abstracts\BoxInterface;
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers\BBCodes;
-use WPDeskFIVendor\WPDesk\Library\Marketing\Boxes\Helpers\Markers;
 /**
- * @var BoxInterface $box
+ * @var \WPDesk\Library\Marketing\Boxes\Abstracts\BoxInterface $box
+ * @var \WPDesk\Library\Marketing\Boxes\Helpers\BBCodes $bbcodes
+ * @var \WPDesk\Library\Marketing\Boxes\Helpers\Markers $markers
  */
-$box = $params['box'];
-/**
- * @var BBCodes $bbcodes
- */
-$bbcodes = $params['bbcodes'];
-/**
- * @var Markers $markers
- */
-$markers = $params['markers'];
 ?>
 <div class="wpdesk-marketing-box wpdesk-marketing-box-video wpdesk-marketing-box-<?php 
-echo $box->get_slug();
+echo \esc_html($box->get_slug());
 ?>">
 	<?php 
 if (!empty($box->get_title())) {
@@ -27,14 +17,14 @@ if (!empty($box->get_title())) {
 		<header>
 			<h3>
 				<?php 
-    echo \wp_strip_all_tags($box->get_title());
+    echo \esc_html($box->get_title());
     ?>
 			</h3>
 			<?php 
     if (!empty($box->get_description())) {
         ?>
 				<p class="description"><?php 
-        echo $bbcodes->replace($markers->replace(\wp_strip_all_tags($box->get_description())));
+        echo \wp_kses_post($bbcodes->replace($markers->replace(\wp_strip_all_tags($box->get_description()))));
         ?></p>
 			<?php 
     }
@@ -48,7 +38,7 @@ if (!empty($box->get_title())) {
     if (!empty($box->get_links())) {
         ?>
 				<div class="<?php 
-        echo $is_carousel;
+        echo \esc_attr($is_carousel);
         ?> owl-theme">
 					<?php 
         foreach ($box->get_links() as $link) {
@@ -56,6 +46,7 @@ if (!empty($box->get_title())) {
 						<div class="item-video">
 							<?php 
             echo \wp_oembed_get($link['video']);
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
             ?>
 						</div>
 					<?php 
@@ -77,7 +68,7 @@ if (!empty($box->get_title())) {
 							target="_blank"
 					>
 						<?php 
-        echo $box->get_button()['name'];
+        echo \wp_kses_post($box->get_button()['name']);
         ?>
 					</a>
 				</p>

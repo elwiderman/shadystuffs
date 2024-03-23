@@ -28,7 +28,6 @@ class OptInOptOut implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookabl
      * @param string $plugin_slug
      * @param string $shop_url
      * @param string $plugin_name
-     *
      */
     public function __construct($plugin_file, $plugin_slug, $shop_url, $plugin_name)
     {

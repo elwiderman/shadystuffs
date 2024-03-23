@@ -60,13 +60,14 @@ class DownloadMenuPage implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Ho
      */
     public function render_page_action()
     {
-        $renderer = $this->get_renderer();
         $url = 'https://docs.flexibleinvoices.com/article/804-printing-and-downloading-documents?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=download-invoices';
         if (\get_locale() === 'pl_PL') {
             $url = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=download-invoices#hurtowe-pobieranie-faktur';
         }
+        $docs_description = \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $url . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>');
+        $renderer = $this->get_renderer();
         $content = '<div class="wrap"><h1 class="wp-heading-inline">' . \esc_html__('Download', 'flexible-invoices') . '</h1>';
-        $content .= '<div class="support-url-wrapper"><a href="' . \esc_url($url) . '" target="_blank">' . \esc_html__('Read user\'s manual &rarr;', 'flexible-invoices') . '</a></div>';
+        $content .= '<div class="support-url-wrapper">' . $docs_description . '</div>';
         $content .= '<hr class="wp-header-end">';
         $content .= $renderer->render('form-start', ['form' => $this, 'method' => 'POST', 'action' => '']);
         $content .= $this->render_fields($renderer);

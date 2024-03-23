@@ -61,7 +61,7 @@ class PrepareWordpressForCodeception extends \WPDeskFIVendor\WPDesk\Composer\Cod
         $this->executeWpCliAndOutput('theme activate storefront', $output, $apache_document_root);
         $this->executeWpCliAndOutput('theme delete storefront-wpdesk-tests', $output, $apache_document_root);
         $this->executeWpCliAndOutput('theme install storefront', $output, $apache_document_root);
-        $this->executeWpCliAndOutput('theme install https://gitlab.com/wpdesk/storefront-wpdesk-tests/-/archive/master/storefront-wpdesk-tests-master.zip', $output, $apache_document_root);
+        $this->executeWpCliAndOutput('theme install https://gitlab.wpdesk.dev/wpdesk/storefront-wpdesk-tests/-/archive/master/storefront-wpdesk-tests-master.zip', $output, $apache_document_root);
         \rename($apache_document_root . '/wp-content/themes/storefront-wpdesk-tests-master', $apache_document_root . '/wp-content/themes/storefront-wpdesk-tests');
         $this->executeWpCliAndOutput('theme activate storefront-wpdesk-tests', $output, $apache_document_root);
     }

@@ -12,18 +12,12 @@ use WPDeskFIVendor\WPDesk\View\Resolver\DirResolver;
  */
 class MarketingBoxes
 {
-    const VERSION = 'v1';
-    /**
-     * @var string
-     */
+    public const VERSION = 'v1';
+    /** @var string */
     private $plugin_slug;
-    /**
-     * @var string
-     */
+    /** @var string */
     private $lang;
-    /**
-     * @var string
-     */
+    /** @var int */
     private $expiration_time;
     /**
      * @param string $plugin_slug

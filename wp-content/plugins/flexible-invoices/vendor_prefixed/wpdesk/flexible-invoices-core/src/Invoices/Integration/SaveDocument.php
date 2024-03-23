@@ -71,8 +71,8 @@ class SaveDocument implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookab
         \add_action('save_post', [$this, 'save_custom_fields_action'], 2, 2);
     }
     /**
-     * @param int      $post_id
-     * @param \WP_Post $post
+     * @param int     $post_id
+     * @param WP_Post $post
      *
      * @return false|int
      */
@@ -143,45 +143,43 @@ class SaveDocument implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookab
             } finally {
                 $mutex->releaseLock();
             }
-            if (isset($meta)) {
-                $meta->set('_date_issue', $document->get_date_of_issue());
-                $meta->set('_date_sale', $document->get_date_of_sale());
-                $meta->set('_date_pay', $document->get_date_of_pay());
-                $meta->set('_date_paid', $document->get_date_of_paid());
-                $meta->set('_products', $document->get_items());
-                $this->save_client_meta($meta, $document->get_customer_as_array());
-                $meta->set('_recipient', $document->get_recipient_as_array());
-                $meta->set('_owner', $document->get_seller_as_array());
-                $meta->set('_total_price', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\CalculateTotals::calculate_total_gross($document->get_items()));
-                $meta->set('_total_net', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\CalculateTotals::calculate_total_net($document->get_items()));
-                $meta->set('_total_tax', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\CalculateTotals::calculate_total_vat($document->get_items()));
-                $meta->set('_total_paid', $document->get_total_paid());
-                $meta->set('_discount', $document->get_discount());
-                $meta->set('_currency', $document->get_currency());
-                $meta->set('_type', $document->get_type());
-                $meta->set('_payment_status', $document->get_payment_status());
-                $meta->set('_payment_method', $document->get_payment_method());
-                $meta->set('_payment_method_name', $document->get_payment_method_name());
-                $meta->set('_notes', \sanitize_textarea_field($document->get_notes()));
-                $meta->set('wpml_user_lang', \sanitize_text_field($document->get_user_lang()));
-                $meta->set('_add_order_id', $document->get_show_order_number());
-                $meta->set('_wc_order_id', $document->get_order_id());
-                $meta->set('_version', $this->plugin_version);
-                $this->save_tax_items($meta, $document->get_items());
-                \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\EmailStatus::save($document);
-                $document_creator->custom_meta($document, $meta)->save();
-                /**
-                 * Fires after document save.
-                 *
-                 * @param Document          $document    Document type.
-                 * @param MetaPostContainer $meta        Meta Container.
-                 * @param int               $document_id Document ID.
-                 *
-                 * @since 3.0.0
-                 */
-                \do_action('fi/core/document/save', $document, $meta, $document_id);
-                \sleep(1);
-            }
+            $meta->set('_date_issue', $document->get_date_of_issue());
+            $meta->set('_date_sale', $document->get_date_of_sale());
+            $meta->set('_date_pay', $document->get_date_of_pay());
+            $meta->set('_date_paid', $document->get_date_of_paid());
+            $meta->set('_products', $document->get_items());
+            $this->save_client_meta($meta, $document->get_customer_as_array());
+            $meta->set('_recipient', $document->get_recipient_as_array());
+            $meta->set('_owner', $document->get_seller_as_array());
+            $meta->set('_total_price', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\CalculateTotals::calculate_total_gross($document->get_items()));
+            $meta->set('_total_net', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\CalculateTotals::calculate_total_net($document->get_items()));
+            $meta->set('_total_tax', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\CalculateTotals::calculate_total_vat($document->get_items()));
+            $meta->set('_total_paid', $document->get_total_paid());
+            $meta->set('_discount', $document->get_discount());
+            $meta->set('_currency', $document->get_currency());
+            $meta->set('_type', $document->get_type());
+            $meta->set('_payment_status', $document->get_payment_status());
+            $meta->set('_payment_method', $document->get_payment_method());
+            $meta->set('_payment_method_name', $document->get_payment_method_name());
+            $meta->set('_notes', \sanitize_textarea_field($document->get_notes()));
+            $meta->set('wpml_user_lang', \sanitize_text_field($document->get_user_lang()));
+            $meta->set('_add_order_id', $document->get_show_order_number());
+            $meta->set('_wc_order_id', $document->get_order_id());
+            $meta->set('_version', $this->plugin_version);
+            $this->save_tax_items($meta, $document->get_items());
+            \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\EmailStatus::save($document);
+            $document_creator->custom_meta($document, $meta)->save();
+            /**
+             * Fires after document save.
+             *
+             * @param Document          $document    Document type.
+             * @param MetaPostContainer $meta        Meta Container.
+             * @param int               $document_id Document ID.
+             *
+             * @since 3.0.0
+             */
+            \do_action('fi/core/document/save', $document, $meta, $document_id);
+            \sleep(1);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }

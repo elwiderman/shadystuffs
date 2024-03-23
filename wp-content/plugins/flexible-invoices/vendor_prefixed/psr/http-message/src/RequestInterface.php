@@ -1,6 +1,5 @@
 <?php
 
-declare (strict_types=1);
 namespace WPDeskFIVendor\Psr\Http\Message;
 
 /**
@@ -40,7 +39,7 @@ interface RequestInterface extends \WPDeskFIVendor\Psr\Http\Message\MessageInter
      *
      * @return string
      */
-    public function getRequestTarget();
+    public function getRequestTarget() : string;
     /**
      * Return an instance with the specific request-target.
      *
@@ -58,13 +57,13 @@ interface RequestInterface extends \WPDeskFIVendor\Psr\Http\Message\MessageInter
      * @param string $requestTarget
      * @return static
      */
-    public function withRequestTarget(string $requestTarget);
+    public function withRequestTarget(string $requestTarget) : \WPDeskFIVendor\Psr\Http\Message\RequestInterface;
     /**
      * Retrieves the HTTP method of the request.
      *
      * @return string Returns the request method.
      */
-    public function getMethod();
+    public function getMethod() : string;
     /**
      * Return an instance with the provided HTTP method.
      *
@@ -80,7 +79,7 @@ interface RequestInterface extends \WPDeskFIVendor\Psr\Http\Message\MessageInter
      * @return static
      * @throws \InvalidArgumentException for invalid HTTP methods.
      */
-    public function withMethod(string $method);
+    public function withMethod(string $method) : \WPDeskFIVendor\Psr\Http\Message\RequestInterface;
     /**
      * Retrieves the URI instance.
      *
@@ -90,7 +89,7 @@ interface RequestInterface extends \WPDeskFIVendor\Psr\Http\Message\MessageInter
      * @return UriInterface Returns a UriInterface instance
      *     representing the URI of the request.
      */
-    public function getUri();
+    public function getUri() : \WPDeskFIVendor\Psr\Http\Message\UriInterface;
     /**
      * Returns an instance with the provided URI.
      *
@@ -121,5 +120,5 @@ interface RequestInterface extends \WPDeskFIVendor\Psr\Http\Message\MessageInter
      * @param bool $preserveHost Preserve the original state of the Host header.
      * @return static
      */
-    public function withUri(\WPDeskFIVendor\Psr\Http\Message\UriInterface $uri, bool $preserveHost = \false);
+    public function withUri(\WPDeskFIVendor\Psr\Http\Message\UriInterface $uri, bool $preserveHost = \false) : \WPDeskFIVendor\Psr\Http\Message\RequestInterface;
 }

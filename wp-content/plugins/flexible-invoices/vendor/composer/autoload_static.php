@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2f90717c706637d1cf189e22022932d4
+class ComposerStaticInit9018cd487458bfe5170575a9a43aa144
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -350,12 +350,25 @@ class ComposerStaticInit2f90717c706637d1cf189e22022932d4
         'WPDeskFIVendor\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/ContainerExceptionInterface.php',
         'WPDeskFIVendor\\Psr\\Container\\ContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/ContainerInterface.php',
         'WPDeskFIVendor\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/NotFoundExceptionInterface.php',
+        'WPDeskFIVendor\\Psr\\EventDispatcher\\EventDispatcherInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/event-dispatcher/src/EventDispatcherInterface.php',
+        'WPDeskFIVendor\\Psr\\EventDispatcher\\ListenerProviderInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/event-dispatcher/src/ListenerProviderInterface.php',
+        'WPDeskFIVendor\\Psr\\EventDispatcher\\StoppableEventInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/event-dispatcher/src/StoppableEventInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Client\\ClientExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-client/src/ClientExceptionInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Client\\ClientInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-client/src/ClientInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Client\\NetworkExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-client/src/NetworkExceptionInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Client\\RequestExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-client/src/RequestExceptionInterface.php',
         'WPDeskFIVendor\\Psr\\Http\\Message\\MessageInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-message/src/MessageInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Message\\RequestFactoryInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-factory/src/RequestFactoryInterface.php',
         'WPDeskFIVendor\\Psr\\Http\\Message\\RequestInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-message/src/RequestInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Message\\ResponseFactoryInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-factory/src/ResponseFactoryInterface.php',
         'WPDeskFIVendor\\Psr\\Http\\Message\\ResponseInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-message/src/ResponseInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Message\\ServerRequestFactoryInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-factory/src/ServerRequestFactoryInterface.php',
         'WPDeskFIVendor\\Psr\\Http\\Message\\ServerRequestInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-message/src/ServerRequestInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Message\\StreamFactoryInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-factory/src/StreamFactoryInterface.php',
         'WPDeskFIVendor\\Psr\\Http\\Message\\StreamInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-message/src/StreamInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Message\\UploadedFileFactoryInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-factory/src/UploadedFileFactoryInterface.php',
         'WPDeskFIVendor\\Psr\\Http\\Message\\UploadedFileInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-message/src/UploadedFileInterface.php',
+        'WPDeskFIVendor\\Psr\\Http\\Message\\UriFactoryInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-factory/src/UriFactoryInterface.php',
         'WPDeskFIVendor\\Psr\\Http\\Message\\UriInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/http-message/src/UriInterface.php',
         'WPDeskFIVendor\\Psr\\Log\\AbstractLogger' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/AbstractLogger.php',
         'WPDeskFIVendor\\Psr\\Log\\InvalidArgumentException' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/InvalidArgumentException.php',
@@ -842,9 +855,9 @@ class ComposerStaticInit2f90717c706637d1cf189e22022932d4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2f90717c706637d1cf189e22022932d4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2f90717c706637d1cf189e22022932d4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2f90717c706637d1cf189e22022932d4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9018cd487458bfe5170575a9a43aa144::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9018cd487458bfe5170575a9a43aa144::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9018cd487458bfe5170575a9a43aa144::$classMap;
 
         }, null, ClassLoader::class);
     }

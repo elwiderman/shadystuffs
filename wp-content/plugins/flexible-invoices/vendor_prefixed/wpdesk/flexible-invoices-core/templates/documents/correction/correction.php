@@ -314,7 +314,7 @@ $correction_colspan = 6;
 \esc_html_e('#', 'flexible-invoices');
 ?></th>
             <th class="item-title" style="<?php 
-echo \esc_html($product_name_style);
+echo \esc_attr($product_name_style);
 ?>"><?php 
 \esc_html_e('Name', 'flexible-invoices');
 ?></th>
