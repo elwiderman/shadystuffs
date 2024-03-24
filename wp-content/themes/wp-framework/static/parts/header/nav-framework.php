@@ -37,9 +37,10 @@ $logo       = get_field('logo_img', 'option');
             </div>
             
             <?php if (function_exists('WC') && (!is_cart() && !is_checkout())) : ?>
-            <div class="navbar-cart">
-                <?php dynamic_sidebar('menu-cart');?>
-            </div>
+            <!-- <div class="navbar-cart">
+                <?php //dynamic_sidebar('menu-cart');?>
+            </div> -->
+            <?php nav_cart();?>
             <?php endif;?>
 
         </div>

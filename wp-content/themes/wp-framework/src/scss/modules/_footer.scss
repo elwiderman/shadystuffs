@@ -119,6 +119,7 @@
     text-align: center;
     background: $primary-color;
     color: $primary-bg;
+    border-radius: 4px;
     @include transition(0.3s);
     display: none;
     opacity: 0;

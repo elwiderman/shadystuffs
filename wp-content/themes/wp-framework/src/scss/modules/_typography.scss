@@ -91,3 +91,34 @@ p {
         font-size: 70%;
     }
 }
+
+[class*="woofc-icon-cart"] {
+    font-family: $icomoon-font-family !important;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    @include respond-to-mob('medium') {
+        margin-right: 0;
+    }
+    &:before {
+        content: $icon-shopping-bag;   
+    }
+}
+
+#woofc-count {
+    right: 15px;
+    bottom: 60px;
+    i {
+        font-size: 28px;
+    }
+}
+
+.woofc-item-estimated-delivery-date {
+    .wpced {
+        .wpced-inner {
+            font-size: 10px;
+        }
+    }
+}
