@@ -5,15 +5,16 @@
                 .product-img-wrap {
                     display: block;
                     width: 100%;
+                    height: auto;
                     padding-right: 50px;
-                    position: sticky;
-                    top: 110px;
-                    @include respond-to-mob('medium') {
-                        position: static;
-                        padding-right: 0;
-                    }
+                    position: relative;
+                    top: 0;
+                    overflow: unset;
+                    z-index: 0;
                     &__inner {
                         @include flex-display(row, flex-start, flex-start);
+                        position: sticky;
+                        top: 0;
                     }
                     .product-carousel {
                         flex: 0 0 70%;
@@ -42,11 +43,14 @@
                             .product-slide {
                                 cursor: pointer;
                                 &__img {
-                                    width: 65px;
-                                    height: 65px;
-                                    & > img {
-                                        object-fit: cover;
-                                        object-position: center;
+                                    width: 120px;
+                                    @include respond-to-mob('medium') {
+                                        width: 65px;
+                                        height: 65px;
+                                        & > img {
+                                            object-fit: cover;
+                                            object-position: center;
+                                        }
                                     }
                                 }
                             }
@@ -248,11 +252,12 @@
                                     display: inline-flex;
                                     justify-content: center;
                                     align-items: center;
-                                    font-size: 14px;
+                                    font-size: 8px;
+                                    font-weight: $light;
                                     width: 35px;
                                     padding: 0;
-                                    @include add-border(1px, $alt-font-color, 'all');
-                                    background: $primary-bg;
+                                    border: none;
+                                    background: #eeeeee;
                                     @include transition(0.3s);
                                     @include respond-to-mob('medium') {
                                         height: 40px;
@@ -273,8 +278,9 @@
                                     height: 45px;
                                     display: inline-flex;
                                     max-width: 50px;
-                                    @include font($secondary-font, $semi-bold);
-                                    @include add-border(1px, $alt-font-color, 'all');
+                                    @include font($secondary-font, $regular);
+                                    background: #eeeeee;
+                                    border: none;
                                     pointer-events: none;
                                     -moz-appearance: textfield;
                                     appearance: textfield;

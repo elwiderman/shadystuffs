@@ -8,6 +8,7 @@ register_nav_menus(
     array(
         'main-nav'      => __('Main Menu', 'shady'),
         'second-nav'    => __('Second Menu', 'shady'),
+        'nav-cart'      => __('Nav Location for Cart', 'shady'),
         'footer-links'  => __('Footer Menu', 'shady')
     )
 );
@@ -25,6 +26,7 @@ function main_menu() {
         )
     );
 }
+
 function second_menu() {
     wp_nav_menu(
         array(
@@ -33,6 +35,20 @@ function second_menu() {
             'items_wrap'    => '<ul id="%1$s" class="%2$s">%3$s</ul>',
             'theme_location'=> 'second-nav',
             'depth'         => 5,
+            'fallback_cb'   => 'bs4navwalker::fallback',
+            'walker'        => new bs4navwalker()
+        )
+    );
+}
+
+function nav_cart() {
+    wp_nav_menu(
+        array(
+            'container'     => false,
+            'menu_class'    => 'navbar-cart',
+            'items_wrap'    => '<ul id="%1$s" class="%2$s">%3$s</ul>',
+            'theme_location'=> 'nav-cart',
+            'depth'         => 1,
             'fallback_cb'   => 'bs4navwalker::fallback',
             'walker'        => new bs4navwalker()
         )

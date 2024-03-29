@@ -184,6 +184,12 @@
     }
 }
 
+.icon-shopping-bag {
+    &:before {
+        content: $icon-shopping-bag;
+    }
+}
+
 .icon-shopping-cart {
     &:before {
         content: $icon-shopping-cart;
