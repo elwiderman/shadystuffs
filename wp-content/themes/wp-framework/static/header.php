@@ -9,11 +9,24 @@
     <link rel="shortcut icon" type="image/x-icon" href="<?php echo image('theme/favicon.png?v=1'); ?>"/>
     <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
 
+    <?php
+    // head scripts go here
+    if (get_field('head_scripts', 'option')) :
+        echo get_field('head_scripts', 'option');
+    endif;
+    ?>
+
     <?php wp_head(); ?>
-    <?php //include_once (TEMPLATEPATH . '/parts/header/analytics.php'); ?>
 </head>
 
 <body <?php body_class(); ?>>
+
+<?php
+// body scripts go here
+if (get_field('b̆ody_scripts', 'option')) :
+    echo get_field('b̆ody_scripts', 'option');
+endif;
+?>
 
 <div class="no-overflow"></div>
 
