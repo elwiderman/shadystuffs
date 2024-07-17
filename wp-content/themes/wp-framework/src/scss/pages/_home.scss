@@ -212,6 +212,16 @@
                     }
                 }
             }
+
+            &.section-bestsellers, &.section-arrivals {
+                .products-carousel {
+                    .product {
+                        .wpced-product {
+                            display: none;
+                        }
+                    }
+                }
+            }
         }
     }
 }
