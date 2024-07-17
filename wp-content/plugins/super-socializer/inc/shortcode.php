@@ -265,7 +265,7 @@ function the_champ_fb_commenting_shortcode($params){
     $html .= ' data-numposts="' . intval($num_posts) . '"';
     $html .= ' data-width="' . ($width == '' ? '100%' : esc_attr($width)) . '"';
     $html .= ' ></div></div><script type="text/javascript" src="//connect.facebook.net/' . esc_attr($language) . '/sdk.js
-    "></script><script>FB.init({xfbml:1,version: "v19.0"});</script>';
+    "></script><script>FB.init({xfbml:1,version: "v20.0"});</script>';
     if(defined('HEATEOR_FB_COM_NOT_VERSION') && version_compare('1.1.5', HEATEOR_FB_COM_NOT_VERSION) < 0){
 	    $html .= '<script type="text/javascript">jQuery(window).load(function(){"undefined"!=typeof theChampFacebookCommentsNotifierOptinText&&(null!=heateorFcnGetCookie("heateorFcnOptin")&&jQuery("input.heateor_ss_fb_comments_notifier_optin").prop("checked",!0),jQuery("input.heateor_ss_fb_comments_notifier_optin").click(function(){if(jQuery(this).is(":checked")){if(heateorFcnOptin=1,null==heateorFcnGetCookie("heateorFcnOptin")){}}else heateorFcnOptin=0,document.cookie="heateorFcnOptin=; expires=Fri, 02 Jan 1970 00:00:00 UTC; path=/"}));});</script>';
 	}

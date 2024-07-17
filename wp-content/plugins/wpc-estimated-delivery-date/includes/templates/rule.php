@@ -37,20 +37,21 @@ $rule = array_merge( Wpced_Backend()->get_base_rule(), $rule );
 				<?php esc_html_e( 'Apply for', 'wpc-estimated-delivery-date' ); ?>
             </div>
             <div class="wpced-item-input">
-                <select class="wpced_apply" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][apply]">
-                    <option value="all" <?php selected( $rule['apply'], 'all' ); ?>><?php esc_attr_e( 'All products', 'wpc-estimated-delivery-date' ); ?></option>
-                    <option value="instock" <?php selected( $rule['apply'], 'instock' ); ?>><?php esc_html_e( 'In stock', 'wpc-estimated-delivery-date' ); ?></option>
-                    <option value="outofstock" <?php selected( $rule['apply'], 'outofstock' ); ?>><?php esc_html_e( 'Out of stock', 'wpc-estimated-delivery-date' ); ?></option>
-                    <option value="backorder" <?php selected( $rule['apply'], 'backorder' ); ?>><?php esc_html_e( 'On backorder', 'wpc-estimated-delivery-date' ); ?></option>
-                    <option value="stock" <?php selected( $rule['apply'], 'stock' ); ?>><?php esc_html_e( 'Stock quantity', 'wpc-estimated-delivery-date' ); ?></option>
-					<?php
-					$taxonomies = get_object_taxonomies( 'product', 'objects' ); //$taxonomies = get_taxonomies( [ 'object_type' => [ 'product' ] ], 'objects' );
+                <label>
+                    <select class="wpced_apply" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][apply]">
+                        <option value="all" <?php selected( $rule['apply'], 'all' ); ?>><?php esc_attr_e( 'All products', 'wpc-estimated-delivery-date' ); ?></option>
+                        <option value="instock" <?php selected( $rule['apply'], 'instock' ); ?>><?php esc_html_e( 'In stock', 'wpc-estimated-delivery-date' ); ?></option>
+                        <option value="outofstock" <?php selected( $rule['apply'], 'outofstock' ); ?>><?php esc_html_e( 'Out of stock', 'wpc-estimated-delivery-date' ); ?></option>
+                        <option value="backorder" <?php selected( $rule['apply'], 'backorder' ); ?>><?php esc_html_e( 'On backorder', 'wpc-estimated-delivery-date' ); ?></option>
+                        <option value="stock" <?php selected( $rule['apply'], 'stock' ); ?>><?php esc_html_e( 'Stock quantity', 'wpc-estimated-delivery-date' ); ?></option>
+						<?php
+						$taxonomies = get_object_taxonomies( 'product', 'objects' ); //$taxonomies = get_taxonomies( [ 'object_type' => [ 'product' ] ], 'objects' );
 
-					foreach ( $taxonomies as $taxonomy ) {
-						echo '<option value="' . esc_attr( $taxonomy->name ) . '" ' . selected( $rule['apply'], $taxonomy->name, false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
-					}
-					?>
-                </select>
+						foreach ( $taxonomies as $taxonomy ) {
+							echo '<option value="' . esc_attr( $taxonomy->name ) . '" ' . selected( $rule['apply'], $taxonomy->name, false ) . '>' . esc_html( $taxonomy->label ) . '</option>';
+						}
+						?>
+                    </select> </label>
                 <div class="wpced_apply_stock hide_if_apply_all show_if_apply_stock">
 					<?php
 					echo '<select class="wpced_apply_compare" name="wpced_rules' . esc_attr( $name ) . '[' . esc_attr( $key ) . '][apply_compare]">';
@@ -65,15 +66,16 @@ $rule = array_merge( Wpced_Backend()->get_base_rule(), $rule );
 					?>
                 </div>
                 <div class="wpced_apply_terms hide_if_apply_all show_if_apply_terms">
-                    <select class="wpced_terms wpced_apply_val" multiple="multiple" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][apply_val][]" data-<?php echo esc_attr( $rule['apply'] ); ?>="<?php echo esc_attr( implode( ',', (array) $rule['apply_val'] ) ); ?>">
-						<?php if ( is_array( $rule['apply_val'] ) && ! empty( $rule['apply_val'] ) ) {
-							foreach ( $rule['apply_val'] as $t ) {
-								if ( $term = get_term_by( 'slug', $t, $rule['apply'] ) ) {
-									echo '<option value="' . esc_attr( $t ) . '" selected>' . esc_html( $term->name ) . '</option>';
+                    <label>
+                        <select class="wpced_terms wpced_apply_val" multiple="multiple" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][apply_val][]" data-<?php echo esc_attr( $rule['apply'] ); ?>="<?php echo esc_attr( implode( ',', (array) $rule['apply_val'] ) ); ?>">
+							<?php if ( is_array( $rule['apply_val'] ) && ! empty( $rule['apply_val'] ) ) {
+								foreach ( $rule['apply_val'] as $t ) {
+									if ( $term = get_term_by( 'slug', $t, $rule['apply'] ) ) {
+										echo '<option value="' . esc_attr( $t ) . '" selected>' . esc_html( $term->name ) . '</option>';
+									}
 								}
-							}
-						} ?>
-                    </select>
+							} ?>
+                        </select> </label>
                 </div>
             </div>
         </div>
@@ -126,8 +128,9 @@ $rule = array_merge( Wpced_Backend()->get_base_rule(), $rule );
 				<?php esc_html_e( 'Minimum', 'wpc-estimated-delivery-date' ); ?>
             </div>
             <div class="wpced-item-input">
-                <input type="number" value="<?php echo esc_attr( $rule['min'] ); ?>" class="wpced_min" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][min]"/>
-                <span><?php esc_html_e( 'days', 'wpc-estimated-delivery-date' ); ?></span>
+                <label>
+                    <input type="number" value="<?php echo esc_attr( $rule['min'] ); ?>" class="wpced_min" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][min]"/>
+                </label> <span><?php esc_html_e( 'days', 'wpc-estimated-delivery-date' ); ?></span>
             </div>
         </div>
         <div class="wpced-item-line">
@@ -135,8 +138,9 @@ $rule = array_merge( Wpced_Backend()->get_base_rule(), $rule );
 				<?php esc_html_e( 'Maximum', 'wpc-estimated-delivery-date' ); ?>
             </div>
             <div class="wpced-item-input">
-                <input type="number" value="<?php echo esc_attr( $rule['max'] ); ?>" class="wpced_max" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][max]"/>
-                <span><?php esc_html_e( 'days', 'wpc-estimated-delivery-date' ); ?></span>
+                <label>
+                    <input type="number" value="<?php echo esc_attr( $rule['max'] ); ?>" class="wpced_max" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][max]"/>
+                </label> <span><?php esc_html_e( 'days', 'wpc-estimated-delivery-date' ); ?></span>
             </div>
         </div>
         <div class="wpced-item-line">
@@ -144,7 +148,9 @@ $rule = array_merge( Wpced_Backend()->get_base_rule(), $rule );
 				<?php esc_html_e( 'Scheduled delivery date', 'wpc-estimated-delivery-date' ); ?>
             </div>
             <div class="wpced-item-input">
-                <input type="text" value="<?php echo esc_attr( $rule['scheduled'] ); ?>" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][scheduled]" placeholder="Premium" readonly/>
+                <label>
+                    <input type="text" value="<?php echo esc_attr( $rule['scheduled'] ); ?>" name="wpced_rules<?php echo esc_attr( $name ); ?>[<?php echo esc_attr( $key ); ?>][scheduled]" placeholder="Premium" readonly/>
+                </label>
                 <p class="description"><?php esc_html_e( 'You can schedule a date when the delivery will be conducted in the future and the estimated delivery dates will be calculated based on this.', 'wpc-estimated-delivery-date' ); ?></p>
             </div>
         </div>

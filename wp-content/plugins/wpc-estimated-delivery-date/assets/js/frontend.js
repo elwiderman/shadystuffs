@@ -23,7 +23,11 @@
         $.post(wpced_vars.ajax_url, data, function(response) {
           if (!$.isEmptyObject(response)) {
             $.each(response, function(key, value) {
-              $('.' + key).replaceWith(value);
+              $('.' + key).each(function() {
+                if (!$(this).closest('.order_item').length) {
+                  $(this).replaceWith(value);
+                }
+              });
             });
           }
         });
@@ -34,19 +38,17 @@
   $(document).on('found_variation', function(e, t) {
     var pid = $(e['target']).closest('.variations_form').data('product_id');
 
-    if (t.wpced_enable === 'override') {
+    if (t.wpced_enable === 'disable') {
+      $('.wpced-' + pid).html('');
+    } else {
       if (t.wpced_date !== undefined) {
         $('.wpced-' + pid).replaceWith(wpced_decode_entities(t.wpced_date));
       } else {
-        $('.wpced-' + pid).html('');
-      }
-    } else if (t.wpced_enable === 'disable') {
-      $('.wpced-' + pid).html('');
-    } else {
-      var variable_date = $('.wpced-variable-' + pid).data('wpced');
+        var variable_date = $('.wpced-variable-' + pid).data('wpced');
 
-      if (variable_date !== undefined) {
-        $('.wpced-' + pid).replaceWith(wpced_decode_entities(variable_date));
+        if (variable_date !== undefined) {
+          $('.wpced-' + pid).replaceWith(wpced_decode_entities(variable_date));
+        }
       }
     }
 

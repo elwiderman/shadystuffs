@@ -5,12 +5,26 @@
  * This is the shipping class that extends WC
  *
  * @package Fish and Ships
- * @version 1.5
+ * @version 1.5.2
  */
 
 defined( 'ABSPATH' ) || exit;
 
 class WC_Fish_n_Ships extends WC_Shipping_Method {
+
+	public $option_name;
+	public $global_group_by;
+	public $global_group_by_method;
+	public $multiple_currency;
+	public $volumetric_weight_factor;
+	public $rules_charge;
+	public $free_shipping;
+	public $disallow_other;
+	public $min_shipping_price;
+	public $max_shipping_price;
+	public $write_logs;
+	public $write_logs_boolean;
+	public $shipping_rules;
 
 	public $log_calculate = array();
 	public $log_totals = array();
@@ -55,12 +69,21 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * Init user set variables.
 	 *
 	 * @since 1.0.0
-	 * @version 1.2.3
+	 * @version 1.5.2
 	 */
 	public function init() {
 		
 		$this->instance_form_fields = require WC_FNS_PATH . 'includes/settings-fns.php';
+		$this->load_settings();
+	}
 
+	/**
+	 * Init user set variables.
+	 *
+	 * @since 1.0.0
+	 * @version 1.5.2
+	 */
+	public function load_settings() {
 		$this->title                    = $this->get_option( 'title' );
 		$this->tax_status               = $this->get_option( 'tax_status' );
 		$this->global_group_by          = $this->get_option( 'global_group_by' );
@@ -77,13 +100,13 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		$this->shipping_rules           = $this->get_shipping_rules();
 		
 		if ($this->write_logs == 'everyone') {
-			$this->write_logs = true;
+			$this->write_logs_boolean = true;
 
 		} elseif ($this->write_logs == 'admins' && ( current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' ) ) ) {
-			$this->write_logs = true;
+			$this->write_logs_boolean = true;
 
 		} else {
-			$this->write_logs = false;
+			$this->write_logs_boolean = false;
 		}
 	}
 	
@@ -108,7 +131,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * The new shipping rules will be saved if we are editing this
 	 *
 	 * @since 1.0.0
-	 * @version 1.5
+	 * @version 1.5.2
 	 */
 	public function process_admin_options(){
 
@@ -146,6 +169,9 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 			global $Fish_n_Ships_PAH;
 			$Fish_n_Ships_PAH->reset_session();
 		}
+		
+		// Refresh all settings
+		$this->load_settings();
 	}
 				
 	/**
@@ -218,7 +244,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * Calculate the shipping costs.
 	 *
 	 * @since 1.0.0
-	 * @version 1.4.13
+	 * @version 1.5.2
 	 *
 	 * @param array $package Package of items from cart.
 	 */
@@ -228,7 +254,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		
 		$errors = array();
 
-		if ($this->write_logs === true) {
+		if ($this->write_logs_boolean === true) {
 			
 			$this->debug_log('*Starting Fish and Ships ' . ($Fish_n_Ships->im_pro() ? 'Pro' : '(free)') . ' calculation, for method: [' . $this->title . ']. Instance_id: [' . $this->instance_id . '], Local time: [' . current_time( 'mysql' ) . ']', 0);
 			
@@ -266,6 +292,11 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		foreach ( $package['contents'] as $key => $product ) {
 			
 			if ($product['data']->needs_shipping()) {
+
+				// Numeric keys makes a bug (admin shipping costs calculation plugin)
+				if( is_numeric($key) ) $key = 'xxx' . $key;
+				if( !isset( $product['key'] ) || $product['key'] != $key )
+					$product['key'] = $key;
 			
 				$shippable_contents[$key] = $product;
 				$shippable_contents[$key]['to_ship'] = $Fish_n_Ships->get_quantity($product);
@@ -305,7 +336,11 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		// Backup all shippable contents for extra fees selection conditions
 		$all_shippable_contents = $shippable_contents;
 
-		// Since 1.4.13 the foreach is replaced by for, to give support to jump-up. The variable $rule has been renamed as $virtual_count
+		// Get the selection methods that have group capabilities
+		$groupable_sm = apply_filters('wc-fns-groupable-selection-methods', array('by-weight', 'by-price', 'by-volume', 'volumetric', 'volumetric-set', 'quantity', 'n-groups') );
+
+		// Since 1.4.13 the foreach is replaced by for, to give support to jump-up, but still experimental
+		// The variable $rule has been renamed as $virtual_count
 		// foreach ($this->shipping_rules as $shipping_rule) {
 		for ( $rule_pointer = 0; $rule_pointer < count( $this->shipping_rules ); $rule_pointer++ )
 		{	
@@ -350,7 +385,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 
 			// Unknown method? Let's advice about it! (once)
 			$idx = 'logical-operator-' . $logical_operator;
-			if ( $this->write_logs === true && !isset( $errors[$idx] ) ) {
+			if ( $this->write_logs_boolean === true && !isset( $errors[$idx] ) ) {
 				$known = $Fish_n_Ships->is_known('logical operator', $logical_operator );
 				if ($known !== true) {
 					$errors[$idx] = '1';
@@ -373,7 +408,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 				// On first iteration it's superfluous
 				$this->unset_groups($rule_groups);
 				
-				/************************* Check if selection matches *************************/
+				/************************* Check if selection meets *************************/
 				
 				$selection_match = false;
 				
@@ -387,7 +422,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 							
 							// Unknown method? Let's advice about it! (only if should write logs and once)
 							$idx = 'selection-' . $selector['method'];
-							if ( $this->write_logs === true && !isset( $errors[$idx] ) ) {
+							if ( $this->write_logs_boolean === true && !isset( $errors[$idx] ) ) {
 								$known = $Fish_n_Ships->is_known('selection', $selector['method']);
 								if ($known !== true) {
 									$errors[$idx] = '1';
@@ -414,8 +449,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 								}
 							}
 							
-							// Only this selection methods has group capabilities
-							$groupable_sm = apply_filters('wc-fns-groupable-selection-methods', array('by-weight', 'by-price', 'by-volume', 'volumetric', 'volumetric-set', 'quantity', 'n-groups') );
+							// Have this selection method group capabilities?
 							if ( in_array($selector['method'], $groupable_sm) ) {
 								
 								if ('yes' === $this->global_group_by) {
@@ -490,7 +524,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 								$this->debug_log('*Currently matching products (accumulated checkings result):', 2);
 								$shippable_contents_rule = $Fish_n_Ships->get_selected_contents($rule_groups, $this, 'and');
 							
-							} else if ( $this->write_logs ) {
+							} else if ( $this->write_logs_boolean ) {
 
 								$this->debug_log('*Currently matching products (accumulated checkings result):', 2);
 								// Only for log purposes: 
@@ -546,7 +580,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 
 						// Unknown method? Let's advice about it! (only if should write logs and once)
 						$idx = 'cost-' . $cost['method'];
-						if ( $this->write_logs === true && !isset( $errors[$idx] ) ) {
+						if ( $this->write_logs_boolean === true && !isset( $errors[$idx] ) ) {
 							$known = $Fish_n_Ships->is_known('cost', $cost['method']);
 							if ($known !== true) {
 								$errors[$idx] = '1';
@@ -567,7 +601,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 
 						// Unknown method? Let's advice about it! (only if should write logs and once)
 						$idx = 'action-' . $action['method'];
-						if ( $this->write_logs === true && !isset( $errors[$idx] ) ) {
+						if ( $this->write_logs_boolean === true && !isset( $errors[$idx] ) ) {
 							$known = $Fish_n_Ships->is_known('action', $action['method']);
 							if ($known !== true) {
 								$errors[$idx] = '1';
@@ -644,7 +678,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 			}
 			$this->unset_groups($rule_groups);
 			
-			// We will jump up rules (rewind)? (since 1.4.13)
+			// We will jump up rules (rewind)? (remains experimental)
 			if( $jump_up_n > 0)
 			{
 				$prevent_crash++;
@@ -729,7 +763,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 				$this->debug_log('*Other methods will be disabled.', 0);
 			}
 						
-			if ($this->write_logs === true) {
+			if ($this->write_logs_boolean === true) {
 				$this->debug_log('*FINAL COST: ' . $Fish_n_Ships->unabstracted_price( $rate['cost'] ) . ' '
 									. ($this->tax_status == 'taxable' ? ' + TAX' : ' [non-taxable]')
 									. ($this->rules_charge == 'once' ? ' [only the most expensive rule applied]' : ''), 0);
@@ -744,7 +778,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 			$this->log_totals['final_cost'] = '[non-applicable]';
 		}
 		
-		if ($this->write_logs === true) {
+		if ($this->write_logs_boolean === true) {
 
 			// There is some error? Let's advice it on summary log
 			if ( count($errors) > 0 ) $this->log_totals['final_cost'] = '<strong>[ERROR]</strong> ' . $this->log_totals['final_cost'];
@@ -792,13 +826,14 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * Store a new text line into logs array if log are activated.
 	 *
 	 * @since 1.0.0
+	 * @version 1.5.2
 	 *
 	 * @param  text $message
 	 * @param  integer $tab
 	 */
 	 public function debug_log($message, $tab = 0) {
 
-		 if ($this->write_logs !== true) return;
+		 if ($this->write_logs_boolean !== true) return;
 		 
 		 $this->log_calculate[] = str_repeat('  ', $tab) . sanitize_text_field($message);
 	 }
@@ -807,11 +842,11 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * Save the debug log at end shipping calculation process
 	 *
 	 * @since 1.0.0
-	 * @version 1.2.8
+	 * @version 1.5.2
 	 */
 	 public function save_debug_log() {
 		 
-		 if ($this->write_logs !== true || count($this->log_calculate) == 0) return;
+		 if ($this->write_logs_boolean !== true || count($this->log_calculate) == 0) return;
 		 
 		// Get the main list
 		$logs_index = get_option('wc_fns_logs_index', array() );

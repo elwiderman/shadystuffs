@@ -5,7 +5,7 @@ Donate link: https://www.kadencewp.com/about-us/
 Requires PHP: 5.2.4
 Requires at least: 5.3
 Tested up to: 6.3
-Stable tag: 1.5.12
+Stable tag: 1.5.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,9 @@ assist you with verification, CVE assignment, and notify the
 developers of this plugin.
 
 == Changelog ==
+
+= 1.5.13 =
+* Fix: PHP deprecated notice.
 
 = 1.5.12 =
 * Update: WC version support.

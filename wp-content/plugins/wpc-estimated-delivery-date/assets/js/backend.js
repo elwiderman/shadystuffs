@@ -185,9 +185,9 @@
 
     $('.wpced-date-type').each(function() {
       if ($(this).val() === 'cus') {
-        $(this).parent().find('.wpced-date-val').show();
+        $(this).closest('.wpced-skipped-date').find('.wpced-date-val').show();
       } else {
-        $(this).parent().find('.wpced-date-val').hide();
+        $(this).closest('.wpced-skipped-date').find('.wpced-date-val').hide();
       }
     });
   }
@@ -235,9 +235,8 @@
         }, minimumInputLength: 1,
       });
 
-      if ((typeof $this.data(apply) === 'string' || $this.data(apply) instanceof
-          String) && $this.data(apply) !== '') {
-        $this.val($this.data(apply).split(',')).change();
+      if ($this.data(apply) !== undefined && $this.data(apply) !== '') {
+        $this.val(String($this.data(apply)).split(',')).change();
       } else {
         $this.val([]).change();
       }

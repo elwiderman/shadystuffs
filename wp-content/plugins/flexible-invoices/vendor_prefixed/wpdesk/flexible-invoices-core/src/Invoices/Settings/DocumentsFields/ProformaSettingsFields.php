@@ -43,7 +43,7 @@ final class ProformaSettingsFields implements \WPDeskFIVendor\WPDesk\Library\Fle
             if (\get_locale() === 'pl_PL') {
                 $docs_link = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=wp-admin-plugins&utm_medium=quick-link&utm_campaign=flexible-invoices-docs-link#proformy';
             }
-            return \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>');
+            return \sprintf('%2$s%1$s%3$s', \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>'), '<strong>', '</strong>');
         } else {
             return \sprintf('<a href="%1$s&utm_content=proforma" style="color: #8f0350; font-weight: 700;" target="_blank">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
         }

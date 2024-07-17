@@ -3,7 +3,7 @@
 Plugin Name: Super Socializer
 Plugin URI: https://super-socializer-wordpress.heateor.com
 Description: A complete 360 degree solution to provide all the social features like Social Login, Social Commenting, Social Sharing, Social Media follow and more
-Version: 7.13.64
+Version: 7.13.65
 Author: Team Heateor
 Author URI: https://www.heateor.com
 Text Domain: super-socializer
@@ -11,7 +11,7 @@ Domain Path: /languages
 License: GPL2+
 */
 defined('ABSPATH') or die("Cheating........Uh!!");
-define('THE_CHAMP_SS_VERSION', '7.13.64');
+define('THE_CHAMP_SS_VERSION', '7.13.65');
 
 // attributes to allow in the HTML of the social share and social media follow icons
 $heateorSsDefaultAttribs = array(
@@ -297,6 +297,7 @@ function the_champ_connect(){
 	}
 
 	if(isset($_GET['SuperSocializerAuth'])){
+		$siteUrlForCallback = isset($theChampLoginOptions['domain_callback']) ? the_champ_get_http() . $_SERVER["HTTP_HOST"] : home_url();
 		if(sanitize_text_field($_GET['SuperSocializerAuth']) == 'Vkontakte'){
 			if(isset($theChampLoginOptions['providers']) && in_array('vkontakte', $theChampLoginOptions['providers']) && isset($theChampLoginOptions['vk_key']) && $theChampLoginOptions['vk_key'] != '' && isset($theChampLoginOptions['vk_secure_key']) && $theChampLoginOptions['vk_secure_key'] != ''){
 				if(function_exists('session_start')){
@@ -322,7 +323,7 @@ function the_champ_connect(){
 				$instagramLoginState = mt_rand();
 				// save referrer url in state
 				update_user_meta($instagramLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-				wp_redirect("https://api.instagram.com/oauth/authorize?client_id=".$theChampLoginOptions['insta_id']."&scope=user_profile,user_media&response_type=code&language=en-us&state=".$instagramLoginState."&redirect_uri=".urlencode(home_url()."/SuperSocializerAuth/Instagram"));
+				wp_redirect("https://api.instagram.com/oauth/authorize?client_id=".$theChampLoginOptions['insta_id']."&scope=user_profile,user_media&response_type=code&language=en-us&state=".$instagramLoginState."&redirect_uri=".urlencode($siteUrlForCallback."/SuperSocializerAuth/Instagram"));
 				die;
 			}
 			// Steam auth
@@ -448,7 +449,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($lineLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://access.line.me/oauth2/v2.1/authorize?client_id=".$theChampLoginOptions['line_channel_id']."&response_type=code&scope=profile%20openid%20email&state=". $lineLoginState ."&redirect_uri=".urlencode(home_url()."/SuperSocializerAuth/Line"));
+				wp_redirect("https://access.line.me/oauth2/v2.1/authorize?client_id=".$theChampLoginOptions['line_channel_id']."&response_type=code&scope=profile%20openid%20email&state=". $lineLoginState ."&redirect_uri=".urlencode($siteUrlForCallback."/SuperSocializerAuth/Line"));
 				die;
 			}
 			// mail.ru
@@ -463,7 +464,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($mailruLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://oauth.mail.ru/login?client_id=". $theChampLoginOptions['mailru_client_id'] ."&scope=userinfo&state=". $mailruLoginState ."&response_type=code&redirect_uri=". home_url() ."/SuperSocializerAuth/Mailru");
+				wp_redirect("https://oauth.mail.ru/login?client_id=". $theChampLoginOptions['mailru_client_id'] ."&scope=userinfo&state=". $mailruLoginState ."&response_type=code&redirect_uri=". $siteUrlForCallback ."/SuperSocializerAuth/Mailru");
 				die;
 			}
 			// yahoo
@@ -474,7 +475,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($yahooLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://api.login.yahoo.com/oauth2/request_auth?client_id=".$theChampLoginOptions['yahoo_channel_id']."&response_type=code&language=en-us&state=".$yahooLoginState."&redirect_uri=".home_url()."/SuperSocializerAuth/Yahoo");
+				wp_redirect("https://api.login.yahoo.com/oauth2/request_auth?client_id=".$theChampLoginOptions['yahoo_channel_id']."&response_type=code&language=en-us&state=".$yahooLoginState."&redirect_uri=".$siteUrlForCallback."/SuperSocializerAuth/Yahoo");
 				die;
 			}
 			// Discord
@@ -485,7 +486,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($discordLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://discord.com/oauth2/authorize/request_auth?client_id=".$theChampLoginOptions['discord_channel_id']."&response_type=code&state=".$discordLoginState."&scope=identify%20email&redirect_uri=".home_url()."/SuperSocializerAuth/Discord");
+				wp_redirect("https://discord.com/oauth2/authorize/request_auth?client_id=".$theChampLoginOptions['discord_channel_id']."&response_type=code&state=".$discordLoginState."&scope=identify%20email&redirect_uri=".$siteUrlForCallback."/SuperSocializerAuth/Discord");
 				die;
 			}
 			// Wordpress
@@ -496,7 +497,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($wordpressLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://public-api.wordpress.com/oauth2/authorize?client_id=".$theChampLoginOptions['wordpress_client_id']."&scope=auth&response_type=code&state=".$wordpressLoginState."&redirect_uri=".home_url()."/SuperSocializerAuth/Wordpress");
+				wp_redirect("https://public-api.wordpress.com/oauth2/authorize?client_id=".$theChampLoginOptions['wordpress_client_id']."&scope=auth&response_type=code&state=".$wordpressLoginState."&redirect_uri=".$siteUrlForCallback."/SuperSocializerAuth/Wordpress");
 				die;
 			}
 			// windows live
@@ -505,7 +506,7 @@ function the_champ_connect(){
 				$liveLoginState = mt_rand();
 				// save referrer url in state
 				update_user_meta($liveLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-				wp_redirect("https://login.live.com/oauth20_authorize.srf?client_id=".$theChampLoginOptions['live_channel_id']."&scope=wl.emails,wl.basic&response_type=code&state=".$liveLoginState."&redirect_uri=".home_url()."/SuperSocializerAuth/Live");
+				wp_redirect("https://login.live.com/oauth20_authorize.srf?client_id=".$theChampLoginOptions['live_channel_id']."&scope=wl.emails,wl.basic&response_type=code&state=".$liveLoginState."&redirect_uri=".$siteUrlForCallback."/SuperSocializerAuth/Live");
 				die;
 			}
 			// twitch
@@ -516,7 +517,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($twitchLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://id.twitch.tv/oauth2/authorize?client_id=".$theChampLoginOptions['twitch_client_id']."&scope=user:read:email&response_type=code&state=".$twitchLoginState."&redirect_uri=".urlencode(home_url()."/SuperSocializerAuth/Twitch"));
+				wp_redirect("https://id.twitch.tv/oauth2/authorize?client_id=".$theChampLoginOptions['twitch_client_id']."&scope=user:read:email&response_type=code&state=".$twitchLoginState."&redirect_uri=".urlencode($siteUrlForCallback."/SuperSocializerAuth/Twitch"));
 				die;
 			}
 			// reddit
@@ -525,7 +526,7 @@ function the_champ_connect(){
 		        $redditLoginState = mt_rand();
 				// save referrer url in state
 				update_user_meta($redditLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-		        wp_redirect("https://ssl.reddit.com/api/v1/authorize?client_id=" . $theChampLoginOptions['reddit_client_id'] . "&scope=identity&state=" . $redditLoginState . "&duration=temporary&response_type=code&redirect_uri=" . home_url() . "/SuperSocializerAuth/Reddit");
+		        wp_redirect("https://ssl.reddit.com/api/v1/authorize?client_id=" . $theChampLoginOptions['reddit_client_id'] . "&scope=identity&state=" . $redditLoginState . "&duration=temporary&response_type=code&redirect_uri=" . $siteUrlForCallback . "/SuperSocializerAuth/Reddit");
 		        die;
 		    }
 		    //disqus
@@ -534,7 +535,7 @@ function the_champ_connect(){
 		        $disqusLoginState = mt_rand();
 				// save referrer url in state
 				update_user_meta($disqusLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-		        wp_redirect("https://disqus.com/api/oauth/2.0/authorize/?client_id=" . $theChampLoginOptions['disqus_public_key'] . "&scope=read,email&response_type=code&state=". $disqusLoginState ."&redirect_uri=" . home_url() . "/SuperSocializerAuth/Disqus");
+		        wp_redirect("https://disqus.com/api/oauth/2.0/authorize/?client_id=" . $theChampLoginOptions['disqus_public_key'] . "&scope=read,email&response_type=code&state=". $disqusLoginState ."&redirect_uri=" . $siteUrlForCallback . "/SuperSocializerAuth/Disqus");
 		        die;
 		    }
 		    // dropbox
@@ -543,7 +544,7 @@ function the_champ_connect(){
 		    	$dropboxLoginState = mt_rand();
 				// save referrer url in state
 				update_user_meta($dropboxLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-		        wp_redirect("https://www.dropbox.com/1/oauth2/authorize?client_id=" . $theChampLoginOptions['dropbox_app_key'] . "&scope=account_info.read&state=" . $dropboxLoginState . "&response_type=code&redirect_uri=" . home_url() . "/SuperSocializerAuth/Dropbox");
+		        wp_redirect("https://www.dropbox.com/1/oauth2/authorize?client_id=" . $theChampLoginOptions['dropbox_app_key'] . "&scope=account_info.read&state=" . $dropboxLoginState . "&response_type=code&redirect_uri=" . $siteUrlForCallback . "/SuperSocializerAuth/Dropbox");
 		        die;
 		    }
 		    // foursquare
@@ -552,7 +553,7 @@ function the_champ_connect(){
 		        $foursquareLoginState = mt_rand();
 				// save referrer url in state
 				update_user_meta($foursquareLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-		        wp_redirect("https://foursquare.com/oauth2/authenticate/?client_id=" . $theChampLoginOptions['foursquare_client_id'] . "&response_type=code&state=". $foursquareLoginState ."&redirect_uri=" . home_url() . "/SuperSocializerAuth/Foursquare");
+		        wp_redirect("https://foursquare.com/oauth2/authenticate/?client_id=" . $theChampLoginOptions['foursquare_client_id'] . "&response_type=code&state=". $foursquareLoginState ."&redirect_uri=" . $siteUrlForCallback . "/SuperSocializerAuth/Foursquare");
 		        die;
 		    }
 		    // odnoklassniki
@@ -563,7 +564,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($odnoklassnikiLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://connect.ok.ru/oauth/authorize?client_id=" . $theChampLoginOptions['odnoklassniki_client_id'] . "&scope=GET_EMAIL%20PHOTO_CONTENT&response_type=code&state=" . $odnoklassnikiLoginState . "&redirect_uri=" . urlencode(home_url()."/SuperSocializerAuth/Odnoklassniki"));
+				wp_redirect("https://connect.ok.ru/oauth/authorize?client_id=" . $theChampLoginOptions['odnoklassniki_client_id'] . "&scope=GET_EMAIL%20PHOTO_CONTENT&response_type=code&state=" . $odnoklassnikiLoginState . "&redirect_uri=" . urlencode($siteUrlForCallback."/SuperSocializerAuth/Odnoklassniki"));
 				die;
 			}
 			// Dribbble
@@ -574,7 +575,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($dribbbleLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://dribbble.com/oauth/authorize?client_id=".$theChampLoginOptions['dribbble_client_id']."&scope=public&state=". $dribbbleLoginState ."&redirect_uri=".urlencode(home_url()."/SuperSocializerAuth/Dribbble"));
+				wp_redirect("https://dribbble.com/oauth/authorize?client_id=".$theChampLoginOptions['dribbble_client_id']."&scope=public&state=". $dribbbleLoginState ."&redirect_uri=".urlencode($siteUrlForCallback."/SuperSocializerAuth/Dribbble"));
 				die;
 			}
 			// Spotify
@@ -585,7 +586,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($spotifyLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://accounts.spotify.com/authorize?client_id=".$theChampLoginOptions['spotify_client_id']."&scope=user-read-email&response_type=code&state=". $spotifyLoginState ."&redirect_uri=".home_url()."/SuperSocializerAuth/Spotify");
+				wp_redirect("https://accounts.spotify.com/authorize?client_id=".$theChampLoginOptions['spotify_client_id']."&scope=user-read-email&response_type=code&state=". $spotifyLoginState ."&redirect_uri=".$siteUrlForCallback."/SuperSocializerAuth/Spotify");
 				die;
 			}
 			// kakao
@@ -596,7 +597,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($kakaoLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://kauth.kakao.com/oauth/authorize?client_id=".$theChampLoginOptions['kakao_client_id']."&response_type=code&state=". $kakaoLoginState ."&redirect_uri=".home_url()."/SuperSocializerAuth/Kakao");
+				wp_redirect("https://kauth.kakao.com/oauth/authorize?client_id=".$theChampLoginOptions['kakao_client_id']."&response_type=code&state=". $kakaoLoginState ."&redirect_uri=".$siteUrlForCallback."/SuperSocializerAuth/Kakao");
 				die;
 			}
 			// yandex
@@ -607,7 +608,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($yandexLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://oauth.yandex.ru/authorize?client_id=" . $theChampLoginOptions['yandex_client_id'] . "&response_type=code&state=" . $yandexLoginState . "&redirect_uri=".urlencode(home_url() . "/SuperSocializerAuth/Yandex"));
+				wp_redirect("https://oauth.yandex.ru/authorize?client_id=" . $theChampLoginOptions['yandex_client_id'] . "&response_type=code&state=" . $yandexLoginState . "&redirect_uri=".urlencode($siteUrlForCallback . "/SuperSocializerAuth/Yandex"));
 				die;
 			}
 			// Github
@@ -618,7 +619,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($githubLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://github.com/login/oauth/authorize?client_id=".$theChampLoginOptions['github_client_id']."&scope=read:user user:email&state=". $githubLoginState ."&response_type=code&redirect_uri=".home_url()."/SuperSocializerAuth/Github");
+				wp_redirect("https://github.com/login/oauth/authorize?client_id=".$theChampLoginOptions['github_client_id']."&scope=read:user user:email&state=". $githubLoginState ."&response_type=code&redirect_uri=".$siteUrlForCallback."/SuperSocializerAuth/Github");
 				die;
 			}
 			// amazon
@@ -629,7 +630,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($amazonLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://www.amazon.com/ap/oa?client_id=".$theChampLoginOptions['amazon_client_id']."&response_type=code&scope=profile&state=".$amazonLoginState."&redirect_uri=".urlencode(home_url()."/SuperSocializerAuth/Amazon"));
+				wp_redirect("https://www.amazon.com/ap/oa?client_id=".$theChampLoginOptions['amazon_client_id']."&response_type=code&scope=profile&state=".$amazonLoginState."&redirect_uri=".urlencode($siteUrlForCallback."/SuperSocializerAuth/Amazon"));
 				die;
 			}
 			// Stack Overflow
@@ -640,7 +641,7 @@ function the_champ_connect(){
 					// save referrer url in state
 					update_user_meta($stackoverflowLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 				}
-				wp_redirect("https://stackexchange.com/oauth?client_id=".$theChampLoginOptions['stackoverflow_client_id']."&response_type=code&scope=private_info&state=".$stackoverflowLoginState."&redirect_uri=".urlencode(home_url()."/SuperSocializerAuth/Stackoverflow"));
+				wp_redirect("https://stackexchange.com/oauth?client_id=".$theChampLoginOptions['stackoverflow_client_id']."&response_type=code&scope=private_info&state=".$stackoverflowLoginState."&redirect_uri=".urlencode($siteUrlForCallback."/SuperSocializerAuth/Stackoverflow"));
 				die;
 			}
 			// Google
@@ -650,7 +651,7 @@ function the_champ_connect(){
 	            // save referrer url in state
 	            update_user_meta($googleLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 	            update_user_meta($googleLoginState, 'super_socializer_temp_network', 'Google');
-		        wp_redirect("https://accounts.google.com/o/oauth2/auth?client_id=" . $theChampLoginOptions['google_key'] . "&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&state=". $googleLoginState ."&response_type=code&prompt=select_account&redirect_uri=" . home_url());
+		        wp_redirect("https://accounts.google.com/o/oauth2/auth?client_id=" . $theChampLoginOptions['google_key'] . "&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/userinfo.profile&state=". $googleLoginState ."&response_type=code&prompt=select_account&redirect_uri=" . $siteUrlForCallback);
 		        die;
 		    }
 		}elseif(sanitize_text_field($_GET['SuperSocializerAuth']) == 'Youtube'){
@@ -659,7 +660,7 @@ function the_champ_connect(){
 	            // save referrer url in state
 	            update_user_meta($youtubeLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
 	            update_user_meta($youtubeLoginState, 'super_socializer_temp_network', 'Youtube');
-	            wp_redirect("https://accounts.google.com/o/oauth2/auth?client_id=" . $theChampLoginOptions['google_key'] . "&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/youtube.readonly&state=". $youtubeLoginState ."&response_type=code&prompt=select_account&redirect_uri=" . home_url());
+	            wp_redirect("https://accounts.google.com/o/oauth2/auth?client_id=" . $theChampLoginOptions['google_key'] . "&scope=https://www.googleapis.com/auth/userinfo.email%20https://www.googleapis.com/auth/youtube.readonly&state=". $youtubeLoginState ."&response_type=code&prompt=select_account&redirect_uri=" . $siteUrlForCallback);
 		        die;
 		    }
 		}elseif(sanitize_text_field($_GET['SuperSocializerAuth']) == 'Twitter' && !isset($_REQUEST['oauth_token'])){
@@ -679,7 +680,7 @@ function the_champ_connect(){
 				    $twitterLoginState = mt_rand();
 				    // save referrer url in state
 	                update_user_meta($twitterLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-				    wp_redirect("https://twitter.com/i/oauth2/authorize?response_type=code&client_id=". $theChampLoginOptions['twitter_key'] ."&redirect_uri=". urlencode(esc_url(home_url()) ."/SuperSocializerAuth/Twitter") ."&scope=tweet.read%20users.read&state=". $twitterLoginState ."&code_challenge=challenge&code_challenge_method=plain");
+				    wp_redirect("https://twitter.com/i/oauth2/authorize?response_type=code&client_id=". $theChampLoginOptions['twitter_key'] ."&redirect_uri=". urlencode(esc_url($siteUrlForCallback) ."/SuperSocializerAuth/Twitter") ."&scope=tweet.read%20users.read&state=". $twitterLoginState ."&code_challenge=challenge&code_challenge_method=plain");
 			        die;
 				}elseif($connection->getLastHttpCode() == 200){
 					// generate unique ID
@@ -719,7 +720,7 @@ function the_champ_connect(){
 		            $facebookLoginState = mt_rand();
 		            // save referrer url in state
 		            update_user_meta($facebookLoginState, 'super_socializer_redirect_to', isset($_GET['super_socializer_redirect_to']) ? esc_url_raw($_GET['super_socializer_redirect_to']) : home_url());
-		            wp_redirect("https://www.facebook.com/v18.0/dialog/oauth?scope=email&client_id=" . $theChampLoginOptions['fb_key'] . "&state=" . $facebookLoginState . "&redirect_uri=" . home_url() . "/?SuperSocializerAuth=Facebook");
+		            wp_redirect("https://www.facebook.com/v18.0/dialog/oauth?scope=email&client_id=" . $theChampLoginOptions['fb_key'] . "&state=" . $facebookLoginState . "&redirect_uri=" . $siteUrlForCallback . "/?SuperSocializerAuth=Facebook");
 		            die;
 		        }elseif(isset($_GET['code']) && isset($_GET['state']) && get_user_meta(sanitize_text_field($_GET['state']), 'super_socializer_redirect_to', true) !== false){
 		            $postData = array(

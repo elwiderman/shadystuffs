@@ -3,8 +3,8 @@ Contributors: Heateor, kamirkhan, mohammadfarhankhan, the_champ
 Donate link: https://www.heateor.com/donate?action=Super+Socializer
 Tags: social login, social share, facebook comments, single sign-on, social media, facebook login, twitter login, linkedin login, google login, vkontakte login, Windows Live Login, Microsoft Login, Wordpress login, Yahoo login, Spotify login, Dribbble login, Kakao login, Github login, Twitch login, Instagram login, dropbox login, foursquare login, disqus login, reddit login, amazon login, stackoverflow login, stack overflow login, discord login, mail.ru login, mailru login, mail ru login, gettr share, parler share, odnoklassniki login, yandex login, odnoklassniki, yandex, odnoklassniki login button, yandex login button, Rutube, Rutube share, Rutube sharing, youtube login, x, x login, x share, yelp, tiktok, threads, Google Maps, Google Translate, RSS Feed, line, mastodon, mastodon share
 Requires at least: 2.5.0
-Tested up to: 6.4.3
-Stable tag: 7.13.64
+Tested up to: 6.5.5
+Stable tag: 7.13.65
 License: GPLv2 or later
 
 The unique Social Plugin to let you integrate Social Login, Social Share, Social Comments and Social Media follow at your website
@@ -213,6 +213,11 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 8. **Social Commenting**: Disqus Commenting selected
 
 == Changelog ==
+= 7.13.65 [13 July 2024] =
+* [Bugfix] Social Login wasn't working on a multilingual site that had different versions as the language codes appended to the URL of the home page
+* [Improvement] Updated the Facebook SDK being used throughout the plugin to the latest version 20.0
+* [Improvement] Minor improvements
+
 = 7.13.64 [2 March 2024] =
 * [New] Added Line in the Follow Icons widget and shortcode
 * [New] Added Mastodon in the Follow Icons widget and shortcode
@@ -2789,4 +2794,9 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 * [Improvement] Improved Facebook social share and social follow icons
 * [Improvement] Improved Vkontakte icon in the Follow Icons shortcode and widget
 * [Improvement] Updated the official Facebook SDK being used throughout the plugin to the latest version 19.0
+* [Improvement] Minor improvements
+
+= 7.13.65 [13 July 2024] =
+* [Bugfix] Social Login wasn't working on a multilingual site that had different versions as the language codes appended to the URL of the home page
+* [Improvement] Updated the Facebook SDK being used throughout the plugin to the latest version 20.0
 * [Improvement] Minor improvements

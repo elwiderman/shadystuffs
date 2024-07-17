@@ -37,7 +37,7 @@ $buy_url = \esc_url(\get_locale() === 'pl_PL' ? $pl : $en, array('https'));
 		<td>
 			<a class="button button-primary button-hero" href="<?php 
 echo \esc_url($buy_url);
-?>" target="_blank"><?php 
+?>" style="background-color: #900351; border-color: #900351;" target="_blank"><?php 
 \_e('Buy Advanced Reports &rarr;', 'flexible-invoices');
 ?></a>
 		</td>

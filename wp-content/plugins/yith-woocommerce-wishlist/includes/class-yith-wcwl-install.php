@@ -2,7 +2,7 @@
 /**
  * Install file
  *
- * @author YITH <plugins@yithemes.com>
+ * @author  YITH <plugins@yithemes.com>
  * @package YITH\Wishlist\Classes
  * @version 3.0.0
  */
@@ -32,7 +32,7 @@ if ( ! class_exists( 'YITH_WCWL_Install' ) ) {
 		 *
 		 * @var string
 		 * @access private
-		 * @since 1.0.0
+		 * @since  1.0.0
 		 */
 		private $table_items;
 
@@ -41,7 +41,7 @@ if ( ! class_exists( 'YITH_WCWL_Install' ) ) {
 		 *
 		 * @var string
 		 * @access private
-		 * @since 1.0.0
+		 * @since  1.0.0
 		 */
 		private $table_wishlists;
 
@@ -119,7 +119,9 @@ if ( ! class_exists( 'YITH_WCWL_Install' ) ) {
 				$this->update_300();
 			}
 
-			// TODO (3.1): _update_310() should call ->_add_tables(), to update db structure and size of external id columns.
+			if ( version_compare( $current_version, '3.0.1', '<' ) ) {
+				$this->update_301();
+			}
 
 			$this->register_current_version();
 		}
@@ -260,11 +262,21 @@ if ( ! class_exists( 'YITH_WCWL_Install' ) ) {
 		}
 
 		/**
+		 * Update from 3.0.0 to 3.0.1 version of the DB
+		 *
+		 * @since 3.34.0
+		 */
+		private function update_301() {
+			$add_to_wishlist_in_loop_option_name = 'yith_wcwl_show_on_loop';
+			update_option( $add_to_wishlist_in_loop_option_name, get_option( $add_to_wishlist_in_loop_option_name, 'no' ) );
+		}
+
+		/**
 		 * Add tables for a fresh installation
 		 *
 		 * @return void
 		 * @access private
-		 * @since 1.0.0
+		 * @since  1.0.0
 		 */
 		private function add_tables() {
 			$this->add_wishlists_table();
@@ -276,7 +288,7 @@ if ( ! class_exists( 'YITH_WCWL_Install' ) ) {
 		 *
 		 * @return void
 		 * @access private
-		 * @since 1.0.0
+		 * @since  1.0.0
 		 */
 		private function add_wishlists_table() {
 			if ( ! $this->is_installed() || version_compare( get_option( 'yith_wcwl_db_version' ), '3.0.0', '<' ) ) {
@@ -305,7 +317,7 @@ if ( ! class_exists( 'YITH_WCWL_Install' ) ) {
 		 *
 		 * @return void
 		 * @access private
-		 * @since 1.0.0
+		 * @since  1.0.0
 		 */
 		private function add_items_table() {
 			if ( ! $this->is_installed() || version_compare( get_option( 'yith_wcwl_db_version' ), '3.0.0', '<' ) ) {

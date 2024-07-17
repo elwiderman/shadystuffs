@@ -246,6 +246,35 @@
     font-size: 13px !important;
 }
 
+.wpclever_settings_page .wpclever_settings_page_suggestion {
+    font-size: 14px;
+    margin-top: 20px;
+    padding: 20px 20px 10px 20px;
+    border: 1px dashed #8c8f94;
+    background-color: #ffffff;
+    position: relative;
+    border-radius: 2px;
+}
+
+.wpclever_settings_page .wpclever_settings_page_suggestion .wpclever_settings_page_suggestion_label {
+    background-color: #222222;
+    color: #ffffff;
+    text-transform: uppercase;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 10px;
+    border-radius: 2px;
+    font-size: 8px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.wpclever_settings_page .wpclever_settings_page_suggestion .wpclever_settings_page_suggestion_content > div {
+    margin-bottom: 10px;
+}
+
 .wpclever_plugins_order {
     margin-left: 10px;
 }

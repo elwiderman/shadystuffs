@@ -3,21 +3,21 @@
 Plugin Name: WPC Fly Cart for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: WPC Fly Cart is an interactive mini cart for WooCommerce. It allows users to update product quantities or remove products without reloading the page.
-Version: 5.6.6
+Version: 5.7.1
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: woo-fly-cart
 Domain Path: /languages/
 Requires Plugins: woocommerce
 Requires at least: 4.0
-Tested up to: 6.4
+Tested up to: 6.5
 WC requires at least: 3.0
-WC tested up to: 8.6
+WC tested up to: 9.0
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOFC_VERSION' ) && define( 'WOOFC_VERSION', '5.6.6' );
+! defined( 'WOOFC_VERSION' ) && define( 'WOOFC_VERSION', '5.7.1' );
 ! defined( 'WOOFC_LITE' ) && define( 'WOOFC_LITE', __FILE__ );
 ! defined( 'WOOFC_FILE' ) && define( 'WOOFC_FILE', __FILE__ );
 ! defined( 'WOOFC_URI' ) && define( 'WOOFC_URI', plugin_dir_url( __FILE__ ) );
@@ -35,7 +35,7 @@ if ( ! class_exists( 'Walker_PageDropdown_Multiple' ) ) {
 	class Walker_PageDropdown_Multiple extends Walker_PageDropdown {
 		function start_el( &$output, $data_object, $depth = 0, $args = [], $current_object_id = 0 ) {
 			$page = $data_object;
-			$pad  = str_repeat( isset( $args['pad'] ) ? $args['pad'] : '--', $depth );
+			$pad  = str_repeat( $args['pad'] ?? '--', $depth );
 
 			$output .= "\t<option class=\"level-$depth\" value=\"$page->ID\"";
 
@@ -98,6 +98,9 @@ if ( ! function_exists( 'woofc_init' ) ) {
 					add_filter( 'woocommerce_add_to_cart_fragments', [ $this, 'cart_fragment' ] );
 					add_filter( 'woocommerce_update_order_review_fragments', [ $this, 'cart_fragment' ] );
 					add_filter( 'wpcsm_locations', [ $this, 'wpcsm_locations' ] );
+
+					// shortcode
+					add_shortcode( 'woofc_cart_link', [ $this, 'shortcode_cart_link' ] );
 
 					// ajax
 					add_action( 'wp_ajax_woofc_update_qty', [ $this, 'ajax_update_qty' ] );
@@ -235,7 +238,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 							'confirm_empty_text'    => self::localization( 'empty_confirm', esc_html__( 'Do you want to empty the cart?', 'woo-fly-cart' ) ),
 							'confirm_remove_text'   => self::localization( 'remove_confirm', esc_html__( 'Do you want to remove this item?', 'woo-fly-cart' ) ),
 							'undo_remove_text'      => self::localization( 'remove_undo', esc_html__( 'Undo?', 'woo-fly-cart' ) ),
-							'removed_text'          => self::localization( 'removed', esc_html__( '%s was removed.', 'woo-fly-cart' ) ),
+							'removed_text'          => self::localization( 'removed', /* translators: product */ esc_html__( '%s was removed.', 'woo-fly-cart' ) ),
 							'manual_show'           => self::get_setting( 'manual_show', '' ),
 							'reload'                => self::get_setting( 'reload', 'no' ),
 							'slick'                 => apply_filters( 'woofc_slick', self::get_setting( 'suggested_carousel', 'yes' ) ),
@@ -286,8 +289,8 @@ if ( ! function_exists( 'woofc_init' ) ) {
 					}
 
 					if ( $plugin === $file ) {
-						$settings             = '<a href="' . admin_url( 'admin.php?page=wpclever-woofc&tab=settings' ) . '">' . esc_html__( 'Settings', 'woo-fly-cart' ) . '</a>';
-						$links['wpc-premium'] = '<a href="' . admin_url( 'admin.php?page=wpclever-woofc&tab=premium' ) . '">' . esc_html__( 'Premium Version', 'woo-fly-cart' ) . '</a>';
+						$settings             = '<a href="' . esc_url( admin_url( 'admin.php?page=wpclever-woofc&tab=settings' ) ) . '">' . esc_html__( 'Settings', 'woo-fly-cart' ) . '</a>';
+						$links['wpc-premium'] = '<a href="' . esc_url( admin_url( 'admin.php?page=wpclever-woofc&tab=premium' ) ) . '">' . esc_html__( 'Premium Version', 'woo-fly-cart' ) . '</a>';
 						array_unshift( $links, $settings );
 					}
 
@@ -328,13 +331,13 @@ if ( ! function_exists( 'woofc_init' ) ) {
 				}
 
 				function admin_menu_content() {
-					$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'settings';
+					$active_tab = sanitize_key( $_GET['tab'] ?? 'settings' );
 					?>
                     <div class="wpclever_settings_page wrap">
-                        <h1 class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Fly Cart', 'woo-fly-cart' ) . ' ' . WOOFC_VERSION . ' ' . ( defined( 'WOOFC_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'woo-fly-cart' ) . '</span>' : '' ); ?></h1>
+                        <h1 class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Fly Cart', 'woo-fly-cart' ) . ' ' . esc_html( WOOFC_VERSION ) . ' ' . ( defined( 'WOOFC_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'woo-fly-cart' ) . '</span>' : '' ); ?></h1>
                         <div class="wpclever_settings_page_desc about-text">
                             <p>
-								<?php printf( /* translators: %s is the stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'woo-fly-cart' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
+								<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'woo-fly-cart' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
                                 <br/>
                                 <a href="<?php echo esc_url( WOOFC_REVIEWS ); ?>" target="_blank"><?php esc_html_e( 'Reviews', 'woo-fly-cart' ); ?></a> |
                                 <a href="<?php echo esc_url( WOOFC_CHANGELOG ); ?>" target="_blank"><?php esc_html_e( 'Changelog', 'woo-fly-cart' ); ?></a> |
@@ -348,16 +351,16 @@ if ( ! function_exists( 'woofc_init' ) ) {
 						<?php } ?>
                         <div class="wpclever_settings_page_nav">
                             <h2 class="nav-tab-wrapper">
-                                <a href="<?php echo admin_url( 'admin.php?page=wpclever-woofc&tab=settings' ); ?>" class="<?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
+                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woofc&tab=settings' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
 									<?php esc_html_e( 'Settings', 'woo-fly-cart' ); ?>
                                 </a>
-                                <a href="<?php echo admin_url( 'admin.php?page=wpclever-woofc&tab=localization' ); ?>" class="<?php echo esc_attr( $active_tab === 'localization' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
+                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woofc&tab=localization' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'localization' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
 									<?php esc_html_e( 'Localization', 'woo-fly-cart' ); ?>
                                 </a>
-                                <a href="<?php echo admin_url( 'admin.php?page=wpclever-woofc&tab=premium' ); ?>" class="<?php echo esc_attr( $active_tab === 'premium' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>" style="color: #c9356e">
+                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-woofc&tab=premium' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'premium' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>" style="color: #c9356e">
 									<?php esc_html_e( 'Premium Version', 'woo-fly-cart' ); ?>
                                 </a>
-                                <a href="<?php echo admin_url( 'admin.php?page=wpclever-kit' ); ?>" class="nav-tab">
+                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-kit' ) ); ?>" class="nav-tab">
 									<?php esc_html_e( 'Essential Kit', 'woo-fly-cart' ); ?>
                                 </a>
                             </h2>
@@ -372,6 +375,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 								$perfect_scrollbar       = self::get_setting( 'perfect_scrollbar', 'yes' );
 								$position                = self::get_setting( 'position', '05' );
 								$effect                  = self::get_setting( 'effect', 'yes' );
+								$rounded                 = self::get_setting( 'rounded', 'no' );
 								$style                   = self::get_setting( 'style', $default_style );
 								$close                   = self::get_setting( 'close', 'yes' );
 								$link                    = self::get_setting( 'link', 'yes' );
@@ -414,71 +418,71 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr>
                                             <th><?php esc_html_e( 'Open on AJAX add to cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[auto_show_ajax]">
-                                                    <option value="yes" <?php selected( $auto_show_ajax, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $auto_show_ajax, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
-                                                <span class="description"><?php printf( esc_html__( 'The fly cart will be opened immediately after whenever click to AJAX Add to cart buttons? See %s "Add to cart behaviour" setting %s', 'woo-fly-cart' ), '<a href="' . admin_url( 'admin.php?page=wc-settings&tab=products&section=display' ) . '" target="_blank">', '</a>.' ); ?></span>
+                                                <label> <select name="woofc_settings[auto_show_ajax]">
+                                                        <option value="yes" <?php selected( $auto_show_ajax, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $auto_show_ajax, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
+                                                <span class="description"><?php printf( /* translators: link */ esc_html__( 'The fly cart will be opened immediately after whenever click to AJAX Add to cart buttons? See %1$s "Add to cart behaviour" setting %2$s', 'woo-fly-cart' ), '<a href="' . esc_url( admin_url( 'admin.php?page=wc-settings&tab=products&section=display' ) ) . '" target="_blank">', '</a>.' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Open on normal add to cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[auto_show_normal]">
-                                                    <option value="yes" <?php selected( $auto_show_normal, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $auto_show_normal, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[auto_show_normal]">
+                                                        <option value="yes" <?php selected( $auto_show_normal, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $auto_show_normal, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'The fly cart will be opened immediately after whenever click to normal Add to cart buttons (AJAX is not enable) or Add to cart button in single product page?', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Reverse items', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[reverse_items]">
-                                                    <option value="yes" <?php selected( $reverse_items, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $reverse_items, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[reverse_items]">
+                                                        <option value="yes" <?php selected( $reverse_items, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $reverse_items, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Overlay layer', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[overlay_layer]">
-                                                    <option value="yes" <?php selected( $overlay_layer, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $overlay_layer, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[overlay_layer]">
+                                                        <option value="yes" <?php selected( $overlay_layer, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $overlay_layer, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'If you hide the overlay layer, the buyer still can work on your site when the fly cart is opening.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th scope="row"><?php esc_html_e( 'Use perfect-scrollbar', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[perfect_scrollbar]">
-                                                    <option value="yes" <?php selected( $perfect_scrollbar, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $perfect_scrollbar, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
-                                                <span class="description"><?php printf( esc_html__( 'Read more about %s', 'woo-fly-cart' ), '<a href="https://github.com/mdbootstrap/perfect-scrollbar" target="_blank">perfect-scrollbar</a>' ); ?>.</span>
+                                                <label> <select name="woofc_settings[perfect_scrollbar]">
+                                                        <option value="yes" <?php selected( $perfect_scrollbar, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $perfect_scrollbar, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
+                                                <span class="description"><?php printf( /* translators: link */ esc_html__( 'Read more about %s', 'woo-fly-cart' ), '<a href="https://github.com/mdbootstrap/perfect-scrollbar" target="_blank">perfect-scrollbar</a>' ); ?>.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Position', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[position]">
-                                                    <option value="01" <?php selected( $position, '01' ); ?>><?php esc_html_e( 'Right', 'woo-fly-cart' ); ?></option>
-                                                    <option value="02" <?php selected( $position, '02' ); ?>><?php esc_html_e( 'Left', 'woo-fly-cart' ); ?></option>
-                                                    <option value="03" <?php selected( $position, '03' ); ?>><?php esc_html_e( 'Top', 'woo-fly-cart' ); ?></option>
-                                                    <option value="04" <?php selected( $position, '04' ); ?>><?php esc_html_e( 'Bottom', 'woo-fly-cart' ); ?></option>
-                                                    <option value="05" <?php selected( $position, '05' ); ?>><?php esc_html_e( 'Center', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[position]">
+                                                        <option value="01" <?php selected( $position, '01' ); ?>><?php esc_html_e( 'Right', 'woo-fly-cart' ); ?></option>
+                                                        <option value="02" <?php selected( $position, '02' ); ?>><?php esc_html_e( 'Left', 'woo-fly-cart' ); ?></option>
+                                                        <option value="03" <?php selected( $position, '03' ); ?>><?php esc_html_e( 'Top', 'woo-fly-cart' ); ?></option>
+                                                        <option value="04" <?php selected( $position, '04' ); ?>><?php esc_html_e( 'Bottom', 'woo-fly-cart' ); ?></option>
+                                                        <option value="05" <?php selected( $position, '05' ); ?>><?php esc_html_e( 'Center', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Effect', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[effect]">
-                                                    <option value="yes" <?php selected( $effect, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $effect, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[effect]">
+                                                        <option value="yes" <?php selected( $effect, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $effect, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Enable/disable slide effect.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
@@ -507,8 +511,8 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr class="woofc_hide_if_style woofc_show_if_style_01 woofc_show_if_style_02 woofc_show_if_style_03 woofc_show_if_style_04">
                                             <th><?php esc_html_e( 'Color', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" name="woofc_settings[color]" id="woofc_color" value="<?php echo self::get_setting( 'color', '#cc6055' ); ?>" class="woofc_color_picker"/>
-                                                <span class="description"><?php printf( esc_html__( 'Background or text color of selected style, default %s', 'woo-fly-cart' ), '<code>#cc6055</code>' ); ?></span>
+                                                <label for="woofc_color"></label><input type="text" name="woofc_settings[color]" id="woofc_color" value="<?php echo self::get_setting( 'color', '#cc6055' ); ?>" class="woofc_color_picker"/>
+                                                <span class="description"><?php printf( /* translators: color */ esc_html__( 'Background or text color of selected style, default %s', 'woo-fly-cart' ), '<code>#cc6055</code>' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr class="woofc_hide_if_style woofc_show_if_style_05">
@@ -524,170 +528,181 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                             </td>
                                         </tr>
                                         <tr>
+                                            <th><?php esc_html_e( 'Rounded', 'woo-fly-cart' ); ?></th>
+                                            <td>
+                                                <label> <select name="woofc_settings[rounded]">
+                                                        <option value="yes" <?php selected( $rounded, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $rounded, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
+                                                <span class="description"><?php esc_html_e( 'Enable/disable rounded style for elements.', 'woo-fly-cart' ); ?></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
                                             <th><?php esc_html_e( 'Close button', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[close]">
-                                                    <option value="yes" <?php selected( $close, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $close, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[close]">
+                                                        <option value="yes" <?php selected( $close, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $close, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the close button.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Link to individual product', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[link]">
-                                                    <option value="yes" <?php selected( $link, 'yes' ); ?>><?php esc_html_e( 'Yes, open in the same tab', 'woo-fly-cart' ); ?></option>
-                                                    <option value="yes_blank" <?php selected( $link, 'yes_blank' ); ?>><?php esc_html_e( 'Yes, open in the new tab', 'woo-fly-cart' ); ?></option>
-                                                    <option value="yes_popup" <?php selected( $link, 'yes_popup' ); ?>><?php esc_html_e( 'Yes, open quick view popup', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $link, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select> <span class="description">If you choose "Open quick view popup", please install <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=woo-smart-quick-view&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Smart Quick View">WPC Smart Quick View</a> to make it work.</span>
+                                                <label> <select name="woofc_settings[link]">
+                                                        <option value="yes" <?php selected( $link, 'yes' ); ?>><?php esc_html_e( 'Yes, open in the same tab', 'woo-fly-cart' ); ?></option>
+                                                        <option value="yes_blank" <?php selected( $link, 'yes_blank' ); ?>><?php esc_html_e( 'Yes, open in the new tab', 'woo-fly-cart' ); ?></option>
+                                                        <option value="yes_popup" <?php selected( $link, 'yes_popup' ); ?>><?php esc_html_e( 'Yes, open quick view popup', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $link, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label> <span class="description">If you choose "Open quick view popup", please install <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=woo-smart-quick-view&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Smart Quick View">WPC Smart Quick View</a> to make it work.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Item data', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[data]">
-                                                    <option value="yes" <?php selected( $data, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $data, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[data]">
+                                                        <option value="yes" <?php selected( $data, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $data, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the item data under title.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Item price', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[price]">
-                                                    <option value="no" <?php selected( $price, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                    <option value="price" <?php selected( $price, 'price' ); ?>><?php esc_html_e( 'Price', 'woo-fly-cart' ); ?></option>
-                                                    <option value="subtotal" <?php selected( $price, 'subtotal' ); ?>><?php esc_html_e( 'Subtotal', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[price]">
+                                                        <option value="no" <?php selected( $price, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                        <option value="price" <?php selected( $price, 'price' ); ?>><?php esc_html_e( 'Price', 'woo-fly-cart' ); ?></option>
+                                                        <option value="subtotal" <?php selected( $price, 'subtotal' ); ?>><?php esc_html_e( 'Subtotal', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the item price or subtotal under title.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Item estimated delivery date', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[estimated_delivery_date]">
-                                                    <option value="yes" <?php selected( $estimated_delivery_date, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $estimated_delivery_date, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[estimated_delivery_date]">
+                                                        <option value="yes" <?php selected( $estimated_delivery_date, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $estimated_delivery_date, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the item estimated delivery date.', 'woo-fly-cart' ); ?> Please install <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-estimated-delivery-date&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Estimated Delivery Date">WPC Estimated Delivery Date</a> to make it work.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Plus/minus button', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[plus_minus]">
-                                                    <option value="yes" <?php selected( $plus_minus, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $plus_minus, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[plus_minus]">
+                                                        <option value="yes" <?php selected( $plus_minus, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $plus_minus, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the plus/minus button.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Item remove', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[remove]">
-                                                    <option value="yes" <?php selected( $remove, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $remove, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[remove]">
+                                                        <option value="yes" <?php selected( $remove, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $remove, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the remove button for each item.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Save for later', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[save_for_later]">
-                                                    <option value="yes" <?php selected( $save_for_later, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $save_for_later, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select> <span class="description">Show/hide the save for later button for each product. If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wc-save-for-later&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Save For Later">WPC Save For Later</a> to make it work.</span>
+                                                <label> <select name="woofc_settings[save_for_later]">
+                                                        <option value="yes" <?php selected( $save_for_later, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $save_for_later, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label> <span class="description">Show/hide the save for later button for each product. If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wc-save-for-later&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Save For Later">WPC Save For Later</a> to make it work.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Subtotal', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[subtotal]">
-                                                    <option value="yes" <?php selected( $subtotal, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $subtotal, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[subtotal]">
+                                                        <option value="yes" <?php selected( $subtotal, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $subtotal, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Coupon', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[coupon]">
-                                                    <option value="yes" <?php selected( $coupon, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $coupon, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[coupon]">
+                                                        <option value="yes" <?php selected( $coupon, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $coupon, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description" style="color: #c9356e">This feature is available for Premium Version only.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Coupon listing', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[coupon_listing]">
-                                                    <option value="yes" <?php selected( $coupon_listing, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $coupon_listing, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select> <span class="description">If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-coupon-listing&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Coupon Listing">WPC Coupon Listing</a> to make it work.</span>
+                                                <label> <select name="woofc_settings[coupon_listing]">
+                                                        <option value="yes" <?php selected( $coupon_listing, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $coupon_listing, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label> <span class="description">If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-coupon-listing&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Coupon Listing">WPC Coupon Listing</a> to make it work.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Shipping cost', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[shipping_cost]">
-                                                    <option value="yes" <?php selected( $shipping_cost, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $shipping_cost, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[shipping_cost]">
+                                                        <option value="yes" <?php selected( $shipping_cost, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $shipping_cost, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description" style="color: #c9356e">This feature is available for Premium Version only.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Shipping calculator', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[shipping_calculator]">
-                                                    <option value="yes" <?php selected( $shipping_calculator, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $shipping_calculator, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[shipping_calculator]">
+                                                        <option value="yes" <?php selected( $shipping_calculator, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $shipping_calculator, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description" style="color: #c9356e">This feature is available for Premium Version only.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Free shipping bar', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[free_shipping_bar]">
-                                                    <option value="yes" <?php selected( $free_shipping_bar, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $free_shipping_bar, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select> <span class="description">If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-free-shipping-bar&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Free Shipping Bar">WPC Free Shipping Bar</a> to make it work.</span>
+                                                <label> <select name="woofc_settings[free_shipping_bar]">
+                                                        <option value="yes" <?php selected( $free_shipping_bar, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $free_shipping_bar, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label> <span class="description">If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-free-shipping-bar&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Free Shipping Bar">WPC Free Shipping Bar</a> to make it work.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Total', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[total]">
-                                                    <option value="yes" <?php selected( $total, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $total, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[total]">
+                                                        <option value="yes" <?php selected( $total, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $total, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Action buttons', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[buttons]">
-                                                    <option value="01" <?php selected( $buttons, '01' ); ?>><?php esc_html_e( 'Cart & Checkout', 'woo-fly-cart' ); ?></option>
-                                                    <option value="02" <?php selected( $buttons, '02' ); ?>><?php esc_html_e( 'Cart only', 'woo-fly-cart' ); ?></option>
-                                                    <option value="03" <?php selected( $buttons, '03' ); ?>><?php esc_html_e( 'Checkout only', 'woo-fly-cart' ); ?></option>
-                                                    <option value="hide" <?php selected( $buttons, 'hide' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[buttons]">
+                                                        <option value="01" <?php selected( $buttons, '01' ); ?>><?php esc_html_e( 'Cart & Checkout', 'woo-fly-cart' ); ?></option>
+                                                        <option value="02" <?php selected( $buttons, '02' ); ?>><?php esc_html_e( 'Cart only', 'woo-fly-cart' ); ?></option>
+                                                        <option value="03" <?php selected( $buttons, '03' ); ?>><?php esc_html_e( 'Checkout only', 'woo-fly-cart' ); ?></option>
+                                                        <option value="hide" <?php selected( $buttons, 'hide' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Instant checkout', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[instant_checkout]" class="woofc_instant_checkout">
-                                                    <option value="yes" <?php selected( $instant_checkout, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $instant_checkout, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label>
+                                                    <select name="woofc_settings[instant_checkout]" class="woofc_instant_checkout">
+                                                        <option value="yes" <?php selected( $instant_checkout, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $instant_checkout, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'If enable this option, buyer can checkout directly on the fly cart.', 'woo-fly-cart' ); ?></span>
                                                 <span class="description" style="color: #c9356e">This feature is available for Premium Version only.</span>
                                             </td>
@@ -695,10 +710,10 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr class="woofc_hide_if_instant_checkout woofc_show_if_instant_checkout_yes">
                                             <th><?php esc_html_e( 'Open instant checkout immediately', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[instant_checkout_open]">
-                                                    <option value="yes" <?php selected( $instant_checkout_open, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $instant_checkout_open, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[instant_checkout_open]">
+                                                        <option value="yes" <?php selected( $instant_checkout_open, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $instant_checkout_open, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Open instant checkout form immediately after adding a product to the cart.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
@@ -755,91 +770,95 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr>
                                             <th><?php esc_html_e( 'Suggested products limit', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="number" min="1" step="1" name="woofc_settings[suggested_limit]" value="<?php echo esc_attr( self::get_setting( 'suggested_limit', 10 ) ); ?>"/>
+                                                <label>
+                                                    <input type="number" min="1" step="1" name="woofc_settings[suggested_limit]" value="<?php echo esc_attr( self::get_setting( 'suggested_limit', 10 ) ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Suggested products carousel', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[suggested_carousel]">
-                                                    <option value="yes" <?php selected( $suggested_carousel, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $suggested_carousel, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[suggested_carousel]">
+                                                        <option value="yes" <?php selected( $suggested_carousel, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $suggested_carousel, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Empty cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[empty]">
-                                                    <option value="yes" <?php selected( $empty, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $empty, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[empty]">
+                                                        <option value="yes" <?php selected( $empty, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $empty, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the empty cart button under the product list.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Confirm empty', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[confirm_empty]">
-                                                    <option value="yes" <?php selected( $confirm_empty, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $confirm_empty, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[confirm_empty]">
+                                                        <option value="yes" <?php selected( $confirm_empty, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $confirm_empty, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Enable/disable confirm before emptying the cart.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Share cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[share]">
-                                                    <option value="yes" <?php selected( $share, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $share, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select> <span class="description">If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-share-cart&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Share Cart">WPC Share Cart</a> to make it work.</span>
+                                                <label> <select name="woofc_settings[share]">
+                                                        <option value="yes" <?php selected( $share, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $share, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label> <span class="description">If you enable this option, please install and activate <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-share-cart&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Share Cart">WPC Share Cart</a> to make it work.</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Continue shopping', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[continue]">
-                                                    <option value="yes" <?php selected( $continue, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $continue, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[continue]">
+                                                        <option value="yes" <?php selected( $continue, 'yes' ); ?>><?php esc_html_e( 'Show', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $continue, 'no' ); ?>><?php esc_html_e( 'Hide', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Show/hide the continue shopping button at the end of fly cart.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Continue shopping URL', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="url" class="regular-text code" name="woofc_settings[continue_url]" value="<?php echo self::get_setting( 'continue_url', '' ); ?>"/>
+                                                <label>
+                                                    <input type="url" class="regular-text code" name="woofc_settings[continue_url]" value="<?php echo self::get_setting( 'continue_url', '' ); ?>"/>
+                                                </label>
                                                 <span class="description"><?php esc_html_e( 'Custom URL for "continue shopping" button. By default, only close the fly cart when clicking on this button.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Confirm remove', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[confirm_remove]">
-                                                    <option value="yes" <?php selected( $confirm_remove, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $confirm_remove, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[confirm_remove]">
+                                                        <option value="yes" <?php selected( $confirm_remove, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $confirm_remove, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Enable/disable confirm before removing a product.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Undo remove', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[undo_remove]">
-                                                    <option value="yes" <?php selected( $undo_remove, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $undo_remove, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[undo_remove]">
+                                                        <option value="yes" <?php selected( $undo_remove, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $undo_remove, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Enable/disable undo after removing a product.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Reload the cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[reload]">
-                                                    <option value="yes" <?php selected( $reload, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $reload, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[reload]">
+                                                        <option value="yes" <?php selected( $reload, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $reload, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'The cart will be reloaded when opening the page? If you use the cache for your site, please turn on this option.', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
@@ -870,27 +889,27 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr>
                                             <th><?php esc_html_e( 'Enable', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[count]">
-                                                    <option value="yes" <?php selected( $count, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $count, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[count]">
+                                                        <option value="yes" <?php selected( $count, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $count, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Position', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[count_position]">
-                                                    <option value="top-left" <?php selected( $count_position, 'top-left' ); ?>><?php esc_html_e( 'Top Left', 'woo-fly-cart' ); ?></option>
-                                                    <option value="top-right" <?php selected( $count_position, 'top-right' ); ?>><?php esc_html_e( 'Top Right', 'woo-fly-cart' ); ?></option>
-                                                    <option value="bottom-left" <?php selected( $count_position, 'bottom-left' ); ?>><?php esc_html_e( 'Bottom Left', 'woo-fly-cart' ); ?></option>
-                                                    <option value="bottom-right" <?php selected( $count_position, 'bottom-right' ); ?>><?php esc_html_e( 'Bottom Right', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[count_position]">
+                                                        <option value="top-left" <?php selected( $count_position, 'top-left' ); ?>><?php esc_html_e( 'Top Left', 'woo-fly-cart' ); ?></option>
+                                                        <option value="top-right" <?php selected( $count_position, 'top-right' ); ?>><?php esc_html_e( 'Top Right', 'woo-fly-cart' ); ?></option>
+                                                        <option value="bottom-left" <?php selected( $count_position, 'bottom-left' ); ?>><?php esc_html_e( 'Bottom Left', 'woo-fly-cart' ); ?></option>
+                                                        <option value="bottom-right" <?php selected( $count_position, 'bottom-right' ); ?>><?php esc_html_e( 'Bottom Right', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Icon', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select id="woofc_count_icon" name="woofc_settings[count_icon]">
+                                                <label for="woofc_count_icon"></label><select id="woofc_count_icon" name="woofc_settings[count_icon]">
 													<?php
 													for ( $i = 1; $i <= 16; $i ++ ) {
 														if ( self::get_setting( 'count_icon', 'woofc-icon-cart7' ) === 'woofc-icon-cart' . $i ) {
@@ -906,10 +925,10 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr>
                                             <th><?php esc_html_e( 'Hide if empty', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <select name="woofc_settings[count_hide_empty]">
-                                                    <option value="yes" <?php selected( $count_hide_empty, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
-                                                    <option value="no" <?php selected( $count_hide_empty, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
-                                                </select>
+                                                <label> <select name="woofc_settings[count_hide_empty]">
+                                                        <option value="yes" <?php selected( $count_hide_empty, 'yes' ); ?>><?php esc_html_e( 'Yes', 'woo-fly-cart' ); ?></option>
+                                                        <option value="no" <?php selected( $count_hide_empty, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                                 <span class="description"><?php esc_html_e( 'Hide the bubble if the cart is empty?', 'woo-fly-cart' ); ?></span>
                                             </td>
                                         </tr>
@@ -946,24 +965,10 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr>
                                             <th><?php esc_html_e( 'Custom menu', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_settings[manual_show]" value="<?php echo self::get_setting( 'manual_show', '' ); ?>" placeholder="<?php esc_attr_e( 'button class or id', 'woo-fly-cart' ); ?>"/>
-                                                <span class="description"><?php printf( esc_html__( 'The class or id of the custom menu. When clicking on it, the fly cart will show up. Example %s or %s', 'woo-fly-cart' ), '<code>.fly-cart-btn</code>', '<code>#fly-cart-btn</code>' ); ?></span>
-                                            </td>
-                                        </tr>
-                                        <tr class="heading">
-                                            <th colspan="2"><?php esc_html_e( 'Suggestion', 'woo-fly-cart' ); ?></th>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                To display custom engaging real-time messages on any wished positions, please install
-                                                <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart Messages</a> plugin. It's free!
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                Wanna save your precious time working on variations? Try our brand-new free plugin
-                                                <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC Variation Bulk Editor</a> and
-                                                <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC Variation Duplicator</a>.
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_settings[manual_show]" value="<?php echo self::get_setting( 'manual_show', '' ); ?>" placeholder="<?php esc_attr_e( 'button class or id', 'woo-fly-cart' ); ?>"/>
+                                                </label>
+                                                <span class="description"><?php printf( /* translators: selector */ esc_html__( 'The class or id of the custom menu. When clicking on it, the fly cart will show up. Example %1$s or %2$s', 'woo-fly-cart' ), '<code>.fly-cart-btn</code>', '<code>#fly-cart-btn</code>' ); ?></span>
                                             </td>
                                         </tr>
                                         <tr class="submit">
@@ -985,115 +990,153 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                         <tr>
                                             <th><?php esc_html_e( 'Cart heading', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[heading]" value="<?php echo esc_attr( self::localization( 'heading' ) ); ?>" placeholder="<?php esc_attr_e( 'Shopping cart', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[heading]" value="<?php echo esc_attr( self::localization( 'heading' ) ); ?>" placeholder="<?php esc_attr_e( 'Shopping cart', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Close', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[close]" value="<?php echo esc_attr( self::localization( 'close' ) ); ?>" placeholder="<?php esc_attr_e( 'Close', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[close]" value="<?php echo esc_attr( self::localization( 'close' ) ); ?>" placeholder="<?php esc_attr_e( 'Close', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Remove', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[remove]" value="<?php echo esc_attr( self::localization( 'remove' ) ); ?>" placeholder="<?php esc_attr_e( 'Remove', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[remove]" value="<?php echo esc_attr( self::localization( 'remove' ) ); ?>" placeholder="<?php esc_attr_e( 'Remove', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Confirm remove', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[remove_confirm]" value="<?php echo esc_attr( self::localization( 'remove_confirm' ) ); ?>" placeholder="<?php esc_attr_e( 'Do you want to remove this item?', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[remove_confirm]" value="<?php echo esc_attr( self::localization( 'remove_confirm' ) ); ?>" placeholder="<?php esc_attr_e( 'Do you want to remove this item?', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Undo remove', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[remove_undo]" value="<?php echo esc_attr( self::localization( 'remove_undo' ) ); ?>" placeholder="<?php esc_attr_e( 'Undo?', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[remove_undo]" value="<?php echo esc_attr( self::localization( 'remove_undo' ) ); ?>" placeholder="<?php esc_attr_e( 'Undo?', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Removed', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[removed]" value="<?php echo esc_attr( self::localization( 'removed' ) ); ?>" placeholder="<?php esc_attr_e( '%s was removed.', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[removed]" value="<?php echo esc_attr( self::localization( 'removed' ) ); ?>" placeholder="<?php /* translators: product */
+													esc_attr_e( '%s was removed.', 'woo-fly-cart' ); ?>"/> </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Empty cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[empty]" value="<?php echo esc_attr( self::localization( 'empty' ) ); ?>" placeholder="<?php esc_attr_e( 'Empty cart', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[empty]" value="<?php echo esc_attr( self::localization( 'empty' ) ); ?>" placeholder="<?php esc_attr_e( 'Empty cart', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Confirm empty', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[empty_confirm]" value="<?php echo esc_attr( self::localization( 'empty_confirm' ) ); ?>" placeholder="<?php esc_attr_e( 'Do you want to empty the cart?', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[empty_confirm]" value="<?php echo esc_attr( self::localization( 'empty_confirm' ) ); ?>" placeholder="<?php esc_attr_e( 'Do you want to empty the cart?', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Share cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[share]" value="<?php echo esc_attr( self::localization( 'share' ) ); ?>" placeholder="<?php esc_attr_e( 'Share cart', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[share]" value="<?php echo esc_attr( self::localization( 'share' ) ); ?>" placeholder="<?php esc_attr_e( 'Share cart', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Subtotal', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[subtotal]" value="<?php echo esc_attr( self::localization( 'subtotal' ) ); ?>" placeholder="<?php esc_attr_e( 'Subtotal', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[subtotal]" value="<?php echo esc_attr( self::localization( 'subtotal' ) ); ?>" placeholder="<?php esc_attr_e( 'Subtotal', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Coupon code', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[coupon_code]" value="<?php echo esc_attr( self::localization( 'coupon_code' ) ); ?>" placeholder="<?php esc_attr_e( 'Coupon code', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[coupon_code]" value="<?php echo esc_attr( self::localization( 'coupon_code' ) ); ?>" placeholder="<?php esc_attr_e( 'Coupon code', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Coupon apply', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[coupon_apply]" value="<?php echo esc_attr( self::localization( 'coupon_apply' ) ); ?>" placeholder="<?php esc_attr_e( 'Apply', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[coupon_apply]" value="<?php echo esc_attr( self::localization( 'coupon_apply' ) ); ?>" placeholder="<?php esc_attr_e( 'Apply', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Shipping', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[shipping]" value="<?php echo esc_attr( self::localization( 'shipping' ) ); ?>" placeholder="<?php esc_attr_e( 'Shipping', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[shipping]" value="<?php echo esc_attr( self::localization( 'shipping' ) ); ?>" placeholder="<?php esc_attr_e( 'Shipping', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Total', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[total]" value="<?php echo esc_attr( self::localization( 'total' ) ); ?>" placeholder="<?php esc_attr_e( 'Total', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[total]" value="<?php echo esc_attr( self::localization( 'total' ) ); ?>" placeholder="<?php esc_attr_e( 'Total', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Cart', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[cart]" value="<?php echo esc_attr( self::localization( 'cart' ) ); ?>" placeholder="<?php esc_attr_e( 'Cart', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[cart]" value="<?php echo esc_attr( self::localization( 'cart' ) ); ?>" placeholder="<?php esc_attr_e( 'Cart', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Checkout', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[checkout]" value="<?php echo esc_attr( self::localization( 'checkout' ) ); ?>" placeholder="<?php esc_attr_e( 'Checkout', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[checkout]" value="<?php echo esc_attr( self::localization( 'checkout' ) ); ?>" placeholder="<?php esc_attr_e( 'Checkout', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Continue shopping', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[continue]" value="<?php echo esc_attr( self::localization( 'continue' ) ); ?>" placeholder="<?php esc_attr_e( 'Continue shopping', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[continue]" value="<?php echo esc_attr( self::localization( 'continue' ) ); ?>" placeholder="<?php esc_attr_e( 'Continue shopping', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'Suggested products', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[suggested]" value="<?php echo esc_attr( self::localization( 'suggested' ) ); ?>" placeholder="<?php esc_attr_e( 'You may be interested in&hellip;', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[suggested]" value="<?php echo esc_attr( self::localization( 'suggested' ) ); ?>" placeholder="<?php esc_attr_e( 'You may be interested in&hellip;', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr>
                                             <th><?php esc_html_e( 'There are no products', 'woo-fly-cart' ); ?></th>
                                             <td>
-                                                <input type="text" class="regular-text" name="woofc_localization[no_products]" value="<?php echo esc_attr( self::localization( 'no_products' ) ); ?>" placeholder="<?php esc_attr_e( 'There are no products in the cart!', 'woo-fly-cart' ); ?>"/>
+                                                <label>
+                                                    <input type="text" class="regular-text" name="woofc_localization[no_products]" value="<?php echo esc_attr( self::localization( 'no_products' ) ); ?>" placeholder="<?php esc_attr_e( 'There are no products in the cart!', 'woo-fly-cart' ); ?>"/>
+                                                </label>
                                             </td>
                                         </tr>
                                         <tr class="submit">
@@ -1117,6 +1160,22 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                     </ul>
                                 </div>
 							<?php } ?>
+                        </div><!-- /.wpclever_settings_page_content -->
+                        <div class="wpclever_settings_page_suggestion">
+                            <div class="wpclever_settings_page_suggestion_label">
+                                <span class="dashicons dashicons-yes-alt"></span> Suggestion
+                            </div>
+                            <div class="wpclever_settings_page_suggestion_content">
+                                <div>
+                                    To display custom engaging real-time messages on any wished positions, please install
+                                    <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart Messages</a> plugin. It's free!
+                                </div>
+                                <div>
+                                    Wanna save your precious time working on variations? Try our brand-new free plugin
+                                    <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC Variation Bulk Editor</a> and
+                                    <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC Variation Duplicator</a>.
+                                </div>
+                            </div>
                         </div>
                     </div>
 					<?php
@@ -1129,10 +1188,16 @@ if ( ! function_exists( 'woofc_init' ) ) {
 						}
 					}
 
-					if ( isset( $_POST['cart_item_key'], $_POST['cart_item_qty'] ) && ! empty( $_POST['cart_item_key'] ) ) {
-						if ( WC()->cart->get_cart_item( sanitize_text_field( $_POST['cart_item_key'] ) ) ) {
-							if ( (float) sanitize_text_field( $_POST['cart_item_qty'] ) > 0 ) {
-								WC()->cart->set_quantity( sanitize_text_field( $_POST['cart_item_key'] ), (float) sanitize_text_field( $_POST['cart_item_qty'] ) );
+					if ( isset( $_POST['cart_item_qty'] ) && ! empty( $_POST['cart_item_key'] ) ) {
+						if ( $cart_item = WC()->cart->get_cart_item( sanitize_text_field( $_POST['cart_item_key'] ) ) ) {
+							$qty = (float) sanitize_text_field( $_POST['cart_item_qty'] );
+
+							if ( ( $max_purchase = $cart_item['data']->get_max_purchase_quantity() ) && ( $max_purchase > 0 ) && ( $qty > $max_purchase ) ) {
+								$qty = $max_purchase;
+							}
+
+							if ( $qty > 0 ) {
+								WC()->cart->set_quantity( sanitize_text_field( $_POST['cart_item_key'] ), $qty );
 							} else {
 								WC()->cart->remove_cart_item( sanitize_text_field( $_POST['cart_item_key'] ) );
 							}
@@ -1285,7 +1350,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 								$product      = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 								$product_id   = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 								$product_link = apply_filters( 'woocommerce_cart_item_permalink', $product->is_visible() ? $product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
-								$item_class   = $remove ? 'woofc-item woofc-item-has-remove' : 'woofc-item';
+								$item_class   = $remove ? 'woofc-item woofc-item-has-remove' : 'woofc-item woofc-item-has-not-remove';
 
 								// add suggested products
 								if ( is_array( $suggested ) && ! empty( $suggested ) ) {
@@ -1399,9 +1464,8 @@ if ( ! function_exists( 'woofc_init' ) ) {
 
 								echo '<div class="woofc-item-qty ' . ( $plus_minus ? 'woofc-item-qty-plus-minus' : '' ) . '"><div class="woofc-item-qty-inner">' . apply_filters( 'woocommerce_cart_item_quantity', $cart_item_quantity, $cart_item_key, $cart_item ) . '</div></div><!-- /.woofc-item-qty -->';
 
-								if ( $remove ) {
-									echo apply_filters( 'woocommerce_cart_item_remove_link', '<span class="woofc-item-remove"><span class="hint--left" aria-label="' . esc_attr( self::localization( 'remove', esc_html__( 'Remove', 'woo-fly-cart' ) ) ) . '"><i class="woofc-icon-icon10"></i></span></span>', $cart_item_key );
-								}
+								// always keep .woofc-item-remove to compatible with themes -  can hide it by CSS
+								echo apply_filters( 'woocommerce_cart_item_remove_link', '<span class="woofc-item-remove" aria-label="' . esc_attr( sprintf( /* translators: product */ esc_html__( 'Remove %s from cart', 'woo-fly-cart' ), wp_strip_all_tags( $product->get_name() ) ) ) . '" data-product_id="' . esc_attr( $product_id ) . '" data-product_sku="' . esc_attr( $product->get_sku() ) . '"><span class="hint--left" aria-label="' . esc_attr( self::localization( 'remove', esc_html__( 'Remove', 'woo-fly-cart' ) ) ) . '"><i class="woofc-icon-icon10"></i></span></span>', $cart_item_key );
 
 								echo '</div><!-- /.woofc-item-inner -->';
 
@@ -1640,7 +1704,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 					}
 
 					// use 'woofc-position-' instead of 'woofc-effect-' from 5.3
-					$area_class = apply_filters( 'woofc_area_class', 'woofc-area woofc-position-' . esc_attr( self::get_setting( 'position', '05' ) ) . ' woofc-effect-' . esc_attr( self::get_setting( 'position', '05' ) ) . ' woofc-slide-' . esc_attr( self::get_setting( 'effect', 'yes' ) ) . ' woofc-style-' . esc_attr( self::get_setting( 'style', '01' ) ) );
+					$area_class = apply_filters( 'woofc_area_class', 'woofc-area woofc-position-' . esc_attr( self::get_setting( 'position', '05' ) ) . ' woofc-effect-' . esc_attr( self::get_setting( 'position', '05' ) ) . ' woofc-slide-' . esc_attr( self::get_setting( 'effect', 'yes' ) ) . ' woofc-rounded-' . esc_attr( self::get_setting( 'rounded', 'no' ) ) . ' woofc-style-' . esc_attr( self::get_setting( 'style', '01' ) ) );
 
 					echo '<div id="woofc-area" class="' . esc_attr( $area_class ) . '">';
 					echo self::get_cart_area();
@@ -1716,6 +1780,10 @@ if ( ! function_exists( 'woofc_init' ) ) {
 					];
 
 					return $locations;
+				}
+
+				function shortcode_cart_link() {
+					return apply_filters( 'woofc_shortcode_cart_link', self::get_cart_link() );
 				}
 
 				public static function get_cart_link( $echo = false ) {

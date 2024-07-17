@@ -1,14 +1,14 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-$active_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'settings';
+$active_tab = sanitize_key( $_GET['tab'] ?? 'settings' );
 $rules      = Wpced_Backend()->get_rules();
 ?>
 <div class="wpclever_settings_page wrap">
     <h1 class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Estimated Delivery Date', 'wpc-estimated-delivery-date' ) . ' ' . esc_html( WPCED_VERSION ) . ' ' . ( defined( 'WPCED_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-estimated-delivery-date' ) . '</span>' : '' ); ?></h1>
     <div class="wpclever_settings_page_desc about-text">
         <p>
-			<?php printf( /* translators: %s is the stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-estimated-delivery-date' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
+			<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-estimated-delivery-date' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
             <br/>
             <a href="<?php echo esc_url( WPCED_REVIEWS ); ?>" target="_blank"><?php esc_html_e( 'Reviews', 'wpc-estimated-delivery-date' ); ?></a> |
             <a href="<?php echo esc_url( WPCED_CHANGELOG ); ?>" target="_blank"><?php esc_html_e( 'Changelog', 'wpc-estimated-delivery-date' ); ?></a> |
@@ -48,66 +48,66 @@ $rules      = Wpced_Backend()->get_rules();
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Position on archive', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-                            <select name="wpced_settings[position_archive]">
-								<?php foreach ( Wpced_Backend()->get_archive_positions() as $key => $pos ) {
-									echo '<option value="' . esc_attr( $key ) . '" ' . selected( $pos_archive, $key, false ) . '>' . esc_html( $pos ) . '</option>';
-								} ?>
-                            </select>
+                            <label> <select name="wpced_settings[position_archive]">
+									<?php foreach ( Wpced_Backend()->get_archive_positions() as $key => $pos ) {
+										echo '<option value="' . esc_attr( $key ) . '" ' . selected( $pos_archive, $key, false ) . '>' . esc_html( $pos ) . '</option>';
+									} ?>
+                                </select> </label>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Position on single', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-                            <select name="wpced_settings[position_single]">
-								<?php foreach ( Wpced_Backend()->get_single_positions() as $key => $pos ) {
-									echo '<option value="' . esc_attr( $key ) . '" ' . selected( $pos_single, $key, false ) . '>' . esc_html( $pos ) . '</option>';
-								} ?>
-                            </select>
+                            <label> <select name="wpced_settings[position_single]">
+									<?php foreach ( Wpced_Backend()->get_single_positions() as $key => $pos ) {
+										echo '<option value="' . esc_attr( $key ) . '" ' . selected( $pos_single, $key, false ) . '>' . esc_html( $pos ) . '</option>';
+									} ?>
+                                </select> </label>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Shortcode', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-							<?php echo sprintf( esc_html__( 'You can use shortcode %s to show the estimated delivery date for current product.', 'wpc-estimated-delivery-date' ), '<code>[wpced]</code>' ); ?>
+							<?php echo sprintf( /* translators: shortcode */ esc_html__( 'You can use shortcode %s to show the estimated delivery date for current product.', 'wpc-estimated-delivery-date' ), '<code>[wpced]</code>' ); ?>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Show on cart items', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-                            <select name="wpced_settings[cart_item]">
-                                <option value="yes" <?php selected( $cart_item, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
-                                <option value="yes_data" <?php selected( $cart_item, 'yes_data' ); ?>><?php esc_html_e( 'Yes, as an item\'s data', 'wpc-estimated-delivery-date' ); ?></option>
-                                <option value="no" <?php selected( $cart_item, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
-                            </select>
+                            <label> <select name="wpced_settings[cart_item]">
+                                    <option value="yes" <?php selected( $cart_item, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
+                                    <option value="yes_data" <?php selected( $cart_item, 'yes_data' ); ?>><?php esc_html_e( 'Yes, as an item\'s data', 'wpc-estimated-delivery-date' ); ?></option>
+                                    <option value="no" <?php selected( $cart_item, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
+                                </select> </label>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Show cart overall', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-                            <select name="wpced_settings[cart_overall]">
-                                <option value="yes" <?php selected( $cart_overall, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
-                                <option value="yes_text" <?php selected( $cart_overall, 'yes_text' ); ?>><?php esc_html_e( 'Yes, as a plain text', 'wpc-estimated-delivery-date' ); ?></option>
-                                <option value="no" <?php selected( $cart_overall, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
-                            </select>
+                            <label> <select name="wpced_settings[cart_overall]">
+                                    <option value="yes" <?php selected( $cart_overall, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
+                                    <option value="yes_text" <?php selected( $cart_overall, 'yes_text' ); ?>><?php esc_html_e( 'Yes, as a plain text', 'wpc-estimated-delivery-date' ); ?></option>
+                                    <option value="no" <?php selected( $cart_overall, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
+                                </select> </label>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><?php esc_html_e( 'Show on order items', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-                            <select name="wpced_settings[order_item]">
-                                <option value="yes" <?php selected( $order_item, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
-                                <option value="no" <?php selected( $order_item, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
-                            </select>
+                            <label> <select name="wpced_settings[order_item]">
+                                    <option value="yes" <?php selected( $order_item, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
+                                    <option value="no" <?php selected( $order_item, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
+                                </select> </label>
                             <span class="description"><?php esc_html_e( 'Show the date on order items (order confirmation or emails).', 'wpc-estimated-delivery-date' ); ?></span>
                         </td>
                     </tr>
                     <tr>
                         <th><?php esc_html_e( 'Reload dates', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-                            <select name="wpced_settings[reload_dates]">
-                                <option value="yes" <?php selected( $reload_dates, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
-                                <option value="no" <?php selected( $reload_dates, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
-                            </select>
+                            <label> <select name="wpced_settings[reload_dates]">
+                                    <option value="yes" <?php selected( $reload_dates, 'yes' ); ?>><?php esc_html_e( 'Yes', 'wpc-estimated-delivery-date' ); ?></option>
+                                    <option value="no" <?php selected( $reload_dates, 'no' ); ?>><?php esc_html_e( 'No', 'wpc-estimated-delivery-date' ); ?></option>
+                                </select> </label>
                             <span class="description"><?php esc_html_e( 'Dates will be reloaded when opening the page? If you use the cache for your site, please turn on this option.', 'wpc-estimated-delivery-date' ); ?></span>
                         </td>
                     </tr>
@@ -150,27 +150,37 @@ $rules      = Wpced_Backend()->get_rules();
                         <th><?php esc_html_e( 'Message', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
                             <label><?php esc_html_e( 'Have both minimum and maximum days', 'wpc-estimated-delivery-date' ); ?></label>
-                            <input type="text" name="wpced_settings[text]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text' ) ); ?>" placeholder="<?php esc_attr_e( 'Estimated delivery dates: %s', 'wpc-estimated-delivery-date' ); ?>"/>
-                            <br/><br/>
+                            <label>
+                                <input type="text" name="wpced_settings[text]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text' ) ); ?>" placeholder="<?php /* translators: date */
+								esc_attr_e( 'Estimated delivery dates: %s', 'wpc-estimated-delivery-date' ); ?>"/>
+                            </label> <br/><br/>
                             <label><?php esc_html_e( 'Have minimum days only', 'wpc-estimated-delivery-date' ); ?></label>
-                            <input type="text" name="wpced_settings[text_min]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_min' ) ); ?>" placeholder="<?php esc_attr_e( 'Earliest estimated delivery date: %s', 'wpc-estimated-delivery-date' ); ?>"/>
-                            <br/><br/>
+                            <label>
+                                <input type="text" name="wpced_settings[text_min]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_min' ) ); ?>" placeholder="<?php /* translators: date */
+								esc_attr_e( 'Earliest estimated delivery date: %s', 'wpc-estimated-delivery-date' ); ?>"/>
+                            </label> <br/><br/>
                             <label><?php esc_html_e( 'Have maximum days only', 'wpc-estimated-delivery-date' ); ?></label>
-                            <input type="text" name="wpced_settings[text_max]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_max' ) ); ?>" placeholder="<?php esc_attr_e( 'Latest estimated delivery date: %s', 'wpc-estimated-delivery-date' ); ?>"/>
-                            <br/><br/>
+                            <label>
+                                <input type="text" name="wpced_settings[text_max]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_max' ) ); ?>" placeholder="<?php /* translators: date */
+								esc_attr_e( 'Latest estimated delivery date: %s', 'wpc-estimated-delivery-date' ); ?>"/>
+                            </label> <br/><br/>
                             <label><?php esc_html_e( 'Cart item\'s data label', 'wpc-estimated-delivery-date' ); ?></label>
-                            <input type="text" name="wpced_settings[text_cart_item]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_cart_item' ) ); ?>" placeholder="<?php esc_attr_e( 'Estimated delivery date', 'wpc-estimated-delivery-date' ); ?>"/>
-                            <br/><br/>
-                            <label><?php esc_html_e( 'Cart overall', 'wpc-estimated-delivery-date' ); ?></label>
-                            <input type="text" name="wpced_settings[text_cart_overall]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_cart_overall' ) ); ?>" placeholder="<?php esc_attr_e( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' ); ?>"/>
-                            <br/><br/>
-                            <span class="description"><?php esc_html_e( 'Use %s to show the date or date-range. Leave blank to use the default text and its equivalent translation in multiple languages.', 'wpc-estimated-delivery-date' ); ?></span>
+                            <label>
+                                <input type="text" name="wpced_settings[text_cart_item]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_cart_item' ) ); ?>" placeholder="<?php esc_attr_e( 'Estimated delivery date', 'wpc-estimated-delivery-date' ); ?>"/>
+                            </label> <br/><br/>
+                            <label><?php esc_html_e( 'Cart overall', 'wpc-estimated-delivery-date' ); ?></label> <label>
+                                <input type="text" name="wpced_settings[text_cart_overall]" class="large-text" style="width: 100%; margin: 0" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'text_cart_overall' ) ); ?>" placeholder="<?php /* translators: date */
+								esc_attr_e( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' ); ?>"/>
+                            </label> <br/><br/> <span class="description"><?php /* translators: date */
+								esc_html_e( 'Use %s to show the date or date-range. Leave blank to use the default text and its equivalent translation in multiple languages.', 'wpc-estimated-delivery-date' ); ?></span>
                         </td>
                     </tr>
                     <tr>
                         <th><?php esc_html_e( 'Extra time line', 'wpc-estimated-delivery-date' ); ?></th>
                         <td>
-                            <input type="text" name="wpced_settings[extra_time_line]" class="wpced-time-val" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'extra_time_line' ) ); ?>" readonly/>
+                            <label>
+                                <input type="text" name="wpced_settings[extra_time_line]" class="wpced-time-val" value="<?php echo esc_attr( Wpced_Backend()->get_setting( 'extra_time_line' ) ); ?>" readonly/>
+                            </label>
                             <span class="description"><?php esc_html_e( 'Maximum time to consider an extra day of shipping.', 'wpc-estimated-delivery-date' ); ?></span>
                         </td>
                     </tr>
@@ -232,22 +242,6 @@ $rules      = Wpced_Backend()->get_rules();
                             </div>
                         </td>
                     </tr>
-                    <tr class="heading">
-                        <th colspan="2"><?php esc_html_e( 'Suggestion', 'wpc-estimated-delivery-date' ); ?></th>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            To display custom engaging real-time messages on any wished positions, please install
-                            <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart Messages</a> plugin. It's free!
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            Wanna save your precious time working on variations? Try our brand-new free plugin
-                            <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC Variation Bulk Editor</a> and
-                            <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC Variation Duplicator</a>.
-                        </td>
-                    </tr>
                     <tr class="submit">
                         <th colspan="2">
 							<?php settings_fields( 'wpced_settings' ); ?><?php submit_button(); ?>
@@ -268,5 +262,21 @@ $rules      = Wpced_Backend()->get_rules();
                 </ul>
             </div>
 		<?php } ?>
+    </div><!-- /.wpclever_settings_page_content -->
+    <div class="wpclever_settings_page_suggestion">
+        <div class="wpclever_settings_page_suggestion_label">
+            <span class="dashicons dashicons-yes-alt"></span> Suggestion
+        </div>
+        <div class="wpclever_settings_page_suggestion_content">
+            <div>
+                To display custom engaging real-time messages on any wished positions, please install
+                <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart Messages</a> plugin. It's free!
+            </div>
+            <div>
+                Wanna save your precious time working on variations? Try our brand-new free plugin
+                <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC Variation Bulk Editor</a> and
+                <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC Variation Duplicator</a>.
+            </div>
+        </div>
     </div>
 </div>

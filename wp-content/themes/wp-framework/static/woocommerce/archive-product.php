@@ -67,9 +67,9 @@ echo "<div class=''>";
 							<figure class="shop-banner__img mb-0">
 								<img class="img-fluid" src="<?=$thumb;?>">
 							</figure>
-							<h1 class="woocommerce-products-header__title shop-banner__title">
+							<h2 class="woocommerce-products-header__title shop-banner__title">
 								<?php woocommerce_page_title(); ?>
-							</h1>
+							</h2>
 						</div>
 						<?php
 						endif;

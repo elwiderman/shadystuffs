@@ -2,14 +2,16 @@
 Contributors: crosspeak, hallme, doomwaxer, timbhowe, matt-h-1, hinyka
 Tags: WooCommerce, address book, multiple addresses, address
 Requires at least: 4.6
-Tested up to: 6.3.1
-Stable tag: 2.6.2
+Tested up to: 6.5.3
+Stable tag: 2.6.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout.
 
 == Description ==
+
+**Notice** - This plugin is does not currently work with the WooCommerce Block Checkout. It currently only supports the Classic WooCommerce checkout. We hope to find a way to integrate with the Block Checkout in the future.
 
 Gives your customers the option to store multiple billing and shipping addresses and retrieve them on checkout. Addresses can be updated and modified quickly and easily in /my-account/, or saved as part of the checkout process.
 
@@ -83,6 +85,10 @@ You may also use PoEdit and create a translation file which can be exported as a
 2. Easily select your billing and shipping address on checkout.
 
 == Changelog ==
+
+= 2.6.3 =
+* Declare checkout block incompatibility.
+* Bump versions.
 
 = 2.6.1 and 2.6.2 =
 * Detect and downgrade from Address Book 3.0 addresses if they exist.

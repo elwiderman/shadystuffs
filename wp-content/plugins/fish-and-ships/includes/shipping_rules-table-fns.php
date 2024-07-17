@@ -4,7 +4,7 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.5
+ * @version 1.5.3
  */
  
 defined( 'ABSPATH' ) || exit;
@@ -44,20 +44,7 @@ $html = '
 <div id="wrapper-shipping-rules-table-fns">';
 
 // Let's put the tab currencies if there is more than one
-$currencies = $Fish_n_Ships->get_currencies();
-$main_currency = get_woocommerce_currency();
-
-if ( count($currencies) > 1 ) {
-	$html .= '<nav class="nav-tab-wrapper">';
-	
-		// The main currency is always the first and active
-		$n = 0;
-		foreach ( $currencies as $currency => $symbol ) {
-			$n++;
-			$html .= '<a href="#" class="nav-tab' . ($n==1 ? ' nav-tab-active' : '') . '" data-fns-currency="' . $currency . '">' . ($n==1 ? 'MAIN: ' : '') . $currency . ' (' . $symbol . ')</a>';
-		}
-	$html .= '</nav>';
-}
+$html .= $Fish_n_Ships->get_multicurrency_tabs();
 
 $html .= '<table class="widefat striped css-conditions-table-fns ltr-text-direction" id="shipping-rules-table-fns">
 	<thead>
@@ -323,3 +310,83 @@ if (count($errors) > 0) {
 // Put the samples helper
 $html .= $Fish_n_Ships_Wizard->get_samples_helper();
 
+// Put the range wizard
+$html .= '<div class="fns-range-wizard-wrapper"><div class="fns-range-wizard">';
+
+if( ! $Fish_n_Ships->im_pro() )
+{
+	$html .= '<div class="fns-notice-pro">
+		<p><strong>This feature is part of Fish and Ships Pro.</strong> This is just a demo; no charges will apply.</p>
+		</div>';
+}
+
+$html .= '<div class="fns_fields_popup">
+		<p class="fns-ranges-based"><label><strong>Ranges based on:</strong></label>
+		<select name="dialog-range_based">
+			<option value="by-weight" selected>' . _x('Weight', 'shorted, select-by conditional', 'fish-and-ships') . '</option>
+			<option value="by-volume">' . _x('Volume', 'shorted, select-by conditional', 'fish-and-ships') . '</option>
+			<option value="volumetric">' . _x('Volumetric', 'shorted, select-by conditional', 'fish-and-ships') . '</option>
+			<option value="volumetric-set">' . _x('Volumetric set', 'shorted, select-by conditional', 'fish-and-ships') . '</option>
+			<option value="quantity">' . _x('Quantity', 'shorted, select-by conditional', 'fish-and-ships') . '</option>
+			<option value="lwh-dimensions">' . _x('Length+Width+Height', 'shorted, select-by conditional', 'fish-and-ships') . '</option>
+			<option value="lgirth-dimensions">' . _x('Length+Girth (L+2W+2H)', 'shorted, select-by conditional', 'fish-and-ships') . '</option>
+		</select></p>' .		
+		$Fish_n_Ships->get_multicurrency_tabs() . '
+		<div class="fns_range_fields">';
+		
+			$currencies      = $Fish_n_Ships->get_currencies();
+			
+			$weight_unit     = get_option('woocommerce_weight_unit');
+			$dimension_unit  = get_option('woocommerce_dimension_unit');
+			
+			$units_switcher  = '<span class="fns-unit-switcher"><span>' . $weight_unit . '</span><span>' . $dimension_unit . '<sup>3</sup></span>'
+							 . '<span>' . $weight_unit . '</span><span>' . $weight_unit . '</span><span></span><span>' . $dimension_unit . '</span><span>' 
+							 . $dimension_unit . '</span></span>';
+
+			$mcfields = array(
+							'range_base' => array(
+													'label' => 'Flat cost',
+													'description' => 'the flat part, base charge:',
+													'class' => 'wc_fns_input_decimal',
+													'wrap_class' => 'fns-base-cost-col'
+												 ),
+							'range_charge' => array(
+													'label' => 'Per-range charge',
+													'description' => 'charge it per each range',
+													'class' => 'wc_fns_input_positive_decimal',
+													'wrap_class' => 'fns-charge-col'
+												 ),
+			);
+													
+				
+			// Multicurrency fields:
+			foreach ( $mcfields as $field_name => $field )
+			{
+				$html .= '<p class="' . esc_html($field['wrap_class']) . '"><label><strong>' . esc_html($field['label']) . '</strong><br>' . esc_html($field['description']) . '</label><span class="field_wrapper"><span class="currency-switcher-fns-wrapper">';
+
+				$n = 0;
+				foreach ( $currencies as $currency=>$symbol )
+				{	
+					$n++;
+					// Main currency haven't sufix, it brings legacy with previous releases
+					$curr_sufix = ''; if ( $n > 1 ) $curr_sufix = '-' . $currency;
+
+					$html .= '<span class="currency-fns-field currency-' . $currency . ($n==1 ? ' currency-main' : '') . '">';
+					$html .= '<input type="text" name="dialog-' . $field_name . $curr_sufix . '" value="0" class="' . esc_attr( $field['class'] . ' fns-'.$field_name ) . '" autocomplete="off" size="4">';
+					$html .= ' <span class="units">' . esc_html($symbol) . '</span></span>';
+				}
+				$html .= '</span></span></p>';
+			}
+			
+			$html .= '<p class="fns-for-each-col"><label><strong>Foreach range</strong><br>the interval ranges value</label><input type="text" name="dialog-range_foreach" value="0" class="wc_fns_input_positive_decimal fns-range_foreach" autocomplete="off" size="4"> ' . $units_switcher . '</p>';
+			$html .= '<p class="fns-range-over-col"><label><strong>Flat cost until</strong><br>without range charges until:</label><input type="text" name="dialog-range_over" value="0" class="wc_fns_input_positive_decimal fns-range_over" autocomplete="off" size="4"> ' . $units_switcher . '</p>';
+			
+			$html .= '<p class="fns-grouping-range-col"><label><strong>Group products for range charge</strong><br>apply ranges separately to each group:'
+					. '</label><select name="dialog-range_group_by">';
+
+					foreach ($Fish_n_Ships->get_group_by_options() as $key=>$caption) {
+						$html .= '<option value="' . esc_attr($key) . '">' . esc_html($caption) . '</option>';
+					}
+
+$html .= '</select></p></div><div class="fns-simulation-wrapper"><p><strong>Charge preview:</strong></p><div class="fns-simulation"></div></div></div>
+</div></div>';

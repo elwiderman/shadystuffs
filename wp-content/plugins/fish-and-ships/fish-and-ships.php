@@ -3,15 +3,15 @@
  * Plugin Name: Fish and Ships
  * Plugin URI: https://www.wp-centrics.com/
  * Description: A WooCommerce conditional table rate shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.
- * Version: 1.5
+ * Version: 1.5.7
  * Author: wpcentrics
  * Author URI: https://www.wp-centrics.com
  * Text Domain: fish-and-ships
  * Domain Path: /languages
  * Requires at least: 4.7
- * Tested up to: 6.4.3
+ * Tested up to: 6.5
  * WC requires at least: 3.0
- * WC tested up to: 8.6.1
+ * WC tested up to: 9.0
  * Requires PHP: 7.0
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 } else {
 
-	define ('WC_FNS_VERSION', '1.5' );
+	define ('WC_FNS_VERSION', '1.5.7' );
 	define ('WC_FNS_PATH', dirname(__FILE__) . '/' );
 	define ('WC_FNS_URL', plugin_dir_url( __FILE__ ) );
 
@@ -52,7 +52,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 	class Fish_n_Ships {
 			
-		public  $id             		  = 'fish_n_ships';
+		public  $id             		= 'fish_n_ships';
 		private $terms_cached           = array();
 		private $options                = array();
 		private $im_pro                 = false;
@@ -1131,11 +1131,42 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		}
 
 		/**
+		 * Get multicurrency tabs (used in popups also)
+		 *
+		 * @since 1.5.3
+		 *
+		 * @return HTML
+		 */
+		
+		function get_multicurrency_tabs()
+		{
+			$html = '';
+			
+			// Let's put the tab currencies if there is more than one
+			$currencies = $this->get_currencies();
+			$main_currency = get_woocommerce_currency();
+
+			if ( count($currencies) > 1 ) {
+				$html .= '<nav class="nav-tab-wrapper">';
+				
+					// The main currency is always the first and active
+					$n = 0;
+					foreach ( $currencies as $currency => $symbol ) {
+						$n++;
+						$html .= '<a href="#" class="nav-tab' . ($n==1 ? ' nav-tab-active' : '') . '" data-fns-currency="' . $currency . '">' . ($n==1 ? 'MAIN: ' : '') . $currency . ' (' . $symbol . ')</a>';
+					}
+				$html .= '</nav>';
+			}
+			
+			return $html;
+		}
+
+		/**
 		 * Filter on WC_Shipping_Rate class creation
 		 * Preventing re-conversion to cart currency when we the calculated rate is on this yet
 		 *
 		 * @since 1.1.1
-		 * @version 1.4.3
+		 * @version 1.5.6
 		 *
 		 * @param $rate 			object of type WC_Shipping_Rate (new created)
 		 * @param $args 			array of params
@@ -1162,8 +1193,10 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 				if ( $this->is_wpml_mc ) {
 					if ( get_option('woocommerce_currency') != get_woocommerce_currency() ) {
 						global $woocommerce_wpml;
-						// Getting ratio exchange: ask in the main currency the 1(cart currency) value
-						$ratio = 1 / $woocommerce_wpml->multi_currency->prices->unconvert_price_amount( 1 );
+						// Getting ratio exchange: ask in the main currency the 10000(cart currency) value
+						// DivisionByZeroError prevented since 1.5.6 for big ratios => small prices rounded to 0
+						$unconverted = $woocommerce_wpml->multi_currency->prices->unconvert_price_amount( 10000 );
+						$ratio = $unconverted > 0 ? 10000 / $unconverted : 1;
 						$rate->cost = $rate->cost / $ratio;
 					}
 				}
@@ -1314,7 +1347,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Sanitize the shipping rules from the admin options form (save)
 		 *
 		 * @since 1.0.0
-		 * @version 1.5
+		 * @version 1.5.3
 		 *
 		 * @param $raw_shipping_rules raw stuff from the $_POST object
 		 *
@@ -1322,6 +1355,29 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 */
 		function sanitize_shipping_rules ($raw_shipping_rules) {
 			
+			if( ! is_array( $raw_shipping_rules ) )
+				return array();
+			
+			// Maybe compressed
+			if( isset( $raw_shipping_rules['compressed'] ) )
+			{				
+				$decoded = array();
+				try {
+					$to_decode  = stripslashes( $raw_shipping_rules['compressed'] );
+					$decoded    = $this->json2MultiDimensional( json_decode($to_decode, true) );
+				} catch ( Exception $ex ) {
+					$decoded = array();
+				}
+				if( is_array( $decoded ) )
+				{
+					foreach( $decoded as $key => $val )
+					{
+						$raw_shipping_rules[$key] = $val;
+					}
+				}
+				unset( $raw_shipping_rules['compressed'] );
+			}
+
 			$shipping_rules = array();
 			
 			foreach ($raw_shipping_rules as $raw_rule) {
@@ -1437,6 +1493,41 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		}
 
 		/**
+		 * Translate the HTML forms way to format multidimensional arrays
+		 *
+		 * @since 1.5.3
+		 *
+		 * @param $array (array) 
+		 *
+		 * @return array
+		 *
+		 */
+		function json2MultiDimensional($array)
+		{
+			if( ! is_array( $array ) )
+				return array();
+
+			$result = array();		
+
+			foreach ($array as $key => $value)
+			{
+				$key = str_replace('[]', '[0]', $key);
+				preg_match_all('/\[([^\]]+)\]/', $key, $matches);
+
+				$current = &$result;
+				foreach ($matches[1] as $match)
+				{
+					if (!isset($current[$match]))
+						$current[$match] = array();
+
+					$current = &$current[$match];
+				}
+				$current = $value;
+			}
+			return $result;
+		}
+
+		/**
 		 * Sanitize the field, should be in the array of allowed values
 		 *
 		 * @since 1.0.0
@@ -1492,6 +1583,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Sanitize textarea before save into database
 		 *
 		 * @since 1.2.9
+		 * @version 1.5
 		 *
 		 * @param $field (raw) 
 		 *
@@ -1762,7 +1854,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Collect all non-unmatched products from all groups
 		 *
 		 * @since 1.0.0
-		 * @version 1.1.9
+		 * @version 1.5.2
 		 *
 		 * @param $rule_groups (array) group set
 		 * @param $shipping_class (class reference)
@@ -1778,7 +1870,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			
 			foreach ($rule_groups as $group_by=>$groups_of_groups) {
 
-				if ($mute_log || $shipping_class->write_logs !== true) {
+				if ($mute_log || $shipping_class->write_logs_boolean !== true) {
 					// No writing log? We will save some resources here
 
 					foreach ($groups_of_groups as $subindex=>$group) {
@@ -1805,7 +1897,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 					$shipping_class->debug_log('Non-grouped > items: ' . count($elements), 3);
 
 					foreach ($elements as $p) {
-						$shipping_class->debug_log ('. ' . $this->get_name($p) . ' (' . $this->get_quantity($p) . ')', 4);
+						$shipping_class->debug_log ('. ' . $this->get_name($p) . ' (' . $p['to_ship'] . ')', 4);
 					}
 				
 				} else {
@@ -1823,7 +1915,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 						$shipping_class->debug_log($group_by . ' > ' . $subindex . ' > items: ' . count($i), 3);
 						
 						foreach ($i as $p) {
-							$shipping_class->debug_log ('. ' . $this->get_name($p) . ' (' . $this->get_quantity($p). ')', 4);
+							$shipping_class->debug_log ('. ' . $this->get_name($p) . ' (' . $p['to_ship'] . ')', 4);
 						}
 					}
 				}
@@ -1835,6 +1927,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Count all matched groups
 		 *
 		 * @since 1.0.0
+		 * @version 1.5.2
 		 *
 		 * @param $rule_groups (array) group set
 		 *
@@ -1854,7 +1947,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 							/* If there is more than one qty of same product and we select non-grouped, 
 								we should considere the quantity as groups count */
 							foreach ($group->elements as $el) {
-								$matched_groups += $this->get_quantity($el);
+								$matched_groups += $el['to_ship'];
 							}
 
 						} else {
@@ -2288,7 +2381,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Get the selector method HTML 
 		 *
 		 * @since 1.0.0
-		 * @version 1.4.4
+		 * @version 1.5.4
 		 *
 		 * @param $rule_nr (integer) rule number
 		 * @param $selection_methods who will populate it (array)
@@ -2306,64 +2399,8 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 						<select name="shipping_rules[' . $rule_nr . '][sel][]" class="wc-fns-selection-method" required>
 							<option value="">' . esc_html__('Select one criterion', 'fish-and-ships') . '</option>';
 			
-			// Now we need to group the selector methods
-			$groups_index     = array();
-			$grouped_methods  = array();
-			$ungrouped_count  = 0;
-			
-			foreach ($selection_methods as $method_id=>$method) 
-			{
-								
-				if ( isset($method['group']) ) {
-					$group_name = $method['group'];
-				} else {
-					// Fallback & ungrouped
-					$ungrouped_count++;
-					$group_name = 'ungrouped_' . $ungrouped_count;
-				}
-				
-				if ( !in_array( $group_name, $groups_index ) ) {
-					$groups_index[]     = $group_name;
-					$grouped_methods[]  = array();
-				}
+			$html .= $this->get_select_options( $selection_methods, $sel_method_id );
 
-				$pos = array_search( $group_name, $groups_index );
-				
-				$method['method_id'] = $method_id;
-				$grouped_methods[$pos][] = $method;
-			}
-			
-			foreach ($grouped_methods as $key=>$group)
-			{
-				if (count($group) > 1) {
-					$html .= '<optgroup label="' . esc_attr( $groups_index[$key] ) . '">';
-				}
-				
-				foreach ( $group as $method ) 
-				{				
-
-					$class = array( 'normal' ); // fallback scope for previous version methods
-					if ( isset($method['scope']) ) $class = $method['scope'];
-					
-					if (!$this->im_pro() && $method['onlypro']) {
-	
-						$class[] = 'only_pro';
-	
-						$html .= '<option value="pro" ';
-							if ( $sel_method_id == $method['method_id'] ) $html .= 'selected ';
-						$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($method['label'] . ' [PRO]') . '</option>';
-	
-					} else {
-							$html .= '<option value="' . esc_attr( $method['method_id'] ) . '" ';
-							if ($sel_method_id == $method['method_id']) $html .= 'selected ';
-						$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($method['label']) . '</option>';
-					}
-				}
-				if (count($group) > 1) {
-					$html .= '</optgroup>';
-				}
-			}
-		
 			$html .= '	</select>
 						<div class="selection_details">[selection_details]</div>
 						<a href="#" class="delete" title="' . esc_attr_x('Remove selector', 'button caption', 'fish-and-ships') . '"><span class="dashicons dashicons-dismiss"></span></a>
@@ -2478,6 +2515,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Get the cost method HTML 
 		 *
 		 * @since 1.0.0
+		 * @version 1.5.4
 		 *
 		 * @param $rule_nr (integer) rule number
 		 * @param $sel_method_id (string) the option selected
@@ -2493,12 +2531,15 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			
 			foreach ($cost_methods as $method_id=>$method) {
 				
+				$only_pro = ( ! $this->im_pro() ) && isset($method['onlypro']) && $method['onlypro'];
+				
 				$html .= '<option value="' . esc_attr($method_id) . '" ';
-				if ($sel_method_id == $method_id) $html .= 'selected ';
-				$html .= '>' . esc_html($method['label']) . '</option>';
+				if( $sel_method_id == $method_id) $html .= 'selected ';
+				if( $only_pro ) $html .= ' class="only_pro"';
+				$html .= '>' . esc_html( $method['label'] . ( $only_pro ? ' [PRO]' : '') ) . '</option>';
 			}
 		
-			$html .= '	</select></span>';
+			$html .= '	</select></span> <a href="#" title="Configure" class="fns-range-config-bt"><span class="config-cost-method button dashicons dashicons-admin-generic"></span></a>';
 				
 			return $html;
 		}
@@ -2507,7 +2548,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Get the action method HTML 
 		 *
 		 * @since 1.0.0
-		 * @version 1.4.0
+		 * @version 1.5.4
 		 *
 		 * @param $rule_nr (integer) rule number
 		 * @param $actions (array)
@@ -2522,32 +2563,94 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 						<span class="field"><select name="shipping_rules[' . intval($rule_nr) . '][actions][]" class="wc-fns-actions" required>
 							<option value="">' . esc_attr__('Select one action', 'fish-and-ships') . '</option>';
 			
-			foreach ($actions as $action_id=>$action) {
-
-				$class = array();
-				if ( isset($action['scope']) ) $class = $action['scope'];
-
-				if (!$this->im_pro() && $action['onlypro']) {
-				
-					$class[] = 'only_pro';
-
-					$html .= '<option value="pro" ';
-					if ($sel_action_id == $action_id) $html .= 'selected ';
-					$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($action['label'] . ' [PRO]').'</option>';
-
-				} else {
-
-					$html .= '<option value="' . esc_attr($action_id) . '" ';
-					if ($sel_action_id == $action_id) $html .= 'selected ';
-					$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($action['label']) . '</option>';
-				}
-			}
+			$html .= $this->get_select_options( $actions, $sel_action_id );
 		
 			$html .= '	</select></span>
 						<div class="action_details">[action_details]</div>
 						<a href="#" class="delete" title="' . esc_attr_x('Remove action', 'button caption', 'fish-and-ships') . '"><span class="dashicons dashicons-dismiss"></span></a>
 					</div>';
 				
+			return $html;
+		}
+
+		/**
+		 * Get the select options HTML 
+		 * used for selectors and actions selects
+		 *
+		 * @since 1.5.4
+		 *
+		 * @param $methods (array) array of methods
+		 * @param $sel_method_id (string) the option selected
+		 *
+		 * @return $html (HTML code) form code for the selector
+		 *
+		 */
+		function get_select_options( $methods, $sel_method_id )
+		{
+			$html = '';
+
+			// Now we need to group the selector methods
+			$groups_index     = array();
+			$grouped_methods  = array();
+			$ungrouped_count  = 0;
+			
+			foreach( $methods as $method_id => $method ) 
+			{
+								
+				if( isset($method['group']) )
+				{
+					$group_name = $method['group'];
+				}
+				else
+				{
+					// Fallback & ungrouped
+					$ungrouped_count++;
+					$group_name = 'ungrouped_' . $ungrouped_count;
+				}
+				
+				if( ! in_array( $group_name, $groups_index ) )
+				{
+					$groups_index[]     = $group_name;
+					$grouped_methods[]  = array();
+				}
+
+				$pos = array_search( $group_name, $groups_index );
+				
+				$method['method_id'] = $method_id;
+				$grouped_methods[$pos][] = $method;
+			}
+			
+			foreach( $grouped_methods as $key => $group )
+			{
+				if (count($group) > 1) {
+					$html .= '<optgroup label="' . esc_attr( $groups_index[$key] ) . '">';
+				}
+				
+				foreach ( $group as $method ) 
+				{
+				
+					$class = array( 'normal' ); // fallback scope for previous version methods
+					if ( isset($method['scope']) ) $class = $method['scope'];
+					
+					if (!$this->im_pro() && $method['onlypro']) {
+						
+						$class[] = 'only_pro';
+
+						$html .= '<option value="pro" ';
+						if ( $sel_method_id == $method['method_id'] ) $html .= 'selected ';
+						$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($method['label'] . ' [PRO]') . '</option>';
+
+					} else {
+						$html .= '<option value="' . esc_attr( $method['method_id'] ) . '" ';
+						if ($sel_method_id == $method['method_id']) $html .= 'selected ';
+						$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($method['label']) . '</option>';
+					}
+				}
+				if (count($group) > 1) {
+					$html .= '</optgroup>';
+				}
+			}
+		
 			return $html;
 		}
 
@@ -2946,7 +3049,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 	 * After all plugins are loaded, we will initialise everything
 	 *
 	 * @since 1.0.0
-	 * @version 1.4.14
+	 * @version 1.5.2
 	 *
 	 */
 	 if (!function_exists('wocommerce_fish_n_ships_init')) {
@@ -2967,11 +3070,16 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			if ( class_exists( 'WC_Measurement_Price_Calculator' ) ) {
 				require WC_FNS_PATH . '3rd-party/fns-measurement-pc.php';
 			}
+
+			// StudioWombat Advanced Product Fields for WooCommerce (WAPF), since 1.5.2
+			if ( function_exists( 'wapf' ) || function_exists( 'wapf_pro' ) ) {
+				require WC_FNS_PATH . '3rd-party/fns-wapf.php';
+			}
 					
 			// Register plugin text domain for translations files
 			load_plugin_textdomain( 'fish-and-ships', false, basename( dirname( __FILE__ ) ) . '/languages' );
 			
-			// PHP prior to 5.5 or WooCommerce not active / old version?
+			// PHP prior to 7 or WooCommerce not active / old version?
 			if ( is_admin() && !$Fish_n_Ships->is_wc() ) {
 				require WC_FNS_PATH . 'includes/woocommerce-required.php';
 			}

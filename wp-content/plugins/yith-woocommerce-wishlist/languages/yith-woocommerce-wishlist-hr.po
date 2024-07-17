@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: YITH WooCommerce Wishlist\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/yith-woocommerce-"
 "wishlist\n"
-"POT-Creation-Date: 2024-02-20 12:03:37+00:00\n"
+"POT-Creation-Date: 2024-05-09 10:11:47+00:00\n"
 "PO-Revision-Date: 2020-10-16 14:05+0200\n"
 "Last-Translator: \n"
 "Language-Team: Your Inspiration Themes <plugins@yithemes.com>\n"
@@ -143,7 +143,7 @@ msgstr ""
 msgid "Add to cart"
 msgstr ""
 
-#: includes/class-yith-wcwl-install.php:342
+#: includes/class-yith-wcwl-install.php:354
 msgid "Wishlist"
 msgstr "Lista želja"
 
@@ -326,15 +326,15 @@ msgstr ""
 msgid "Free!"
 msgstr "Besplatno!"
 
-#: includes/class-yith-wcwl.php:233
+#: includes/class-yith-wcwl.php:268
 msgid "The item cannot be added to this wishlist"
 msgstr ""
 
-#: includes/class-yith-wcwl.php:237 includes/class-yith-wcwl.php:243
+#: includes/class-yith-wcwl.php:272 includes/class-yith-wcwl.php:278
 msgid "An error occurred while adding the products to the wishlist."
 msgstr ""
 
-#: includes/class-yith-wcwl.php:340 includes/class-yith-wcwl.php:366
+#: includes/class-yith-wcwl.php:375 includes/class-yith-wcwl.php:401
 msgid "Error. Unable to remove the product from the wishlist."
 msgstr "Greška. Proizvod se ne može obrisati iz liste želja."
 
@@ -1400,7 +1400,7 @@ msgid ""
 "order and try to recover lost sales."
 msgstr ""
 
-#: includes/class-yith-wcwl-install.php:340
+#: includes/class-yith-wcwl-install.php:352
 msgctxt "page_slug"
 msgid "wishlist"
 msgstr ""

@@ -27,18 +27,35 @@ class SendingTab extends FieldSettingsTab {
 		return 'yes';
 	}
 
+	private function get_doc_link(): string {
+		$pro_url = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sklep/faktury-woocommerce-zaawansowana-wysylka/?utm_source=wp-admin-plugins&utm_medium=button&utm_campaign=flexible-invoices-adavanced-sending' : 'https://flexibleinvoices.com/products/advanced-sending-for-flexible-invoices/?utm_source=wp-admin-plugins&utm_medium=button&utm_campaign=flexible-invoices-advanced-sending';
+
+		$doc_link = sprintf( esc_html__( 'To automate emails with invoices to your accountant buy the %2$s%1$s%3$s', 'flexible-invoices' ), esc_html__( 'Advanced Sending add-on for Flexible Invoices &rarr;', 'flexible-invoices' ), '<a target="_blank" href="' . $pro_url . '" style="color: #8f0350; font-weight: 700;">', '</a>' );
+		$output   = sprintf( '%2$s%1$s%3$s', $doc_link, '<strong>', '</strong><br/>' );
+		$output   .= sprintf( '%2$s%1$s%3$s', esc_html__( 'The add-on requires Flexible Invoices PRO.', 'flexible-invoices' ), '<strong>', '</strong>' );
+
+		return $output;
+	}
+
+	public function get_docs_url(): string {
+		$docs_url = 'https://wpde.sk/fi-sending-docs';
+		if ( get_locale() === 'pl_PL' ) {
+			$docs_url = 'https://wpde.sk/fi-sending-docs-pl';
+		}
+
+		return sprintf( esc_html__( 'Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices' ), '<a href="' . $docs_url . '" target="_blank" style="color: #4BB04E; font-weight: 700;"><strong>', '</strong></a>' );
+	}
+
 	/**
 	 * Field definition.
 	 *
 	 * @return array
 	 */
 	protected function get_fields() {
-		$pro_url = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sklep/faktury-woocommerce-zaawansowana-wysylka/?utm_source=wp-admin-plugins&utm_medium=button&utm_campaign=flexible-invoices-adavanced-sending' : 'https://flexibleinvoices.com/products/advanced-sending-for-flexible-invoices/?utm_source=wp-admin-plugins&utm_medium=button&utm_campaign=flexible-invoices-advanced-sending';
-
 		return [
 			( new Header() )
 				->set_name( 'no_value' )
-				->set_description( sprintf( '<a target="_blank" href="%1$s" >%2$s</a><br><span>%3$s</span>', $pro_url, esc_html__( 'To automate emails with invoices to your accountant buy the add-on Advanced Sending for Flexible Invoices &rarr;', 'flexible-invoices' ), esc_html__( 'The add-on requires Flexible Invoices PRO.', 'flexible-invoices-core' ) ) )
+				->set_description( $this->get_doc_link() )
 				->set_label( esc_html__( 'Sending invoices', 'flexible-invoices' ) )
 				->set_disabled(),
 			( new CheckboxField() )
@@ -55,7 +72,7 @@ class SendingTab extends FieldSettingsTab {
 			( new Header() )
 				->set_name( 'no_value' )
 				->set_label( esc_html__( 'Cyclical sending of invoices', 'flexible-invoices' ) )
-				->set_description( __( 'Below you will set up a cyclical sending of ZIP files with invoices. You can find out more in the <a href="https://wpde.sk/fi-sending-docs" target="_blank" rel="nofollow, noopener">plugins docs</a>.', 'flexible-invoices' ) )
+				->set_description( esc_html__( 'Below you will set up a cyclical sending of ZIP files with invoices.', 'flexible-invoices' ) . ' ' . $this->get_docs_url() )
 				->set_disabled(),
 			( new MultipleInputTextField() )
 				->set_name( 'no_value' )
@@ -94,7 +111,7 @@ class SendingTab extends FieldSettingsTab {
 			( new Header() )
 				->set_name( 'no_value' )
 				->set_label( esc_html__( 'Cyclical sending of reports', 'flexible-invoices' ) )
-				->set_description( esc_html__( 'Below you will set up a cyclical sending of reports. You can find out more in the <a href="https://wpde.sk/fi-sending-docs" target="_blank" rel="nofollow, noopener">plugins docs</a>.', 'flexible-invoices' ) )
+				->set_description( esc_html__( 'Below you will set up a cyclical sending of reports.', 'flexible-invoices' ) . ' ' . $this->get_docs_url() )
 				->set_disabled(),
 			( new MultipleInputTextField() )
 				->set_name( 'no_value' )

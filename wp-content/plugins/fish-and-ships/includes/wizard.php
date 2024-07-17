@@ -4,7 +4,7 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.5
+ * @version 1.5.2
  */
    
 defined( 'ABSPATH' ) || exit;
@@ -54,6 +54,10 @@ if ( !class_exists( 'Fish_n_Ships_Wizard' ) ) {
 			if( isset( $_GET[ 'wc-fns-wizard' ] ) && $_GET[ 'wc-fns-wizard' ] == 'restart' ) 
 			{
 				$this->update_wizard_opts( 'wizard', 'now' );
+
+				// Remove the parameter in the URL
+				if( wp_redirect( add_query_arg('wc-fns-wizard', false) ) )
+					exit();
 			}
 			
 			$this->load_all_messages();
@@ -472,7 +476,7 @@ if ( !class_exists( 'Fish_n_Ships_Wizard' ) ) {
 			if( ! isset($_POST['wc-fns-samples']) )
 			{
 				echo '<p class="fns-space-up big"><strong>A quick way to get started</strong>...is by selecting a pre-solved full case example that closely matches the configuration you need. Or you can continue the wizard:</p>'
-					. '<p><a href="#" class="button button-wc-fns-colors woocommerce-fns-case">Load a full example</a> &nbsp; <a href="' . add_query_arg('wc-fns-wizard', 'off') . '" class="button wc-fns-continue-wizard button-wc-fns-colors" data-kind-OFF="wizard__" data-param-OFF="off__">Continue wizard</a> &nbsp; '
+					. '<p><a href="#" class="button button-wc-fns-colors woocommerce-fns-case">Load a full example</a> &nbsp; <a href="' . add_query_arg('wc-fns-wizard', 'off') . '" class="button wc-fns-continue-wizard button-wc-fns-colors" data-kind="wizard" data-param="off">Continue wizard</a> &nbsp; '
 					. '<a href="' . add_query_arg('wc-fns-wizard', 'later') . '" class="button" data-kind="wizard" data-param="later">' . esc_html__('Remind later', 'fish-and-ships') . '</a> &nbsp; '
 					. '<a href="' . add_query_arg('wc-fns-wizard', 'off') . '" class="button" data-kind="wizard" data-param="off">' . esc_html__('Thanks, I know how to use it', 'fish-and-ships') . '</a></p>';
 			}

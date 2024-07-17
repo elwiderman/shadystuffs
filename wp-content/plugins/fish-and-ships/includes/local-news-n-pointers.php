@@ -3,10 +3,13 @@
  * Local news & pointers, loaded from wizard.php
  *
  * @package Fish and Ships
- * @version 1.0.1
+ * @version 1.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
+
+// We're inisde class Fish_n_Ships_Wizard, load_all_messages() function
+global $Fish_n_Ships;
 
 $local_news_n_pointers = array();
 
@@ -43,7 +46,9 @@ if( $wizard_on_method )
 		'priority'  => 5,
 
 		'title'     => esc_html__( 'Set the Group-by strategy' ),
-		'content'   => __( 'It will determine how the cart products should be grouped (or not) to decide if they match the selection conditions.<br><br>For example: to consider the weight of all products together, set it as "all grouped together". But if you want to see if there is some heavy product, set it to "None, no grouping". <a href="#" class="woocommerce-fns-help-popup" data-fns-tip="group_by">Read more</a>.' ),
+		'content'   => __( 'It will determine how the cart products should be grouped (or not) to decide if they match the selection conditions.<br><br>
+		<img src="' . WC_FNS_URL . 'help/img/group-by-tooltip.jpg" width="259" height="117" alt="Group-by strategy" /><br>
+		<br>For example: to compare every product weight, set it to "None, no grouping". But to consider the weight of all products together, set it as "all grouped together". <a href="#" class="woocommerce-fns-help-popup" data-fns-tip="group_by">Read more</a>.' ),
 
 		'where'     => array( 'woocommerce_page_wc-settings' ),
 		'auto_open' => true,
@@ -63,7 +68,10 @@ if( $wizard_on_method )
 		'priority'  => 5,
 
 		'title'     => esc_html__( 'Here the heart: the rules table' ),
-		'content'   => __( 'Briefly: for each rule, when the <strong>Selection conditions</strong> are met, <strong>Shipping costs</strong> are applied and <strong>Special actions</strong> (if any) are executed.' ),
+		'content'   => __( 'Briefly: for each rule, when the <strong>Selection conditions</strong> are met, <strong>Shipping costs</strong> are applied and <strong>Special actions</strong> (if any) are executed.<br><br>
+		<img src="' . WC_FNS_URL . 'help/img/table-tooltip.jpg" width="282" height="123" alt="Group-by strategy" />
+		
+		' ),
 
 		'where'     => array( 'woocommerce_page_wc-settings' ),
 		'auto_open' => true,
@@ -218,6 +226,36 @@ if( $wizard_on_method )
 		'align'			=> 'left',
 	);
 }
+
+
+// Announce the new feature only for old users
+if( 
+	$Fish_n_Ships->im_pro() 
+	&& count($local_news_n_pointers) < 1
+	&& version_compare($Fish_n_Ships->get_option('first_version'), '1.5.2', '<' ) 
+) {
+	$local_news_n_pointers['wizard-free-shipping'] = array(
+
+		'type'      => 'pointer',
+		'priority'  => 15,
+
+		'title'     => esc_html__( 'New feature!' ),
+		'content'   => '<strong>You can now set the costs per ranges</strong><br><br>Based on weight, volume, volumetric, product quantity or dimensions: All in one rule!',
+
+		'where'     => array( 'woocommerce_page_wc-settings' ),
+		'auto_open' => true,
+
+		'anchor'    => '.wc-fns-cost-method:first',
+
+		//'close_bt'  => '<span class="dashicons dashicons-dismiss"></span> Finish',
+		//'extra_action'  => 'wizard-end',
+		
+		'edge'      => 'top',
+		'align'     => 'left',
+	);
+}
+
+
 /* Where 
 add_action( 'admin_enqueue_scripts', function( $page ) {
 	echo '$page: ' . $page;

@@ -286,15 +286,13 @@
     display: block;
 }
 
-.wpced-product-settings .wpced-settings, .wpced-variation-settings .wpced-settings {
-    padding: 12px;
-}
-
-.wpced-settings .wpced-select-wrapper label {
+.wpced-settings label {
     float: none !important;
     margin: 0 !important;
-    display: block;
-    width: 100%;
+}
+
+.wpced-product-settings .wpced-settings, .wpced-variation-settings .wpced-settings {
+    padding: 12px;
 }
 
 .wpced-settings .wpced-select-wrapper select {

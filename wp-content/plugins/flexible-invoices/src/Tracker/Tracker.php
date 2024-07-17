@@ -21,7 +21,7 @@ class Tracker {
 	public function hooks() {
 		add_filter( 'wpdesk_tracker_notice_screens', [ $this, 'wpdesk_tracker_notice_screens' ] );
 		add_filter( 'wpdesk_track_plugin_deactivation', [ $this, 'wpdesk_track_plugin_deactivation' ] );
-		add_filter( 'plugin_action_links_' . $this->plugin_file_name, [ $this, 'plugin_action_links' ], 2 );
+		//add_filter( 'plugin_action_links_' . $this->plugin_file_name, [ $this, 'plugin_action_links' ], 2 );
 		add_action( 'activated_plugin', [ $this, 'activated_plugin' ], 10, 2 );
 	}
 

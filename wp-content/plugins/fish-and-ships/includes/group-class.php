@@ -7,7 +7,7 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.1.9
+ * @version 1.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
 class Fish_n_Ships_group {
 	
 	public $group_by             = NULL;     // the group_by criterion
+	public $shipping_class;
 	public $elements             = array();  // initially group elements will be here
 	public $elements_unmatched   = array();  // but when another this or another group is unmatched, 
 											 // coincident elements will be moved here
@@ -76,8 +77,23 @@ class Fish_n_Ships_group {
 			$this->elements[$key] = $element;
 			$this->reset_totals();
 		
-			if ($is_change) $this->$changed = true;
+			if ($is_change) $this->changed = true;
 		}
+	}
+	
+	public function add_or_increase_element($key, $element, $is_change = true) {
+		
+		// if there is not a change really, we don't do nothing
+		if( ! isset($this->elements[$key]) )
+		{
+			$this->elements[$key] = $element;
+		}
+		else
+		{
+			$this->elements[$key]['to_ship'] += $element['to_ship'];
+		}
+		$this->reset_totals();
+		if ($is_change) $this->changed = true;
 	}
 	
 	/**
@@ -186,7 +202,7 @@ class Fish_n_Ships_group {
 	 * calculate one total
 	 *
 	 * @since 1.0.0
-	 * @version 1.1.2
+	 * @version 1.5.2
 	 */
 
 	public function calculate($what) {
@@ -198,7 +214,7 @@ class Fish_n_Ships_group {
 
 		foreach ($this->elements as $product) {
 
-			$qty = $Fish_n_Ships->get_quantity($product);
+			$qty = $product['to_ship'];
 			
 			//if group_by is set to none, the calculations for matching are based on one item
 			$forced_to_1 = $qty > 1 && $this->group_by === 'none';

@@ -1,8 +1,8 @@
-/**
+/*!
  * Javascript for the shipping method functionality.
  *
  * @package Fish and Ships
- * @version 1.5
+ * @version 1.5.4
  */
 
 jQuery(document).ready(function($) {
@@ -16,6 +16,7 @@ jQuery(document).ready(function($) {
 
 	// We're on Fish and ships form?
 	if ($("#shipping-rules-table-fns").length != 0) {
+		$('html').addClass('wc-fish-and-ships-html');
 		$('body').addClass('wc-fish-and-ships');
 		if ($('#wc-fns-freemium-panel.pro-version.closed').length != 0) $('body').addClass('wc-fish-and-ships-pro-closed');
 		
@@ -234,52 +235,14 @@ jQuery(document).ready(function($) {
 		$('.wc-fns-export-buttons a').insertAfter('p.submit button.woocommerce-save-button');
 		$('.wc-fns-export-buttons').remove();
 	}
-	
-	/* Export */
-	$('a.wc-fns-export').click(function () {
 		
+	/* Export */
+	$('a.wc-fns-export').click(function ()
+	{	
 		var data = {'version' : wcfns_data.version, 'pro' : wcfns_data.im_pro };
-		var ignore = ['select', 'undefined', '_wp_http_referer', '_wpnonce', 'fns-serial', 'fns-register', 'log[]', 'fnslogsperpag'];
-
 		var form = $(this).closest('form');
-
-		$('input, checkbox, select, radio, textarea', form).each( function ( index, el) {
-			
-			name = $(el).attr('name');
-			if ( typeof (name) != 'undefined' && $.inArray( name, ignore ) == -1 ) {
-				
-				if (name.substr(0, 25) == 'woocommerce_fish_n_ships_') name = name.substr(25);
-				val = $(el).val();
-				
-				//console.log( name + ': ' + val + '(' + typeof (val) + ')' );
-				
-				// Lovely JS... value attr should get only on checked case!
-				// if ( $(el).is(':checkbox') && !$(el).is(":checked") ) val = '';
-				if ( $(el).is(':checkbox') && !$(el).is(":checked") ) return;
-				
-				// ...and radio buttons? ignore not checked
-				if ( $(el).is(':radio') && !$(el).is(":checked") ) return;
-				
-				// select multiple?
-				if ( typeof (val) == 'object' ) {
-					i=0;
-					for (key in val) {
-						unique_name = name.replace(/\[[0-9]*\]$/, '['+i+']' );
-						data[unique_name] = val[key];
-						i++;
-					}
-				} else {
-
-					// Support for WC decimal separator: comma, point or whatever will be replaced by point
-					if ( $(el).hasClass('wc_fns_input_positive_decimal') || $(el).hasClass('wc_fns_input_decimal') )
-					{
-						val = val.split( woocommerce_admin.decimal_point ).join( '.' );
-					}
-					data[name] = val;
-				}
-			}
-		});
-		data = JSON.stringify( data );
+		
+		data = json_stringify_fields( data, form, false );
 
 		$('body').append('<div id="fns_dialog"><p class="fns-tabbed">'+wcfns_data.i18n_export_ins+'</p><div class="export_wrapper">...</div></div>');
 		
@@ -333,6 +296,56 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
+
+	// This function has double use: export & import/save compressed
+	function json_stringify_fields( data, target, delete_fields )
+	{
+		var ignore = ['select', 'undefined', '_wp_http_referer', '_wpnonce', 'fns-serial', 'fns-register', 'log[]', 'fnslogsperpag'];
+
+		$('input, select, textarea', target).each( function ( index, el)
+		{	
+			name = $(el).attr('name');
+			if ( typeof (name) != 'undefined' && $.inArray( name, ignore ) == -1 )
+			{
+				if (name.substr(0, 25) == 'woocommerce_fish_n_ships_') name = name.substr(25);
+				val = $(el).val();
+				
+				//console.log( name + ': ' + val + '(' + typeof (val) + ')' );
+				
+				// Lovely JS... value attr should get only on checked case!
+				var skip_chkbox = $(el).is(':checkbox') && !$(el).is(":checked");
+				
+				// ...and radio buttons? ignore not checked
+				var skip_radio  = $(el).is(':radio') && !$(el).is(":checked");
+				
+				if( ! skip_chkbox && ! skip_radio )
+				{
+					// select multiple?
+					if ( typeof (val) == 'object' ) {
+						i=0;
+						for (key in val) {
+							unique_name = name.replace(/\[[0-9]*\]$/, '['+i+']' );
+							data[unique_name] = val[key];
+							i++;
+						}
+					} else {
+
+						// Support for WC decimal separator: comma, point or whatever will be replaced by point
+						if ( $(el).hasClass('wc_fns_input_positive_decimal') || $(el).hasClass('wc_fns_input_decimal') )
+						{
+							val = val.split( woocommerce_admin.decimal_point ).join( '.' );
+						}
+						data[name] = val;
+					}
+				}
+				
+				if( delete_fields ) $(el).remove();
+			}
+		});
+		data = JSON.stringify( data );
+		return data;
+	}
+	
 	// Select text
 	jQuery.fn.fns_selectText = function(){
 		this.find('input').each(function() {
@@ -343,7 +356,7 @@ jQuery(document).ready(function($) {
 		});
 		var doc = document;
 		var element = this[0];
-		console.log(this, element);
+		// console.log(this, element);
 		if (doc.body.createTextRange) {
 			var range = document.body.createTextRange();
 			range.moveToElementText(element);
@@ -404,9 +417,11 @@ jQuery(document).ready(function($) {
 		});
 
 		$('body').addClass('fns-popup');
-		$('.ui-dialog .ui-dialog-buttonset button').not('.ui-dialog-fns-samples button').attr('class', 'button button-primary button-large');
+		
+		cont = $('.ui-dialog').not('.ui-dialog-fns-samples');
+		$('.ui-dialog-buttonset button', cont).attr('class', 'button button-primary button-large');
 		$('#fns_dialog').dialog('open');
-		$('<p class="fns-tabbed"><em>'+wcfns_data.i18n_import_att+'</em></p>').insertAfter('.ui-dialog-buttonset');
+		$('<p class="fns-tabbed"><em>'+wcfns_data.i18n_import_att+'</em></p>').insertAfter( $('.ui-dialog-buttonset', cont) );
 
 		return false;
 	});
@@ -434,7 +449,7 @@ jQuery(document).ready(function($) {
 		$('#fns_recreate_form_wrap').remove();
 		$('body').append('<div id="fns_recreate_form_wrap" style="display:none">'
 					+ '<form method="post" id="fns_recreate_form" action="" enctype="multipart/form-data">'
-					+ '</form></div>');
+					+ '<div class="outisde_table"></div><div class="inside_table"></div></form></div>');
 		
 		// First, let's put the imported fields
 		for (key in code) {
@@ -442,18 +457,21 @@ jQuery(document).ready(function($) {
 			// Empty checkboxes not be recreated
 			if ( $.inArray( key, checks ) == -1 || code[key] != '' ) {
 
-				key_form = key;
-				if (key.substr(0, 14) != 'shipping_rules') key_form = 'woocommerce_fish_n_ships_' + key;
-
-				// Recreate the shipping rules fields
-				$('#fns_recreate_form').append('<input type="hidden" name="' + key_form + '" value="' + code[key] + '" />');
+				if (key.substr(0, 14) != 'shipping_rules') 
+				{
+					$('#fns_recreate_form .outisde_table').append('<input type="hidden" name="woocommerce_fish_n_ships_' + key + '" value="' + code[key] + '" />');
+				}
+				else
+				{
+					$('#fns_recreate_form .inside_table').append('<input type="hidden" name="' + key + '" value="' + code[key] + '" />');
+				}
 			}
 		}
 
 		// Now, we will copy the non-imported fields
 		var ignore = ['select', 'undefined', 'fns-serial', 'fns-register'];
 
-		$('input, checkbox, select, radio, button', form ).each( function ( index, el) {
+		$('input, select, button', form ).each( function ( index, el) {
 			
 			name = $(el).attr('name');
 
@@ -471,11 +489,27 @@ jQuery(document).ready(function($) {
 				//if ( $.inArray( shorted_name, checks ) == -1 ) {
 					
 					if ( $( '[name="'+name+'"]', '#fns_recreate_form' ).length == 0 ) {
-						$('#fns_recreate_form').append('<input type="hidden" name="' + name + '" value="' + val + '" />');
+						$('#fns_recreate_form .outisde_table').append('<input type="hidden" name="' + name + '" value="' + val + '" />');
 					}
 				//}
 			}
 		});
+
+		// Compress data to avoid max_input_vars error if required
+		if( wcfns_data['max_input_vars'] <= $( 'input, select, textarea, button', $('#fns_recreate_form') ).length )
+		{
+			console.log('Compress data to avoid max_input_vars at import, from: ' + $( 'input, select, textarea, button', $('#fns_recreate_form') ).length );
+			
+			target = $('#fns_recreate_form .inside_table');
+
+			// Get the values of rule fields json-fied & delete they:
+			compressed_data = json_stringify_fields( {}, target, true );
+			
+			$(target).append("<input type='hidden' id='fns_compressedData' name='shipping_rules[compressed]' />");
+			$("#fns_compressedData").val(compressed_data);
+			
+			console.log('to: ' + $( 'input, select, textarea, button', $('#fns_recreate_form') ).length );
+		}
 		
 		$('#fns_recreate_form').submit();
 	}
@@ -798,10 +832,17 @@ jQuery(document).ready(function($) {
 		start_sliders();
 
 		apply_datepickers();
+		
+		// Hide the select ancestors that has all childs hidden ( normal/extra rules)
+		$( "select.wc-fns-selection-method optgroup, select.wc-fns-actions optgroup" ).each( function( idx, optgroup )
+		{
+			$( optgroup ).toggleClass( 'no-items-normal', $( 'option.normal', optgroup ).length == 0 );
+			$( optgroup ).toggleClass( 'no-items-extra', $( 'option.extra', optgroup ).length == 0 );
+		});
 
 		// Apply dropdowns submenu where there aren't
 		if ($.fn.dropdownSubmenu) {
-			$( ".selection_wrapper > select.wc-fns-selection-method" ).dropdownSubmenu({
+			$( ".selection_wrapper > select.wc-fns-selection-method, .shipping-costs-column select.wc-fns-cost-method, .action_wrapper select.wc-fns-actions" ).dropdownSubmenu({
 				watchChangeVal:  true,
 			});
 		}
@@ -818,10 +859,17 @@ jQuery(document).ready(function($) {
 			$(el).html(html);
 		});
 	});
+	$(document).on('dropdown-submenu-tuned', function( e, submenu) {
+		wrapper = $(submenu).closest('.dropdown-submenu-wrapper');
+		watch_content = $('.dropdown-field-watch .content', wrapper);
+		text = $(watch_content).text();
+		html = text.toString().replace('[PRO]', '<span class="fns-pro-icon">PRO</span>');
+		$(watch_content).html(html);
+	});
 
-	/* multicurrency swithcing fields */
-		
-	$("#wrapper-shipping-rules-table-fns .nav-tab").click(function () {
+
+	/* multicurrency swithcing fields: for main table & popups */
+	$(document).on('click', "#fns_dialog .nav-tab, #wrapper-shipping-rules-table-fns .nav-tab", function() {
 		
 		var nav   = $(this).closest('nav');
 		var cont  = $(nav).next();
@@ -860,11 +908,13 @@ jQuery(document).ready(function($) {
 		}
 		
 		if (mc) {
-			$('#wrapper-shipping-rules-table-fns').addClass('mc-tabs-fns');
+			$('body').addClass('mc-tabs-fns');
 			$('.fns-currency-secondary').show();
 		} else {
-			$('#wrapper-shipping-rules-table-fns .nav-tab').eq(0).trigger('click');
-			$('#wrapper-shipping-rules-table-fns').removeClass('mc-tabs-fns');
+			$('.nav-tab-wrapper').each( function(idx, el) {
+				$('.nav-tab', el).eq(0).trigger('click');
+			});
+			$('body').removeClass('mc-tabs-fns');
 			$('.fns-currency-secondary').hide();
 		}
 	}
@@ -1160,7 +1210,7 @@ jQuery(document).ready(function($) {
 					regional: [''],
 				})
 				.on( "change", function() {
-					console.log('change');
+					// console.log('change');
 					from.datepicker( "option", "maxDate", getDate( this ) );
 				});
 				
@@ -1214,12 +1264,12 @@ jQuery(document).ready(function($) {
 	    2.2. Shipping costs column
 	 *******************************************************/
 	
-	// Show or hide the simple/composite cost fields
+	// Show or hide the simple/composite/range cost fields
 	function check_composite_cost() {
 		$('#shipping-rules-table-fns select.wc-fns-cost-method').each(function(index, element) {
 
 			// Extra rules haven't cost fields
-			if ( !$(element).closest('tr').hasClass('fns-ruletype-normal') ) return;
+			if( ! $(element).closest('tr').hasClass('fns-ruletype-normal') ) return;
 			
 			cont = $(element).closest('td');
 
@@ -1227,10 +1277,19 @@ jQuery(document).ready(function($) {
 
 				$('.cost_simple', cont).hide();
 				$('.cost_composite', cont).show();
+				$('.fns-range-config-bt', cont).hide();
+
+			} else if ($(element).val() == 'ranges') {
+
+				$('.cost_simple', cont).hide();
+				$('.cost_composite', cont).hide();
+				$('.fns-range-config-bt', cont).show();
+
 			} else {
 
 				$('.cost_simple', cont).show();
 				$('.cost_composite', cont).hide();
+				$('.fns-range-config-bt', cont).hide();
 			}
 		});
 	}
@@ -1260,6 +1319,12 @@ jQuery(document).ready(function($) {
 	}, '.wc-fns-cost-method');
 	
 	check_composite_cost();
+
+	$('#shipping-rules-table-fns > tbody').on('change', '.wc-fns-cost-method', function() {
+		if( $(this).val() != 'ranges' ) return;
+		cont = $(this).closest('td');
+		$('.fns-range-config-bt', cont).trigger('click');
+	});
 	
 	/*******************************************************
 	    2.3. Special actions column
@@ -1518,7 +1583,7 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 	
-	// Open / close log rules
+	// Open / close all log rules branches
 
 	$(document).on('click', '#fnslogs .fns-log-opener-all', function () {
 		
@@ -1529,28 +1594,28 @@ jQuery(document).ready(function($) {
 		$( '.fns-log-opener', log_container ).each( function (index, el) {
 			if ( !$(el).closest('p').hasClass('opened') ) {
 				all_opened = false;
-				console.log('not opened');
+				// console.log('not opened');
 			} else {
-				console.log('opened');
+				// console.log('opened');
 			}
 		});
 		
 		if ( all_opened ) {
 			// Close all
 			$( '.fns-log-opener', log_container ).trigger('click');
-			console.log('close all');
+			// console.log('close all');
 		} else {
 			// Open the closed only
 			$( '.fns-log-opener', log_container ).each( function (index, el) {
 				if ( !$(el).closest('p').hasClass('opened') ) $( el ).trigger('click');
 			});
-			console.log('open closed all');
+			// console.log('open closed all');
 		}
 		
 		return false;
 	});
 	
-	
+	// Open close one rule
 	$(document).on('click', '#fnslogs .fns-log-opener', function () {
 		
 		el = $(this).closest('p');
@@ -1573,7 +1638,6 @@ jQuery(document).ready(function($) {
 	
 
 	// Paged logs with AJAX
-	
 	$(document).on('click', '#fnslogs .pagination-links a, #fns_logs_reload', function () {
 		
 		get_list_logs_ajaxified( $(this).attr('data-fns-logs-pag'), $(this).attr('data-instance_id'), $("select[name='fnslogsperpag']").val() );
@@ -1586,31 +1650,64 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 	
-	$(document).on('click', "button[name='fns-remove_logs']", function () {
+	// Disable / Enable remove button
+	$(document).on('change', "input[name='log[]'], input.cb-select-all", function () {
+		refresh_remove_logs_button();
+	});
+	
+	function refresh_remove_logs_button() {
+		if( $("input[name='log[]']:checked").length == 0 )
+		{
+			$("button[name='fns-remove_logs']").attr("disabled", true);
+		} 
+		else 
+		{
+			$("button[name='fns-remove_logs']").removeAttr("disabled");
+		}
+	}
+	refresh_remove_logs_button();
 
-		// prevent double click
-		if ( $('#logs_wrapper').hasClass('loading') ) return;
-		
-		$('#logs_wrapper').addClass('loading').append('<div class="fns-loglist-loading"><span class="wc-fns-spinner"></span></div>');
+	// Delete selected logs
+	$(document).on('click', "button[name='fns-remove_logs']", function () {
 		
 		var del_logs = [];
 		$("input[name='log[]']:checked").each(function(){
 			del_logs.push(this.value);
 		});
-
 		
+		delete_logs_ajax( del_logs, $('#fns_logs_reload').attr('data-fns-logs-pag') );
+		return false;
+	});
+
+	// Delete all logs
+	$(document).on('click', "button[name='fns-remove_all_logs']", function () {
+		
+		delete_logs_ajax( 'all', '1' );
+		return false;
+	});
+	
+	// Talk with the server, refresh, etc.
+	function delete_logs_ajax( del_logs, page ) {
+
+		// prevent double click
+		if ( $('#logs_wrapper').hasClass('loading') ) return;
+		
+		$('#logs_wrapper').addClass('loading').append('<div class="fns-loglist-loading"><span class="wc-fns-spinner"></span></div>');
+
+
 		var data = {
 			action:             'wc_fns_logs_pane', 
 			'fns-remove_logs' : '1',
 			log :               del_logs,
 
 			instance_id:        $('#fns_logs_reload').attr('data-instance_id'),
-			fnslogspag:         $('#fns_logs_reload').attr('data-fns-logs-pag'),
+			fnslogspag:         page,
 			fnslogsperpag:      $("select[name='fnslogsperpag']").val(),
 
 			_wpnonce :          $("#_wpnonce").val(),
 			_wp_http_referer :  $("input[name='_wp_http_referer']").val(),
 		};
+
 				
 		$.ajax({
 			url:    ajaxurl,
@@ -1623,7 +1720,7 @@ jQuery(document).ready(function($) {
 			},
 			success: function (data) {
 				
-				console.log(data);
+				// console.log(data);
 				
 				if ( data == '0' ) {
 					console.log('error deleting logs');
@@ -1636,12 +1733,13 @@ jQuery(document).ready(function($) {
 					//.find('.fns-loglist-loading').remove();
 				
 				$('#wc_fns_logs_list').show();
+				
+				refresh_remove_logs_button();
 			},
 			dataType: 'html'
 		});
 		
-		return false;
-	});
+	}
 	
 	
 	function get_list_logs_ajaxified( $fnslogspag, $instance_id, $fnslogsperpag ) {
@@ -1672,6 +1770,8 @@ jQuery(document).ready(function($) {
 					//.find('.fns-loglist-loading').remove();
 				
 				$('#wc_fns_logs_list').show();
+				
+				refresh_remove_logs_button();
 			},
 			dataType: 'html'
 		});
@@ -2084,10 +2184,25 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 	
-	// Prevent change serial submit to prevent unsaved changes alert
-	jQuery('#wc-fns-freemium-panel button').bind('click', function(event) {
+	// Compress data to avoid max_input_vars error if required
+	jQuery('button.woocommerce-save-button').bind('click', function(event)
+	{
+		//var elementsToSubmit = $('input, select, textarea', $(this).closest('form') );
+		
+		if( wcfns_data['max_input_vars'] <= $('input, select, textarea', $(this).closest('form') ).length )
+		{
+			target = $('#wrapper-shipping-rules-table-fns');
 
-		if (!unsaved) window.onbeforeunload = function() {};
+			console.log('Compress data to avoid max_input_vars at save, from: ' + $( 'input, select, textarea, button', $(this).closest('form') ).length );
+
+			// Get the values of rule fields json-fied & delete they:
+			compressed_data = json_stringify_fields( {}, target, true );
+			
+			$(target).append("<input type='hidden' id='fns_compressedData' name='shipping_rules[compressed]' />");
+			$("#fns_compressedData").val(compressed_data);
+
+			console.log('to: ' + $( 'input:not([name]), select, textarea, button', $(this).closest('form') ).length );
+		}
 	});
 
 	// Remove required attr on fields when we're saving a new serial (the form is the same for everyone);
@@ -2282,7 +2397,7 @@ jQuery(document).ready(function($) {
 			},
 			success: function (data) {
 				
-				console.log(data);
+				// console.log(data);
 				
                 $('.snippets-ajax-loading').replaceWith(data.snippets);
                 $('.fullsamples-ajax-loading').replaceWith(data.fullsamples);
@@ -2534,6 +2649,239 @@ jQuery(document).ready(function($) {
 		if( req == 'all' ) req = 'All together';
 		
 		return req;
+	}
+
+	/*******************************************************
+	    9. Ranges Wizard
+	 *******************************************************/
+	
+	$( '#wrapper-shipping-rules-table-fns' ).on('click', '.fns-range-config-bt', function ()
+	{	
+		cont    = $(this).closest('.shipping-costs-column');
+		rule_n  = $('#wrapper-shipping-rules-table-fns .config-cost-method').index(this);
+		
+		// Prepare & open dialog
+		$('body').append('<div id="fns_dialog">'+$('.fns-range-wizard-wrapper').html()+'</div>');
+		
+		$('#fns_dialog').dialog({
+			title: 'Range settings',
+			dialogClass: 'wp-dialog',
+			autoOpen: false,
+			draggable: true,
+			width: 'auto',
+			modal: true,
+			resizable: true,
+			closeOnEscape: true,
+			position: {
+				my: "center",
+				at: "center",
+				of: window
+			},
+			open: function () {
+				// close dialog by clicking the overlay behind it
+				$('.ui-widget-overlay').bind('click', function() {
+					close_popup_dialog();
+				});
+
+				// Pass all fields values to dialog
+				$('.cost_range input', cont).each( function(idx, el) {
+					name  = $(el).attr('data-fns-range-field');
+					val   = $(el).val();
+					$('#fns_dialog [name="dialog-'+name+'"]').val(val);
+				});
+				
+				refresh_range_wizard();
+			},
+			create: function () {
+				// style fix for WordPress admin
+				$('.ui-dialog-titlebar-close').addClass('ui-button');
+			},
+			buttons: [
+				{
+					text:   wcfns_data.i18n_close_bt,
+					click:  close_popup_dialog
+				}
+			],
+			close: function() {
+
+				// Pass all fields values to dialog
+				$('#fns_dialog input, #fns_dialog select').each( function(idx, el) {
+
+					name  = $(el).attr('name');
+					if( name.substr(0,7) != 'dialog-' )
+						return
+					
+					val = $(el).val();
+					$('[data-fns-range-field="'+name.substr(7)+'"]', cont).val(val);
+				});
+
+				close_popup_dialog();
+			}
+		});
+
+		$('body').addClass('fns-popup');
+		$('.ui-dialog .ui-dialog-buttonset button').not('.ui-dialog-fns-samples button').attr('class', 'button button-primary button-large');
+		$('#fns_dialog').dialog('open');
+		
+		$('#fns_dialog select[name="dialog-range_based"]').click( function() {
+			refresh_range_wizard();
+		});
+		$('#fns_dialog .nav-tab').click( function() {
+			setTimeout( refresh_range_wizard, 10 );
+		});
+		$('#fns_dialog .fns_range_fields')
+			.change( function() {
+				refresh_range_wizard();
+			})
+			.keyup( function() {
+				refresh_range_wizard();
+			});
+
+		return false;
+	});
+	
+	
+	function refresh_range_wizard() {
+		
+		range_based    = $('#fns_dialog select[name="dialog-range_based"]').val();
+		range_based_n  = $('#fns_dialog select[name="dialog-range_based"]').prop('selectedIndex');
+		
+		groupbyel = $('#fns_dialog select[name="dialog-range_group_by"]');
+
+		if( range_based == 'lwh-dimensions' || range_based == 'lgirth-dimensions' )
+		{
+			if( ! $(groupbyel)[0].hasAttribute('data-fns-remember') )
+				$(groupbyel).attr( 'data-fns-remember', $(groupbyel).val() );
+
+			$('#fns_dialog select[name="dialog-range_group_by"]')
+				.val('none')
+				.attr('disabled', true);
+		}
+		else
+		{
+			$('#fns_dialog select[name="dialog-range_group_by"]')
+				.attr('disabled', false);
+
+			if( $(groupbyel)[0].hasAttribute('data-fns-remember') )
+			{
+				$(groupbyel)
+					.val( $(groupbyel).attr('data-fns-remember') )
+					.removeAttr('data-fns-remember');
+			}
+		}
+
+		// Show the right unit
+		$('#fns_dialog .fns-unit-switcher').each( function( idx, el ) {
+			$(el).show();
+			$('span', el).hide();
+			$('span', el).eq(range_based_n).show();
+			
+			preview_unit = $('span', el).eq(range_based_n).html();
+		});
+				
+		// Simulation
+		prefix = '';
+		currency = $('.currency-switcher-fns-wrapper .units:first ').text();
+		if( $('#woocommerce_fish_n_ships_multiple_currency').is(':checked') )
+		{
+			n = $('#fns_dialog .nav-tab').index( $('#fns_dialog .nav-tab-active') );
+			currency = $('.currency-switcher-fns-wrapper .units ').eq(n).text();
+			if( n > 0 ) prefix = '-' + $('#fns_dialog .nav-tab-active').attr('data-fns-currency');
+		}
+
+		base    = numerize( $('#fns_dialog input[name="dialog-range_base'+prefix+'"]').val(), 0 );
+		charge  = numerize_abs( $('#fns_dialog input[name="dialog-range_charge'+prefix+'"]').val(), 0 );
+
+		unit    = $('#fns_dialog .fns-unit-switcher span').eq(range_based_n).html();
+		over    = numerize_abs( $('#fns_dialog input[name="dialog-range_over"]').val(), 0 );
+		foreach = numerize_abs( $('#fns_dialog input[name="dialog-range_foreach"]').val(), 1 );
+
+		// Same calculations here in JS simulation and PHP shipping rate calculation
+		if( foreach < 0.0000001 ) foreach = 0;
+		if( over    < 0.0000001 ) over = 0;
+		
+		// Simulation
+		simulation_range  = foreach * 4;
+		simulation_step   = (range_based == 'quantity') ? foreach : foreach / 2;
+		simulation_start  = (over - simulation_step * 3);
+
+		simulation_precisio = 0;
+		if( simulation_step < 1 ) simulation_precisio = 1;
+		if( simulation_step < 0.1 ) simulation_precisio = 2;
+		if( simulation_step < 0.01 ) simulation_precisio = 3;
+		if( simulation_step < 0.001 ) simulation_precisio = 4;
+		if( simulation_step < 0.0001 ) simulation_precisio = 5;
+
+		// step = foreach / 2; // Això cal que sigui rodó per al preview, p.e. "range over 4,9" fa un desastre
+		// start = over - step * 3;
+		if( simulation_start < 0 ) simulation_start = 0;
+		
+		code_simulation = '<table class="widefat striped"><tr>';
+		for( n=0; n<10; n++) {
+			
+			value  = simulation_start + simulation_step * n;
+			value  = limitDecimals( value, simulation_precisio );
+			value  = value.toString().replace( '.', wcfns_data.decimal_separator);
+
+			code_simulation += '<td>' + value + unit + '</td>';
+		}
+		code_simulation += '</tr><tr>';
+		for( n=0; n<10; n++) {
+			
+			value  = simulation_start + simulation_step * n;
+			value  = limitDecimals( value, simulation_precisio );
+console.log('value: ' + value);
+			// Value must be rounded?
+			// if ( value%1 > .9 && charge > 0.49 ) value = Math.round(value);
+			// if ( value%1 > .95 && charge > 0.3 ) value = Math.round(value);
+			
+			// Same calculations here in JS simulation and PHP shipping rate calculation
+			calculation = 0;
+			ranges = Math.ceil( ( value - over ) / foreach);
+			if( ranges < 0 ) ranges = 0;
+
+			calculation = base + ranges * charge;
+
+			if( calculation < 0 ) calculation = 0;
+			calculation = limitDecimals( calculation, 0 );
+			calculation = calculation.toString().replace( '.', wcfns_data.decimal_separator);
+			code_simulation += '<td>' + calculation + currency + '</td>';
+		}
+		code_simulation += '</tr></table>';
+		
+		$('#fns_dialog .fns-simulation').html( code_simulation );
+	}
+	
+	function numerize(text, default_vaule) {
+		text = text.toString().replace(',', '.');
+		if( text == '' ) text = default_vaule;
+		value = isNaN( parseFloat(text) ) ? default_vaule : parseFloat(text);
+		return value;
+	}
+
+	function numerize_abs(text, default_vaule) {
+		value = numerize(text, default_vaule);
+		if( value < 0 ) value = 0;
+		return value;
+	}
+		
+	function limitDecimals(numero, decimals) {
+
+		if ( numero == 0 ) 
+			return 0;
+
+		while (true) {
+
+			var testRounded = parseFloat(numero.toFixed(decimals));
+
+			if (Math.abs(numero - testRounded) / numero < 0.05 && decimals > 1) {
+				return testRounded;
+			}
+			if (Math.abs(numero - testRounded) / numero < 0.01 ) {
+				return testRounded;
+			}
+			decimals++;
+		}
 	}
 
 	/* FINALLY, REFRESH RULES: */

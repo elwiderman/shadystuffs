@@ -4,7 +4,7 @@ Tags: woocommerce, quick view, woocommerce quick view, products quick view
 Requires PHP: 7.4
 Requires at least: 6.3
 Tested up to: 6.5
-Stable tag: 1.37.0
+Stable tag: 1.41.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,12 @@ Full documentation is available [here](https://docs.yithemes.com/yith-woocommerc
 2. Upload the plugin folder into the `wp-content/plugins/` directory of your WordPress site.
 3. Activate `YITH WooCommerce Quick View` from Plugins page.
 
+== Frequently Asked Questions ==
+
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/yith-woocommerce-quick-view)
+
 == Screenshots ==
 
 1. The plugin admin page.
@@ -40,6 +46,26 @@ Full documentation is available [here](https://docs.yithemes.com/yith-woocommerc
 3. The quick view modal.
 
 == Changelog ==
+
+= 1.41.0 = Released 17 July 2024
+
+* New: support for WooCommerce 9.1
+* Update: YITH plugin framework
+
+= 1.40.0 = Released 24 June 2024
+
+* New: support for WooCommerce 9.0
+* Update: YITH plugin framework
+
+= 1.39.0 = Released 25 May 2024
+
+* New: support for WooCommerce 8.9
+* Update: YITH plugin framework
+
+= 1.38.0 = Released 17 April 2024
+
+* New: support for WooCommerce 8.8
+* Update: YITH plugin framework
 
 = 1.37.0 = Released 21 March 2024
 
@@ -531,7 +557,7 @@ Or, if you have created your own language pack, or have an update for an existin
 
 == Upgrade notice ==
 
-= 1.36.0 = Released 19 February 2024
+= 1.39.0 = Released 25 May 2024
 
-* New: support for WooCommerce 8.6
+* New: support for WooCommerce 8.9
 * Update: YITH plugin framework

@@ -77,7 +77,7 @@ class Assets implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookable
      */
     private function enqueue_post_type_scripts(\WP_Screen $screen)
     {
-        if (\in_array($screen->id, [self::INVOICE_PAGE_ID, self::INVOICE_EDIT_PAGE_ID], \true)) {
+        if (isset($screen->post_type) && 'inspire_invoice' === $screen->post_type) {
             \wp_enqueue_style('fiw-admin-style', $this->assets_url . 'css/admin.css', [], $this->scripts_version);
             \wp_enqueue_style('fiw-actions-style', $this->assets_url . 'css/admin-order.css', [], $this->scripts_version);
             \wp_enqueue_style('jquery-ui-style', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/smoothness/jquery-ui.css', [], $this->scripts_version);

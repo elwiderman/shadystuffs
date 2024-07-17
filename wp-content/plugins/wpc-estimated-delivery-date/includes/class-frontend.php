@@ -69,7 +69,6 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			// Cart
 			if ( Wpced_Backend()->get_setting( 'cart_item', 'no' ) === 'yes' ) {
 				add_filter( 'woocommerce_cart_item_name', [ $this, 'cart_item_name' ], 10, 2 );
-				//add_action( 'woocommerce_after_cart_item_name', [ $this, 'after_cart_item_name' ] );
 			}
 
 			if ( Wpced_Backend()->get_setting( 'cart_item', 'no' ) === 'yes_data' ) {
@@ -81,7 +80,6 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			}
 
 			// Order details (order confirmation or emails)
-			add_filter( 'woocommerce_add_cart_item_data', [ $this, 'add_cart_item_data' ], 10, 2 );
 			add_action( 'woocommerce_checkout_create_order_line_item', [ $this, 'create_order_line_item' ], 10, 3 );
 			add_action( 'woocommerce_order_item_meta_start', [ $this, 'order_item_meta_start' ], 10, 2 );
 
@@ -263,7 +261,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			echo self::get_product_date( $product );
 		}
 
-		function get_product_date( $product, $type = 'full' ) {
+		function get_product_date( $product, $type = 'full', $context = 'product' ) {
 			if ( is_numeric( $product ) ) {
 				$product_id = $product;
 				$product    = wc_get_product( $product_id );
@@ -319,32 +317,36 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 				$product_date = $delivery_date;
 			} else {
 				if ( $is_max ) {
-					$delivery_text = Wpced_Backend()->get_setting( 'text_max', esc_html__( 'Latest estimated delivery date: %s', 'wpc-estimated-delivery-date' ) );
+					$delivery_text = Wpced_Backend()->get_setting( 'text_max', /* translators: date */ esc_html__( 'Latest estimated delivery date: %s', 'wpc-estimated-delivery-date' ) );
 
 					if ( empty( $delivery_text ) ) {
-						$delivery_text = esc_html__( 'Latest estimated delivery date: %s', 'wpc-estimated-delivery-date' );
+						$delivery_text = /* translators: date */
+							esc_html__( 'Latest estimated delivery date: %s', 'wpc-estimated-delivery-date' );
 					}
 				} elseif ( $is_min ) {
-					$delivery_text = Wpced_Backend()->get_setting( 'text_min', esc_html__( 'Earliest estimated delivery date: %s', 'wpc-estimated-delivery-date' ) );
+					$delivery_text = Wpced_Backend()->get_setting( 'text_min', /* translators: date */ esc_html__( 'Earliest estimated delivery date: %s', 'wpc-estimated-delivery-date' ) );
 
 					if ( empty( $delivery_text ) ) {
-						$delivery_text = esc_html__( 'Earliest estimated delivery date: %s', 'wpc-estimated-delivery-date' );
+						$delivery_text = /* translators: date */
+							esc_html__( 'Earliest estimated delivery date: %s', 'wpc-estimated-delivery-date' );
 					}
 				} else {
-					$delivery_text = Wpced_Backend()->get_setting( 'text', esc_html__( 'Estimated delivery dates: %s', 'wpc-estimated-delivery-date' ) );
+					$delivery_text = Wpced_Backend()->get_setting( 'text', /* translators: date */ esc_html__( 'Estimated delivery dates: %s', 'wpc-estimated-delivery-date' ) );
 
 					if ( empty( $delivery_text ) ) {
-						$delivery_text = esc_html__( 'Estimated delivery dates: %s', 'wpc-estimated-delivery-date' );
+						$delivery_text = /* translators: date */
+							esc_html__( 'Estimated delivery dates: %s', 'wpc-estimated-delivery-date' );
 					}
 				}
 
-				$wrapper_id = is_a( $product, 'WC_Product_Variation' ) ? $product->get_parent_id() : $product_id;
+				$wrapper_id    = is_a( $product, 'WC_Product_Variation' ) ? $product->get_parent_id() : $product_id;
+				$wrapper_class = apply_filters( 'wpced_wrapper_class', 'wpced wpced-' . $wrapper_id . ' wpced-' . $context . ' wpced-' . ( isset( $rule['key'] ) ? $rule['key'] : 'default' ), $product, $type, $context );
 
 				if ( ! empty( $delivery_date ) ) {
-					$product_date = '<div class="' . esc_attr( 'wpced wpced-' . $wrapper_id . ' wpced-' . ( isset( $rule['key'] ) ? $rule['key'] : 'default' ) ) . '" data-id="' . esc_attr( $wrapper_id ) . '"><div class="wpced-inner">' . sprintf( $delivery_text, $delivery_date ) . '</div></div>';
+					$product_date = '<div class="' . esc_attr( $wrapper_class ) . '" data-id="' . esc_attr( $wrapper_id ) . '"><div class="wpced-inner">' . sprintf( $delivery_text, $delivery_date ) . '</div></div>';
 				} else {
 					// keep wrapper for variable product
-					$product_date = '<div class="' . esc_attr( 'wpced wpced-' . $wrapper_id . ' wpced-' . ( isset( $rule['key'] ) ? $rule['key'] : 'default' ) ) . '" data-id="' . esc_attr( $wrapper_id ) . '"></div>';
+					$product_date = '<div class="' . esc_attr( $wrapper_class ) . '" data-id="' . esc_attr( $wrapper_id ) . '"></div>';
 				}
 			}
 
@@ -397,23 +399,17 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 		}
 
 		function cart_item_name( $name, $cart_item ) {
-			if ( ! empty( $cart_item['_wpced_date'] ) ) {
-				$name .= $cart_item['_wpced_date'];
-			}
-
-			return $name;
-		}
-
-		function after_cart_item_name( $cart_item ) {
-			self::show_date( $cart_item['data'] );
+			return $name . self::get_product_date( $cart_item['data'] );
 		}
 
 		function cart_item_meta( $data, $cart_item ) {
-			if ( ! empty( $cart_item['_wpced_date_plain'] ) ) {
+			$date = self::get_product_date( $cart_item['data'], 'plain' );
+
+			if ( ! empty( $date ) ) {
 				$data['wpced_date'] = apply_filters( 'wpced_cart_item_meta', [
 					'key'     => apply_filters( 'wpced_cart_item_meta_key', Wpced_Backend()->get_setting( 'text_cart_item', esc_html__( 'Estimated delivery date', 'wpc-estimated-delivery-date' ) ), $cart_item ),
-					'value'   => apply_filters( 'wpced_cart_item_meta_value', esc_html( $cart_item['_wpced_date_plain'] ), $cart_item ),
-					'display' => apply_filters( 'wpced_cart_item_meta_display', $cart_item['_wpced_date_plain'], $cart_item ),
+					'value'   => apply_filters( 'wpced_cart_item_meta_value', esc_html( $date ), $cart_item ),
+					'display' => apply_filters( 'wpced_cart_item_meta_display', $date, $cart_item ),
 				], $cart_item );
 			}
 
@@ -452,10 +448,11 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 					sort( $overall );
 
 					$delivery_date = wp_date( $date_format, end( $overall ) );
-					$delivery_text = Wpced_Backend()->get_setting( 'text_cart_overall', esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' ) );
+					$delivery_text = Wpced_Backend()->get_setting( 'text_cart_overall', /* translators: date */ esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' ) );
 
 					if ( empty( $delivery_text ) ) {
-						$delivery_text = esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' );
+						$delivery_text = /* translators: date */
+							esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' );
 					}
 
 					if ( Wpced_Backend()->get_setting( 'cart_overall', 'yes' ) === 'yes_text' ) {
@@ -471,14 +468,24 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 
 		function get_date( $days, $scheduled = '' ) {
 			// get date after skipped
-			$i               = 1;
-			$available       = [];
-			$days            = absint( $days );
-			$current_time    = current_time( 'h:i a' );
-			$current_date    = current_time( 'm/d/Y' );
-			$extra_time_line = Wpced_Backend()->get_setting( 'extra_time_line' );
+			$i                    = 1;
+			$j                    = 1;
+			$available            = [];
+			$days                 = absint( $days );
+			$current_time         = current_time( 'h:i a' );
+			$current_date         = current_time( 'm/d/Y' );
+			$extra_time_line      = Wpced_Backend()->get_setting( 'extra_time_line' );
+			$current_date_skipped = false;
 
-			if ( ! empty( $extra_time_line ) ) {
+			while ( self::check_skipped( strtotime( $current_date ) ) && ( $j <= 100 ) ) {
+				// skipped start date
+				$current_date         = wp_date( 'm/d/Y', strtotime( $current_date . ' + 1 day' ) );
+				$current_date_skipped = true;
+				$j ++;
+			}
+
+			if ( ! empty( $extra_time_line ) && ! $current_date_skipped ) {
+				// don't calculate extra time if current date is skipped
 				if ( strtotime( $current_date . ' ' . $current_time ) > strtotime( $current_date . ' ' . $extra_time_line ) ) {
 					$days += 1;
 				}
@@ -518,25 +525,8 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			return self::get_product_date( $product );
 		}
 
-		function add_cart_item_data( $cart_item_data, $product_id ) {
-			$date       = self::get_product_date( $product_id );
-			$date_plain = self::get_product_date( $product_id, 'plain' );
-
-			if ( ! empty( $date ) ) {
-				$cart_item_data['_wpced_date'] = $date;
-			}
-
-			if ( ! empty( $date_plain ) ) {
-				$cart_item_data['_wpced_date_plain'] = $date_plain;
-			}
-
-			return $cart_item_data;
-		}
-
 		function create_order_line_item( $order_item, $cart_item_key, $values ) {
-			if ( isset( $values['_wpced_date'] ) ) {
-				$order_item->update_meta_data( '_wpced_date', $values['_wpced_date'] );
-			}
+			$order_item->update_meta_data( '_wpced_date', self::get_product_date( $values['data'] ) );
 		}
 
 		function hidden_order_itemmeta( $hidden ) {
@@ -546,13 +536,13 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 		}
 
 		function before_order_itemmeta( $order_item_id, $order_item ) {
-			if ( $date = $order_item->get_meta( '_wpced_date' ) ) {
+			if ( ( $date = $order_item->get_meta( '_wpced_date' ) ) && ! empty( $date ) ) {
 				echo $date;
 			}
 		}
 
 		function order_item_meta_start( $order_item_id, $order_item ) {
-			if ( ( Wpced_Backend()->get_setting( 'order_item', 'no' ) === 'yes' ) && ( $date = $order_item->get_meta( '_wpced_date' ) ) ) {
+			if ( ( Wpced_Backend()->get_setting( 'order_item', 'no' ) === 'yes' ) && ( $date = $order_item->get_meta( '_wpced_date' ) ) && ! empty( $date ) ) {
 				echo apply_filters( 'wpced_order_item_date', $date, $order_item_id, $order_item );
 			}
 		}

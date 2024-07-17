@@ -8,15 +8,16 @@
                     height: auto;
                     padding-right: 50px;
                     position: relative;
-                    top: 0;
-                    overflow: unset;
                     z-index: 0;
+                    @include respond-to-mob('medium') {
+                        padding-right: 0;
+                    }
                     &__inner {
                         @include flex-display(row, flex-start, flex-start);
-                        position: sticky;
-                        top: 0;
                     }
                     .product-carousel {
+                        position: sticky;
+                        top: 20px;
                         flex: 0 0 70%;
                         max-width: 70%;
                         @include respond-to-mob('medium') {
@@ -39,6 +40,9 @@
                             @include transition(0.2s);
                             &.slick-current {
                                 opacity: 1;
+                            }
+                            @include respond-to-mob('medium') {
+                                margin-right: 5px;
                             }
                             .product-slide {
                                 cursor: pointer;
@@ -149,11 +153,19 @@
                                     margin-bottom: 0;
                                 }
                             }
+                            a {
+                                font-weight: $semi-bold;
+                                color: $secondary-color;
+                                &:hover {
+                                    color: $primary-font-color;
+                                }
+                            }
                         }
                     }
                     .cart {
                         margin-bottom: 20px;
                         .variations {
+                            margin-bottom: 10px;
                             .label {
                                 font-size: 14px;
                                 line-height: 1;
@@ -561,14 +573,9 @@
                             }
                             .description-content {
                                 .card-body {
-                                    h3, h4, h5, h6 {
+                                    h2, h3, h4, h5, h6 {
                                         @include font($secondary-font, $bold);
-                                    }
-                                    h3 {
-                                        font-size: 24px;
-                                        font-weight: $bold !important;
-                                    }
-                                    h4 {
+                                        @extend h4;
                                         font-size: 20px;
                                     }
                                     h5 {

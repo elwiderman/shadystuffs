@@ -21,6 +21,11 @@ class SupportMenuPage implements Hookable {
 	 */
 	private $assets_url;
 
+	/**
+	 * @var SimplePhpRenderer
+	 */
+	private $renderer;
+
 	public function __construct( string $assets_url ) {
 		$this->assets_url = $assets_url;
 		$this->init_renderer();
@@ -37,7 +42,7 @@ class SupportMenuPage implements Hookable {
 					[ $this, 'render_page_action' ],
 					11
 			);
-		}, 9999 );
+		}, 999 );
 
 		add_action( 'admin_footer', [ $this, 'append_plugin_rate' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );

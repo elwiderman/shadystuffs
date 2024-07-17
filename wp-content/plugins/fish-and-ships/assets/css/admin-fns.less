@@ -3,7 +3,7 @@
  *
  * @package Fish and Ships
  * @since 1.1.12
- * @version 1.5
+ * @version 1.5.4
  */
 
 /*************************************************
@@ -143,9 +143,8 @@ body div.ui-widget-overlay.fns-loading .wc-fns-spinner {
 	position: relative;
 	display: none;
 }
-#fns_dialog .nav-tab-wrapper,
-#wrapper-shipping-rules-table-fns.mc-tabs-fns .nav-tab-wrapper {
-	display: block;
+body.mc-tabs-fns .nav-tab-wrapper {
+	display: block !important;
 }
 
 #fns_dialog .nav-tab-active,
@@ -155,35 +154,35 @@ body div.ui-widget-overlay.fns-loading .wc-fns-spinner {
 }
 
 /* The currency fields switching */
-#fns_dialog table .currency-switcher-fns-wrapper,
+#fns_dialog .currency-switcher-fns-wrapper,
 #wrapper-shipping-rules-table-fns .currency-switcher-fns-wrapper {
 	position: relative;
 }
-#fns_dialog table .currency-fns-field,
+#fns_dialog .currency-fns-field,
 #wrapper-shipping-rules-table-fns .currency-fns-field {
 	display: none;
 }
-#fns_dialog table.locked .currency-fns-field,
+#fns_dialog .locked .currency-fns-field,
 #shipping-rules-table-fns.locked .currency-fns-field {
 	opacity: 0;
 }
-#fns_dialog table .currency-fns-field.currency-main,
+#fns_dialog .currency-fns-field.currency-main,
 #wrapper-shipping-rules-table-fns .currency-fns-field.currency-main {
 	display: inline;
 }
-#fns_dialog table .currency-fns-field.currency-active,
+#fns_dialog .currency-fns-field.currency-active,
 #wrapper-shipping-rules-table-fns .currency-fns-field.currency-active {
 	position: absolute;
 	z-index: 2;
 	left: 0;
 	display: inline-block;
 }
-#fns_dialog table .currency-fns-field.currency-active.wc_fns_focus_tip,
+#fns_dialog .currency-fns-field.currency-active.wc_fns_focus_tip,
 #wrapper-shipping-rules-table-fns .currency-fns-field.currency-active.wc_fns_focus_tip {
 	z-index: 3;
 }
 
-#fns_dialog table.locked .currency-fns-field.currency-active,
+#fns_dialog .locked .currency-fns-field.currency-active,
 #shipping-rules-table-fns.locked .currency-fns-field.currency-active {
 	opacity: 1;
 }
@@ -267,7 +266,7 @@ body div.ui-widget-overlay.fns-loading .wc-fns-spinner {
 }
 
 
-#fns_dialog table.locked::before,
+#fns_dialog .locked::before,
 #shipping-rules-table-fns.locked::before {
 	display: block;
 	content: ' ';
@@ -446,11 +445,14 @@ a.button.wc-fns-export {
 	display:inline;
 	vertical-align:top;
 }
-.css-conditions-table-fns .dropdown-submenu-wrapper,
+.css-conditions-table-fns .selection_wrapper .dropdown-submenu-wrapper,
+.css-conditions-table-fns .envelope-fields {
+	margin-top:5px;
+}
+.css-conditions-table-fns .action_wrapper .dropdown-submenu-wrapper,
 .css-conditions-table-fns select.wc-fns-selection-method,
 .css-conditions-table-fns .envelope-fields,
 .css-conditions-table-fns .selection-rules-column .field {
-	margin-top:5px;
 	margin-right:15px; /* horizontal spaces between fields */
 }
 .css-conditions-table-fns .dropdown-submenu-wrapper {
@@ -460,6 +462,11 @@ a.button.wc-fns-export {
 .dropdown-submenu-wrapper .only_pro {
 	color: #aaa;
 }
+.dropdown-submenu-wrapper .only_pro:hover {
+	background: #eee;
+	color: #999;
+}
+
 #shipping-rules-table-fns.locked .dropdown-submenu-wrapper .dropdown-field {
 	z-index: 0;
 }
@@ -469,15 +476,28 @@ a.button.wc-fns-export {
 .css-conditions-table-fns select.wc-fns-actions option {
 	display: none;
 }
-.css-conditions-table-fns .dropdown-submenu-wrapper li.dropdown-has-childs,
 .css-conditions-table-fns .fns-ruletype-container-normal .dropdown-submenu-wrapper li.normal,
 .css-conditions-table-fns .fns-ruletype-container-normal select.wc-fns-selection-method option.normal,
 .css-conditions-table-fns .fns-ruletype-container-normal select.wc-fns-actions option.normal,
+
+.css-conditions-table-fns .dropdown-submenu-wrapper .wc-fns-cost-method li,
 
 .css-conditions-table-fns .fns-ruletype-container-extra .dropdown-submenu-wrapper li.extra,
 .css-conditions-table-fns .fns-ruletype-container-extra select.wc-fns-selection-method option.extra,
 .css-conditions-table-fns .fns-ruletype-container-extra select.wc-fns-actions option.extra {
 	display: block;
+}
+.css-conditions-table-fns .dropdown-submenu-wrapper li.dropdown-has-childs {
+	display: flex;
+}
+.css-conditions-table-fns .fns-ruletype-container-normal .dropdown-submenu-wrapper li.no-items-normal,
+.css-conditions-table-fns .fns-ruletype-container-extra .dropdown-submenu-wrapper li.no-items-extra {
+	display: none;
+}
+
+
+.css-conditions-table-fns li[data-value="virtual-any"] {
+	border-top: #000 1px solid;
 }
 
 /* options have now scope */
@@ -876,3 +896,6 @@ body.show_wc_fns_wizard .woocommerce-layout__notice-list-hide > div.wc-fns-wizar
 
 @import 'admin-fns-panes.less';
 @import 'admin-fns-popups.less';
+@media print {
+	@import 'admin-fns-printing.less';
+}

@@ -5,11 +5,11 @@ Tags: invoice, eu vat, woocommerce pdf invoices, vat invoice, woocommerce invoic
 Requires at least: 6.0
 Tested up to: 6.5
 Requires PHP: 7.3
-Stable tag: 5.6.25
+Stable tag: 5.7.7
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Easy invoicing plugin for PDF invoices in WooCommerce. Now, the plugin allows you to issue a vat invoice also in WordPress alone! Supercharge it by installing the extension to generate a WooCommerce invoice with more options, for example, EU VAT validation, reverse charge invoice, MOSS and OSS support, automatic invoicing, download WooCommerce PDF invoices in bulk, and much more.
+WooCommerce PDF invoices made simple. EU VAT validation, reverse charge invoice, proforma invoices, MOSS / OSS support, invoices in bulk and more.
 
 == Description ==
 
@@ -298,6 +298,30 @@ There is still a lot of work ahead :) The Flexible PDF Invoices for WooCommerce 
 64. Send PDF invoices automatically for additional email recipients (PRO add-on).
 
 == Changelog ==
+
+= 5.7.7 - 2024-07-09 =
+* Updated readme
+
+= 5.7.6 - 2024-07-07 =
+* Added support for WooCommerce 9.1
+
+= 5.7.5 - 2024-06-07 =
+* Added support for WooCommerce 9.0
+
+= 5.7.4 - 2024-05-21 =
+* Added support for WooCommerce 8.9
+
+= 5.7.3 - 2024-04-15 =
+* Added support for WooCommerce 8.8
+= 5.7.2 - 2024-04-03 =
+ * Fixed Sequential Order Number
+
+= 5.7.1 - 2024-03-28 =
+ * Fixed marketing
+
+= 5.7.0 - 2024-03-26 =
+* Added block support
+* Fixed marketing
 
 = 5.6.25 - 2024-03-22 =
 * Added support for WordPress 6.5

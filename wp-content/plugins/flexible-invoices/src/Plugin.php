@@ -9,18 +9,20 @@ namespace WPDesk\FlexibleInvoices;
 
 use WPDesk\FlexibleInvoices\Addons\Filters\AdvancedFiltersAddon;
 use WPDesk\FlexibleInvoices\Addons\Sending\SendingSettingsAddon;
+use WPDesk\FlexibleInvoices\Block\VatNumber\RegisterCheckoutBlock;
+use WPDesk\FlexibleInvoices\Marketing\SupportLinks;
 use WPDesk\FlexibleInvoices\Marketing\SupportMenuPage;
+use WPDeskFIVendor\Psr\Log\LoggerAwareInterface;
+use WPDeskFIVendor\Psr\Log\LoggerAwareTrait;
+use WPDeskFIVendor\Psr\Log\NullLogger;
 use WPDeskFIVendor\WPDesk\Dashboard\DashboardWidget;
 use WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\WooCommerce;
 use WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\InvoicesIntegration;
 use WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\WordPress\Translator;
-use WPDeskFIVendor\Psr\Log\LoggerAwareInterface;
-use WPDeskFIVendor\Psr\Log\LoggerAwareTrait;
-use WPDeskFIVendor\Psr\Log\NullLogger;
 use WPDeskFIVendor\WPDesk\Logger\WPDeskLoggerFactory;
+use WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\AbstractPlugin;
 use WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\HookableCollection;
 use WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\HookableParent;
-use WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\AbstractPlugin;
 use WPDeskFIVendor\WPDesk\View\Renderer\Renderer;
 use WPDeskFIVendor\WPDesk\View\Renderer\SimplePhpRenderer;
 use WPDeskFIVendor\WPDesk\View\Resolver\ChainResolver;
@@ -86,8 +88,10 @@ class Plugin extends AbstractPlugin implements LoggerAwareInterface, HookableCol
 		$integration = new InvoicesIntegration( $this->plugin_info, $this->logger );
 		$this->add_hookable( $integration );
 		$this->add_hookable( new SupportMenuPage( $this->plugin_url . '/assets/' ) );
+		$this->add_hookable( new SupportLinks() );
 
 		if ( WooCommerce::is_active() ) {
+			$this->add_hookable( new RegisterCheckoutBlock( $this->plugin_info, $integration->get_settings() ) );
 			( new Tracker\Tracker( $this->plugin_info->get_plugin_file_name() ) )->hooks();
 			( new Tracker\UsageDataTracker( $this->plugin_info->get_plugin_file_name() ) )->hooks();
 			Translator::$text_domain = $this->plugin_text_domain;
@@ -120,19 +124,20 @@ class Plugin extends AbstractPlugin implements LoggerAwareInterface, HookableCol
 	 */
 	public function links_filter( $links ) {
 		unset( $links['0'] );
-		$is_pl        = 'pl_PL' === get_locale();
-		$support_url  = $is_pl ? 'https://wordpress.org/support/plugin/flexible-invoices/' : 'https://flexibleinvoices.com/support/';
-		$start_here_url = admin_url( 'edit.php?post_type=inspire_invoice&page=wpdesk-marketing' );
-		$settings_url = admin_url( 'edit.php?post_type=inspire_invoice&page=invoices_settings' );
-		$docs_url     = $is_pl ? 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/' : 'https://docs.flexibleinvoices.com/';
-		$pro_url      = $is_pl ? 'https://www.wpdesk.pl/sklep/faktury-woocommerce/' : 'https://www.flexibleinvoices.com/';
-		$pro_url      .= '?utm_source=wp-admin-plugins&utm_medium=quick-link&utm_campaign=flexible-invoices-plugins-upgrade-link';
+		$is_pl   = 'pl_PL' === get_locale();
+		$pro_url = $is_pl ? 'https://www.wpdesk.pl/sklep/faktury-woocommerce/' : 'https://www.flexibleinvoices.com/';
+		$pro_url .= '?utm_source=wp-admin-plugins&utm_medium=quick-link&utm_campaign=flexible-invoices-plugins-upgrade-link';
+		$upgrade = '<a href="' . $pro_url . '" target="_blank" style="color:#900351;font-weight:bold;">' . esc_html__( 'Upgrade to PRO →', 'flexible-invoices' ) . '</a>';
+		array_splice( $links, 1, 0, [ $upgrade ] );
 
-		$plugin_links['start-here'] = '<a href="' . $start_here_url . '" style="color:#005D47;font-weight:700;">' . esc_html__( 'Start Here', 'flexible-invoices' ) . '</a>';
-		$plugin_links['settings'] = '<a href="' . $settings_url . '">' . esc_html__( 'Settings', 'flexible-invoices' ) . '</a>';
-		$plugin_links['docs']     = '<a href="' . $docs_url . '" target="_blank">' . esc_html__( 'Docs', 'flexible-invoices' ) . '</a>';
-		$plugin_links['upgrade']  = '<a href="' . $pro_url . '" target="_blank" style="color:#d64e07;font-weight:bold;">' . esc_html__( 'Upgrade to PRO →', 'flexible-invoices' ) . '</a>';
-		//$plugin_links['support']  = '<a href="' . $support_url . '" target="_blank">' . esc_html__( 'Support', 'flexible-invoices' ) . '</a>';
+		$start_here_url = admin_url( 'edit.php?post_type=inspire_invoice&page=wpdesk-marketing' );
+		$settings_url   = admin_url( 'edit.php?post_type=inspire_invoice&page=invoices_settings' );
+		$docs_url       = $is_pl ? 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/' : 'https://docs.flexibleinvoices.com/';
+		$support_url    = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/support/' : 'https://flexibleinvoices.com/support/';
+
+		$plugin_links['start-here'] = '<a href="' . $start_here_url . '" style="color:#007050;font-weight:700;">' . esc_html__( 'Start Here', 'flexible-invoices' ) . '</a>';
+		$plugin_links['settings']   = '<a href="' . $settings_url . '">' . esc_html__( 'Settings', 'flexible-invoices' ) . '</a>';
+		$plugin_links['docs']       = '<a href="' . $docs_url . '" target="_blank">' . esc_html__( 'Docs', 'flexible-invoices' ) . '</a>';
 
 		return array_merge( $plugin_links, $links );
 	}

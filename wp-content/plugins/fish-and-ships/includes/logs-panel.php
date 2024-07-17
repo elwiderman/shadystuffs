@@ -10,7 +10,7 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.4.2
+ * @version 1.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -35,9 +35,9 @@ if ( isset($_POST['fns-remove_logs']) ) {
 	unset($_POST['fns-remove_logs']); // prevent multiinstance repeat
 }
 
+// Prevent too much logs, show error in the method that has the wrong setting only
+if ( ! wp_doing_ajax() && count($logs_index) >= 750 && $this->write_logs == 'everyone' ) {
 
-// Prevent too much logs, show error (since 1.4.2):
-if ( count($logs_index) > 750 && $this->write_logs == 'everyone' ) {
 	?>
 	<div class="notice notice-error inline"><h3>Please, disable write logs or set them only for Admin and Shop managers (too many logs will affect performance).</h3></div>
 	<?php
@@ -55,10 +55,6 @@ if ( count($logs_index) > 1000 ) {
 	}
 	$logs_index = $logs_index_aux;
 }
-// ...and tell about
-if ( count($logs_index) >= 1000 ) {
-	$html .= '<div class="notice notice-warning inline"><p><strong>Logs are limited to 1000 for performance reasons.</p></div>';
-}
 // End too much logs prevention
 
 
@@ -68,16 +64,31 @@ foreach ($logs_index as $key=>$log) {
 		unset ($logs_index[$key]);
 	} else {
 		if (is_array($del_logs)) {
-			// Remove transient by user petition
+			// Remove selected logs by user petition
 			if ( $Fish_n_Ships->is_log_name( $log['name'] ) && in_array( $log['name'], $del_logs, true ) ) {
 				unset ($logs_index[$key]);
 				delete_transient($log['name']);
 				$deleted ++;
 			}
 		}
+		elseif( $del_logs === 'all' )
+		{
+			// Remove all method logs by user petition
+			if ( $Fish_n_Ships->is_log_name( $log['name'] ) && $log['instance_id'] == $instance_id ) {
+				unset ($logs_index[$key]);
+				delete_transient($log['name']);
+				$deleted ++;
+			}
+		}
+
 	}
 }
 if ($deleted !=0) echo '<div id="message" class="updated notice inline"><p>' . esc_html( sprintf(__('%s Logs have been deleted.', 'fish-and-ships'), $deleted ) ) . '</p></div>';
+
+// too much messages? tell about in the logs pane
+if ( count($logs_index) >= 1000 ) {
+	$html .= '<div class="notice notice-warning inline"><p><strong>Logs are limited to 1000 for performance reasons.</strong><br> Please, check if some Fish and Ships method are logging calculations for all users (not only Admins / Shop managers).</p></div>';
+}
 
 // Save updated index
 update_option('wc_fns_logs_index', $logs_index, false);
@@ -178,7 +189,7 @@ if ( count($logs_index) == 0 ) {
 						
 			$html .= '</td><td class="thin"><a href="' . esc_attr(add_query_arg(array('fns_remove_log' => false, 'fns_see_log' => $active ? false : $log['name']), $current_url)) . '#fnslogs" data-fns-log="' . esc_attr($log['name']) . '" class="open_close">';
 			
-			$html .= '<span class="open">[' . esc_html__('Open', 'fish-and-ships') . ']</span><span class="close">[' . esc_html__('Close', 'fish-and-ships') . ']</span></a></td>';
+			$html .= '<span class="fns-open">[' . esc_html__('Open', 'fish-and-ships') . ']</span><span class="fns-close">[' . esc_html__('Close', 'fish-and-ships') . ']</span></a></td>';
 			
 			$html .= '<td class="thin">' . wp_kses($log['final_cost'], array('strong' => array() ) ) . '</td>
 					  <td>' . esc_html($log['cart_qty']) . '</td></tr>';
@@ -204,7 +215,8 @@ if ( count($logs_index) == 0 ) {
 			<input class="cb-select-all" type="checkbox">
 		</td>
 		<td colspan="2">
-			<button name="fns-remove_logs" class="button woocommerce-save-button" type="submit" value="' . esc_attr__('Remove selected logs', 'fish-and-ships') . '">' . esc_html__('Remove selected logs', 'fish-and-ships') . '</button>
+			<button name="fns-remove_logs" class="button" disabled value="' . esc_attr__('Remove selected logs', 'fish-and-ships') . '">' . esc_html__('Remove selected logs', 'fish-and-ships') . '</button>
+			<button name="fns-remove_all_logs" class="button" value="' . esc_attr__('Remove all logs', 'fish-and-ships') . '">' . esc_html__('Remove all logs' . ' (' . count($logs_index) . ')', 'fish-and-ships') . '</button>
 		</td><td colspan="3" style="text-align:right">';
 	
 	// pagination

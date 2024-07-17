@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9018cd487458bfe5170575a9a43aa144
+class ComposerStaticInite048eda0ba533ce468dfba6c3d0ed9d5
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -839,6 +839,9 @@ class ComposerStaticInit9018cd487458bfe5170575a9a43aa144
         'WPDesk\\FlexibleInvoices\\Addons\\Sending\\Fields\\WysiwygField' => __DIR__ . '/../..' . '/src/Addons/Sending/Fields/WysiwygField.php',
         'WPDesk\\FlexibleInvoices\\Addons\\Sending\\SendingSettingsAddon' => __DIR__ . '/../..' . '/src/Addons/Sending/SendingSettingsAddon.php',
         'WPDesk\\FlexibleInvoices\\Addons\\Sending\\SendingTab' => __DIR__ . '/../..' . '/src/Addons/Sending/SendingTab.php',
+        'WPDesk\\FlexibleInvoices\\Block\\VatNumber\\BlocksIntegration' => __DIR__ . '/../..' . '/src/Block/VatNumber/BlocksIntegration.php',
+        'WPDesk\\FlexibleInvoices\\Block\\VatNumber\\RegisterCheckoutBlock' => __DIR__ . '/../..' . '/src/Block/VatNumber/RegisterCheckoutBlock.php',
+        'WPDesk\\FlexibleInvoices\\Marketing\\SupportLinks' => __DIR__ . '/../..' . '/src/Marketing/SupportLinks.php',
         'WPDesk\\FlexibleInvoices\\Marketing\\SupportMenuPage' => __DIR__ . '/../..' . '/src/Marketing/SupportMenuPage.php',
         'WPDesk\\FlexibleInvoices\\Plugin' => __DIR__ . '/../..' . '/src/Plugin.php',
         'WPDesk\\FlexibleInvoices\\PluginFactory' => __DIR__ . '/../..' . '/src/PluginFactory.php',
@@ -855,9 +858,9 @@ class ComposerStaticInit9018cd487458bfe5170575a9a43aa144
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9018cd487458bfe5170575a9a43aa144::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9018cd487458bfe5170575a9a43aa144::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9018cd487458bfe5170575a9a43aa144::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite048eda0ba533ce468dfba6c3d0ed9d5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite048eda0ba533ce468dfba6c3d0ed9d5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite048eda0ba533ce468dfba6c3d0ed9d5::$classMap;
 
         }, null, ClassLoader::class);
     }
