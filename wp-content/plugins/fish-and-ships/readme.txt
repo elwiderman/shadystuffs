@@ -1,21 +1,21 @@
-﻿=== Fish and Ships - Most flexible shipping method table rate. A WooCommerce conditional shipping rate ===
+﻿=== Fish and Ships - Most flexible shipping table rate. A WooCommerce shipping rate ===
 Contributors: wpcentrics
 Donate link: https://www.wp-centrics.com/
-Tags: woocommerce shipping, table rate, shipping rate, conditional shipping, shipping method
+Tags: shipping table rate, shipping rate, conditional shipping, table rate shipping
 Requires at least: 4.7
-Tested up to: 6.4.3
+Tested up to: 6.5
 WC requires at least: 3.0
-WC tested up to: 8.6.1
-Stable tag: 1.5
+WC tested up to: 9.0
+Stable tag: 1.5.7
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Best table rate shipping method for WooCommerce: easy and flexible table rate, allow you to setup weight based shipping rates or whatever: price, volume, category...
+Best table rate shipping method for WooCommerce: easy and flexible table rate. Set shipping rates by price, volume, category... whatever.
 
 == Description ==
 
-###The best WooCommerce shipping method table rate
+###The best WooCommerce shipping table rate plugin
 
 A **conditional shipping method table rate for WooCommerce**: It allows you to set up weight-based **shipping rates** or any other criteria such as price, volume, quantity, or category
 
@@ -156,9 +156,11 @@ Apart of the table rules, you'll find this options on the method:
 
 = Other 3rd party plugins supported =
 
+* Support for StudioWombat Advanced Product Fields for WooCommerce: [link](https://wordpress.org/plugins/advanced-product-fields-for-woocommerce/)
 * Support for WPC Product Bundles: [link](https://wordpress.org/plugins/woo-product-bundle/)
 * Support for the plugin Uni CPO: [link](https://wordpress.org/plugins/uni-woo-custom-product-options/)
 * Support for the Skyverge Measurement Price Calculator plugin: [link](https://woocommerce.com/products/measurement-price-calculator/) [PRO]
+ 
 
 = ...and much, much more: =
 
@@ -293,7 +295,38 @@ Fish and Ships has widely tested with older and latest; our philosophy is to cov
 
 == Changelog ==
 
-= 1.5 - 11/03/2023 =
+= 1.5.7 - 03/07/2024 =
+* Added CSS for better shipping settings printing
+* Rare bug solved back-end shipping calculator plugin (3rd party)
+* Checked for WC 9.0
+
+= 1.5.6 - 11/06/2024 =
+* Error fixed for WCML multicurrency
+
+= 1.5.5 - 05/06/2024 =
+* Minor bug fixed into the ranges rounding (JavaScript preview calculation)
+* Checked for WC 8.9
+
+= 1.5.4 - 21/05/2024 =
+* Interface improvements in the table rules dropdowns
+
+= 1.5.3 - 08/05/2024 =
+* Added price ranges per weight, volume, volumetric, quantity or size [PRO]
+* Solved the "input variables exceeded max_input_vars" error when there is too much rules to save
+
+= 1.5.2 - 26/04/2024 =
+* Compatibility with StudioWombat Advanced Product Fields
+* Log pane enharcements
+* Bug solved on products/non-grouped count
+* Checked for WC 8.8
+* Checked for WP 6.5
+
+= 1.5.1 - 2/04/2024 =
+* Fixed some deprecated messages in PHP 8.2 and 8.3
+* Checked for WordPress 6.5
+* Checked for WooCommerce 8.7
+
+= 1.5 - 11/03/2024 =
 * New samples & snippets wizard: +60 cases/samples ready to use
 * Performance: CSS and JS are loaded minfied
 * Enharced welcome/wizard: dismiss notices per each wp-admin user. Added wp-pointers

@@ -17,7 +17,7 @@ $docs_link = 'https://docs.flexibleinvoices.com/category/785-currencies?utm_sour
 if (\get_locale() === 'pl_PL') {
     $docs_link = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=currency-rates#konfiguracja-walut';
 }
-$link = \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>');
+$link = \sprintf('%2$s%1$s%3$s', \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>'), '<strong>', '</strong>');
 ?>
 	<div class="support-url-wrapper"><?php 
 echo $link;

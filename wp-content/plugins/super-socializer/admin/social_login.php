@@ -1838,6 +1838,23 @@
 
 						<tr>
 							<th>
+							<label for="the_champ_domain_callback"><?php _e( "Use Domain as the Callback URL", 'super-socializer' ); ?></label><img id="the_champ_domain_callback_help" class="the_champ_help_bubble" src="<?php echo plugins_url( '../images/info.png', __FILE__ ) ?>" />
+							</th>
+							<td>
+							<input id="the_champ_domain_callback" name="the_champ_login[domain_callback]" type="checkbox" <?php echo isset( $theChampLoginOptions['domain_callback'] ) ? 'checked' : '';?> value="1" />
+							</td>
+						</tr>
+						
+						<tr class="the_champ_help_content" id="the_champ_domain_callback_help_cont">
+							<td colspan="2">
+							<div>
+							<?php _e( 'Enable this option if you have a multilingual website that has different versions as the different language codes appended to the domain. For example, yourwebsite.com/es, yourwebsite.com/de etc', 'super-socializer' ) ?>
+							</div>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
 							<label for="the_champ_sl_username_email"><?php _e("Generate Username from Email address", 'super-socializer'); ?></label><img id="the_champ_sl_username_email_help" class="the_champ_help_bubble" src="<?php echo plugins_url('../images/info.png', __FILE__) ?>" />
 							</th>
 							<td>
@@ -2187,6 +2204,10 @@
 						<div><?php _e('Make sure that App ID and Secret (Client ID and Secret) keys you have saved, belong to the same app', 'super-socializer'); ?></div>
 						</p>
 						<p><a href="http://support.heateor.com/browser-blocking-social-features/" target="_blank"><?php _e('Why is my browser blocking some features of the plugin?', 'super-socializer') ?></a></p>
+						<p>
+						<a href="javascript:void(0 )"><?php _e( 'How to make social login work on a multilingual website?', 'super-socializer' ); ?></a>
+						<div><?php _e( 'If your website supports different languages. For example, yourwebsite.com/es, yourwebsite.com/de etc, enable "Use Domain as the Callback URL" option in the Advanced Configuration section at the Super Socializer > Social Login configuration page', 'super-socializer' ); ?></div>
+						</p>
 						<p><a href="https://wordpress.org/support/plugin/super-socializer" target="_blank"><?php _e('More', 'super-socializer') ?>...</a></p>
 					</div>
 				</div>

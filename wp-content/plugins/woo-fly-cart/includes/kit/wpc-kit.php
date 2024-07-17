@@ -169,7 +169,7 @@ if ( ! class_exists( 'WPCleverKit' ) ) {
 										<?php } ?>
                                     </li>
                                     <li>
-                                        <a href="<?php echo esc_url( $details_link ); ?>" class="thickbox open-plugin-details-modal" aria-label="<?php echo esc_attr( sprintf( esc_html__( 'More information about %s', 'wpc-kit' ), $plugin['name'] ) ); ?>" title="<?php echo esc_attr( $plugin['name'] ); ?>">
+                                        <a href="<?php echo esc_url( $details_link ); ?>" class="thickbox open-plugin-details-modal" aria-label="<?php echo esc_attr( sprintf( /* translators: plugin name */ esc_html__( 'More information about %s', 'wpc-kit' ), $plugin['name'] ) ); ?>" title="<?php echo esc_attr( $plugin['name'] ); ?>">
 											<?php esc_html_e( 'More Details', 'wpc-kit' ); ?>
                                         </a>
                                     </li>
@@ -206,14 +206,14 @@ if ( ! class_exists( 'WPCleverKit' ) ) {
 
 						if ( isset( $plugin['active_installs'] ) ) { ?>
                             <div class="column-downloaded">
-								<?php echo number_format_i18n( $plugin['active_installs'] ) . esc_html__( '+ Active Installations', 'wpc-kit' ); ?>
+								<?php echo esc_html( number_format_i18n( $plugin['active_installs'] ) ) . esc_html__( '+ Active Installations', 'wpc-kit' ); ?>
                             </div>
 						<?php }
 
 						if ( isset( $plugin['last_updated'] ) ) { ?>
                             <div class="column-compatibility">
                                 <strong><?php esc_html_e( 'Last Updated:', 'wpc-kit' ); ?></strong>
-                                <span><?php printf( esc_html__( '%s ago', 'wpc-kit' ), esc_html( human_time_diff( $plugin['last_updated'] ) ) ); ?></span>
+                                <span><?php printf( /* translators: updated time */ esc_html__( '%s ago', 'wpc-kit' ), esc_html( human_time_diff( $plugin['last_updated'] ) ) ); ?></span>
                             </div>
 						<?php }
 

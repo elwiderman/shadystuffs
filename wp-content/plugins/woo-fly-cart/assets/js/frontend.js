@@ -303,6 +303,7 @@ function woofc_update_qty(cart_item_key, cart_item_qty) {
 function woofc_remove_item($item) {
   var cart_item_key = $item.attr('data-key');
   var cart_item_name = $item.attr('data-name');
+  var $btn = $item.find('.woofc-item-remove');
 
   woofc_cart_loading();
 
@@ -318,7 +319,8 @@ function woofc_remove_item($item) {
     }
 
     jQuery(document.body).
-        trigger('removed_from_cart', [response.fragments, response.cart_hash]);
+        trigger('removed_from_cart',
+            [response.fragments, response.cart_hash, $btn]);
 
     jQuery('body').attr('woofc-undo-key', cart_item_key);
     jQuery('body').attr('woofc-undo-name', cart_item_name);

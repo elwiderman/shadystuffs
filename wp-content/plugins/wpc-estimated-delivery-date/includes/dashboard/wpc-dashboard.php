@@ -17,6 +17,7 @@ if ( ! class_exists( 'WPCleverDashboard' ) ) {
 			add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 			add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 			add_action( 'wp_ajax_wpc_get_plugins', [ $this, 'ajax_get_plugins' ] );
+			add_action( 'wp_ajax_wpc_get_suggestion', [ $this, 'ajax_get_suggestion' ] );
 		}
 
 		function enqueue_scripts() {
@@ -126,16 +127,51 @@ if ( ! class_exists( 'WPCleverDashboard' ) ) {
 				$i = 1;
 
 				foreach ( $plugins_arr as $pl ) {
-					if ( strpos( $pl['name'], 'WPC' ) === false ) {
+					if ( ! str_contains( $pl['name'], 'WPC' ) ) {
 						continue;
 					}
 
-					echo '<div class="item" data-p="' . esc_attr( isset( $pl['active_installs'] ) ? $pl['active_installs'] : 0 ) . '" data-u="' . esc_attr( isset( $pl['last_updated'] ) ? $pl['last_updated'] : 0 ) . '" data-d="' . esc_attr( isset( $pl['downloaded'] ) ? $pl['downloaded'] : 0 ) . '"><a class="thickbox" href="' . esc_url( network_admin_url( 'plugin-install.php?tab=plugin-information&amp;plugin=' . $pl['slug'] . '&amp;TB_iframe=true&amp;width=600&amp;height=550' ) ) . '" title="' . esc_attr( $pl['name'] ) . '"><span class="num">' . esc_html( $i ) . '</span><span class="title">' . esc_html( $pl['name'] ) . '</span><br/><span class="info">' . esc_html( 'Version ' . $pl['version'] . ( isset( $pl['last_updated'] ) ? ' - Last updated: ' . wp_date( 'M j, Y', $pl['last_updated'] ) : '' ) ) . '</span></a></div>';
+					echo '<div class="item" data-p="' . esc_attr( $pl['active_installs'] ?? 0 ) . '" data-u="' . esc_attr( $pl['last_updated'] ?? 0 ) . '" data-d="' . esc_attr( $pl['downloaded'] ?? 0 ) . '"><a class="thickbox" href="' . esc_url( network_admin_url( 'plugin-install.php?tab=plugin-information&amp;plugin=' . $pl['slug'] . '&amp;TB_iframe=true&amp;width=600&amp;height=550' ) ) . '" title="' . esc_attr( $pl['name'] ) . '"><span class="num">' . esc_html( $i ) . '</span><span class="title">' . esc_html( $pl['name'] ) . '</span><br/><span class="info">' . esc_html( 'Version ' . $pl['version'] . ( isset( $pl['last_updated'] ) ? ' - Last updated: ' . wp_date( 'M j, Y', $pl['last_updated'] ) : '' ) ) . '</span></a></div>';
 					$i ++;
 				}
 			} else {
 				echo 'Have an error while loading the plugin list. Please visit our website <a href="https://wpclever.net?utm_source=visit&utm_medium=menu&utm_campaign=wporg" target="_blank">https://wpclever.net</a>';
 			}
+
+			wp_die();
+		}
+
+		function ajax_get_suggestion() {
+			if ( ! isset( $_POST['security'] ) || ! wp_verify_nonce( sanitize_key( $_POST['security'] ), 'wpc_dashboard' ) ) {
+				die( 'Permissions check failed!' );
+			}
+
+			$get_suggestion = '';
+
+			if ( false === ( $suggestion = get_transient( 'wpclever_suggestion' ) ) ) {
+				$request = wp_remote_get( 'https://api.wpclever.net/suggestion.json' );
+
+				if ( is_wp_error( $request ) ) {
+					return false;
+				}
+
+				$body       = wp_remote_retrieve_body( $request );
+				$suggestion = json_decode( $body, true );
+
+				if ( is_array( $suggestion ) && count( $suggestion ) > 0 ) {
+					set_transient( 'wpclever_suggestion', $suggestion, 24 * HOUR_IN_SECONDS );
+				}
+			}
+
+			if ( is_array( $suggestion ) && count( $suggestion ) > 0 ) {
+				shuffle( $suggestion );
+
+				foreach ( $suggestion as $sg ) {
+					$get_suggestion .= ! empty( $sg['desc'] ) ? '<div>' . $sg['desc'] . '</div>' : '';
+				}
+			}
+
+			echo wp_kses_post( $get_suggestion );
 
 			wp_die();
 		}

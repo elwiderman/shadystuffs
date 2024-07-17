@@ -179,7 +179,6 @@ class SaveDocument implements \WPDeskFIVendor\WPDesk\PluginBuilder\Plugin\Hookab
              * @since 3.0.0
              */
             \do_action('fi/core/document/save', $document, $meta, $document_id);
-            \sleep(1);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }

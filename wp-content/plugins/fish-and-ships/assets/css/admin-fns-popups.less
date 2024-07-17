@@ -173,6 +173,15 @@ body.fns-popup {
 	padding:5px;
 	font-weight:600;
 }
+.fns_fields_popup span.field.action-boxes-skip_prods {
+	padding-top: 1px;
+	padding-bottom: 1px;
+	font-weight: 400;
+}
+.fns_fields_popup span.field.action-boxes-keep_flat {
+	font-weight: 400;
+}
+
 .fns_fields_popup .max_600 {
 	max-width: 600px;
 }
@@ -896,3 +905,117 @@ table.free_pro .dashicons.purple {
 		}
 	}*/
 
+/*************************************************
+  Range wizard
+*************************************************/
+
+.fns-notice-pro {
+	border: #ffd200 1px solid;
+	border-left-width: 4px;
+	background: #fff5a0;
+	padding: 5px 15px;
+	margin: 20px;
+	
+	p {
+		margin: 5px 0;
+	}
+}
+
+#wrapper-shipping-rules-table-fns {
+
+	.fns-range-config-bt {
+		display: none;
+		vertical-align: text-bottom;
+	}
+	.config-cost-method {
+		width: 1.5em;
+		vertical-align: bottom;
+		padding: 0;
+		margin: 0 0.00em;
+		font-size: 1.2em;
+		line-height: 2em;
+	}
+	.cost_range {
+		display: none;
+	}
+}
+
+// Popup
+.fns-range-wizard-wrapper {
+	display: none;
+}
+.fns-range-wizard {
+
+	.fns-unit-switcher {
+		display: none;
+	}
+	.fns_range_fields {
+		border: #ccc 1px solid;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		max-width: 750px;
+
+		p {
+			padding: 8px 20px;
+			margin: 0;
+			width: 50%;
+			box-sizing: border-box;
+		}
+		.fns-base-cost-col {
+			background-color: #f6f7f7;
+		}
+		.fns-range-over-col {
+			order: 1;
+			background-color: #f6f7f7;
+		}
+		.fns-for-each-col {
+			order: 2;
+		}
+		.fns-charge-col {
+			order: 3;
+		}
+		p.fns-grouping-range-col {
+			order: 4;
+			width: 100%;
+			background: #f6f7f7;
+			label {
+				width: 50%;
+			}
+		}
+		label {
+			width: calc(~"100% - 140px");
+			display: inline-block;
+			padding-right: 15px;
+		}
+		input {
+			width: 100px;
+			text-align: right;
+		}
+	}
+	.fns-ranges-based {
+		margin-top: 0;
+		padding-left: 5px;
+		
+		label {
+			padding-right: 15px;
+			line-height: 1.4em;
+		}
+		strong {
+			font-size: 1.1em;
+		}
+	}
+	.fns-simulation-wrapper {
+		position: relative;
+		z-index: 1;
+		
+		table {
+			border-collapse: collapse;
+		}
+		td {
+			border: #ccc 1px solid;
+			text-align: right;
+			font-weight: 500;
+		}
+	}
+}

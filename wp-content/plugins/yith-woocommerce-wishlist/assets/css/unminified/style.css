@@ -437,6 +437,7 @@ p.wishlist-empty{
 
 .wishlist_table tr th.product-thumbnail{
     width: 80px;
+    min-width: 40px;
 }
 
 .wishlist_table tr td.product-thumbnail,

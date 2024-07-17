@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WPC Estimated Delivery Date for WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Estimated Delivery Date for WooCommerce 2.3.5\n"
+"Project-Id-Version: WPC Estimated Delivery Date for WooCommerce 2.4.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-estimated-delivery-date\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-13T09:06:17+00:00\n"
+"POT-Creation-Date: 2024-06-21T12:59:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.5.0\n"
 "X-Domain: wpc-estimated-delivery-date\n"
@@ -23,7 +23,7 @@ msgid "https://wpclever.net/"
 msgstr ""
 
 #. Description of the plugin
-msgid "WPC Estimated Delivery Date allows you to establish and personalize delivery times for each one of the products available on your WooCommerce website and on several levels."
+msgid "WPC Estimated Delivery Date allows you to establish and personalize delivery times for each product available in your store on several levels."
 msgstr ""
 
 #. Author of the plugin
@@ -108,7 +108,7 @@ msgid "Override"
 msgstr ""
 
 #: includes/class-backend.php:214
-#: includes/templates/settings.php:230
+#: includes/templates/settings.php:240
 msgid "+ Add rule"
 msgstr ""
 
@@ -126,64 +126,68 @@ msgstr ""
 msgid "Community support"
 msgstr ""
 
-#: includes/class-frontend.php:322
-#: includes/class-frontend.php:325
-#: includes/templates/settings.php:159
+#. translators: date
+#: includes/class-frontend.php:320
+#: includes/class-frontend.php:324
+#: includes/templates/settings.php:165
 msgid "Latest estimated delivery date: %s"
 msgstr ""
 
-#: includes/class-frontend.php:328
+#. translators: date
+#: includes/class-frontend.php:327
 #: includes/class-frontend.php:331
-#: includes/templates/settings.php:156
+#: includes/templates/settings.php:160
 msgid "Earliest estimated delivery date: %s"
 msgstr ""
 
+#. translators: date
 #: includes/class-frontend.php:334
-#: includes/class-frontend.php:337
-#: includes/templates/settings.php:153
+#: includes/class-frontend.php:338
+#: includes/templates/settings.php:155
 msgid "Estimated delivery dates: %s"
 msgstr ""
 
-#: includes/class-frontend.php:414
-#: includes/templates/settings.php:162
+#: includes/class-frontend.php:410
+#: includes/templates/settings.php:169
 msgid "Estimated delivery date"
 msgstr ""
 
+#. translators: date
+#: includes/class-frontend.php:451
 #: includes/class-frontend.php:455
-#: includes/class-frontend.php:458
-#: includes/templates/settings.php:165
+#: includes/templates/settings.php:173
 msgid "Overall estimated dispatch date: %s"
 msgstr ""
 
-#: includes/templates/date.php:18
+#: includes/templates/date.php:19
 msgid "Weekly on every Sunday"
 msgstr ""
 
-#: includes/templates/date.php:19
+#: includes/templates/date.php:20
 msgid "Weekly on every Monday"
 msgstr ""
 
-#: includes/templates/date.php:20
+#: includes/templates/date.php:21
 msgid "Weekly on every Tuesday"
 msgstr ""
 
-#: includes/templates/date.php:21
+#: includes/templates/date.php:22
 msgid "Weekly on every Wednesday"
 msgstr ""
 
-#: includes/templates/date.php:22
+#: includes/templates/date.php:23
 msgid "Weekly on every Thursday"
 msgstr ""
 
-#: includes/templates/date.php:23
+#: includes/templates/date.php:24
 msgid "Weekly on every Friday"
 msgstr ""
 
-#: includes/templates/date.php:24
+#: includes/templates/date.php:25
 msgid "Weekly on every Saturday"
 msgstr ""
 
-#: includes/templates/date.php:25
+#: includes/templates/date.php:26
 msgid "Custom (Premium)"
 msgstr ""
 
@@ -203,84 +207,84 @@ msgstr ""
 msgid "Apply for"
 msgstr ""
 
-#: includes/templates/rule.php:41
+#: includes/templates/rule.php:42
 msgid "All products"
 msgstr ""
 
-#: includes/templates/rule.php:42
+#: includes/templates/rule.php:43
 msgid "In stock"
 msgstr ""
 
-#: includes/templates/rule.php:43
+#: includes/templates/rule.php:44
 msgid "Out of stock"
 msgstr ""
 
-#: includes/templates/rule.php:44
+#: includes/templates/rule.php:45
 msgid "On backorder"
 msgstr ""
 
-#: includes/templates/rule.php:45
+#: includes/templates/rule.php:46
 msgid "Stock quantity"
 msgstr ""
 
-#: includes/templates/rule.php:57
+#: includes/templates/rule.php:58
 msgid "Equal to"
 msgstr ""
 
-#: includes/templates/rule.php:58
+#: includes/templates/rule.php:59
 msgid "Not equal to"
 msgstr ""
 
-#: includes/templates/rule.php:59
+#: includes/templates/rule.php:60
 msgid "Greater than"
 msgstr ""
 
-#: includes/templates/rule.php:60
+#: includes/templates/rule.php:61
 msgid "Greater or equal to"
 msgstr ""
 
-#: includes/templates/rule.php:61
+#: includes/templates/rule.php:62
 msgid "Less than"
 msgstr ""
 
-#: includes/templates/rule.php:62
+#: includes/templates/rule.php:63
 msgid "Less or equal to"
 msgstr ""
 
-#: includes/templates/rule.php:82
+#: includes/templates/rule.php:84
 msgid "Shipping zone"
 msgstr ""
 
-#: includes/templates/rule.php:91
+#: includes/templates/rule.php:93
 msgid "All zones"
 msgstr ""
 
-#: includes/templates/rule.php:104
+#: includes/templates/rule.php:106
 msgid "Shipping method"
 msgstr ""
 
-#: includes/templates/rule.php:113
+#: includes/templates/rule.php:115
 msgid "All methods"
 msgstr ""
 
-#: includes/templates/rule.php:126
+#: includes/templates/rule.php:128
 msgid "Minimum"
 msgstr ""
 
-#: includes/templates/rule.php:130
-#: includes/templates/rule.php:139
+#: includes/templates/rule.php:133
+#: includes/templates/rule.php:143
 msgid "days"
 msgstr ""
 
-#: includes/templates/rule.php:135
+#: includes/templates/rule.php:138
 msgid "Maximum"
 msgstr ""
 
-#: includes/templates/rule.php:144
+#: includes/templates/rule.php:148
 msgid "Scheduled delivery date"
 msgstr ""
 
-#: includes/templates/rule.php:148
+#: includes/templates/rule.php:154
 msgid "You can schedule a date when the delivery will be conducted in the future and the estimated delivery dates will be calculated based on this."
 msgstr ""
 
@@ -288,7 +292,7 @@ msgstr ""
 msgid "Premium"
 msgstr ""
 
-#. translators: %s is the stars
+#. translators: stars
 #: includes/templates/settings.php:11
 msgid "Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating."
 msgstr ""
@@ -325,6 +329,7 @@ msgstr ""
 msgid "Shortcode"
 msgstr ""
 
+#. translators: shortcode
 #: includes/templates/settings.php:71
 msgid "You can use shortcode %s to show the estimated delivery date for current product."
 msgstr ""
@@ -387,50 +392,47 @@ msgstr ""
 msgid "Have both minimum and maximum days"
 msgstr ""
 
-#: includes/templates/settings.php:155
+#: includes/templates/settings.php:157
 msgid "Have minimum days only"
 msgstr ""
 
-#: includes/templates/settings.php:158
+#: includes/templates/settings.php:162
 msgid "Have maximum days only"
 msgstr ""
 
-#: includes/templates/settings.php:161
+#: includes/templates/settings.php:167
 msgid "Cart item's data label"
 msgstr ""
 
-#: includes/templates/settings.php:164
+#: includes/templates/settings.php:171
 msgid "Cart overall"
 msgstr ""
 
-#: includes/templates/settings.php:167
+#. translators: date
+#: includes/templates/settings.php:175
 msgid "Use %s to show the date or date-range. Leave blank to use the default text and its equivalent translation in multiple languages."
 msgstr ""
 
-#: includes/templates/settings.php:171
+#: includes/templates/settings.php:179
 msgid "Extra time line"
 msgstr ""
 
-#: includes/templates/settings.php:174
+#: includes/templates/settings.php:184
 msgid "Maximum time to consider an extra day of shipping."
 msgstr ""
 
-#: includes/templates/settings.php:178
+#: includes/templates/settings.php:188
 msgid "Skipped dates"
 msgstr ""
 
-#: includes/templates/settings.php:180
+#: includes/templates/settings.php:190
 msgid "Select dates to skip in estimated (most shipping don't work on weekends, so you can select Saturday, Sunday and all the saturday and sundays will not be counted in calculating estimated shipping date)."
 msgstr ""
 
-#: includes/templates/settings.php:191
+#: includes/templates/settings.php:201
 msgid "+ Add date"
 msgstr ""
 
-#: includes/templates/settings.php:197
+#: includes/templates/settings.php:207
 msgid "Rules"
-msgstr ""
-
-#: includes/templates/settings.php:236
-msgid "Suggestion"
 msgstr ""

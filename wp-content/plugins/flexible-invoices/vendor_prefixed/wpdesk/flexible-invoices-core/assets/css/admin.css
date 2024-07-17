@@ -496,6 +496,6 @@ button.add_product {
 	margin-left: 10px !important;
 }
 
-#menu-posts-inspire_invoice .wp-submenu li:last-child a {
+#menu-posts-inspire_invoice ul.wp-submenu li:last-child a {
 	color: #00FFC2 !important;
 }

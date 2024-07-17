@@ -27,6 +27,41 @@ if ( ! class_exists( 'YITH_WCWL' ) ) {
 		protected static $instance;
 
 		/**
+		 * Admin class
+		 *
+		 * @var YITH_WCWL_Admin
+		 */
+		protected $wcwl_admin;
+
+		/**
+		 * Frontend class
+		 *
+		 * @var YITH_WCWL_Frontend
+		 */
+		protected $wcwl_frontend;
+
+		/**
+		 * Cron class
+		 *
+		 * @var YITH_WCWL_Cron
+		 */
+		protected $wcwl_cron;
+
+		/**
+		 * Session class
+		 *
+		 * @var YITH_WCWL_Session
+		 */
+		protected $wcwl_session;
+
+		/**
+		 * Emails
+		 *
+		 * @var array
+		 */
+		public $emails = array();
+
+		/**
 		 * Last operation token
 		 *
 		 * @var string

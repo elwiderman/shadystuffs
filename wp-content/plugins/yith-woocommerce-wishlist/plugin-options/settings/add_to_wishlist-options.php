@@ -64,7 +64,7 @@ return apply_filters(
 				'name'      => __( 'Show "Add to wishlist" in loop', 'yith-woocommerce-wishlist' ),
 				'desc'      => __( 'Enable the "Add to wishlist" feature in WooCommerce products\' loop', 'yith-woocommerce-wishlist' ),
 				'id'        => 'yith_wcwl_show_on_loop',
-				'default'   => 'no',
+				'default'   => 'yes',
 				'type'      => 'yith-field',
 				'yith-type' => 'onoff',
 			),

@@ -2,13 +2,13 @@
 /**
  * Plugin Name: WooCommerce Address Book
  * Description: Gives your customers the option to store multiple shipping addresses and retrieve them on checkout..
- * Version: 2.6.2
+ * Version: 2.6.3
  * Author: CrossPeak
  * Author URI: https://www.crosspeaksoftware.com/
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: woo-address-book
- * WC tested up to: 8.0.1
+ * WC tested up to: 8.9.0
  *
  * @package WooCommerce Address Book
  */
@@ -28,6 +28,7 @@ add_action(
 	function() {
 		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', __FILE__, false );
 		}
 	}
 );
@@ -71,5 +72,5 @@ function woo_address_book_update_notice( $args, $response ) {
 	if ( version_compare( $response->new_version, '3.0', '<' ) ) {
 		return;
 	}
-	echo '<br><span style="display: inline-block; background-color: #d54e21; padding: 5px 10px 5px 10px; color: #f9f9f9; margin-top: 10px"><b>Version 3.0</b> introduces new data structure and templates. This will <b>break custom user modifications</b>! Please test it before upgrading.</span>';
+	echo '<br><span style="display: inline-block; background-color: #d54e21; padding: 5px 10px 5px 10px; color: #f9f9f9; margin-top: 10px"><b>Version 3.x+</b> introduces new data structure and templates. This will <b>break some custom user modifications</b> especially if you access the user meta directly! Please test it before upgrading.</span>';
 }

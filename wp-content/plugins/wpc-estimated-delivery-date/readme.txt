@@ -3,13 +3,13 @@ Contributors: wpclever
 Donate link: https://wpclever.net
 Tags: woocommerce, wpc, estimated, delivery-date, delivery-time
 Requires at least: 4.0
-Tested up to: 6.4
-Version: 2.3.5
-Stable tag: 2.3.5
+Tested up to: 6.5
+Version: 2.4.3
+Stable tag: 2.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WPC Estimated Delivery Date allows you to establish and personalize delivery times for each one of the products available on your WooCommerce website and on several levels.
+WPC Estimated Delivery Date allows you to establish and personalize delivery times for each product available in your store on several levels.
 
 == Description ==
 
@@ -63,9 +63,9 @@ The delivery dates will be calculated based on the global rules for different sh
 
 Individual delivery dates can be specified in the Estimated Delivery Date tab of single product pages. Users can simply choose to disable the global rules or configure new rules applied for that product specifically. Individual rules are prioritized over the global ones.
 
-= Extra Time Line & Skipped Dates =
+= Extra Timeline & Skipped Dates =
 
-The Extra time line option is available to help sellers have more time processing their order. This is the time point to mark when it’s late for an order to be packed and shipped in time, so orders placed after this hour will be counted with an extra shipping day.
+The Extra timeline option is available to help sellers have more time processing their order. This is the time point to mark when it’s late for an order to be packed and shipped in time, so orders placed after this hour will be counted with an extra shipping day.
 
 Skipped dates are added to let our plugin know when the sellers are unavailable or unable to prepare for the order delivery. So skipped dates can be weekdays, weekends, holidays, vacation time, etc.; what’s more, multiple skipped dates are possible. Dates added as skipped dates will not be counted when calculating the delivery time for the order. This will apply to all products throughout the store.
 
@@ -88,6 +88,30 @@ Please try other plugins from us:
 4. Go to WP-admin > WPClever > Estimated Delivery Date to add your rules
 
 == Changelog ==
+
+= 2.4.3 =
+* Updated: Compatible with WP 6.5 & Woo 9.0
+
+= 2.4.2 =
+* Fixed: Minor JS/CSS issues in backend
+
+= 2.4.1 =
+* Updated: Optimized the code
+
+= 2.4.0 =
+* Fixed: Minor CSS issues in backend
+
+= 2.3.9 =
+* Fixed: Estimated wasn't updated on the cart
+
+= 2.3.8 =
+* Fixed: Skipped dates
+
+= 2.3.7 =
+* Fixed: Don't reload the date for order item
+
+= 2.3.6 =
+* Updated: Optimized the code
 
 = 2.3.5 =
 * Updated: Compatible with WP 6.4 & Woo 8.6

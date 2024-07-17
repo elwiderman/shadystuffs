@@ -30,7 +30,7 @@ final class GeneralSettingsFields implements \WPDeskFIVendor\WPDesk\Library\Flex
         if (\get_locale() === 'pl_PL') {
             $docs_link = 'https://www.wpdesk.pl/docs/faktury-woocommerce-docs/?utm_source=flexible-invoices-settings&utm_medium=link&utm_campaign=flexible-invoices-docs-link&utm_content=woocommerce-general-settings#woocommerce';
         }
-        return \sprintf('<a href="%s" target="_blank">%s</a>', \esc_url($docs_link), \esc_html__('Read WooCommerce integration manual &rarr;', 'flexible-invoices'));
+        return \sprintf('%2$s%1$s%3$s', \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_link . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>'), '<strong>', '</strong>');
     }
     /**
      * @return array

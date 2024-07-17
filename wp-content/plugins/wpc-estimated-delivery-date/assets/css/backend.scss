@@ -300,18 +300,16 @@
 }
 
 .wpced-settings {
+  label {
+    float: none !important;
+    margin: 0 !important;
+  }
+
   .wpced-product-settings &, .wpced-variation-settings & {
     padding: 12px;
   }
 
   .wpced-select-wrapper {
-    label {
-      float: none !important;
-      margin: 0 !important;
-      display: block;
-      width: 100%;
-    }
-
     select {
       float: none !important;
       margin: 0 !important;

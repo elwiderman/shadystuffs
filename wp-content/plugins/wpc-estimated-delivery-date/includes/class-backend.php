@@ -317,10 +317,10 @@ if ( ! class_exists( 'Wpced_Backend' ) ) {
 
 		public function ajax_add_rule() {
 			$key          = Wpced_Helper()->generate_key();
-			$product_id   = isset( $_POST['product_id'] ) ? sanitize_text_field( $_POST['product_id'] ) : 0;
-			$is_variation = isset( $_POST['is_variation'] ) ? wc_string_to_bool( sanitize_text_field( $_POST['is_variation'] ) ) : false;
+			$product_id   = absint( sanitize_text_field( $_POST['product_id'] ?? 0 ) );
+			$is_variation = wc_string_to_bool( sanitize_text_field( $_POST['is_variation'] ?? 'no' ) );
 			$rule_name    = $is_variation ? 'wpced_rules_v' : 'wpced_rules';
-			$rule_data    = isset( $_POST['rule_data'] ) ? $_POST['rule_data'] : '';
+			$rule_data    = $_POST['rule_data'] ?? '';
 			$rule_arr     = [];
 
 			if ( ! empty( $rule_data ) ) {

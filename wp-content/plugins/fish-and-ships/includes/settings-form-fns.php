@@ -3,7 +3,7 @@
  * The Pluggable table rules stuff 
  *
  * @package Fish and Ships
- * @version 1.5
+ * @version 1.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -513,6 +513,7 @@ function wc_fns_check_matching_selection_method_fn($rule_groups, $selector, $gro
  * Filter to get all cost methods
  *
  * @since 1.0.0
+ * @version 1.5.4
  *
  * @param $cost_methods (array) maybe incomming  a pair action-id / action-name array
  *
@@ -524,14 +525,17 @@ add_filter('wc_fns_get_cost_methods', 'wc_fns_get_cost_methods_fn', 10, 1);
 
 function wc_fns_get_cost_methods_fn($cost_methods = array()) {
 
+	global $Fish_n_Ships;
+
 	if (!is_array($cost_methods)) $cost_methods = array();
 													// Will be HTML escaped later
-	$cost_methods['once']       = array('label' => _x('(once)', 'very shorted, once price application', 'fish-and-ships'));
-	$cost_methods['qty']        = array('label' => '* [qty]');
-	$cost_methods['weight']     = array('label' => sprintf(_x('* weight (%s)', 'shorted, per weight price application', 'fish-and-ships'), get_option('woocommerce_weight_unit')) );
-	$cost_methods['group']      = array('label' => '* [group]');
-	$cost_methods['percent']    = array('label' => '%');
-	$cost_methods['composite']  = array('label' => _x('composite', 'VERY shorted, composite price application', 'fish-and-ships'));
+	$cost_methods['once']       = array('onlypro' => false, 'label' => _x('(once)', 'very shorted, once price application', 'fish-and-ships'));
+	$cost_methods['qty']        = array('onlypro' => false, 'label' => '* [qty]');
+	$cost_methods['weight']     = array('onlypro' => false, 'label' => sprintf(_x('* weight (%s)', 'shorted, per weight price application', 'fish-and-ships'), get_option('woocommerce_weight_unit')) );
+	$cost_methods['group']      = array('onlypro' => false, 'label' => '* [group]');
+	$cost_methods['percent']    = array('onlypro' => false, 'label' => '%');
+	$cost_methods['composite']  = array('onlypro' => false, 'label' => _x('composite', 'VERY shorted, composite price application', 'fish-and-ships'));
+	$cost_methods['ranges']     = array('onlypro' => true,  'label' => _x('Ranges', 'VERY shorted, ranges price application', 'fish-and-ships') );
 	
 	return $cost_methods;
 }
@@ -540,7 +544,7 @@ function wc_fns_get_cost_methods_fn($cost_methods = array()) {
  * Filter to get the HTML fields for price rules
  *
  * @since 1.0.0
- * @version 1.4.9
+ * @version 1.5.3
  *
  * @param $html (HTML) maybe incomming html
  * @param $rule_nr (integer) the rule number
@@ -610,6 +614,66 @@ function wc_fns_get_html_price_fields_fn($html, $rule_nr, $values) {
 	}
 	$html .= '</div>';
 
+	$html .= '<div class="cost_range">';
+		
+		/* Range based on field
+		$value = 'weight'; if ( isset($values[ 'range_based' ]) ) $value = $values[ 'range_based' ];
+		$html .= '<input type="text" name="shipping_rules[' . $rule_nr . '][cost][range_based][]" value="' . esc_attr( $value ) . '" data-fns-range-field="range_based">';
+		*/
+		$not_mcfields = array(
+						'range_based' => array(
+												'default'   => 'by-weight',
+												'format_number' => false
+											 ),
+						'range_foreach' => array(
+												'default'   => 1,
+												'format_number' => true
+											 ),
+						'range_over' => array(
+												'default'   => 0,
+												'format_number' => true
+											 ),
+						'range_group_by' => array(
+												'default'   => 'all',
+												'format_number' => false
+											 ),
+		);
+		
+		// Not multicurrency fields
+		foreach ( $not_mcfields as $field_name => $attr )
+		{
+			$value = isset($values[ $field_name ]) ? $values[ $field_name ] : $attr['default']; 			
+
+			if( $attr['format_number'] ) 
+				$value = $Fish_n_Ships->format_number( $value, 'decimal' );
+
+			$html .= '<input type="text" name="shipping_rules[' . $rule_nr . '][cost][' . $field_name . '][]" value="' . esc_attr( $value ) . '" data-fns-range-field="'.$field_name.'">';
+		}
+
+		// Multicurrency fields:
+		foreach ( array( 'range_base', 'range_charge' ) as $field_name )
+		{
+			// $html .= '<span class="field_wrapper"><span class="currency-switcher-fns-wrapper">';
+
+			$n = 0;
+			foreach ( $currencies as $currency=>$symbol )
+			{	
+				$n++;
+				// Main currency haven't sufix, it brings legacy with previous releases
+				$curr_sufix = ''; if ( $n > 1 ) $curr_sufix = '-' . $currency;
+
+				$value = 0; if( $field_name == 'range_charge' ) $value = 1; // default
+				if ( isset($values[ $field_name . $curr_sufix ]) ) $value = $values[ $field_name . $curr_sufix ];
+
+				// $html .= '<span class="currency-fns-field currency-' . $currency . ($n==1 ? ' currency-main' : '') . '">';
+				$html .= '<input type="text" name="shipping_rules[' . $rule_nr . '][cost][' . $field_name . $curr_sufix . '][]" value="' . esc_attr( $Fish_n_Ships->format_number( $value, 'decimal' ) ) . '" data-fns-range-field="'.$field_name . $curr_sufix.'">';
+				//$html .= '</span>';
+			}
+			//$html .= '</span></span>';
+		}
+
+	$html .= '</div>';
+
 	return $html;
 }
 
@@ -617,7 +681,7 @@ function wc_fns_get_html_price_fields_fn($html, $rule_nr, $values) {
  * Filter to sanitize cost
  *
  * @since 1.0.0
- * @version 1.2.7
+ * @version 1.5.3
  *
  * @param $rule_cost (array) 
  *
@@ -676,7 +740,23 @@ function wc_fns_sanitize_cost_fn($rule_cost) {
 				}
 			}
 			break;
+
+		case 'ranges':
+			
+			$n = 0; $allowed = array('range_based','range_foreach','range_over', 'range_group_by'); // non-currency fields
+			foreach ( $currencies as $currency=>$symbol )
+			{
+				$n++;
+				// Main currency haven't sufix, it brings legacy with previous releases
+				$curr_sufix = ''; if ( $n > 1 ) $curr_sufix = '-' . $currency;
+				
+				foreach ( array('range_base', 'range_charge') as $field_name ) {
+					$allowed[] = $field_name . $curr_sufix;
+				}
+			}
+			break;
 	}
+	
 	if (is_array($allowed)) {
 
 		// form fields comes always lower-cased, let's check it and reinstate if needed
@@ -698,13 +778,31 @@ function wc_fns_sanitize_cost_fn($rule_cost) {
 		// sanitize expected values
 		foreach ($allowed as $field) {
 
-			$value = isset( $rule_cost['values'][$field] ) ? $rule_cost['values'][$field] : 0;
+			switch( $field )
+			{
+				case 'range_based':
+					
+					$value = isset( $rule_cost['values'][$field] ) ? $rule_cost['values'][$field] : 'by-weight';
+					$rule_cost['values'][$field] = $Fish_n_Ships->sanitize_allowed( $value, array('by-weight','by-volume','volumetric','volumetric-set','quantity','lwh-dimensions','lgirth-dimensions') );
+					
+					break;
+				
+				case 'range_group_by':
+					
+					$value = isset( $rule_cost['values'][$field] ) ? $rule_cost['values'][$field] : 'all';
+					$rule_cost['values'][$field] = $Fish_n_Ships->sanitize_allowed( $value, array('none','id_sku','product_id','class','all') );
+					
+					break;
+				
+				default:
 
-			$rule_cost['values'][$field] = $Fish_n_Ships->sanitize_number($value, 'decimal');
+			$value = isset( $rule_cost['values'][$field] ) ? $rule_cost['values'][$field] : 0;
+					$rule_cost['values'][$field] = $Fish_n_Ships->sanitize_number($value, 'decimal');
+
+					break;
+			} 
 		}
 	}
-	
-
 	return $rule_cost;
 }
 
@@ -712,7 +810,7 @@ function wc_fns_sanitize_cost_fn($rule_cost) {
  * Filter to calculate the shipping cost rule
  *
  * @since 1.0.0
- * @version 1.4.13
+ * @version 1.5.3
  *
  * @param $prev_cost (integer) 0 or maybe the previous filtered cost
  * @param $cost (array) The rule cost
@@ -742,7 +840,7 @@ function wc_fns_calculate_cost_rule_fn($prev_cost, $cost, $shippable_contents_ru
 	if ($cost['method'] == 'qty' || $cost['method'] == 'composite') {
 
 		$qty = 0;
-		foreach ( $shippable_contents_rule as $key => $product ) {
+		foreach ( $shippable_contents_rule as $product ) {
 
 			//$qty += $Fish_n_Ships->get_quantity($product);
 			$qty += $product[ 'to_ship' ];
@@ -754,7 +852,7 @@ function wc_fns_calculate_cost_rule_fn($prev_cost, $cost, $shippable_contents_ru
 	if ($cost['method'] == 'percent' || $cost['method'] == 'composite') {
 
 		$total_price = 0;
-		foreach ( $shippable_contents_rule as $key => $product ) {
+		foreach ( $shippable_contents_rule as $product ) {
 
 			//$total_price += $Fish_n_Ships->get_price($product) * $Fish_n_Ships->get_quantity($product);
 			$total_price += $Fish_n_Ships->get_price($product) * $product[ 'to_ship' ];
@@ -766,9 +864,9 @@ function wc_fns_calculate_cost_rule_fn($prev_cost, $cost, $shippable_contents_ru
 	if ($cost['method'] == 'weight' || $cost['method'] == 'composite') {
 
 		$weight = 0;
-		foreach ( $shippable_contents_rule as $key => $product ) {
+		foreach ( $shippable_contents_rule as $product ) {
 
-			$weight += $Fish_n_Ships->get_weight($product) * $Fish_n_Ships->get_quantity($product);
+			$weight += $Fish_n_Ships->get_weight($product) * $product[ 'to_ship' ];
 		}
 	}
 
@@ -833,11 +931,109 @@ function wc_fns_calculate_cost_rule_fn($prev_cost, $cost, $shippable_contents_ru
 			$calculated_cost += $cost_weight   * $weight;
 			$calculated_cost += $cost_group    * $matched_groups;
 			// The percentage comes into humnan format: 0-100%
-			$calculated_cost += $cost_percent  * $total_price * 0.01; 
+			$calculated_cost += $cost_percent  * $Fish_n_Ships->currency_abstraction('cart-currency', $total_price) * 0.01; 
 
 			$shipping_class->debug_log('Composite cost (once + qty + weight + group + %): ' . $cost_once . ' + ' . $cost_qty . '*' . $qty . ' + ' . $cost_weight . '*' . $weight . ' + ' . $cost_group . '*' . $matched_groups . ' + ' . $total_price . '*' . $cost_percent . '% = ' . $calculated_cost, 2);
 			
 			break;
+
+		/* start pro */
+		case 'ranges':
+		
+			// Non-currency fields:
+			$range_based     =         $cost['values']['range_based'];
+			$range_group_by  =         $cost['values']['range_group_by'];
+			$range_foreach   = (float) $cost['values']['range_foreach'];
+			$range_over      = (float) $cost['values']['range_over'];
+
+			// Currency fields:
+			$range_base     = $Fish_n_Ships->currency_abstraction( (float) $origin_costs_fields, $cost['values']['range_base'.$curr_sufix] );
+			$range_charge   = $Fish_n_Ships->currency_abstraction( (float) $origin_costs_fields, $cost['values']['range_charge'.$curr_sufix] );
+			
+			$shipping_class->debug_log('* Ranges: [' . $range_based . '], grouped: [' . $range_group_by . '] => ' . $range_base . ' + ' . $range_charge . ' per each ' . $range_foreach . ' over ' . $range_over, 2);
+
+			if( $range_foreach  < 0.0000001 ) $range_foreach  = 0;
+			if( $range_over     < 0.0000001 ) $range_over     = 0;
+			//if( $range_base     < 0 )         $range_base     = 0;
+			if( $range_charge   < 0 )         $range_charge   = 0;
+			
+			// Ungroupable product values:
+			if( $range_based == 'lwh-dimensions' || $range_based == 'lgirth-dimensions' )
+			{
+				$range_group_by = 'none';
+			}
+
+			// The group function is different here!
+			
+			// Let's group the products
+			$range_groups = array();
+			foreach ( $shippable_contents_rule as $key => $product )
+			{	
+				// Maybe there is more than one of the same, and non-grouped strategy:
+				for( $count = 1; $count <= $product['to_ship']; $count++ )
+				{
+					switch ($range_group_by) {
+						case 'id_sku' :
+							$subindex = $Fish_n_Ships->get_sku_safe($product);
+							break;
+
+						case 'product_id' :
+							$subindex = $Fish_n_Ships->get_real_id($product);
+							break;
+
+						case 'class' :
+							$subindex = $product['data']->get_shipping_class_id();
+							break;
+
+						case 'all' :
+							$subindex = '';
+							break;
+
+						case 'none' :
+						default :
+							$range_group_by = 'none';
+							// Compatibility with Uni CPO plugin
+							
+							// Grups separats!!!
+							$subindex = 'unique-' . uniqid();
+							break;
+					}
+
+					// if the group isn't created, let's create it
+					if ( !isset( $range_groups[$subindex] ) ) {
+						$range_groups[$subindex] = new Fish_n_Ships_group($range_group_by, $shipping_class);
+
+						if ( $range_group_by != 'all' ) $shipping_class->debug_log('creating new group: ' . $range_group_by . ' > ' . $subindex, 3);
+					}
+					
+					$cloned_product = $product;
+					$cloned_product['to_ship'] = 1;
+					
+					// We will add the product (one unit in any case) in the right group
+					$range_groups[$subindex]->add_or_increase_element($key, $cloned_product, false);
+				}
+			}
+
+			foreach ( $range_groups as $key=>$group ) {
+
+				// Grouped products calculations
+				$value4range = $group->get_total( $range_based );
+				
+				// Now we will calculate the cost range of the grouped products focused value				
+				$ranges = ceil( ( $value4range - $range_over ) / $range_foreach );
+				if( $ranges < 0 ) $ranges = 0;
+				
+				$range_calculated_cost = $range_base + $ranges * $range_charge;
+				$shipping_class->debug_log('* Value for range: [' . $value4range . '], range cost: [' . $range_calculated_cost . ']' , 3);
+
+				$calculated_cost += $range_calculated_cost;
+
+				// Free memory
+				unset($group);
+			}
+			
+			break;
+		/* end pro */
 	}
 	
 	return $prev_cost + $calculated_cost;
@@ -848,7 +1044,7 @@ function wc_fns_calculate_cost_rule_fn($prev_cost, $cost, $shippable_contents_ru
  * Filter to get all actions
  *
  * @since 1.0.0
- * @version 1.4.13
+ * @version 1.5.4
  *
  * @param $actions (array) maybe incomming  a pair action-id / only-pro, scope (optional), action-name array
  *
@@ -872,25 +1068,33 @@ function wc_fns_get_actions_fn($actions = array()) {
 	$scope_normal  = array ('normal');
 	$scope_extra   = array ('extra');
 																	// will be HTML scaped later 
-	$actions['abort']           = array('onlypro' => false, 'scope' => $scope_normal, 'label' => _x('Abort shipping method', 'shorted, action name', 'fish-and-ships'));
-	$actions['skip']            = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Skip N rules', 'shorted, action name', 'fish-and-ships'));
-	$actions['reset']           = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Reset previous costs', 'shorted, action name', 'fish-and-ships'));
-	$actions['break']           = array('onlypro' => false, 'scope' => $scope_normal, 'label' => _x('Stop (ignore below rules)', 'shorted, action name (renamed on v1.2.1)', 'fish-and-ships'));
-	$actions['min_max']         = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Set min/max rule costs', 'shorted, action name', 'fish-and-ships'));
-	$actions['unset']           = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Matching prods skip below rules', 'shorted, action name (renamed on v1.2.1)', 'fish-and-ships'));
-	
-	$actions['notice']          = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Show notice message', 'shorted, action name', 'fish-and-ships'));
-	$actions['rename']          = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Rename method title', 'shorted, action name', 'fish-and-ships'));
-	$actions['description']     = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Add subtitle (text under)', 'shorted, action name', 'fish-and-ships'));
-	$actions['total-messages']  = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Change cart totals messages', 'shorted, action name', 'fish-and-ships'));
-	
-	
-	$actions['coupon']          = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Auto-apply coupon', 'shorted, action name', 'fish-and-ships'));
-	$actions['math']            = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Math expression', 'shorted, action name', 'fish-and-ships'));
-	$actions['disable_others']  = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Hide other shipping methods', 'shorted, action name', 'fish-and-ships'));
+	$actions['break']           = array('onlypro' => false, 'group' => 'Flow control', 'scope' => $scope_normal, 'label' => _x('Stop (ignore below rules)', 'shorted, action name (renamed on v1.2.1)', 'fish-and-ships'));
+	$actions['abort']           = array('onlypro' => false, 'group' => 'Flow control', 'scope' => $scope_normal, 'label' => _x('Abort shipping method', 'shorted, action name', 'fish-and-ships'));
+	$actions['skip']            = array('onlypro' => true,  'group' => 'Flow control', 'scope' => $scope_normal, 'label' => _x('Skip N rules', 'shorted, action name', 'fish-and-ships'));
+
+	$actions['notice']          = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Show notice message', 'shorted, action name', 'fish-and-ships'));
+	$actions['rename']          = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Rename method title', 'shorted, action name', 'fish-and-ships'));
+	$actions['description']     = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Add subtitle (text under)', 'shorted, action name', 'fish-and-ships'));
+	$actions['total-messages']  = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Change cart totals messages', 'shorted, action name', 'fish-and-ships'));
+
+	$actions['reset']           = array('onlypro' => true,  'group' => 'Costs calculation', 'scope' => $scope_normal, 'label' => _x('Reset previous costs', 'shorted, action name', 'fish-and-ships'));
+	// $actions['jump_up']         = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Repeat N rules (jump up)', 'shorted, action name', 'fish-and-ships'));
+	$actions['min_max']         = array('onlypro' => true,  'group' => 'Costs calculation', 'scope' => $scope_normal, 'label' => _x('Set min/max rule costs', 'shorted, action name', 'fish-and-ships'));
+	$actions['math']            = array('onlypro' => true,  'group' => 'Costs calculation', 'scope' => $scope_normal, 'label' => _x('Math expression', 'shorted, action name', 'fish-and-ships'));
+
+	$actions['unset']           = array('onlypro' => true,  'group' => 'Advanced', 'scope' => $scope_normal, 'label' => _x('Matching prods skip below rules', 'shorted, action name (renamed on v1.2.1)', 'fish-and-ships'));
+	$actions['coupon']          = array('onlypro' => true,  'group' => 'Advanced', 'scope' => $scope_normal, 'label' => _x('Auto-apply coupon', 'shorted, action name', 'fish-and-ships'));
+	$actions['disable_others']  = array('onlypro' => true,  'group' => 'Advanced', 'scope' => $scope_normal, 'label' => _x('Hide other shipping methods', 'shorted, action name', 'fish-and-ships'));
 
 	$actions['ship_rate_pct']   = array('onlypro' => true,  'scope' => $scope_extra,  'label' => _x('Shipping rate +/- %', 'shorted, action name', 'fish-and-ships'));
 	$actions['ship_rate_fix']   = array('onlypro' => true,  'scope' => $scope_extra,  'label' => _x('Shipping rate +/- fixed', 'shorted, action name', 'fish-and-ships'));
+	
+	/* start pro */
+	$custom_actions = apply_filters( 'wc_fns_custom_special_actions', array() );
+	
+	if ( is_array( $custom_actions ) && count( $custom_actions ) > 0 )
+		$actions['custom_filter']   = array('onlypro' => true,  'scope' => $scope_all,    'label' => _x('Custom filter', 'shorted, action name', 'fish-and-ships'));
+	/* end pro */
 
 	return $actions;
 }

@@ -208,12 +208,6 @@ class WPSEO_Metabox extends WPSEO_Meta {
 			'<a href="https://googlewebmastercentral.blogspot.com/2009/12/handling-legitimate-cross-domain.html" target="_blank" rel="noopener">',
 			WPSEO_Admin_Utils::get_new_tab_message() . '</a>'
 		);
-		/* translators: %s expands to the post type name. */
-		WPSEO_Meta::$meta_fields['advanced']['wordproof_timestamp']['title']        = __( 'Timestamp this %s', 'wordpress-seo' );
-		WPSEO_Meta::$meta_fields['advanced']['wordproof_timestamp']['description']  = __( 'Use WordProof to timestamp this page to comply with legal regulations and join the fight for a more transparant and accountable internet.', 'wordpress-seo' );
-		WPSEO_Meta::$meta_fields['advanced']['wordproof_timestamp']['options']['0'] = __( 'Off', 'wordpress-seo' );
-		WPSEO_Meta::$meta_fields['advanced']['wordproof_timestamp']['options']['1'] = __( 'On', 'wordpress-seo' );
-		WPSEO_Meta::$meta_fields['advanced']['wordproof_timestamp']['type']         = 'hidden';
 
 		WPSEO_Meta::$meta_fields['advanced']['redirect']['title']       = __( '301 Redirect', 'wordpress-seo' );
 		WPSEO_Meta::$meta_fields['advanced']['redirect']['description'] = __( 'The URL that this page should redirect to.', 'wordpress-seo' );
@@ -269,9 +263,9 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * Adds CSS classes to the meta box.
 	 *
-	 * @param array $classes An array of postbox CSS classes.
+	 * @param string[] $classes An array of postbox CSS classes.
 	 *
-	 * @return array List of classes that will be applied to the editbox container.
+	 * @return string[]  List of classes that will be applied to the editbox container.
 	 */
 	public function wpseo_metabox_class( $classes ) {
 		$classes[] = 'yoast wpseo-metabox';
@@ -282,7 +276,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * Passes variables to js for use with the post-scraper.
 	 *
-	 * @return array
+	 * @return array<string,string|array<string|int|bool>|bool|int>
 	 */
 	public function get_metabox_script_data() {
 		$permalink = '';
@@ -297,7 +291,6 @@ class WPSEO_Metabox extends WPSEO_Meta {
 		);
 
 		$values = $post_formatter->get_values();
-
 		/** This filter is documented in admin/filters/class-cornerstone-filter.php. */
 		$post_types = apply_filters( 'wpseo_cornerstone_post_types', WPSEO_Post_Type::get_accessible_post_types() );
 		if ( $values['cornerstoneActive'] && ! in_array( $this->get_metabox_post()->post_type, $post_types, true ) ) {
@@ -513,8 +506,8 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	 *
 	 * @todo [JRF] Check if $class is added appropriately everywhere.
 	 *
-	 * @param array  $meta_field_def Contains the vars based on which output is generated.
-	 * @param string $key            Internal key (without prefix).
+	 * @param string[] $meta_field_def Contains the vars based on which output is generated.
+	 * @param string   $key            Internal key (without prefix).
 	 *
 	 * @return string
 	 */
@@ -967,7 +960,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * Returns post in metabox context.
 	 *
-	 * @return WP_Post|array
+	 * @return WP_Post|array<string|int|bool>
 	 */
 	protected function get_metabox_post() {
 		if ( $this->post !== null ) {
@@ -996,7 +989,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * Returns an array with shortcode tags for all registered shortcodes.
 	 *
-	 * @return array
+	 * @return string[]
 	 */
 	private function get_valid_shortcode_tags() {
 		$shortcode_tags = [];
@@ -1011,7 +1004,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * Prepares the replace vars for localization.
 	 *
-	 * @return array Replace vars.
+	 * @return string[] Replace vars.
 	 */
 	private function get_replace_vars() {
 		$cached_replacement_vars = [];
@@ -1060,7 +1053,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	/**
 	 * Prepares the recommended replace vars for localization.
 	 *
-	 * @return array Recommended replacement variables.
+	 * @return array<string[]> Recommended replacement variables.
 	 */
 	private function get_recommended_replace_vars() {
 		$recommended_replace_vars = new WPSEO_Admin_Recommended_Replace_Vars();
@@ -1076,7 +1069,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	 *
 	 * @param WP_Post $post The post to check for custom taxonomies and fields.
 	 *
-	 * @return array Array containing all the replacement variables.
+	 * @return array<string[]> Array containing all the replacement variables.
 	 */
 	private function get_custom_replace_vars( $post ) {
 		return [
@@ -1090,7 +1083,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	 *
 	 * @param WP_Post $post The post to check for custom taxonomies.
 	 *
-	 * @return array Array containing all the replacement variables.
+	 * @return array<string[]> Array containing all the replacement variables.
 	 */
 	private function get_custom_taxonomies_replace_vars( $post ) {
 		$taxonomies          = get_object_taxonomies( $post, 'objects' );
@@ -1121,7 +1114,7 @@ class WPSEO_Metabox extends WPSEO_Meta {
 	 *
 	 * @param WP_Post $post The post to check for custom fields.
 	 *
-	 * @return array Array containing all the replacement variables.
+	 * @return array<string[]> Array containing all the replacement variables.
 	 */
 	private function get_custom_fields_replace_vars( $post ) {
 		$custom_replace_vars = [];

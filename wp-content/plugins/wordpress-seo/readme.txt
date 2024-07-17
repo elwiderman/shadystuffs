@@ -4,8 +4,8 @@ Donate link: https://yoa.st/1up
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
-Tested up to: 6.5
-Stable tag: 22.3
+Tested up to: 6.6
+Stable tag: 23.0
 Requires PHP: 7.2.5
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -315,48 +315,44 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 22.3 =
+= 23.0 =
 
-Release date: 2024-03-19
+Release date: 2024-07-02
 
-Yoast SEO 22.3 is out today. In this release, you’ll find various fixes and improvements for a better user experience. Find out more about what's new in Yoast SEO 22.3 in [our release post](https://yoa.st/release-19-3-24)!
+Yoast SEO 23.0 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/release-2-7-24).
 
 #### Enhancements
 
-* Removes an unnecessary query relating to breadcrumb schema generation on the homepage.
+* Removes a redundant database write query, when saving a post.
 
 #### Bugfixes
 
-* Adds `x.com` as a possible domain for the Twitter validation in our first time configuration social profiles settings.
-* Fixes a bug where the `Or go to your SEO dashboard` link in the final step of our first time configuration would not be focusable using tab.
+* Fixes a bug where unnecessary data was written in the Yoast database on non-production sites (or when the relevant `Yoast\WP\SEO\should_index_indexables` filter was used to disable such a behavior).
 
 #### Other
 
-* Removes the autofill for taxonomy keyphrases.
-* Sets the WordPress tested up to version to 6.5.
+* Deprecates the Wordproof feature.
+* Deprecates the following classes: `Wordproof`, `Wordproof_App_Config`, `Wordproof_Helper`, `Wordproof_Integration_Active_Conditional`, `Wordproof_Plugin_Inactive_Conditional`,  `Wordproof_Translations`.
 
-= 22.2 =
+= 22.9 =
 
-Release date: 2024-03-05
+Release date: 2024-06-18
 
-Yoast SEO 22.2 is out today. In this release, you’ll find language analysis enhancements. More accurate keyphrase recognition and translation improvements to Yoast News SEO. Find out more about what's new in Yoast SEO 22.2 in [our release post](https://yoa.st/release-5-3-24)!
+Yoast SEO 22.9 brings more enhancements and bugfixes. [Find more information about our software releases and updates here](https://yoa.st/release-18-6-24).
 
 #### Enhancements
 
-* Improves keyphrase detection by treating hyphens and en-dashes as word boundaries. For example, if the keyphrase is 'dog-training tips', a keyphrase occurrence will be recognized as long as the words 'dog', 'training', and 'tips' are found in the same sentence.
-* Improves recognition of single-word function words for Arabic and Hebrew.
-* Improves the highlighting of keyphrases that contain hyphens or dashes. For example, if the keyphrase is 'Cold War era', it will be correctly highlighted in the phrase 'post-Cold War era'. Previously, the word 'post' would also be highlighted.
-* Improves the _inclusive language analysis_ by refining feedback strings and excluding false positives for phrases related to mental health.
+* Helps guide Elementor users to Yoast when they have the new editor top bar activated.
+* Adds additional filter options for the `og:image` meta tags.
+* Improves compatibility with custom RSS feeds. Props to @gsusI.
 
 #### Bugfixes
 
-* Adds `x.com` as a possible domain for the Twitter validation in our site representation settings.
-* Fixes a bug where `sitemap.xml` would redirect to a 404 when the HTTPS server value of the response would be "On" instead of "on".
-* Fixes a bug where the _keyphrase in slug_ assessment would crash when the site language was Indonesian, the keyphrase contained a reduplicated word (e.g. 'buku-buku'), and a form of that word also occurred in the slug.
-* Fixes a bug where the "Organization description" field would still be focusable via tabbing.
-* Fixes a bug where the Organization's Site founding date would span 2 lines in Chrome, by removing our placeholder.
-* Fixes a bug where the schema of a post requested through a REST request wouldn't include the primary image.
-* Fixes a bug where the upsell message for Yoast WooCommerce SEO would appear when using the AI feature on a non-WooCommerce product page.
+* Fixes a bug where a PHP notice would be thrown on RSS feeds when a canonical URL can not be created for its parent page.
+
+#### Others
+
+* Changes the copy in the admin sidebar from `Premium` to `Upgrades`.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).

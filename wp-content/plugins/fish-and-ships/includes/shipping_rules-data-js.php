@@ -3,8 +3,7 @@
  * The Javascript data object. 
  *
  * @package Fish and Ships
- * @version 1.0.0
- * @version 1.4.13
+ * @version 1.5.3
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -53,6 +52,7 @@ $data = array(
 	'version' => WC_FNS_VERSION,
 	'im_pro' => $Fish_n_Ships->im_pro(),
 	'empty_row_html' => $empty_row,
+	'decimal_separator' => wc_get_price_decimal_separator(),
 	'new_selection_method_html' => str_replace('[selection_details]', '', $Fish_n_Ships->get_selector_method_html(0, $selection_methods)),
 	'new_action_html' => str_replace('[action_details]', '', $Fish_n_Ships->get_action_method_html(0, $actions)),
 	
@@ -104,7 +104,8 @@ Parser error message:', 'Import error', 'fish-and-ships'),
 	
 	'ajax_url_main_lang' => $Fish_n_Ships->get_unlocalised_ajax_url(), // main site lang attribute will be added on multiligual
 	'admin_lang' => function_exists('get_user_locale') ? get_user_locale() : get_locale(), // The preferred language to show the help
-	'help_url' => WC_FNS_URL . 'help/'
+	'help_url' => WC_FNS_URL . 'help/',
+	'max_input_vars' => ini_get('max_input_vars')
 );
 
 // the html code details for each selection method

@@ -44,7 +44,11 @@ final class MossSettingsFields implements \WPDeskFIVendor\WPDesk\Library\Flexibl
      */
     private function get_moss_link() : string
     {
-        return \esc_url(\get_locale() === 'pl_PL' ? 'https://wpde.sk/faktury-woocommerce-oss' : 'https://wpde.sk/flexible-invoices-oss', ['https']);
+        $docs_url = 'https://wpde.sk/flexible-invoices-oss';
+        if (\get_locale() === 'pl_PL') {
+            $docs_url = 'https://wpde.sk/faktury-woocommerce-oss';
+        }
+        return \sprintf('%2$s%1$s%3$s', \sprintf(\esc_html__('Read more in the %1$splugin documentation &rarr;%2$s', 'flexible-invoices'), '<a href="' . $docs_url . '" target="_blank" style="color: #4BB04E; font-weight: 700;">', '</a>'), '<strong>', '</strong>');
     }
     /**
      * @return string
@@ -52,7 +56,7 @@ final class MossSettingsFields implements \WPDeskFIVendor\WPDesk\Library\Flexibl
     private function get_doc_link() : string
     {
         if (\WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\InvoicesIntegration::is_super()) {
-            return \sprintf(\__('The EU OSS procedure is an extension of MOSS. From 07.2021 VAT on every transaction above €10.000 to other EU countries must be calculated based on the customer location, and you need to collect evidence of this (IP address and Billing Address). B2B transactions are subject to reverse charge. <a href="%s" target="_blank">Read this guide</a> for instructions on doing this.', 'flexible-invoices'), $this->get_moss_link());
+            return \__('The EU OSS procedure is an extension of MOSS. From 07.2021 VAT on every transaction above €10.000 to other EU countries must be calculated based on the customer location, and you need to collect evidence of this (IP address and Billing Address). B2B transactions are subject to reverse charge.', 'flexible-invoices') . ' ' . $this->get_moss_link();
         } else {
             return \sprintf('<a href="%1$s&utm_content=oss" target="_blank" style="color: #8f0350; font-weight: 700;">%2$s</a>', \WPDeskFIVendor\WPDesk\Library\FlexibleInvoicesCore\Helpers\Plugin::upgrade_to_pro_url(), \esc_html__('Upgrade to PRO and enable options below →', 'flexible-invoices'));
         }

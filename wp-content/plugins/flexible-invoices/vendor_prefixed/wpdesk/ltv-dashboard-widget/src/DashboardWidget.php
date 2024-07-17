@@ -115,9 +115,11 @@ final class DashboardWidget
         });
         $installed_plugins_dir = $this->get_all_plugins_dirs();
         $plugins = \array_filter($plugins, static function ($plugin) use($installed_plugins_dir, $for_free) {
-            $slug = $for_free ? $plugin['free_plugin_slug'] ?? "" : $plugin['slug'];
-            $installed = \in_array($slug, $installed_plugins_dir, \true);
-            return $for_free ? $installed : !$installed;
+            $installed = !\in_array($plugin['slug'], $installed_plugins_dir, \true);
+            if ($for_free) {
+                $installed = \in_array($plugin['free_plugin_slug'], $installed_plugins_dir, \true) && $installed;
+            }
+            return $installed;
         });
         return \array_slice($plugins, 0, $limit);
     }
