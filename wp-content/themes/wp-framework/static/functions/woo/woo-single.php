@@ -124,7 +124,7 @@ function shady_add_custom_product_tabs($tabs) {
     $pid = $product->get_id();
 
     // rename product description
-    $tabs['description']['title']       = __('What you are really getting', 'shady');
+    $tabs['description']['title']       = __('Product Description', 'shady');
     $tabs['description']['priority']    = 20;
 
     if (get_field('show_product_spec_bool', $pid)) :
