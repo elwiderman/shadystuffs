@@ -20,7 +20,7 @@ if (get_field('show_collections_bool')) :
             </div>
         </div>
 
-        <div class="row collections-grid justify-content-center">
+        <div class="row collections-grid justify-content-center justify-content-xl-between">
             <?php
             if (have_rows('collections_repeater')) :
                 while (have_rows('collections_repeater')) : the_row();
