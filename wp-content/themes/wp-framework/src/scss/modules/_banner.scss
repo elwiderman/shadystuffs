@@ -40,7 +40,7 @@
                                 display: inline-block;
                                 h1 {
                                     @include font($primary-font, $regular);
-                                    font-size: $rem-52;
+                                    font-size: 52px;
                                     @include responsive-size(font-size, 52, 45, 1400, 1300, px);
                                     line-height: 1.0577;
 

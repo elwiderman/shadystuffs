@@ -233,7 +233,7 @@
     @include responsive-size(height, 50, 35, 1920, 1300, px);
     padding: 0;
     border-radius: 100%;
-    border: $rem-2 solid;
+    border: 2px solid;
     border-top-color: rgba($secondary-color, 0.80);
     border-bottom-color: rgba($primary-color, 0.15);
     border-left-color: rgba($secondary-color, 0.80);
