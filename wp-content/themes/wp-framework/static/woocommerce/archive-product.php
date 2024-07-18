@@ -61,15 +61,18 @@ echo "<div class=''>";
 						endif;
 
 
+						$title_color	= get_term_meta($query_obj->term_id, 'page_title_color', true) ? get_term_meta($query_obj->term_id, 'page_title_color', true) : '#0D1423';
+
+
 						if (!is_shop()) : ?>
 						<div class="shop-banner">
 							<div class="overlay"></div>
 							<figure class="shop-banner__img mb-0">
 								<img class="img-fluid" src="<?=$thumb;?>">
 							</figure>
-							<h2 class="woocommerce-products-header__title shop-banner__title">
+							<h1 class="woocommerce-products-header__title shop-banner__title" style="color:<?php echo $title_color;?>">
 								<?php woocommerce_page_title(); ?>
-							</h2>
+							</h1>
 						</div>
 						<?php
 						endif;
