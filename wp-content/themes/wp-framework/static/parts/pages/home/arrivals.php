@@ -23,10 +23,11 @@ if (get_field('show_new_arrivals_bool')) :
         </div>
 
         <?php
-        if (have_rows('new_arrivals_repeater')) :
+        // for new arrivals
+        if (sizeof(get_field('new_arrivals_relations')) > 0) :
             echo "<div class='products-carousel'>";
-            while (have_rows('new_arrivals_repeater')) : the_row();
-                $post_object = get_post(get_sub_field('product'));
+            foreach (get_field('new_arrivals_relations') as $post_id) :
+                $post_object = get_post($post_id);
 
                 setup_postdata($GLOBALS['post'] =& $post_object);
 
@@ -35,7 +36,7 @@ if (get_field('show_new_arrivals_bool')) :
                 echo "</div>";
 
                 wp_reset_postdata();
-            endwhile;
+            endforeach;
             echo "</div>";
         endif;
         ?>

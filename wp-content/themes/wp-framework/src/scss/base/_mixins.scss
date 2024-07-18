@@ -281,3 +281,31 @@
         +'Please make sure it is define in `$breakpoints` map.';
     }
 }
+
+
+
+// position absolute helper - just renders the full sized absolute elem
+@mixin full-absolute($zindex: 0) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: $zindex;
+}
+@mixin center-absolute($zindex: 0) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: $zindex;
+}
+
+
+// object fit cover center for the images inside aspect ratio divs
+@mixin img-obj-fit() {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}

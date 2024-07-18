@@ -17,7 +17,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_64a18c2d21fd9",
@@ -170,7 +171,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_64a1ef76b9ee0",
@@ -235,7 +237,7 @@
             "aria-label": "",
             "type": "repeater",
             "instructions": "",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
@@ -245,8 +247,8 @@
             "layout": "row",
             "pagination": 0,
             "min": 0,
-            "max": 5,
-            "collapsed": "",
+            "max": 0,
+            "collapsed": "field_652255318c308",
             "button_label": "Add Row",
             "rows_per_page": 20,
             "sub_fields": [
@@ -293,7 +295,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_64d2175521c78",
@@ -368,56 +371,39 @@
             "return_format": "array"
         },
         {
-            "key": "field_64d8a9a114f19",
+            "key": "field_6698595862c3d",
             "label": "Add the bestsellers",
-            "name": "bestsellers_repeater",
+            "name": "bestsellers_relations",
             "aria-label": "",
-            "type": "repeater",
+            "type": "relationship",
             "instructions": "",
-            "required": 0,
+            "required": 1,
             "conditional_logic": 0,
             "wrapper": {
                 "width": "",
                 "class": "",
                 "id": ""
             },
-            "layout": "table",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add Row",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_64d8a9db14f1a",
-                    "label": "Product",
-                    "name": "product",
-                    "aria-label": "",
-                    "type": "post_object",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "post_type": [
-                        "product"
-                    ],
-                    "post_status": [
-                        "publish"
-                    ],
-                    "taxonomy": "",
-                    "return_format": "id",
-                    "multiple": 0,
-                    "allow_null": 0,
-                    "ui": 1,
-                    "bidirectional_target": [],
-                    "parent_repeater": "field_64d8a9a114f19"
-                }
-            ]
+            "post_type": [
+                "product"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search",
+                "post_type",
+                "taxonomy"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": 20,
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0,
+            "bidirectional_target": []
         },
         {
             "key": "field_64d2811cf099b",
@@ -434,7 +420,8 @@
                 "id": ""
             },
             "placement": "top",
-            "endpoint": 0
+            "endpoint": 0,
+            "selected": 0
         },
         {
             "key": "field_64d285e3f099c",
@@ -493,11 +480,11 @@
             "return_format": "array"
         },
         {
-            "key": "field_64db92c2111bd",
+            "key": "field_6698598d62c43",
             "label": "Add the new arrivals",
-            "name": "new_arrivals_repeater",
+            "name": "new_arrivals_relations",
             "aria-label": "",
-            "type": "repeater",
+            "type": "relationship",
             "instructions": "",
             "required": 0,
             "conditional_logic": 0,
@@ -506,44 +493,26 @@
                 "class": "",
                 "id": ""
             },
-            "layout": "table",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add Row",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_64db92c2111c2",
-                    "label": "Product",
-                    "name": "product",
-                    "aria-label": "",
-                    "type": "post_object",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "",
-                        "class": "",
-                        "id": ""
-                    },
-                    "post_type": [
-                        "product"
-                    ],
-                    "post_status": [
-                        "publish"
-                    ],
-                    "taxonomy": "",
-                    "return_format": "id",
-                    "multiple": 0,
-                    "allow_null": 0,
-                    "bidirectional": 0,
-                    "ui": 1,
-                    "bidirectional_target": [],
-                    "parent_repeater": "field_64db92c2111bd"
-                }
-            ]
+            "post_type": [
+                "product"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search",
+                "post_type",
+                "taxonomy"
+            ],
+            "return_format": "id",
+            "min": "",
+            "max": 20,
+            "elements": [
+                "featured_image"
+            ],
+            "bidirectional": 0,
+            "bidirectional_target": []
         }
     ],
     "location": [
@@ -564,5 +533,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1696748964
+    "modified": 1721261389
 }

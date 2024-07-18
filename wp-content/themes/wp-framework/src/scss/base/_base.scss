@@ -102,7 +102,8 @@ ul {
 .container {
     padding: 0 12px;
     @include respond-to('s-desk') {
-        max-width: 1300px;
+        max-width: 100%;
+        padding: 0 25px;
     }
     .row {
         margin: 0 -12px;
