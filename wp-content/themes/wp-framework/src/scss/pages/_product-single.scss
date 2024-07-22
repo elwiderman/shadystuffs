@@ -580,6 +580,9 @@
                                         @include font($secondary-font, $bold);
                                         @extend h4;
                                         font-size: 20px;
+                                        strong, b {
+                                            @include font($secondary-font, $bold);
+                                        }
                                     }
                                     h5 {
                                         font-size: 18px;

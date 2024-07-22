@@ -7,6 +7,30 @@
 //     echo "<h4 class='title'>{$title}</h4>";
 // }
 
+/**
+ * Change the strength requirement for WooCommerce passwords
+ *
+ * @author Misha Rudrastyh
+ * @url https://rudrastyh.com/woocommerce/password-strength-meter.html#change-minimum-strength
+ *
+ * Strength Settings
+ * 4 = Strong
+ * 3 = Medium (default) 
+ * 2 = Also Weak but a little bit stronger 
+ * 1 = Password should be at least Weak
+ * 0 = Very Weak / Anything
+ */
+add_filter( 'woocommerce_min_password_strength', 'shady_change_password_strength' );
+
+function shady_change_password_strength( $strength ) {
+    return 2;
+}
+
+add_filter( 'loop_shop_per_page', 'shady_redefine_products_per_page', 9999 );
+function shady_redefine_products_per_page( $per_page ) {
+    $per_page = 32;
+    return $per_page;
+}
 
 // thumb wrapper and starting of content wrap
 remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
