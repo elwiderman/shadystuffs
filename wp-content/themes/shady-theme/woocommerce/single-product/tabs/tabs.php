@@ -35,20 +35,22 @@ if ( ! empty( $product_tabs ) ) : ?>
 		$i = 0;
 		foreach ($product_tabs as $key => $product_tab) :
 			$i++;
+			/* 
+			setting the accordion to start collapsed
 			if ($i == 1) :
 				$title_collapsed 	= '';
 				$aria_expanded		= 'true';
 				$collapse_show		= 'show';
 			else :
-				$title_collapsed 	= 'collapsed';
-				$aria_expanded		= 'false';
-				$collapse_show		= '';
-			endif;
+			endif; */
+			$title_collapsed 	= 'collapsed';
+			$aria_expanded		= 'false';
+			$collapse_show		= '';
 			?>
 			<div class="card">
 				<div class="card-header" id="<?php echo esc_attr( $key ); ?>">
-					<h4 class="card-header__title <?php echo $title_collapsed;?>" type="button" data-toggle="collapse"
-						data-target="#<?php echo esc_attr( $key ); ?>-content" aria-expanded="<?php echo $aria_expanded;?>" aria-controls="<?php echo esc_attr( $key ); ?>-content">
+					<h4 class="card-header__title <?php echo $title_collapsed;?>" type="button" data-bs-toggle="collapse"
+						data-bs-target="#<?php echo esc_attr( $key ); ?>-content" aria-expanded="<?php echo $aria_expanded;?>" aria-controls="<?php echo esc_attr( $key ); ?>-content">
 						<span class="card-header__title--label">
 							<?php echo wp_kses_post(apply_filters('woocommerce_product_' . $key . '_tab_title', $product_tab['title'], $key));?>
 						</span>
@@ -58,7 +60,7 @@ if ( ! empty( $product_tabs ) ) : ?>
 					</h4>
 				</div>
 
-				<div id="<?php echo esc_attr( $key ); ?>-content" class="<?php echo esc_attr( $key ); ?>-content collapse <?php echo $collapse_show;?>" aria-labelledby="<?php echo esc_attr( $key ); ?>" data-parent="#productAccordion">
+				<div id="<?php echo esc_attr( $key ); ?>-content" class="<?php echo esc_attr( $key ); ?>-content collapse <?php echo $collapse_show;?>" aria-labelledby="<?php echo esc_attr( $key ); ?>" data-bs-parent="#productAccordion">
 					<div class="card-body">
 						<?php
 						if ( isset( $product_tab['callback'] ) ) {

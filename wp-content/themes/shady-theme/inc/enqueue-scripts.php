@@ -76,7 +76,7 @@ function shady_framework_scripts() {
     if (is_cart() || is_product()) {
         wp_enqueue_script('shady-woo', $path . shady_get_hashed_assets('js/shadyWoo.js'), ['wc-cart'], '', [
             'strategy'      => 'defer',
-            'in_footer'     => true
+            'in_footer'     => false
         ]);
 
         wp_localize_script('shady-woo', 'WPURLS', array(
@@ -100,7 +100,7 @@ function shady_framework_admin_scripts() {
     $path = get_template_directory_uri();
     wp_enqueue_style('site-admin-css', $path . shady_get_hashed_assets('scss/admin.scss'), array(), '', 'all');
 }
-add_action('admin_enqueue_scripts', 'shady_framework_admin_scripts');
+// add_action('admin_enqueue_scripts', 'shady_framework_admin_scripts');
 
 
 

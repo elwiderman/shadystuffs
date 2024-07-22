@@ -1,3 +1,6 @@
+import $ from 'jquery';
+import 'slick-carousel';
+
 export default class Carousels {
     constructor() {
         this.init();

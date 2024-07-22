@@ -8,6 +8,7 @@ export default class Woo {
     }
 
     init() {
+        console.log('asdas');
         if ($('.single-page.single-product').length) {
             this.theQuantityButtons();
         }

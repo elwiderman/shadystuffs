@@ -1,6 +1,9 @@
 /* all forms js methods are here */
 
-import 'select2';
+import $ from 'jquery';
+import select2 from 'select2';
+//Hook up select2 to jQuery
+select2($);
 
 export default class Forms {
     constructor() {

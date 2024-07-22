@@ -267,7 +267,7 @@
                                     display: inline-flex;
                                     justify-content: center;
                                     align-items: center;
-                                    font-size: 8px;
+                                    font-size: 15px;
                                     font-weight: $light;
                                     width: 35px;
                                     padding: 0;
@@ -350,6 +350,9 @@
                                 }
                             }
                         }
+                    }
+                    .wpced {
+                        margin-bottom: 10px;
                     }
                     .wishlist {
                         .yith-wcwl-add-to-wishlist {
@@ -622,8 +625,14 @@
                         line-height: 1;
                         margin-bottom: 20px;
                     }
+                    .products-carousel {
+                        .product {
+                            .wpced-product {
+                                display: none;
+                            }
+                        }
+                    }
                 }
-                
             }
         }
     }

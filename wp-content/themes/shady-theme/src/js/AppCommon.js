@@ -2,14 +2,10 @@
 **  All the common js methods are called here
 */
 import $ from 'jquery';
-import 'slick-carousel';
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
 
 import { Fancybox } from "@fancyapps/ui";
-import { Tab } from 'bootstrap';
-import select2 from 'select2';
-//Hook up select2 to jQuery
-select2($);
+// import { Tab } from 'bootstrap';
 
 export default class AppCommon {
     constructor() {
@@ -21,8 +17,8 @@ export default class AppCommon {
         // this.pageLoading();
         this.goTop();
         this.nav();
-        this.fancyLightbox();
-        this.postGallery();
+        // this.fancyLightbox();
+        // this.postGallery();
         this.sizeChartTrigger();
 
         if ($('#mobiSidebar').length) {
@@ -136,7 +132,10 @@ export default class AppCommon {
                 if ($(e.currentTarget).attr('href') === '#sizeChartPop') {
                     e.preventDefault();
                     // trigger the modal
-                    $('#sizeChartPop').modal('show');
+                    // $('#sizeChartPop').modal('show');
+                    let modal = new bootstrap.Modal($('#sizeChartPop')[0]);
+
+                    modal.show();
                 }
             });
         }

@@ -32,13 +32,13 @@ function shady_add_category_collection_below_title() {
 add_action( 'woocommerce_after_quantity_input_field', 'shady_display_quantity_plus' );
   
 function shady_display_quantity_plus() {
-   echo '<button type="button" class="plus quantity__btn"><i class="fas fa-plus"></i></button>';
+   echo '<button type="button" class="plus quantity__btn"><i class="icon-plus"></i></button>';
 }
   
 add_action( 'woocommerce_before_quantity_input_field', 'shady_display_quantity_minus' );
   
 function shady_display_quantity_minus() {
-   echo '<button type="button" class="minus quantity__btn"><i class="fas fa-minus"></i></button>';
+   echo '<button type="button" class="minus quantity__btn"><i class="icon-minus"></i></button>';
 }
   
 // -------------
@@ -185,7 +185,7 @@ function shady_size_chart_before_quantity() {
         ?>
         
         <div class="sizechart-wrap">
-            <a href="#" class="sizechart-wrap__trigger-sizechart" data-toggle="modal" data-target="#sizeChartPop">
+            <a href="#" class="sizechart-wrap__trigger-sizechart" data-bs-toggle="modal" data-bs-target="#sizeChartPop">
                 <?php _e('See size chart', 'shady');?>
             </a>
     
