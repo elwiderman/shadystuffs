@@ -70,7 +70,17 @@
                             .shop-banner {
                                 position: relative;
                                 z-index: 0;
+                                overflow: hidden;
                                 margin-bottom: 30px;
+                                &:before {
+                                    content: '';
+                                    @include full-absolute(1);
+                                    top: unset;
+                                    bottom: 0;
+                                    height: 50%;
+                                    background: rgb(39,41,43);
+                                    background: linear-gradient(0deg, rgba(39,41,43,1) 19%, rgba(4,52,98,0) 100%);
+                                }
                                 &__img {
                                     width: 100%;
                                     position: relative;
@@ -88,6 +98,9 @@
                                     left: 15px;
                                     z-index: 1;
                                     @extend h1;
+                                    @include respond-to-mob('medium') {
+                                        font-size: 25px;
+                                    }
                                 }
                             }
                         }

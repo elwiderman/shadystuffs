@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header( 'shop' );
 
-echo "<div class=''>";
+// echo "<div class=''>";
 ?>
 
 <div class="archive-page archive-shadystore">
@@ -56,9 +56,13 @@ echo "<div class=''>";
 							$thumb_id = get_term_meta($query_obj->term_id, 'banner_for_the_archive_pages_img', true);
 
 							$thumb = ($thumb_id) ? wp_get_attachment_image_src($thumb_id, 'full')[0] : placeholder_src('shop-banner')['url'];
+							$title_color	= get_term_meta($query_obj->term_id, 'page_title_color', true) ? get_term_meta($query_obj->term_id, 'page_title_color', true) : '#ffffff';
 						else :
 							$thumb = (has_post_thumbnail(get_the_ID())) ? get_the_post_thumbnail_url(get_the_ID(), 'shop-banner') : placeholder_src('shop-banner')['url'];
+							$title_color	= '#0d1423';
 						endif;
+
+
 
 
 						if (!is_shop()) : ?>
@@ -67,9 +71,9 @@ echo "<div class=''>";
 							<figure class="shop-banner__img mb-0">
 								<img class="img-fluid" src="<?=$thumb;?>">
 							</figure>
-							<h2 class="woocommerce-products-header__title shop-banner__title">
+							<h1 class="woocommerce-products-header__title shop-banner__title" style="color:<?php echo $title_color;?>">
 								<?php woocommerce_page_title(); ?>
-							</h2>
+							</h1>
 						</div>
 						<?php
 						endif;

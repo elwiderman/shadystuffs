@@ -23,7 +23,7 @@ if (have_rows('hero_slider_repeater')) : ?>
                         <div>
                             <div class='slide'>
                                 <a href='{$link_href}' class='{$link_class}' target='{$link_target}'>
-                                    <figure class='slider__img mb-0'>
+                                    <figure class='slide__img mb-0'>
                                         <img class='img-fluid' src='{$img['url']}' alt='{$img['alt']}'>
                                     </figure>
                                 </a>
