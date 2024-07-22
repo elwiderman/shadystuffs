@@ -1,0 +1,124 @@
+/* Styles for Typography and helpers */
+
+// typography
+h1 {
+    @include font($primary-font, $regular);
+    font-size: 60px;
+    line-height: 1;
+    margin: 0;
+    &.xxl {
+        font-size: 175px;
+        line-height: 1;
+        @include respond-to-mob('medium') {
+            font-size: 65px;
+        }
+    }
+}
+h2 {
+    @include font($primary-font, $regular);
+    font-size: 50px;
+    line-height: 1;
+}
+h3 {
+    @include font($primary-font, $regular);
+    font-size: 40px;
+    line-height: 1.2;
+    &.sm {
+        font-size: 33px;
+        line-height: 1.1;
+    }
+}
+h4 {
+    @include font($secondary-font, $regular);
+    font-size: 30px;
+    line-height: 1.2;
+}
+h5 {
+    @include font($secondary-font, $regular);
+    font-size: 25px;
+    line-height: 1.2;
+}
+h6 {
+    @include font($secondary-font, $semi-bold);
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+p {
+    @include font($secondary-font, $regular);
+    font-size: 14px;
+    line-height: 1.34;
+    margin-bottom: calc(14px * 1.34);
+}
+
+.lead {
+    @include font($secondary-font, $medium);
+    font-size: 16px;
+    line-height: 1.4;
+}
+.text-muted {
+    color: $secondary-color;
+}
+.title-area {
+    margin-bottom: 65px;
+    h1 {
+        font-size: 50px;
+        line-height: 70px;
+    }
+    h2 {
+        margin: 0 0 35px;
+    }
+    .lead {
+        margin: 0;
+    }
+    .margin-top-sm {
+        margin-top: 20px;
+    }
+}
+
+.color-grey {
+    color: $grey;
+}
+.color-dark {
+    color: $primary-font-color;
+}
+.color-alt-dark {
+    color: $alt-font-color;
+}
+
+.woocommerce-Price-amount {
+    .woocommerce-Price-currencySymbol {
+        font-size: 70%;
+    }
+}
+
+[class*="woofc-icon-cart"] {
+    font-family: $icomoon-font-family !important;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    @include respond-to-mob('medium') {
+        margin-right: 0;
+    }
+    &:before {
+        content: $icon-shopping-bag;   
+    }
+}
+
+#woofc-count {
+    right: 15px;
+    bottom: 60px;
+    i {
+        font-size: 28px;
+    }
+}
+
+.woofc-item-estimated-delivery-date {
+    .wpced {
+        .wpced-inner {
+            font-size: 10px;
+        }
+    }
+}

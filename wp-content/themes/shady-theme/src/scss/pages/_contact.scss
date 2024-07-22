@@ -1,0 +1,139 @@
+.single-page {
+    &.single-contact {
+        .section-block {
+            &.section-hero {
+                padding: 30px 0 20px;
+                h1 {
+                    @include font($secondary-font, $bold);
+                    font-size: 30px;
+                }
+            }
+            &.section-contact {
+                .content-wrap {
+                    &__links {
+                        font-size: 18px;
+                        display: flex;
+                        align-items: center;
+                        &:not(:last-child) {
+                            margin-bottom: 8px;
+                        }
+                        i {
+                            font-size: 20px;
+                            width: 40px;
+                            &:before {
+                                color: $secondary-color;
+                            }
+                        }
+                        a {
+                            &:focus {
+                                color: $primary-font-color;
+                            }
+                        }
+                    }
+                }
+                .form-area {
+                    &.form-contact {
+                        background: rgba($alt-grey, 0.35);
+                        padding: 25px 20px;
+                        .form-group {
+                            .form-label {
+                                display: block;
+                                font-size: 16px;
+                                color: #6c757d;
+                                padding-left: 0.75rem;
+                                margin-bottom: 0;
+                            }
+                            .wpcf7-not-valid-tip {
+                                font-size: 11px;
+                                padding-left: 0.75rem;
+                            }
+                            .form-control {
+                                height: 38px;
+                                background: $primary-bg;
+                                border-color: $form-border;
+                                border-radius: 0;
+                                box-shadow: none !important;
+                                outline: 0 !important;
+                                @include transition(0.2s);
+                                &:focus {
+                                    background: $primary-bg;
+                                    border-color: #80bdff;
+                                }
+                            }
+                            textarea {
+                                min-height: 100px;
+                            }
+                            .form-radio-elem {
+                                font-size: 14px;
+                                padding-left: 0;
+                                .wpcf7-list-item {
+                                    @include respond-to-mob('medium') {
+                                        display: block;
+                                        margin-left: 10px !important;
+                                    }
+                                    &.first {
+                                        margin-left: 0;
+                                    }
+                                    label {
+                                        position: relative;
+                                        margin-bottom: 0;
+                                        cursor: pointer;
+                                        input[type="radio"] {
+                                            opacity: 0;
+                                            visibility: hidden;
+                                            &:checked + .wpcf7-list-item-label {
+                                                &:before {
+                                                    opacity: 1;
+                                                }
+                                                &:after {
+                                                    opacity: 0;
+                                                }
+                                            }
+                                        }
+                                        .wpcf7-list-item-label {
+                                            position: relative;
+                                            padding-left: 5px;
+                                            &:before, &:after {
+                                                position: absolute;
+                                                top: 50%;
+                                                left: -12px;
+                                                transform: translateY(-50%);
+                                                font-family: 'shadyicons';
+                                                font-size: 15px;
+                                                font-weight: $regular;
+                                                line-height: 1;
+                                                opacity: 0;
+                                                @include transition(0.2s);
+                                            }
+                                            &:before {
+                                                content: '\e90b';
+                                                color: $secondary-color;
+                                            }
+                                            &:after {
+                                                content: '\e925';
+                                                opacity: 1;
+                                            }
+                                            &::selection {
+                                                background: transparent;
+                                                color: inherit;
+                                            }
+                                            &::-moz-selection {
+                                                background: transparent;
+                                                color: inherit;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .wpcf7-response-output {
+                            font-size: 18px;
+                            text-align: center;
+                            margin: 25px 0 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

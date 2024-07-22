@@ -1,0 +1,79 @@
+/* Styles for buttons */
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    @include font($secondary-font, $bold);
+    font-size: 16px;
+    line-height: 1;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 3px 4px 9px rgba($primary-color, 0.45);
+    outline: 0 !important;
+    padding: 0 30px;
+    @include transition(0.3s);
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        &:hover {
+            background: initial;
+        }
+    }
+    @include respond-to-mob ('medium') {
+        font-size: 13px;
+        height: 40px;
+        padding: 0 20px;
+    }
+}
+
+.btn-main {
+    @extend .btn;
+    background: $secondary-color;
+    font-weight: $bold;
+    color: $primary-bg;
+    text-transform: lowercase;
+    &:hover {
+        background: darken($secondary-color, 10);
+        color: $primary-bg;
+        box-shadow: none;
+    }
+    &:disabled, &.disabled {
+        box-shadow: none;
+    }
+}
+
+.btn-main-ghost {
+    @extend .btn;
+    background: $primary-bg;
+    font-weight: $bold;
+    color: $alt-font-color;
+    text-transform: lowercase;
+    @include add-border(1px, $alt-font-color, 'all');
+    &:hover {
+        background: darken($primary-bg, 10);
+        // color: $primary-bg;
+        box-shadow: none;
+    }
+    &:disabled, &.disabled {
+        box-shadow: none;
+    }
+}
+
+.btn-square-white {
+    @extend .btn;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    color: $primary-font-color;
+    line-height: 1;
+    background: $primary-bg;
+    @include add-border(1px, $primary-font-color, 'all');
+    box-shadow: none !important;
+    border-radius: 0;
+    padding: 0;
+    &:hover {
+        color: $secondary-color;
+    }
+}
