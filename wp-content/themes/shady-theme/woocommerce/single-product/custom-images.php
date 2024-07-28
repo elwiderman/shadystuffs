@@ -10,46 +10,50 @@ array_unshift($attachment_ids, (int)$post_thumbnail_id);
 
 <div class="product-img-wrap">
     <div class="product-img-wrap__inner">
-        <div class="product-carousel" id="productSingleCarouselMain">
-            <?php
-            foreach ($attachment_ids as $att_id) :
-                $thumb          = wp_get_attachment_image_url($att_id, 'prod-single');
-                $thumb_xl       = wp_get_attachment_image_url($att_id, 'full');
-                $thumb_srcset   = wp_get_attachment_image_srcset($att_id, ['prod-single-thumb', 'full']);
-                $thumb_alt      = get_post_meta($att_id, '_wp_attachment_image_alt', true);
-    
-                echo "
-                <div>
-                    <div class='product-slide'>
-                        <a href='{$thumb_xl}' data-fancybox='product-imgs>
-                            <figure class='product-slide__img mb-0'>
-                                <img src='{$thumb}' srcset='{$thumb_srcset}' alt='{$thumb_alt}' class='img-fluid'>
-                            </figure>
-                        </a>
+        <div class="product-img-wrap__inner--main">
+            <div class="product-carousel" id="productSingleCarouselMain">
+                <?php
+                foreach ($attachment_ids as $att_id) :
+                    $thumb          = wp_get_attachment_image_url($att_id, 'prod-single');
+                    $thumb_xl       = wp_get_attachment_image_url($att_id, 'full');
+                    $thumb_srcset   = wp_get_attachment_image_srcset($att_id, ['prod-single-thumb', 'full']);
+                    $thumb_alt      = get_post_meta($att_id, '_wp_attachment_image_alt', true);
+        
+                    echo "
+                    <div>
+                        <div class='product-slide'>
+                            <a href='{$thumb_xl}' data-fancybox='product-imgs>
+                                <figure class='product-slide__img mb-0'>
+                                    <img src='{$thumb}' srcset='{$thumb_srcset}' alt='{$thumb_alt}' class='img-fluid'>
+                                </figure>
+                            </a>
+                        </div>
                     </div>
-                </div>
-                ";
-            endforeach;
-            ?>
+                    ";
+                endforeach;
+                ?>
+            </div>
         </div>
     
-        <div class="product-nav" id="productSingleCarouselNav">
-            <?php
-            foreach ($attachment_ids as $att_id) :
-                $thumb          = wp_get_attachment_image_url($att_id, 'prod-single-thumb');
-                $thumb_alt      = get_post_meta($att_id, '_wp_attachment_image_alt', true);
-    
-                echo "
-                <div>
-                    <div class='product-slide'>
-                        <figure class='product-slide__img mb-0'>
-                            <img src='{$thumb}' alt='{$thumb_alt}' class='img-fluid'>
-                        </figure>
+        <div class="product-img-wrap__inner--navs">
+            <div class="product-nav" id="productSingleCarouselNav">
+                <?php
+                foreach ($attachment_ids as $att_id) :
+                    $thumb          = wp_get_attachment_image_url($att_id, 'prod-single-thumb');
+                    $thumb_alt      = get_post_meta($att_id, '_wp_attachment_image_alt', true);
+        
+                    echo "
+                    <div>
+                        <div class='product-slide'>
+                            <figure class='product-slide__img mb-0'>
+                                <img src='{$thumb}' alt='{$thumb_alt}' class='img-fluid'>
+                            </figure>
+                        </div>
                     </div>
-                </div>
-                ";
-            endforeach;
-            ?>
+                    ";
+                endforeach;
+                ?>
+            </div>
         </div>
     </div>
 </div>

@@ -47,7 +47,7 @@ export default class Carousels {
                 slidesToShow: 1,
                 slidesToScroll: 1,
                 swipeToSlide: true,
-                waitForAnimate: false,
+                waitForAnimate: true,
                 centerMode: false,
                 lazyLoad: 'ondemand',
                 adaptiveHeight: false,
@@ -65,13 +65,14 @@ export default class Carousels {
             dots: false,
             arrows: false,
             infinite: true,
-            autoplay: false,
+            autoplay: true,
             rows: 0,
             speed: 800,
             fade: true,
             cssEase: 'ease',
             lazyLoad: 'ondemand',
-            asNavFor: '#productSingleCarouselNav'
+            asNavFor: '#productSingleCarouselNav',
+            adaptiveHeight: true,
         });
 
         $('#productSingleCarouselNav').slick({
@@ -84,6 +85,7 @@ export default class Carousels {
             fade: false,
             slidesToShow: 4,
             slidesToScroll: 1,
+            variableWidth: false,
             vertical: true,
             centerMode: false,
             focusOnSelect: true,
@@ -103,6 +105,23 @@ export default class Carousels {
                     vertical: false,
                 }
             }]
+        });
+
+
+        let mainSlider = $('#productSingleCarouselMain'),
+            navSlider = $('#productSingleCarouselNav'),
+            parent = mainSlider.parents('.product-img-wrap');
+
+        $(window).on('load resize', e => {
+            if ($(window).width() > 767) {
+                mainSlider.css({
+                    'width': parent.width() - navSlider.width() - 20
+                });
+            } else {
+                mainSlider.css({
+                    'width': parent.width()
+                });
+            }
         });
     }
 }

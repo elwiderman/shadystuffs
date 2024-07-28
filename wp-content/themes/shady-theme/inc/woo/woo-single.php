@@ -92,6 +92,13 @@ function shady_woo_quantity_input_min( $min, $product ){
 }
 
 
+// move the short desc after the add to cart
+remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
+add_action('woocommerce_single_product_summary', 'shady_template_single_excerpt', 32);
+function shady_template_single_excerpt() {
+    wc_get_template_part('single-product/short-description');
+}
+
 
 // add wishlist button after the add to cart button
 add_action('woocommerce_single_product_summary', 'shady_add_wishlist_after_add_to_cart_shop_sinlge', 31);
@@ -215,9 +222,9 @@ function shady_size_chart_before_quantity() {
 
 /* the image section */
 remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10);
-remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
+// remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
 
-add_action('woocommerce_before_single_product_summary', 'shady_woo_custom_product_images', 20);
+// add_action('woocommerce_before_single_product_summary', 'shady_woo_custom_product_images', 20);
 function shady_woo_custom_product_images() {
     if (is_product()) {
         get_template_part('woocommerce/single-product/custom-images');

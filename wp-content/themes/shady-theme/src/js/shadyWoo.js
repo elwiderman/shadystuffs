@@ -8,9 +8,9 @@ export default class Woo {
     }
 
     init() {
-        console.log('asdas');
         if ($('.single-page.single-product').length) {
             this.theQuantityButtons();
+            this.moveSizechartBtn();
         }
         if ($('#shadyCart').length) {
             this.theQuantityButtons();
@@ -48,6 +48,16 @@ export default class Woo {
                 }
             }
         });
+    }
+
+    moveSizechartBtn() {
+        let trigger = $('.sizechart-wrap__trigger-sizechart');
+
+        if (trigger.length) {
+            trigger.detach();
+
+            $('form.variations_form .variations.cfvsw-variation-disable-logic').find('label[for="pa_size"]').parents('th.label').addClass('size-chart-appended').append(trigger);
+        }
     }
 
     moveCrossSells() {

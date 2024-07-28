@@ -33,7 +33,7 @@ global $product;
 
 	<?php endif; ?>
 
-	<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<div class="tagged_as">' . '<i class="fas fa-tags"></i>' . ' ', '</div>' ); ?>
+	<?php echo wc_get_product_tag_list( $product->get_id(), ', ', '<div class="tagged_as">' . '<i class="icon-tag"></i>' . ' ', '</div>' ); ?>
 
 	<?php do_action( 'woocommerce_product_meta_end' ); ?>
 
