@@ -1,0 +1,171 @@
+.archive-page {
+    &.archive-shadystore {
+        position: relative;
+        z-index: 0;
+        .main-wrapper {
+            .content-area {
+                padding-left: 50px;
+                @include respond-to-mob('medium') {
+                    padding-left: 0;
+                }
+                .site-main {
+                    .product-wrap {
+                        width: 100%;
+                        display: flex;
+                        .product-grid {
+                            min-width: calc(100% + 24px);
+                            .loop-product-thumb {
+                                margin-bottom: 40px;
+                                .product {
+                                    .woocommerce-loop-product {
+                                        &__link {
+                                            .onsale {
+                                                left: 0;
+                                                min-height: auto;
+                                                min-width: auto;
+                                                border-radius: 0;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            .product-category {
+                                margin-bottom: 30px;
+                                a {
+                                    display: block;
+                                    position: relative;
+                                    z-index: 0;
+                                    &:hover {
+                                        .product-category__thumb {
+                                            img {
+                                                transform: scale(1.2);
+                                            }
+                                        }
+                                    }
+                                }
+                                &__thumb {
+                                    margin-bottom: 0;
+                                    overflow: hidden;
+                                    img {
+                                        @include transition(0.8s);
+                                    }
+                                }
+                                .woocommerce-loop-category__title {
+                                    position: absolute;
+                                    bottom: 15px;
+                                    @extend h3;
+                                    background: $primary-bg;
+                                    padding: 0 15px;
+                                    .count {
+                                        display: none !important;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .section-block {
+                        &.woocommerce-products-header {
+                            .shop-banner {
+                                position: relative;
+                                z-index: 0;
+                                overflow: hidden;
+                                margin-bottom: 30px;
+                                &:before {
+                                    content: '';
+                                    @include full-absolute(1);
+                                    top: unset;
+                                    bottom: 0;
+                                    height: 50%;
+                                    background: rgb(39,41,43);
+                                    background: linear-gradient(0deg, rgba(39,41,43,1) 19%, rgba(4,52,98,0) 100%);
+                                }
+                                &__img {
+                                    width: 100%;
+                                    position: relative;
+                                    overflow: hidden;
+                                    img {
+                                        width: 100%;
+                                        height: 100%;
+                                        object-fit: cover;
+                                        object-position: center;
+                                    }
+                                }
+                                &__title {
+                                    position: absolute;
+                                    bottom: 15px;
+                                    left: 15px;
+                                    z-index: 1;
+                                    @extend h1;
+                                    @include respond-to-mob('medium') {
+                                        font-size: 25px;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.woocommerce-before-loop {
+                            @include flex-display(row, space-between, center);
+                            .woocommerce-notices-wrapper {
+                                flex: 0 0 100%;
+                                max-width: 100%;
+                            }
+                            .woocommerce-result-count {
+                                @include respond-to-mob('medium') {
+                                    font-size: 11px;
+                                }
+                            }
+                            .woocommerce-ordering {
+                                min-width: 165px;
+                                text-align: right;
+                                .select2-container {
+                                    .select2-selection {
+                                        &--single {
+                                            height: 20px;
+                                            border: 0;
+                                            border-radius: 0;
+                                        }
+                                        &__rendered {
+                                            @extend p;
+                                            color: $primary-color;
+                                            margin-bottom: 0;
+                                            @include respond-to-mob('medium') {
+                                                font-size: 11px;
+                                                line-height: 20px;
+                                            }
+                                        }
+                                        &__arrow {
+                                            height: 19px;
+                                            top: 0;
+                                            right: 0;
+                                        }
+                                    }
+                                    .select2-dropdown {
+                                        border-radius: 0;
+                                        .select2-results {
+                                            &__option {
+                                                @extend p;
+                                                font-size: 12px;
+                                                margin-bottom: 0;
+                                                @include respond-to-mob('medium') {
+                                                    font-size: 11px;
+                                                }
+                                                &--selectable {
+                                                }
+                                                &--highlighted {
+                                                    background: $secondary-color;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}

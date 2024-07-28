@@ -1,0 +1,136 @@
+/* Styles for Footer */
+
+.footer {
+    background: $primary-color;
+    color: $primary-bg;
+    margin-top: 70px;
+    &__top {
+        padding: 50px 0;
+        &--menu-block {
+            @include respond-to-mob('medium') {
+                margin-bottom: 20px;
+            }
+        }
+        &--menu {
+            li {
+                font-size: 0;
+                &:not(:last-child) {
+                    margin-bottom: 8px;
+                }
+                a {
+                    display: inline-block;
+                    font-size: 14px;
+                    color: $primary-bg;
+                    &:hover {
+                        color: $secondary-color;
+                    }
+                }
+            }
+        }
+        &--socials {
+            @include flex-display;
+            li {
+                font-size: 0;
+                &:not(:last-child) {
+                    margin-right: 12px;
+                }
+                a {
+                    font-size: 25px;
+                    &:hover {
+                        opacity: 0.3;
+                    }
+                }
+            }
+        }
+        &--promo {
+            @include flex-display(row, flex-start, flex-start);
+            flex-wrap: nowrap;
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+            figure {
+                flex: 0 0 90px;
+                max-width: 90px;
+                padding-right: 10px;
+            }
+            .text {
+                font-size: 13px;
+            }
+        }
+    }
+    &__middle {
+        padding: 0 0 50px;
+        &--search-links {
+            @include flex-display;
+            li {
+                font-size: 0;
+                &:not(:last-child) {
+                    &:after {
+                        content: '|';
+                        font-size: 13px;
+                        color: rgba($primary-bg, 0.7);
+                        padding: 0 5px;
+                    }
+                }
+                a {
+                    font-size: 13px;
+                    color: $primary-bg;
+                    &:hover {
+                        color: $secondary-color;
+                    }
+                }
+            }
+        }
+        &--meta {
+            margin-top: 50px;
+            h1, h2, h3, h4, h5, h6 {
+                @extend h6;
+            }
+            p, ul, ol {
+                font-size: 13px;
+                margin-bottom: calc(13px * 1.34);
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+            ul, ol {
+                padding-left: 30px;
+            }
+            ul {
+                list-style: circle;
+            }
+        }
+    }
+    &__bottom {
+        padding: 0 0 50px;
+        &--copy {
+            font-size: 11px;
+        }
+    }
+}
+
+.go-top {
+    position: fixed;
+    bottom: 20px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background: $primary-color;
+    color: $primary-bg;
+    border-radius: 4px;
+    @include transition(0.3s);
+    display: none;
+    opacity: 0;
+    &:focus {
+        color: $primary-bg;
+    }
+    &.show {
+        display: block;
+        opacity: 0.8;
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

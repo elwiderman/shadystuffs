@@ -1,0 +1,312 @@
+/*
+** Mixins
+*/
+// which font
+@mixin font($font, $weight, $stretch: 100%) {
+    font-family: $font;
+    font-weight: $weight;
+    font-stretch: $stretch;
+}
+
+// border-radius
+@mixin border-radius($radius) {
+    border-radius: $radius;
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+}
+
+// transition ease-in-out
+@mixin transition($time) {
+    transition: All $time ease-in-out;
+    -webkit-transition: All $time ease-in-out;
+    -moz-transition: All $time ease-in-out;
+    -o-transition: All $time ease-in-out;
+}
+
+// transition smooth
+@mixin smooth-effect($time) {
+    -webkit-transition: all $time cubic-bezier(0.190, 1.000, 0.220, 1.000);
+    -moz-transition: all $time cubic-bezier(0.190, 1.000, 0.220, 1.000);
+    -o-transition: all $time cubic-bezier(0.190, 1.000, 0.220, 1.000);
+    transition: all $time cubic-bezier(0.190, 1.000, 0.220, 1.000);
+}
+
+// add border to elements
+@mixin add-border($size, $color, $position) {
+    @if $position=='top' {
+        border-top: $size solid $color;
+    }
+
+    @else if $position=='right' {
+        border-right: $size solid $color;
+    }
+
+    @else if $position=='bottom' {
+        border-bottom: $size solid $color;
+    }
+
+    @else if $position=='left' {
+        border-left: $size solid $color;
+    }
+
+    @else if $position=='top-bottom' {
+        border-top: $size solid $color;
+        border-bottom: $size solid $color;
+    }
+
+    @else if $position=='right-left' {
+        border-right: $size solid $color;
+        border-left: $size solid $color;
+    }
+
+    @else if $position=='all' {
+        border: $size solid $color;
+    }
+}
+
+// box shadow
+@mixin box-shadow($size, $color) {
+    box-shadow: $size $color;
+    -webkit-box-shadow: $size $color;
+    -moz-box-shadow: $size $color;
+    -o-box-shadow: $size $color;
+}
+
+// text-shadow
+@mixin text-shadow($size, $color) {
+    text-shadow: $size $color;
+}
+
+// translate item
+@mixin transform-translateXY($foo, $bar) {
+    transform: translate($foo, $bar);
+    -webkit-transform: translate($foo, $bar);
+    -moz-transform: translate($foo, $bar);
+    -ms-transform: translate($foo, $bar);
+    -o-transform: translate($foo, $bar);
+}
+
+// translate item along X
+
+@mixin transform-translateX($val) {
+    transform: translateX($val);
+    -webkit-transform: translateX($val);
+    -moz-transform: translateX($val);
+    -ms-transform: translateX($val);
+    -o-transform: translateX($val);
+}
+
+// translate item along Y
+@mixin transform-translateY($val) {
+    transform: translateY($val);
+    -webkit-transform: translateY($val);
+    -moz-transform: translateY($val);
+    -ms-transform: translateY($val);
+    -o-transform: translateY($val);
+}
+
+// scale item
+@mixin transform-scale($foo, $bar) {
+    transform: scale($foo, $bar);
+    -webkit-transform: scale($foo, $bar);
+    -moz-transform: scale($foo, $bar);
+    -ms-transform: scale($foo, $bar);
+    -o-transform: scale($foo, $bar);
+}
+
+// scale item along X
+@mixin transform-scaleX($foo) {
+    transform: scaleX($foo);
+    -webkit-transform: scaleX($foo);
+    -moz-transform: scaleX($foo);
+    -ms-transform: scaleX($foo);
+    -o-transform: scaleX($foo);
+}
+
+// scale item along Y
+@mixin transform-scaleY($foo) {
+    transform: scaleY($foo);
+    -webkit-transform: scaleY($foo);
+    -moz-transform: scaleY($foo);
+    -ms-transform: scaleY($foo);
+    -o-transform: scaleY($foo);
+}
+
+// transform origin
+@mixin transform-origin($position) {
+    transform-origin: $position;
+    -webkit-transform-origin: $position;
+}
+
+// animation fill mode
+@mixin animation-fill-mode($direction) {
+    animation-fill-mode: $direction;
+    -webkit-animation-fill-mode: $direction;
+}
+
+// placeholder for forms
+@mixin optional-at-root($sel) {
+    @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+        @content;
+    }
+}
+
+@mixin placeholder {
+    @include optional-at-root('::-webkit-input-placeholder') {
+        @content;
+    }
+    @include optional-at-root(':-moz-placeholder') {
+        @content;
+    }
+    @include optional-at-root('::-moz-placeholder') {
+        @content;
+    }
+    @include optional-at-root(':-ms-input-placeholder') {
+        @content;
+    }
+}
+
+// lines to show (thanks to https://codepen.io/martinwolf/pen/qlFdp)
+@mixin lines-visible($font-size, $line-height, $lines-to-show) {
+    display: block;
+    /* Fallback for non-webkit */
+    display: -webkit-box;
+    max-width: 100%;
+    height: calc(#{$font-size} * #{$line-height} * #{$lines-to-show} + 1px);
+    /* Fallback for non-webkit */
+    margin: 0 auto;
+    font-size: $font-size;
+    line-height: $line-height;
+    -webkit-line-clamp: $lines-to-show;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+@mixin lines-visible-responsive($max-font-size, $min-font-size, $line-height, $lines-to-show, $max-viewport, $min-viewport) {
+    display: block;
+    /* Fallback for non-webkit */
+    display: -webkit-box;
+    max-width: 100%;
+    height: calc((#{$min-font-size}px + (#{$max-font-size} - #{$min-font-size}) * ((100vw - #{$min-viewport}px) / (#{$max-viewport} - #{$min-viewport}))) * #{$line-height} * #{$lines-to-show});
+    /* Fallback for non-webkit */
+    margin: 0 auto;
+    // font-size: $font-size;
+    font-size: calc(#{$min-font-size}px + (#{$max-font-size} - #{$min-font-size}) * ((100vw - #{$min-viewport}px) / (#{$max-viewport} - #{$min-viewport})));
+    line-height: $line-height;
+    -webkit-line-clamp: $lines-to-show;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+// to generate dynamic key value pairs for dynamic sizing
+// refer: https://css-tricks.com/books/volume-i/scale-typography-screen-size/
+@mixin responsive-size($property, $max-size, $min-size, $max-viewport, $min-viewport, $unit) {
+    @media (max-width: #{$max-viewport}#{$unit}) and (min-width: #{$min-viewport}#{$unit}) {
+        #{$property}: calc(#{$min-size}#{$unit} + (#{$max-size} - #{$min-size}) * ((100vw - #{$min-viewport}#{$unit}) / (#{$max-viewport} - #{$min-viewport})));
+    }
+
+    @media (max-width: calc(#{$min-viewport}#{$unit} - 1#{$unit})) {
+        #{$property}: #{$min-size}#{$unit};
+    }
+
+    @media (min-width: calc(#{$max-viewport}#{$unit} + 1#{$unit})) {
+        #{$property}: #{$max-size}#{$unit};
+    }
+}
+
+@mixin flex-display($direction: row, $justify: flex-start, $align: center) {
+    display: flex;
+    flex-direction: $direction;
+    flex-wrap: wrap;
+    justify-content: $justify;
+    align-items: $align;
+}
+
+@mixin equal-cols {
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+@mixin spinner($width, $color-one, $color-two) {
+    width: $width;
+    height: $width;
+    padding: 0;
+    border-radius: 100%;
+    border: 2px solid;
+    border-top-color: rgba($color-one, 0.80);
+    border-bottom-color: rgba($color-two, 0.15);
+    border-left-color: rgba($color-one, 0.80);
+    border-right-color: rgba($color-two, 0.15);
+    -webkit-animation: loader 0.8s linear infinite;
+    animation: loader 1.0s linear infinite;
+}
+
+@mixin respond-to($breakpoint) {
+    $raw-query: map-get($breakpoints, $breakpoint);
+
+    @if $raw-query {
+        $query: if(type-of($raw-query)=='string',
+                unquote($raw-query),
+                inspect($raw-query),
+            );
+
+        @media #{$query} {
+            @content;
+        }
+    }
+
+    @else {
+        @error "No value found for `#{$breakpoint}`. " (+"Please make sure it is define in `$breakpoints` map.");
+    }
+}
+
+@mixin respond-to-mob($breakpoint) {
+    $raw-query: map-get($breakpoints_mob, $breakpoint);
+
+    @if $raw-query {
+        $query: if(type-of($raw-query)=='string',
+                unquote($raw-query),
+                inspect($raw-query),
+            );
+
+        @media #{$query} {
+            @content;
+        }
+    }
+
+    @else {        
+        @error "No value found for `#{$breakpoints_mob}`. " (+"Please make sure it is define in `$breakpoints_mob` map.");
+    }
+}
+
+
+// position absolute helper - just renders the full sized absolute elem
+@mixin full-absolute($zindex: 0) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: $zindex;
+}
+@mixin center-absolute($zindex: 0) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: $zindex;
+}
+
+
+// object fit cover center for the images inside aspect ratio divs
+@mixin img-obj-fit() {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}

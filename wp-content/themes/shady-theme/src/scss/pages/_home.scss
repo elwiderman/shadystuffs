@@ -1,0 +1,219 @@
+.single-page {
+    &.single-home {
+        .section-block {
+            position: relative;
+            z-index: 1;
+            .section-title {
+                @extend h1, .xxl;
+                @include respond-to-mob('medium') {
+                    margin-bottom: 5px;
+                }
+            }
+            &.section-hero, &.section-search, &.section-bestsellers {
+                z-index: 2;
+            }
+            &.section-search {
+                .prod-search-wrap {
+                    .dgwt-wcas-style-pirx {
+                        .dgwt-wcas-sf-wrapp {
+                            background: transparent !important;
+                        }
+                    }
+                }
+            }
+            &.section-collections {
+                padding: 50px 0 100px;
+                @include respond-to-mob('medium') {
+                    padding: 20px 0 50px;
+                }
+                .collections-blob {
+                    position: absolute;
+                    top: -20%;
+                    right: -20%;
+                    width: 100%;
+                    z-index: -1;
+                    lottie-player {
+                        width: 90vw;
+                        height: 60vw;
+                    }
+                    @include respond-to-mob('medium') {
+                        top: -30px;
+                        right: 0;
+                        width: 110vw;
+                        lottie-player {
+                            width: 150vw;
+                            height: 90vw;
+                        }
+                    }
+                }
+                /* .collections-grid {
+                    .grid-row {
+                        @include flex-display(row, flex-start, flex-start);
+                        margin: 0 -6px;
+                        position: relative;
+                        z-index: 0;
+                        &:not(:first-child) {
+                            margin-top: 12px;
+                        }
+                        .grid {
+                            flex: 0 0 50%;
+                            max-width: 50%;
+                            padding: 0 6px;
+                            &__perma {
+                                display: block;
+                                width: 100%;
+                                height: 100%;
+                                &:hover {
+                                    .grid__thumb {
+                                        img {
+                                            transform: scale(1.1);
+                                        }
+                                    }
+                                }
+                            }
+                            &__thumb {
+                                width: 100%;
+                                height: 100%;
+                                position: relative;
+                                z-index: 0;
+                                overflow: hidden;
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    object-position: center;
+                                    @include transition(0.6s);
+                                }
+                                &--caption {
+                                    position: absolute;
+                                    bottom: 30px;
+                                    right: 15px;
+                                    text-align: right;
+                                    font-size: 55px;
+                                    @include font($primary-font, $regular);
+                                    color: $primary-bg;
+                                    line-height: 1.3;
+                                    text-transform: lowercase;
+                                    background: $primary-color;
+                                    padding: 0 15px 0 35px;
+                                }
+                            }
+                        }
+                        &:nth-child(odd) {
+                            .grid {
+                                &:nth-child(1) {
+                                    aspect-ratio: 588 / 612;
+                                }
+                                &:nth-child(2), &:nth-child(3) {
+                                    aspect-ratio: 588 / 300;
+                                }
+                                &:nth-child(3) {
+                                    position: absolute;
+                                    bottom: 0;
+                                    right: 0;
+                                }
+                            }
+                        }
+                        &:nth-child(even) {
+                            .grid {
+                                &:nth-child(3) {
+                                    aspect-ratio: 588 / 612;
+                                }
+                                &:nth-child(1), &:nth-child(2) {
+                                    aspect-ratio: 588 / 300;
+                                }
+                                &:nth-child(2) {
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                }
+                            }
+                        }
+                    }
+                } */
+
+                .collections-grid {
+                    @include respond-to-mob('medium') {
+                        margin: 0;
+                        margin-top: 20px;
+                    }
+                    .collection {
+                        margin-bottom: 40px;
+                        @include respond-to-mob('medium') {
+                            display: flex;
+                            margin-bottom: 20px;
+                        }
+                        &__perma {
+                            display: block;
+                            &--img {
+                                overflow: hidden;
+                                margin-bottom: 0;
+                                img {
+                                    transform-origin: center;
+                                    @include transition(0.5s);
+                                }
+                                @include respond-to('s-desk') {
+                                    width: 30vw;
+                                    aspect-ratio: 1;
+                                    img {
+                                        @include img-obj-fit;
+                                    }
+                                }
+                            }
+                            &--title {
+                                @include font($secondary-font, $semi-bold);
+                                font-size: 17px;
+                                letter-spacing: 2px;
+                                text-transform: uppercase;
+                                text-align: center;
+                                margin: 8px 0 0;
+                                @include respond-to-mob('medium') {
+                                    font-size: 9px;
+                                }
+                            }
+                            &:hover {
+                                img {
+                                    transform: scale(1.1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.section-arrivals {
+                margin-top: 50px;
+                .arrivals-blob {
+                    position: absolute;
+                    top: -40%;
+                    left: -20%;
+                    width: 100%;
+                    z-index: -1;
+                    lottie-player {
+                        width: 90vw;
+                        height: 60vw;
+                    }
+                    @include respond-to-mob('medium') {
+                        top: -110px;
+                        left: -30%;
+                        width: 110vw;
+                        lottie-player {
+                            width: 150vw;
+                            height: 90vw;
+                        }
+                    }
+                }
+            }
+
+            &.section-bestsellers, &.section-arrivals {
+                .products-carousel {
+                    .product {
+                        .wpced-product {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,58 @@
+/*
+** All variables
+*/
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Montserrat:wght@300;400;600;700&family=Special+Elite&display=swap');
+
+// Font family
+$primary-font: 'Acme', sans-serif;
+$alt-font: 'Special Elite', cursive;
+$secondary-font: 'Montserrat', sans-serif;
+
+// Font weights
+$thin: 100;
+$light: 300;
+$regular: 400;
+$medium: 500;
+$semi-bold: 600;
+$bold: 700;
+$ultra-bold: 900;
+
+
+
+/* Colors */
+$primary-color:             #0D1423;
+$secondary-color:           #FF5C00;
+$dark-grey:					#999999;
+$grey:						#b5b8bc;
+$alt-grey:                  #ebebeb;
+$primary-bg:                #ffffff;
+$primary-font-color:        #0D1423;
+$alt-font-color:            #545454;
+$form-border:               #aaaaaa;
+$form-bg:                   #f8f8f8;
+$green:                     #00cb00;
+$red:                       #ff0000;
+
+
+/* Breakpoints */
+$breakpoints: ('x-small': (min-width: 480px),
+    'small': (min-width: 576px),
+    'medium': (min-width: 768px),
+    'large': (min-width: 992px),
+    'x-large': (min-width: 1200px),
+    's-desk': (min-width: 1360px),
+    'xx-large': (min-width: 1400px),
+    'xxx-large': (min-width: 1550px),
+) !default;
+
+$breakpoints_mob: ('x-small': (max-width: 479px),
+    'small': (max-width: 575px),
+    'medium': (max-width: 767px),
+    'large': (max-width: 991px),
+    'x-large': (max-width: 1199px),
+    's-desk': (max-width: 1359px),
+    'xx-large': (max-width: 1399px),
+    'xxx-large': (max-width: 1549px),
+) !default;

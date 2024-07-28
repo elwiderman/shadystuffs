@@ -1,0 +1,60 @@
+{
+  "name": "shady-theme",
+  "version": "1.0.0",
+  "description": "Parcel bundler for the shady stuffs theme",
+  "main": "index.js",
+  "author": "Ajasra Das (das.ajasra@gmail.com)",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean:output": "rimraf .parcel-cache dist",
+    "watch": "yarn run clean:output && parcel watch",
+    "build": "yarn run clean:output && parcel build --no-source-maps"
+  },
+  "source": [
+    "src/js/app.js",
+    "src/js/shadyWoo.js",
+    "src/scss/app.scss",
+    "src/scss/admin.scss"
+  ],
+  "devDependencies": {
+    "@parcel/runtime-browser-hmr": "^2.12.0",
+    "@parcel/transformer-sass": "^2.12.0",
+    "@types/node": "^20.12.5",
+    "git-cz": "^4.9.0",
+    "parcel": "^2.12.0",
+    "parcel-namer-rewrite": "^2.10.3-rc.2",
+    "parcel-reporter-bundle-manifest": "^1.0.0",
+    "parcel-resolver-ignore": "^2.2.0",
+    "rimraf": "^5.0.5",
+    "sass": "^1.69.7",
+    "typescript": "^5.4.4"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "targets": {
+    "main": false,
+    "default": {
+      "distDir": "./dist"
+    }
+  },
+  "parcel-namer-rewrite": {
+    "hashing": "always",
+    "disable": false,
+    "rules": {
+      "scss/(.*).css": "css/$1{.hash}.min.css",
+      "(.*).js": "$1{.hash}.min.js"
+    }
+  },
+  "parcelIgnore": [
+    "assets/fonts/*"
+  ],
+  "dependencies": {
+    "@fancyapps/ui": "^5.0.35",
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.3",
+    "domready": "^1.0.8",
+    "jquery": "^3.7.1",
+    "select2": "^4.1.0-rc.0",
+    "slick-carousel": "^1.8.1"
+  }
+}

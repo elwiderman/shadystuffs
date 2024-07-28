@@ -1,0 +1,608 @@
+/*!
+*   Title : Styles for wordpress admin pages
+*   Author : Ajasra Das(das.ajasra@gmail.com)
+*   Version: 2.0.0
+ */
+
+@import 'npm:bootstrap/dist/css/bootstrap.min.css';
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,700');
+
+body {
+    &.wp-admin {
+        #wpcontent {
+            #wpbody {
+                #wpbody-content {
+                    font-family: 'Poppins', sans-serif;
+                    font-weight: 300;
+                    color: #23282d;
+                    letter-spacing: 0.1px;
+                    .theme-options-page {
+                        .page-title {
+                            border-bottom: 2px solid #23282d;
+                            padding-bottom: 20px;
+                            margin-bottom: 30px;
+                        }
+
+                        .options-tabs {
+                            .nav-tabs {
+                                li {
+                                    &>a {
+                                        &:focus {
+                                            box-shadow: none;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .tab-content {
+                            background: rgba(204, 204, 204, 0.3);
+                            padding: 20px;
+                        }
+
+                        .form-group {
+                            label {
+                                font-size: 13px;
+                                font-weight: 400;
+                                text-transform: capitalize;
+                            }
+
+                            .form-control {
+                                font-size: 14px;
+                                height: 35px;
+                                text-align: left;
+                            }
+
+                            textarea {
+                                &.form-control {
+                                    min-height: 80px;
+                                    resize: vertical;
+                                }
+                            }
+
+                            input[type="number"] {
+                                height: calc(2.25rem + 2px);
+                            }
+
+                            img {
+                                max-width: 60%;
+                            }
+
+                            .input-group {
+                                &>.input-group-append {
+                                    .input-group-text {
+                                        font-size: 14px;
+                                        height: 35px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .shady-admin {
+                        .admin-wrap {
+                            padding-right: 15px;
+
+                            .title-section {
+                                background: #D8D8D8;
+                                padding: 30px 15px;
+                                margin-top: 20px;
+                                display: flex;
+                                flex-direction: row;
+                                justify-content: space-between;
+                                align-items: center;
+
+                                h1 {
+                                    font-size: 30px;
+                                    font-weight: 700;
+                                    margin: 0;
+                                    display: flex;
+                                    flex-direction: row;
+                                    align-items: center;
+
+                                    span {
+                                        font-size: 14px;
+                                        color: #666666;
+                                        margin-left: 20px;
+                                    }
+                                }
+
+                                .button-area {
+                                    text-align: right;
+                                    display: flex;
+
+                                    .btn {
+                                        margin-right: 20px;
+
+                                        &.filter-privacy {
+                                            &.reset {
+                                                background: #000;
+                                                color: #fff;
+                                            }
+                                        }
+                                    }
+
+                                    .dt-buttons {
+                                        position: relative;
+
+                                        .dt-button {
+                                            &.buttons-collection {
+                                                background: rgba(#fff, 0);
+                                                font-size: 14px;
+                                                color: #000000;
+                                                line-height: 36px;
+                                                height: 40px;
+                                                text-transform: uppercase;
+                                                border: 2px solid #000;
+                                                border-radius: 40px;
+                                                padding: 0 25px;
+
+                                                &:hover {
+                                                    background: #000;
+                                                    color: #fff;
+                                                }
+                                            }
+                                        }
+
+                                        .dt-button-collection {
+                                            position: absolute;
+                                            text-align: center;
+                                            background: #D8D8D8;
+                                            padding: 0 5px;
+                                            margin-top: 10px !important;
+                                            z-index: 1;
+
+                                            .dt-button {
+                                                background: rgba(#fff, 0);
+                                                font-size: 12px;
+                                                color: #000000;
+                                                line-height: 28px;
+                                                height: 30px;
+                                                width: 100%;
+                                                text-transform: uppercase;
+                                                border: 2px solid #000;
+                                                border-radius: 40px;
+                                                padding: 0 15px;
+                                                margin-bottom: 5px;
+
+                                                &:hover {
+                                                    background: #000;
+                                                    color: #fff;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            .content-block {
+                                &.detail {
+                                    background: #fff;
+                                }
+
+                                .container-fluid {
+                                    padding: 0;
+                                }
+
+                                .panel {
+                                    padding-top: 10px;
+
+                                    .table {
+                                        font-size: 12px;
+
+                                        .buttons {
+                                            text-align: center;
+
+                                            .btn {
+                                                font-size: 14px;
+                                                padding: 1px 5px;
+
+                                                &.remove {
+                                                    color: #F44336;
+                                                }
+
+                                                &.answered {
+                                                    color: #00b4ff;
+                                                }
+
+                                                &:not(:last-child) {
+                                                    margin-right: 10px;
+                                                }
+
+                                                &:hover {
+                                                    color: #666666;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .dataTables_wrapper {
+                                        .dataTables_processing {
+                                            line-height: 0;
+                                            padding: 30px 0;
+                                        }
+                                    }
+                                }
+
+                                .form-area {
+                                    padding: 50px 0 100px;
+
+                                    .form-group {
+                                        margin-bottom: 25px;
+
+                                        label {
+                                            font-size: 13px;
+                                            color: #999;
+                                            line-height: 1;
+                                            margin-bottom: 5px;
+
+                                            b,
+                                            strong {
+                                                font-weight: bold;
+                                            }
+                                        }
+
+                                        .form-control {
+                                            height: 40px;
+                                            font-size: 15px;
+                                            color: #000;
+                                            line-height: 38px;
+                                            border-radius: 0;
+                                            border-color: #ccc;
+                                            box-shadow: none;
+
+                                            &:focus {
+                                                border-color: #000;
+                                            }
+
+                                            &+.error {
+                                                color: #c30000;
+                                            }
+                                        }
+
+                                        &.selectbox {
+                                            position: relative;
+
+                                            &:before {
+                                                content: '\f078';
+                                                font-family: 'Font Awesome 5 Free';
+                                                font-weight: 800;
+                                                font-size: 13px;
+                                                color: #999;
+                                                position: absolute;
+                                                top: 34px;
+                                                right: 25px;
+                                                text-align: center;
+                                                z-index: 1;
+                                            }
+
+                                            .error {
+                                                position: absolute;
+                                                bottom: -20px;
+                                                left: 15px;
+                                                color: #c30000;
+                                            }
+
+                                            select {
+                                                &.form-control {
+                                                    -webkit-appearance: none;
+                                                    -moz-appearance: none;
+                                                    -ms-appearance: none;
+                                                    appearance: none;
+                                                    line-height: 38px;
+                                                    color: #000;
+                                                    padding: 0 0 0 12px;
+                                                }
+                                            }
+
+                                            select::-ms-expand {
+                                                display: none;
+                                            }
+
+                                            .select2 {
+                                                &.select2-container {
+                                                    .selection {
+                                                        .select2-selection {
+                                                            height: 40px;
+                                                            border-radius: 0;
+                                                            border-color: #ccc;
+
+                                                            .select2-selection__rendered {
+                                                                line-height: 38px;
+                                                            }
+
+                                                            .select2-selection__arrow {
+                                                                display: none;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                        textarea {
+                                            &.form-control {
+                                                height: 120px;
+                                                line-height: 1.4;
+                                                resize: none;
+                                            }
+                                        }
+
+                                        /*Select2 ReadOnly Start*/
+                                        select[readonly].select2-hidden-accessible+.select2-container {
+                                            pointer-events: none;
+                                            touch-action: none;
+                                        }
+
+                                        select[readonly].select2-hidden-accessible+.select2-container .select2-selection {
+                                            background: #e9ecef;
+                                            box-shadow: none;
+                                        }
+
+                                        select[readonly].select2-hidden-accessible+.select2-container .select2-selection__arrow,
+                                        select[readonly].select2-hidden-accessible+.select2-container .select2-selection__clear {
+                                            display: none;
+                                        }
+
+                                        /*Select2 ReadOnly End*/
+                                    }
+
+                                    .response {
+                                        text-align: center;
+
+                                        .updated,
+                                        .error {
+                                            display: none;
+                                        }
+
+                                        .updated {
+                                            color: #00c300;
+                                        }
+
+                                        .error {
+                                            color: #c30000;
+                                        }
+                                    }
+
+                                    &.not-found {
+                                        display: flex;
+                                        flex-direction: column;
+                                        min-height: calc(100vh - 250px);
+                                    }
+
+                                    &.dash {
+                                        display: flex;
+                                        flex-direction: row;
+                                        min-height: calc(100vh - 250px);
+                                        padding-left: 15px;
+                                    }
+
+                                    &.form-upload-csv {
+                                        padding-bottom: 10px;
+                                        padding-left: 10px;
+
+                                        .form-control-file {
+                                            font-size: 13px;
+                                        }
+
+                                        .btn {
+                                            width: 140px;
+
+                                            &.is-loading {
+                                                color: #fff;
+                                                background: #23282d;
+
+                                                &+.loading {
+                                                    opacity: 1;
+                                                }
+                                            }
+
+                                            &+.loading {
+                                                position: absolute;
+                                                left: 165px;
+                                                top: 5px;
+                                                opacity: 0;
+                                                transition: all 0.3s ease-in-out;
+                                                width: 30px;
+                                                height: 30px;
+                                                border-radius: 100%;
+                                                border: 2px solid;
+                                                border-top-color: rgba(#23282d, 0.65);
+                                                border-bottom-color: rgba(#23282d, 0.15);
+                                                border-left-color: rgba(#23282d, 0.65);
+                                                border-right-color: rgba(#23282d, 0.15);
+                                                animation: loader 1.0s linear infinite;
+                                            }
+                                        }
+                                    }
+
+                                    &.form-map-csv {
+                                        padding-top: 20px;
+                                    }
+                                }
+
+                                .sms-credentials {
+                                    padding: 20px 30px 50px;
+                                    border-bottom: 1px solid #ccc;
+
+                                    .sms-cred-form {
+                                        &.form-area {
+                                            padding-top: 0;
+
+                                            .form-group {
+                                                align-items: center;
+
+                                                .form-control {
+                                                    height: 36px;
+                                                }
+
+                                                .operators {
+                                                    .operator {
+                                                        display: flex;
+                                                        align-items: center;
+                                                        margin-bottom: 10px;
+
+                                                        .jt-remove {
+                                                            width: 36px;
+                                                            height: 36px;
+                                                            border: none;
+                                                            padding: 0;
+                                                            display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                            background: #ccc;
+                                                            border-radius: 0;
+                                                            box-shadow: none;
+
+                                                            &:hover {
+                                                                color: #F44336;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                textarea {
+                                                    &.form-control {
+                                                        line-height: 1.45;
+                                                        min-height: 110px;
+                                                        resize: none;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .updated,
+                                    .notice {
+                                        background: #fbfbfb;
+                                        margin: 0 0 25px;
+                                    }
+
+                                    .notice {
+                                        font-size: 14px;
+                                        border-left-color: #00a3ff;
+                                        padding: 10px 12px;
+                                    }
+                                }
+
+                                #map-csv {
+                                    .response {
+                                        display: none;
+                                    }
+                                }
+
+                                ul {
+
+                                    &.insert,
+                                    &.update {
+                                        text-align: left;
+
+                                        li {
+                                            font-size: 13px;
+                                            color: #23282d;
+                                            margin-bottom: 14px;
+
+                                            b {
+                                                font-weight: bold;
+                                            }
+                                        }
+                                    }
+
+                                    &.insert {
+                                        padding: 10px 0 0;
+                                        margin-bottom: 25px;
+
+                                        li {
+                                            i {
+                                                color: #00c300;
+                                            }
+                                        }
+                                    }
+
+                                    &.update {
+                                        li {
+                                            i {
+                                                color: #00a3ff;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+* {
+    outline: 0 !important;
+
+    &:focus {
+        outline: 0 !important;
+    }
+}
+
+
+.btn {
+    &:focus {
+        box-shadow: none;
+    }
+
+    &.is-loading {
+        opacity: 0.5;
+        cursor: progress;
+        pointer-events: none;
+    }
+
+    &.btn-ghost {
+        background: rgba(#fff, 0);
+        font-size: 14px;
+        color: #000000;
+        line-height: 36px;
+        height: 40px;
+        text-transform: uppercase;
+        border: 2px solid #000;
+        border-radius: 40px;
+        padding: 0 25px;
+
+        &:hover {
+            background: #000;
+            color: #fff;
+        }
+    }
+
+    &.btn-primary {
+        background: #000;
+        font-size: 14px;
+        color: #fff;
+        line-height: 36px;
+        height: 40px;
+        text-transform: uppercase;
+        border: 2px solid #000;
+        border-radius: 40px;
+        padding: 0 25px;
+
+        &:hover {
+            background: transparent;
+            color: #000;
+        }
+    }
+
+    &.btn-sm {
+        font-size: 12px;
+        line-height: 28px;
+        height: 32px;
+    }
+}
+
+@keyframes loader {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
