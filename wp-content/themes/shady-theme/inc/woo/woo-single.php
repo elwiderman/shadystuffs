@@ -26,6 +26,22 @@ function shady_add_category_collection_below_title() {
     echo "</div>";
 }
 
+// Replace Variable Price With Variation Price | WooCommerce
+add_action( 'woocommerce_variable_add_to_cart', 'shady_update_price_with_variation_price' );
+function shady_update_price_with_variation_price() {
+    global $product;
+    $price = $product->get_price_html();
+    wc_enqueue_js("     
+        $(document).on('found_variation', 'form.cart', function( event, variation ) {   
+            if(variation.price_html) $('.entry-summary > p.price').html(variation.price_html);
+            $('.woocommerce-variation-price').hide();
+        });
+        $(document).on('hide_variation', 'form.cart', function( event, variation ) {   
+            $('.entry-summary > p.price').html('" . $price . "');
+        });
+    ");
+}
+
 
 
 // 1. Show plus minus buttons
