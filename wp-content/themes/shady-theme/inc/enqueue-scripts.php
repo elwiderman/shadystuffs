@@ -71,3 +71,12 @@ function shady_get_hashed_assets($real_file) {
 
     return false;
 }
+
+function get_enqueued_scripts () {
+    $scripts = wp_scripts();
+    echo '<pre>';
+    var_dump( array_keys( $scripts->groups ) );
+    echo '</pre>';
+}
+
+// add_action( 'wp_head', 'get_enqueued_scripts' );

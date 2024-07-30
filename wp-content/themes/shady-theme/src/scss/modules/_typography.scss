@@ -49,6 +49,20 @@ p {
     font-size: 14px;
     line-height: 1.34;
     margin-bottom: calc(14px * 1.34);
+    @include respond-to-mob('x-large') {
+        font-size: 13px;
+        line-height: 1.43;
+        margin-bottom: calc(13px * 1.43);
+    }
+}
+.alt-p {
+    @extend p;
+    font-size: 13px;
+    line-height: 1.385;
+    @include respond-to-mob('x-large') {
+        font-size: 12px;
+        line-height: 1.4167;
+    }
 }
 
 .lead {

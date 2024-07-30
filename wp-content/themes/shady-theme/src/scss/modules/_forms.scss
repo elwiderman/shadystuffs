@@ -5,6 +5,7 @@
         .form-group {
             display: flex;
             flex-direction: column;
+            margin-bottom: 10px;
             .form-label {
                 font-size: 13px;
                 font-weight: $semi-bold;
@@ -16,10 +17,10 @@
                 }
             }
             .form-control {
-                height: 38px;
+                height: 40px;
                 background: $form-bg;
                 border-color: $form-border;
-                border-radius: 0;
+                border-radius: 5;
                 box-shadow: none !important;
                 outline: 0 !important;
                 @include transition(0.2s);
@@ -228,7 +229,14 @@
                 }
             }
         }
+
     }
+}
+.wc-block-components-form .wc-block-components-text-input input:-webkit-autofill+label, 
+.wc-block-components-form .wc-block-components-text-input.is-active label, 
+.wc-block-components-text-input input:-webkit-autofill+label, 
+.wc-block-components-text-input.is-active label {
+    transform: translateY(0.1em) scale(0.775) !important;
 }
 
 .form-control {
