@@ -10,9 +10,9 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see https://docs.woocommerce.com/document/template-structure/
+ * @see https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 7.0.1
+ * @version 8.7.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -23,7 +23,6 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 
 	<?php do_action( 'woocommerce_edit_account_form_start' ); ?>
 
-	
 	<div class="row">
 		<div class="form-group col-12 col-md-6">
 			<label class="form-label" for="account_first_name"><?php esc_html_e( 'First name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
@@ -39,7 +38,7 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 	<div class="row">
 		<div class="form-group col-12 col-md-6">
 			<label class="form-label" for="account_display_name"><?php esc_html_e( 'Display name', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
-			<input type="text" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="account_display_name" id="account_display_name" value="<?php echo esc_attr( $user->display_name ); ?>" /> <span class="field-info"><em><?php esc_html_e( 'This will be how your name will be displayed in the account section and in reviews', 'woocommerce' ); ?></em></span>
+			<input type="text" class="woocommerce-Input woocommerce-Input--text input-text form-control" name="account_display_name" id="account_display_name" value="<?php echo esc_attr( $user->display_name ); ?>" /> <span class="field-info"><em><?php esc_html_e( 'This will be how your name be displayed in the account section and in reviews', 'woocommerce' ); ?></em></span>
 		</div>
 		<div class="form-group col-12 col-md-6">
 			<label class="form-label" for="account_email"><?php esc_html_e( 'Email address', 'woocommerce' ); ?>&nbsp;<span class="required">*</span></label>
@@ -48,7 +47,15 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 	</div>
 	<div class="clear"></div>
 
-	<hr>
+
+	<?php
+		/**
+		 * Hook where additional fields should be rendered.
+		 *
+		 * @since 8.7.0
+		 */
+		do_action( 'woocommerce_edit_account_form_fields' );
+	?>
 
 	<fieldset>
 		<legend><?php esc_html_e( 'Password change', 'woocommerce' ); ?></legend>
@@ -74,7 +81,14 @@ do_action( 'woocommerce_before_edit_account_form' ); ?>
 	</fieldset>
 	<div class="clear"></div>
 
-	<?php do_action( 'woocommerce_edit_account_form' ); ?>
+	<?php
+		/**
+		 * My Account edit account form.
+		 *
+		 * @since 2.6.0
+		 */
+		do_action( 'woocommerce_edit_account_form' );
+	?>
 
 	<div class="form-submit">
 		<?php wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>

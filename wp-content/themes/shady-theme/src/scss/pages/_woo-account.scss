@@ -9,6 +9,13 @@
                     margin-bottom: 30px;
                 }
 
+                .container {
+                    @include respond-to('s-desk') {
+                        max-width: 1140px;
+                        padding: 0 12px;
+                    }
+                }
+
                 .account-main {
                     .woocommerce {
                         @include flex-display(row, flex-start, flex-start);
@@ -55,6 +62,7 @@
                             flex: 0 0 75%;
                             max-width: 75%;
                             width: unset;
+                            padding-bottom: 15px;
                             @include respond-to-mob('medium') {
                                 flex: 0 0 100%;
                                 max-width: 100%;
@@ -495,86 +503,194 @@
                                 }
                             }
                         }
+
+                        .account-login-wrap {
+                            width: 100%;
+                            padding-top: 30px;
+                            @include respond-to('x-large') {
+                                padding-top: 50px;
+                            }
+                        }
                         #customer_login {
                             h2 {
                                 @extend h5;
                                 @include font($secondary-font, $semi-bold);
                             }
-                            .woocommerce-form {
-                                border-radius: 0;
-                                margin-top: 0;
-                                .form-row {
-                                    padding: 0;
-                                }
-                                &__label {
-                                    line-height: 1;
-                                    position: relative;
-                                    padding-left: 5px;
-                                    cursor: pointer;
-                                    margin-bottom: 16px;
-                                }
-                                &__input-checkbox {
-                                    opacity: 0;
-                                    visibility: hidden;
-                                    & + span {
-                                        font-size: 15px;
-                                        &:before, &:after {
-                                            position: absolute;
-                                            top: 50%;
-                                            left: 0;
-                                            transform: translateY(-50%);
-                                            font-family: 'shadyicons';
-                                            font-size: 16px;
-                                            font-weight: $regular;
-                                            line-height: 1;
-                                            opacity: 0;
-                                            @include transition(0.2s);
-                                            @include respond-to-mob('medium') {
-                                                top: 6px;
-                                                transform: unset;
-                                            }
-                                        }
-                                        &:before {
-                                            content: '\e90c';
-                                        }
-                                        &:after {
-                                            content: '\e924';
-                                            opacity: 1;
-                                        }
-                                        &::selection {
-                                            background: transparent;
-                                            color: inherit;
-                                        }
-                                        &::-moz-selection {
-                                            background: transparent;
-                                            color: inherit;
-                                        }
-                                    }
-                                    &:checked + span {
-                                        &:before {
-                                            opacity: 1;
-                                        }
-                                        &:after {
-                                            opacity: 0;
-                                        }
-                                    }
-                                }
-                                .woocommerce-button {
-                                    @extend .btn-main;
-                                }
-                                .woocommerce-LostPassword {
-                                    margin-top: 20px;
-                                    a {
-                                        font-size: 16px;
-                                        font-weight: $semi-bold;
-                                        color: $primary-font-color;
-                                        &:hover {
-                                            color: $secondary-color;
-                                        }
-                                    }
+                            
+
+                            .social-login {
+                                @include flex-display(row, center);
+                                min-height: 200px;
+                                @include add-border(1px, $form-border, 'all');
+                                border-radius: 5px;
+                                padding: 20px;
+                                margin-bottom: 20px;
+                                @include respond-to('medium') {
+                                    margin-bottom: 0;
                                 }
                                 .the_champ_social_login_title {
-                                    font-size: 16px;
+                                    @extend h6;
+                                    font-weight: $bold;
+                                    margin-bottom: 15px;
+                                }
+                                .the_champ_login_container {
+                                    .the_champ_login_ul {
+                                        display: flex;
+                                        flex-direction: column;
+                                        justify-content: center;
+                                        align-items: center;
+                                        gap: 10px;
+                                        li {
+                                            .theChampLogin {
+                                                @include flex-display(row, center);
+                                                width: 100%;
+                                                height: 40px;
+                                                position: relative;
+                                                float: unset;
+                                                border-radius: 5px;
+                                                margin: 0;
+                                                z-index: 0;
+                                                overflow: hidden;
+                                                @include transition(0.3s);
+                                                .theChampLoginSvg {
+                                                    background-size: contain !important;
+                                                    width: 40px;
+                                                    position: absolute;
+                                                    left: 0;
+                                                    top: 50%;
+                                                    transform: translateY(-50%);
+                                                }
+                                                &.theChampGoogleLogin {
+                                                    background: #4285F4;
+                                                    .theChampLoginSvg {
+                                                        background-color: $primary-bg;
+                                                    }
+                                                    &:after {
+                                                        content: attr(title);
+                                                        font-size: 16px;
+                                                        font-weight: $semi-bold;
+                                                        font-style: normal;
+                                                        color: $primary-bg;
+                                                        display: block;
+                                                        width: 100%;
+                                                        padding: 0 10px 0 50px;
+                                                    }
+                                                    &:hover {
+                                                        background: darken(#4285F4, 10);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .social-login-or {
+                                margin-bottom: 20px;
+                                @include respond-to('medium') {
+                                    margin-bottom: 0;
+                                }
+                            }
+                            .login-registration {
+                                @include add-border(1px, $form-border, 'all');
+                                border-radius: 5px;
+                                padding: 20px;
+                                .nav-tabs {
+                                    justify-content: center;
+                                    .nav-item {
+                                        .nav-link {
+                                            @extend h6;
+                                            font-weight: $bold;
+                                            color: $primary-font-color;
+                                            border: none;
+                                            margin-bottom: 0;
+                                            &:not(.active) {
+                                                opacity: 0.5;
+                                            }
+                                        }
+                                    }
+                                }
+                                .tab-content {
+                                    .tab-pane {
+                                        .woocommerce-form {
+                                            border: none;
+                                            border-radius: 0;
+                                            padding: 15px 0 0;
+                                            margin: 0;
+                                            .form-group {
+                                                margin-bottom: 15px;
+                                            }
+                                            .form-row {
+                                                padding: 0;
+                                            }
+                                            &__label {
+                                                line-height: 1;
+                                                position: relative;
+                                                padding-left: 5px;
+                                                cursor: pointer;
+                                                margin-bottom: 16px;
+                                            }
+                                            &__input-checkbox {
+                                                opacity: 0;
+                                                visibility: hidden;
+                                                & + span {
+                                                    font-size: 15px;
+                                                    &:before, &:after {
+                                                        position: absolute;
+                                                        top: 50%;
+                                                        left: 0;
+                                                        transform: translateY(-50%);
+                                                        font-family: 'shadyicons';
+                                                        font-size: 16px;
+                                                        font-weight: $regular;
+                                                        line-height: 1;
+                                                        opacity: 0;
+                                                        @include transition(0.2s);
+                                                        @include respond-to-mob('medium') {
+                                                            top: 6px;
+                                                            transform: unset;
+                                                        }
+                                                    }
+                                                    &:before {
+                                                        content: '\e90c';
+                                                    }
+                                                    &:after {
+                                                        content: '\e924';
+                                                        opacity: 1;
+                                                    }
+                                                    &::selection {
+                                                        background: transparent;
+                                                        color: inherit;
+                                                    }
+                                                    &::-moz-selection {
+                                                        background: transparent;
+                                                        color: inherit;
+                                                    }
+                                                }
+                                                &:checked + span {
+                                                    &:before {
+                                                        opacity: 1;
+                                                    }
+                                                    &:after {
+                                                        opacity: 0;
+                                                    }
+                                                }
+                                            }
+                                            .woocommerce-button {
+                                                @extend .btn-main;
+                                            }
+                                            .woocommerce-LostPassword {
+                                                margin-top: 15px;
+                                                a {
+                                                    font-size: 14px;
+                                                    font-weight: $semi-bold;
+                                                    color: $primary-font-color;
+                                                    &:hover {
+                                                        color: $secondary-color;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

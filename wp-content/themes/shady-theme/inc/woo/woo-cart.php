@@ -2,12 +2,12 @@
 /* all overrides for the woo cart page */
 
 // move the cross sells after the cart
-remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
-add_action('woocommerce_cart_contents', 'woocommerce_cross_sell_display');
+// remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
+// add_action('woocommerce_cart_contents', 'woocommerce_cross_sell_display');
 
 
 // change thumb size in woo cart
-add_filter('woocommerce_cart_item_thumbnail', 'shady_custom_cart_thumbnail_size_filter', 10, 3);
+// add_filter('woocommerce_cart_item_thumbnail', 'shady_custom_cart_thumbnail_size_filter', 10, 3);
 function shady_custom_cart_thumbnail_size_filter($thumbnail, $cart_item, $cart_item_key) {
     // Get the product ID from the cart item
     $product_id = $cart_item['product_id'];
@@ -29,7 +29,7 @@ function shady_custom_cart_thumbnail_size_filter($thumbnail, $cart_item, $cart_i
 /* overrdie the checkout page */
 
 // remove the billing and shipping company
-add_filter('woocommerce_checkout_fields', 'shady_remove_billing_fields');
+// add_filter('woocommerce_checkout_fields', 'shady_remove_billing_fields');
 function shady_remove_billing_fields($fields) {
     unset($fields['billing']['billing_company']);
     unset($fields['shipping']['shipping_company']);
@@ -37,7 +37,7 @@ function shady_remove_billing_fields($fields) {
 }
 
 // this removes the company from all 
-add_filter('woocommerce_default_address_fields', 'shady_modify_default_address_fields');
+// add_filter('woocommerce_default_address_fields', 'shady_modify_default_address_fields');
 function shady_modify_default_address_fields($fields) {
     // remove the company field
     unset($fields['company']);
@@ -69,3 +69,80 @@ function shady_modify_default_address_fields($fields) {
 
     return $fields;
 }
+
+
+  
+// Hide ALL shipping rates in ALL zones when Free Shipping is available
+add_filter( 'woocommerce_package_rates', 'shady_unset_shipping_when_free_is_available_all_zones', 9999, 2 );
+function shady_unset_shipping_when_free_is_available_all_zones( $rates, $package ) {
+    $all_free_rates = array();
+    foreach ( $rates as $rate_id => $rate ) {
+        if ( 'free_shipping' === $rate->method_id ) {
+            $all_free_rates[ $rate_id ] = $rate;
+            break;
+        }
+    }
+    if (empty($all_free_rates)) {
+        return $rates;
+    } else {
+        return $all_free_rates;
+    } 
+}
+
+
+/**
+ * @snippet       Create Hooks For WooCommerce Cart Block
+ * @how-to        Get CustomizeWoo.com FREE
+ * @author        Rodolfo Melogli
+ * @compatible    WooCommerce 9
+ * @community     https://businessbloomer.com/club/
+ */
+ 
+add_filter( 'render_block', 'shady_woocommerce_cart_block_do_actions', 9999, 2 );
+function shady_woocommerce_cart_block_do_actions( $block_content, $block ) {
+    $blocks = array(
+        'woocommerce/cart',
+        'woocommerce/filled-cart-block',
+        'woocommerce/cart-items-block',
+        'woocommerce/cart-line-items-block',
+        'woocommerce/cart-cross-sells-block',
+        'woocommerce/cart-cross-sells-products-block',
+        'woocommerce/cart-totals-block',
+        'woocommerce/cart-order-summary-block',
+        'woocommerce/cart-order-summary-heading-block',
+        'woocommerce/cart-order-summary-coupon-form-block',
+        'woocommerce/cart-order-summary-subtotal-block',
+        'woocommerce/cart-order-summary-fee-block',
+        'woocommerce/cart-order-summary-discount-block',
+        'woocommerce/cart-order-summary-shipping-block',
+        'woocommerce/cart-order-summary-taxes-block',
+        'woocommerce/cart-express-payment-block',
+        'woocommerce/proceed-to-checkout-block',
+        'woocommerce/cart-accepted-payment-methods-block',
+    );
+    if ( in_array( $block['blockName'], $blocks ) ) {
+        ob_start();
+        do_action( 'shady_before_' . $block['blockName'] );
+        echo $block_content;
+        do_action( 'shady_after_' . $block['blockName'] );
+        $block_content = ob_get_contents();
+        ob_end_clean();
+    }
+    return $block_content;
+}
+
+/**
+ * @snippet       Add Product Block Below Cross-Sells (WooCommerce Cart Block)
+ * @how-to        Get CustomizeWoo.com FREE
+ * @author        Rodolfo Melogli
+ * @compatible    WooCommerce 9
+ * @community     https://businessbloomer.com/club/
+ */
+ 
+add_action('shady_after_woocommerce/cart-line-items-block', function() {
+    wc_get_template_part('cart/cross-sells');
+});
+
+add_action('shady_after_woocommerce/cart-order-summary-coupon-form-block', function() {
+    echo do_shortcode('[wpccl_button]');
+});

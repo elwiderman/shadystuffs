@@ -17,35 +17,41 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( $cross_sells ) : ?>
+if (is_cart()) :
+	$cross_sells = WC()->cart->get_cross_sells();
 
-	<div class="cross-sells" id="crossSells">
-		<?php
-		$heading = apply_filters( 'woocommerce_product_cross_sells_products_heading', __( 'You may be interested in&hellip;', 'woocommerce' ) );
+	if ( $cross_sells ) : ?>
 
-		if ( $heading ) :
-			?>
-			<h5><?php echo esc_html( $heading ); ?></h5>
-		<?php endif; ?>
+		<div class="cross-sells" id="crossSells">
+			<?php
+			$heading = apply_filters( 'woocommerce_product_cross_sells_products_heading', __( 'You may be interested in&hellip;', 'woocommerce' ) );
 
-		<div class="products-carousel">
-			<?php foreach ( $cross_sells as $cross_sell ) : ?>
-
-				<?php
-					$post_object = get_post( $cross_sell->get_id() );
-
-					setup_postdata( $GLOBALS['post'] =& $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
-
-					echo "<div>";
-					wc_get_template_part('content', 'product-carousel');
-					echo "</div>";
+			if ( $heading ) :
 				?>
+				<h6 class="cross-sells__title text-bold"><?php echo esc_html( $heading ); ?></h6>
+			<?php endif; ?>
 
-			<?php endforeach; ?>
+			<div class="products-carousel">
+				<?php foreach ( $cross_sells as $cross_sell ) : ?>
+
+					<?php
+						$post_object = get_post( $cross_sell);
+
+						setup_postdata( $GLOBALS['post'] =& $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, Squiz.PHP.DisallowMultipleAssignments.Found
+
+						echo "<div>";
+						wc_get_template_part('content', 'product-carousel');
+						echo "</div>";
+					?>
+
+				<?php endforeach; ?>
+			</div>
+
 		</div>
+		<?php
+	endif;
 
-	</div>
-	<?php
+	wp_reset_postdata();
+	
 endif;
 
-wp_reset_postdata();

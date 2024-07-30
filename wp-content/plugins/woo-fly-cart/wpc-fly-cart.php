@@ -3,21 +3,21 @@
 Plugin Name: WPC Fly Cart for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: WPC Fly Cart is an interactive mini cart for WooCommerce. It allows users to update product quantities or remove products without reloading the page.
-Version: 5.7.1
+Version: 5.7.2
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: woo-fly-cart
 Domain Path: /languages/
 Requires Plugins: woocommerce
 Requires at least: 4.0
-Tested up to: 6.5
+Tested up to: 6.6
 WC requires at least: 3.0
-WC tested up to: 9.0
+WC tested up to: 9.1
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOFC_VERSION' ) && define( 'WOOFC_VERSION', '5.7.1' );
+! defined( 'WOOFC_VERSION' ) && define( 'WOOFC_VERSION', '5.7.2' );
 ! defined( 'WOOFC_LITE' ) && define( 'WOOFC_LITE', __FILE__ );
 ! defined( 'WOOFC_FILE' ) && define( 'WOOFC_FILE', __FILE__ );
 ! defined( 'WOOFC_URI' ) && define( 'WOOFC_URI', plugin_dir_url( __FILE__ ) );
@@ -396,6 +396,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 								$instant_checkout        = self::get_setting( 'instant_checkout', 'no' );
 								$instant_checkout_open   = self::get_setting( 'instant_checkout_open', 'no' );
 								$suggested               = self::get_setting( 'suggested', [] );
+								$suggested_empty         = self::get_setting( 'suggested_empty', 'no' );
 								$suggested_carousel      = self::get_setting( 'suggested_carousel', 'yes' );
 								$empty                   = self::get_setting( 'empty', 'no' );
 								$confirm_empty           = self::get_setting( 'confirm_empty', 'no' );
@@ -765,6 +766,18 @@ if ( ! function_exists( 'woofc_init' ) ) {
                                                 <span class="description">You can use
 													<a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-custom-related-products&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Custom Related Products">WPC Custom Related Products</a> or
 														<a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=wpc-smart-linked-products&TB_iframe=true&width=800&height=550' ) ); ?>" class="thickbox" title="WPC Smart Linked Products">WPC Smart Linked Products</a> plugin to configure related/upsells/cross-sells in bulk with smart conditions.</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php esc_html_e( 'Suggested for empty cart', 'woo-fly-cart' ); ?></th>
+                                            <td>
+                                                <label> <select name="woofc_settings[suggested_empty]">
+                                                        <option value="no" <?php selected( $suggested_empty, 'no' ); ?>><?php esc_html_e( 'No', 'woo-fly-cart' ); ?></option>
+                                                        <option value="recent" <?php selected( $suggested_empty, 'recent' ); ?>><?php esc_html_e( 'Recent products', 'woo-fly-cart' ); ?></option>
+                                                        <option value="onsale" <?php selected( $suggested_empty, 'onsale' ); ?>><?php esc_html_e( 'On-sale products', 'woo-fly-cart' ); ?></option>
+                                                        <option value="featured" <?php selected( $suggested_empty, 'featured' ); ?>><?php esc_html_e( 'Featured products', 'woo-fly-cart' ); ?></option>
+                                                        <option value="random" <?php selected( $suggested_empty, 'random' ); ?>><?php esc_html_e( 'Random products', 'woo-fly-cart' ); ?></option>
+                                                    </select> </label>
                                             </td>
                                         </tr>
                                         <tr>
@@ -1481,6 +1494,39 @@ if ( ! function_exists( 'woofc_init' ) ) {
 						if ( ( self::get_setting( 'save_for_later', 'yes' ) === 'yes' ) && class_exists( 'WPCleverWoosl' ) ) {
 							echo '<div class="woofc-save-for-later">' . do_shortcode( '[woosl_list context="woofc"]' ) . '</div>';
 						}
+
+						$suggested_empty = self::get_setting( 'suggested_empty', 'no' );
+
+						if ( $suggested_empty !== 'no' ) {
+							$suggested_empty_args = [
+								'status' => 'publish',
+								'limit'  => (int) self::get_setting( 'suggested_limit', 10 ),
+								'return' => 'ids',
+							];
+
+							switch ( $suggested_empty ) {
+								case 'recent':
+									$suggested_empty_args['orderby'] = 'ID';
+									$suggested_empty_args['order']   = 'DESC';
+									break;
+								case 'onsale':
+									$suggested_empty_args['include'] = wc_get_product_ids_on_sale();
+									break;
+								case 'featured':
+									$suggested_empty_args['include'] = wc_get_featured_product_ids();
+									break;
+								case 'random':
+									$suggested_empty_args['orderby'] = 'rand';
+									break;
+							}
+
+							$suggested_empty_products = wc_get_products( apply_filters( 'woofc_suggested_empty_args', $suggested_empty_args ) );
+							$suggested_empty_products = apply_filters( 'woofc_suggested_empty_products', $suggested_empty_products );
+
+							if ( is_array( $suggested_empty_products ) && ! empty( $suggested_empty_products ) ) {
+								self::get_suggested_products( $suggested_empty_products, $link );
+							}
+						}
 					}
 
 					do_action( 'woofc_below_items' );
@@ -1559,48 +1605,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 							$suggested_products = apply_filters( 'woofc_suggested_products', $suggested_products, $cart_products );
 
 							if ( ! empty( $suggested_products ) ) {
-								do_action( 'woofc_above_suggested', $suggested_products );
-								echo apply_filters( 'woofc_above_suggested_content', '' );
-								echo '<div class="woofc-suggested">';
-								echo '<div class="woofc-suggested-heading"><span>' . self::localization( 'suggested', esc_html__( 'You may be interested in&hellip;', 'woo-fly-cart' ) ) . '</span></div>';
-								echo '<div class="woofc-suggested-products ' . ( ( count( $suggested_products ) > 1 ) && ( apply_filters( 'woofc_slick', self::get_setting( 'suggested_carousel', 'yes' ) ) === 'yes' ) ? 'woofc-suggested-products-slick' : '' ) . '">';
-
-								foreach ( $suggested_products as $suggested_product_id ) {
-									$suggested_product = wc_get_product( $suggested_product_id );
-
-									if ( $suggested_product ) {
-										$suggested_product_link = $suggested_product->is_visible() ? $suggested_product->get_permalink() : '';
-
-										echo '<div class="woofc-suggested-product">';
-										echo '<div class="woofc-suggested-product-image">';
-
-										if ( ( $link !== 'no' ) && ! empty( $suggested_product_link ) ) {
-											echo sprintf( '<a ' . ( $link === 'yes_popup' ? 'class="woosq-link" data-id="' . esc_attr( $suggested_product_id ) . '" data-context="woofc"' : '' ) . ' href="%s" ' . ( $link === 'yes_blank' ? 'target="_blank"' : '' ) . '>%s</a>', esc_url( $suggested_product_link ), $suggested_product->get_image() );
-										} else {
-											echo $suggested_product->get_image();
-										}
-
-										echo '</div>';
-										echo '<div class="woofc-suggested-product-info">';
-										echo '<div class="woofc-suggested-product-name">';
-
-										if ( ( $link !== 'no' ) && ! empty( $suggested_product_link ) ) {
-											echo sprintf( '<a ' . ( $link === 'yes_popup' ? 'class="woosq-link" data-id="' . esc_attr( $suggested_product_id ) . '" data-context="woofc"' : '' ) . ' href="%s" ' . ( $link === 'yes_blank' ? 'target="_blank"' : '' ) . '>%s</a>', esc_url( $suggested_product_link ), $suggested_product->get_name() );
-										} else {
-											echo $suggested_product->get_name();
-										}
-
-										echo '</div>';
-										echo '<div class="woofc-suggested-product-price">' . $suggested_product->get_price_html() . '</div>';
-										echo '<div class="woofc-suggested-product-atc">' . do_shortcode( '[add_to_cart style="" show_price="false" id="' . esc_attr( $suggested_product->get_id() ) . '"]' ) . '</div>';
-										echo '</div>';
-										echo '</div>';
-									}
-								}
-
-								echo '</div></div>';
-								echo apply_filters( 'woofc_below_suggested_content', '' );
-								do_action( 'woofc_below_suggested', $suggested_products );
+								self::get_suggested_products( $suggested_products, $link );
 							}
 						}
 					}
@@ -1624,6 +1629,51 @@ if ( ! function_exists( 'woofc_init' ) ) {
 					return ob_get_clean();
 				}
 
+				function get_suggested_products( $suggested_products = [], $link = 'no' ) {
+					do_action( 'woofc_above_suggested', $suggested_products );
+					echo apply_filters( 'woofc_above_suggested_content', '' );
+					echo '<div class="woofc-suggested">';
+					echo '<div class="woofc-suggested-heading"><span>' . self::localization( 'suggested', esc_html__( 'You may be interested in&hellip;', 'woo-fly-cart' ) ) . '</span></div>';
+					echo '<div class="woofc-suggested-products ' . ( ( count( $suggested_products ) > 1 ) && ( apply_filters( 'woofc_slick', self::get_setting( 'suggested_carousel', 'yes' ) ) === 'yes' ) ? 'woofc-suggested-products-slick' : '' ) . '">';
+
+					foreach ( $suggested_products as $suggested_product_id ) {
+						$suggested_product = wc_get_product( $suggested_product_id );
+
+						if ( $suggested_product ) {
+							$suggested_product_link = $suggested_product->is_visible() ? $suggested_product->get_permalink() : '';
+
+							echo '<div class="woofc-suggested-product">';
+							echo '<div class="woofc-suggested-product-image">';
+
+							if ( ( $link !== 'no' ) && ! empty( $suggested_product_link ) ) {
+								echo sprintf( '<a ' . ( $link === 'yes_popup' ? 'class="woosq-link" data-id="' . esc_attr( $suggested_product_id ) . '" data-context="woofc"' : '' ) . ' href="%s" ' . ( $link === 'yes_blank' ? 'target="_blank"' : '' ) . '>%s</a>', esc_url( $suggested_product_link ), $suggested_product->get_image() );
+							} else {
+								echo $suggested_product->get_image();
+							}
+
+							echo '</div>';
+							echo '<div class="woofc-suggested-product-info">';
+							echo '<div class="woofc-suggested-product-name">';
+
+							if ( ( $link !== 'no' ) && ! empty( $suggested_product_link ) ) {
+								echo sprintf( '<a ' . ( $link === 'yes_popup' ? 'class="woosq-link" data-id="' . esc_attr( $suggested_product_id ) . '" data-context="woofc"' : '' ) . ' href="%s" ' . ( $link === 'yes_blank' ? 'target="_blank"' : '' ) . '>%s</a>', esc_url( $suggested_product_link ), $suggested_product->get_name() );
+							} else {
+								echo $suggested_product->get_name();
+							}
+
+							echo '</div>';
+							echo '<div class="woofc-suggested-product-price">' . $suggested_product->get_price_html() . '</div>';
+							echo '<div class="woofc-suggested-product-atc">' . do_shortcode( '[add_to_cart style="" show_price="false" id="' . esc_attr( $suggested_product->get_id() ) . '"]' ) . '</div>';
+							echo '</div>';
+							echo '</div>';
+						}
+					}
+
+					echo '</div></div>';
+					echo apply_filters( 'woofc_below_suggested_content', '' );
+					do_action( 'woofc_below_suggested', $suggested_products );
+				}
+
 				function get_cart_count() {
 					if ( ! isset( WC()->cart ) ) {
 						return '';
@@ -1631,20 +1681,18 @@ if ( ! function_exists( 'woofc_init' ) ) {
 
 					$count       = WC()->cart->get_cart_contents_count();
 					$icon        = self::get_setting( 'count_icon', 'woofc-icon-cart7' );
-					$count_class = 'woofc-count woofc-count-' . self::get_setting( 'count_position', 'bottom-left' );
+					$count_class = 'woofc-count woofc-count-' . $count . ' woofc-count-' . self::get_setting( 'count_position', 'bottom-left' );
 
 					if ( ( self::get_setting( 'count_hide_empty', 'no' ) === 'yes' ) && ( $count <= 0 ) ) {
 						$count_class .= ' woofc-count-hide-empty';
 					}
 
-					ob_start();
+					$cart_count = '<div id="woofc-count" class="' . esc_attr( apply_filters( 'woofc_cart_count_class', $count_class ) ) . '" data-count="' . esc_attr( $count ) . '">';
+					$cart_count .= '<i class="' . esc_attr( $icon ) . '"></i>';
+					$cart_count .= '<span id="woofc-count-number" class="woofc-count-number">' . esc_attr( $count ) . '</span>';
+					$cart_count .= '</div>';
 
-					echo '<div id="woofc-count" class="' . esc_attr( $count_class ) . '">';
-					echo '<i class="' . esc_attr( $icon ) . '"></i>';
-					echo '<span id="woofc-count-number" class="woofc-count-number">' . esc_attr( $count ) . '</span>';
-					echo '</div>';
-
-					return apply_filters( 'woofc_cart_count', ob_get_clean(), $count, $icon );
+					return apply_filters( 'woofc_cart_count', $cart_count, $count, $icon );
 				}
 
 				function get_cart_menu() {
@@ -1655,7 +1703,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 					$count     = WC()->cart->get_cart_contents_count();
 					$subtotal  = WC()->cart->get_cart_subtotal();
 					$icon      = self::get_setting( 'count_icon', 'woofc-icon-cart7' );
-					$cart_menu = '<li class="' . apply_filters( 'woofc_cart_menu_class', 'menu-item woofc-menu-item menu-item-type-woofc' ) . '"><a href="' . wc_get_cart_url() . '"><span class="woofc-menu-item-inner" data-count="' . esc_attr( $count ) . '"><i class="' . esc_attr( $icon ) . '"></i> <span class="woofc-menu-item-inner-subtotal">' . $subtotal . '</span></span></a></li>';
+					$cart_menu = '<li class="' . esc_attr( apply_filters( 'woofc_cart_menu_class', 'menu-item woofc-menu-item menu-item-type-woofc' ) ) . '"><a href="' . esc_url( wc_get_cart_url() ) . '"><span class="woofc-menu-item-inner" data-count="' . esc_attr( $count ) . '"><i class="' . esc_attr( $icon ) . '"></i> <span class="woofc-menu-item-inner-subtotal">' . $subtotal . '</span></span></a></li>';
 
 					return apply_filters( 'woofc_cart_menu', $cart_menu, $count, $subtotal, $icon );
 				}
@@ -1742,21 +1790,10 @@ if ( ! function_exists( 'woofc_init' ) ) {
 				}
 
 				function cart_fragment( $fragments ) {
-					ob_start();
-					echo self::get_cart_count();
-					$fragments['.woofc-count'] = ob_get_clean();
-
-					ob_start();
-					echo self::get_cart_menu();
-					$fragments['.woofc-menu-item'] = ob_get_clean();
-
-					ob_start();
-					echo self::get_cart_link();
-					$fragments['.woofc-cart-link'] = ob_get_clean();
-
-					ob_start();
-					echo self::get_cart_area();
-					$fragments['.woofc-cart-area'] = ob_get_clean();
+					$fragments['.woofc-count']     = self::get_cart_count();
+					$fragments['.woofc-menu-item'] = self::get_cart_menu();
+					$fragments['.woofc-cart-link'] = self::get_cart_link();
+					$fragments['.woofc-cart-area'] = self::get_cart_area();
 
 					return $fragments;
 				}

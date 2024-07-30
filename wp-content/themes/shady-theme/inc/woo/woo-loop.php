@@ -23,7 +23,7 @@
 add_filter( 'woocommerce_min_password_strength', 'shady_change_password_strength' );
 
 function shady_change_password_strength( $strength ) {
-    return 2;
+    return 3;
 }
 
 add_filter( 'loop_shop_per_page', 'shady_redefine_products_per_page', 9999 );

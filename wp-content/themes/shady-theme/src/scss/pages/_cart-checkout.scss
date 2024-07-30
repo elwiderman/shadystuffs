@@ -303,6 +303,211 @@
                             }
                         }
                     }
+
+
+                    .wp-block-woocommerce-cart {
+                        .wc-block-cart {
+                            gap: 40px;
+                            @include respond-to('medium') {
+                                gap: 50px;
+                            }
+                            @include respond-to('s-desk') {
+                                gap: 80px;
+                            }
+                            .wc-block-components-main {
+                                flex: none;
+                                width: 100%;
+                                @include respond-to('medium') {
+                                    width: 55%;
+                                    padding-right: 0;
+                                }
+                                .wc-block-cart-items {
+                                    th {
+                                        padding: 8px 16px;
+                                    }
+                                    .wc-block-cart-item {
+                                        &__image {
+                                            a {
+                                                display: block;
+                                            }
+                                        }
+                                        &__product {
+                                            .wc-block-cart-item {
+                                                &__wrap {
+                                                    @include flex-display(column, flex-start, flex-start);
+                                                    .wc-block-components-product-name {
+                                                        flex: none;
+                                                        width: 100%;
+                                                    }
+                                                    .wc-block-components-product-badge {
+                                                        font-size: 12px;
+                                                        flex: none;
+                                                        width: auto;
+                                                    }
+                                                }
+                                                &__prices {
+                                                    font-size: 14px;
+                                                }
+                                            }
+                                        }
+                                        &__total {
+                                            @extend h6;
+                                            font-weight: $bold;
+                                        }
+                                    }
+                                }
+                            }
+                            .wc-block-components-sidebar {
+                                flex: 1 0;
+                                max-width: 100%;
+                                .wc-block-cart {
+                                    &__totals-title {
+                                        padding-left: 16px;
+                                    }
+                                    &__submit-button {
+                                        @extend .btn-main, .btn-xl;
+                                    }
+                                }
+                                .wp-block-woocommerce-cart-order-summary-coupon-form-block {
+                                    padding-bottom: 0;
+                                    .wc-block-components-panel {
+                                        &__button {
+                                            font-size: 14px;
+                                            font-weight: $bold;
+                                            @include transition(0.3s);
+                                            padding-bottom: 0;
+                                            margin-bottom: 0;
+                                            &:hover {
+                                                color: $secondary-color;
+                                            }
+                                        }
+                                    }
+                                    .wc-block-components-totals-coupon {
+                                        &__button {
+                                            @extend .btn-main-ghost;
+                                            height: 50px;           
+                                        }
+                                    }
+                                }
+                                .wp-block-woocommerce-cart-order-summary-discount-block {
+                                    .wc-block-components-totals-item {
+                                        align-items: flex-end;
+                                        &__label {
+                                            font-size: 14px;
+                                        }
+                                        &__description {
+                                            .wc-block-components-totals-discount {
+                                                &__coupon-list {
+                                                    @include flex-display;
+                                                    gap: 10px;
+                                                }
+                                                &__coupon-list-item {
+                                                    margin: 0;
+                                                    .wc-block-components-chip {
+                                                        &__remove {
+                                                            display: flex;
+                                                            justify-content: center;
+                                                            align-items: center;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                .wp-block-woocommerce-cart-order-summary-totals-block {
+                                    .wp-block-woocommerce-cart-order-summary-subtotal-block,
+                                    .wp-block-woocommerce-cart-order-summary-shipping-block {
+                                        .wc-block-components-totals-item {
+                                            align-items: flex-end;
+                                            &__label {
+                                                font-size: 14px;
+                                            }
+                                            &__value {
+                                                line-height: 1;
+                                            }
+                                            &__description {
+                                                .wc-block-components-totals-shipping {
+                                                    &__via {
+                                                        font-size: 14px;
+                                                        font-weight: $semi-bold;
+                                                        & + .wc-block-components-shipping-address {
+                                                            font-size: 14px;
+                                                            margin-top: 10px;
+                                                        }
+                                                    }
+                                                    &__change-address {
+                                                        &__link {
+                                                            font-size: 14px;
+                                                            color: $secondary-color;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .wp-block-woocommerce-cart-order-summary-shipping-block {
+                                        @include add-border(1px, rgba(18,18,18, 0.11), 'top');
+                                        margin-top: 16px;
+                                        .wc-block-components-totals-shipping {
+                                            &__fieldset {
+                                                display: none;
+                                            }
+                                            .wc-block-components-shipping-calculator {
+                                                .wc-block-components-shipping-calculator-address {
+                                                    &__button {
+                                                        @extend .btn-main-ghost;
+                                                        height: 50px;
+                                                        width: auto;
+                                                        min-height: unset;
+                                                        min-width: unset;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .wpccl-btn-wrapper {
+                                    padding: 5px 16px;
+                                    .wpccl-btn {
+                                        font-size: 14px;
+                                        font-weight: $semi-bold;
+                                        text-decoration: underline;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .page-title {
+                        @extend h5;
+                        font-weight: $bold;
+                        margin-bottom: 30px;
+                    }
+                    .cross-sells {
+                        overflow: hidden;
+                        @include respond-to-mob('medium') {
+                            margin-top: 40px;
+                            overflow: unset;
+                        }
+                        &__title {
+                            font-size: 15px;
+                        }
+                        .products-carousel {
+                            .slick-list {
+                                .slide {
+                                    margin-right: 15px;
+                                    @include respond-to-mob('medium') {
+                                        margin-right: 12px;
+                                    }
+                                    .loop-product-thumb {
+                                        width: 200px;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -363,8 +568,9 @@
                             }
                         }
 
-                        .woocommerce-checkout-payment#payment {
-                            border-radius: 0;
+                        #payment {
+                            background: $alt-grey;
+                            border-radius: 5px;
                             .wc_payment_methods {
                                 label {
                                     font-size: 15px;
@@ -442,6 +648,9 @@
 
                     .woocommerce-order {
                         margin-top: 30px;
+                        @include respond-to('s-desk') {
+                            margin-top: 50px;    
+                        }
                         .woocommerce-notice {
                             font-size: 25px;
                         }
@@ -630,34 +839,53 @@
                     .woocommerce-order {
                         &.thankyou-page {
                             h2.woocommerce-notice {
-                                font-size: 40px;
+                                @include font($secondary-font, $semi-bold);
+                                font-size: 30px;
                                 margin-bottom: 50px;
                                 display: flex;
                                 flex-direction: column;
-                                i {
+                                &:before {
+                                    content: $icon-check-circle;
+                                    font-family: $icomoon-font-family;
                                     font-size: 60px;
                                     margin-bottom: 15px;
                                 }
                                 &.woocommerce-notice--success {
-                                    i {
+                                    &:before {
                                         color: $green;
                                     }
                                 }
                                 &.woocommerce-notice--error {
-                                    color: $red;
+                                    &:before {
+                                        color: $red;
+                                    }
                                 }
                             }
                             .woocommerce-order-overview {
                                 &.order_details {
                                     @include flex-display(row, center);
+                                    gap: 20px;
                                     background: $alt-grey;
                                     padding: 15px 20px;
                                     margin-bottom: 20px;
+                                    @include respond-to('s-desk') {
+                                        gap: 30px;
+                                    }
                                     li {
-                                        &:last-child {
-                                            padding: 0;
-                                            margin: 0;
+                                        flex: none;
+                                        width: 100%;
+                                        border: none;
+                                        padding: 0;
+                                        margin: 0;
+                                        @include respond-to('medium') {
+                                            width: auto;
                                         }
+                                        strong {
+                                            font-size: 15px;
+                                        }
+                                    }
+                                    &:before, &:after {
+                                        display: none;
                                     }
                                 }
                             }
@@ -665,6 +893,319 @@
                                 margin-bottom: 50px;
                                 p {
                                     font-size: 20px;
+                                }
+                            }
+                        }
+                    }
+
+
+                    .wp-block-woocommerce-checkout {
+                        .wc-block-checkout {
+                            &__sidebar {
+                                @include respond-to('medium') {
+                                    margin-top: 0;
+                                }
+                                .wp-block-woocommerce-checkout-order-summary-block {
+                                    background: $form-bg;
+                                }
+                                .wp-block-woocommerce-checkout-order-summary-cart-items-block {
+                                    .wc-block-components-order-summary {
+                                        &__button-text {
+                                            font-weight: $bold;
+                                        }
+                                        .wc-block-components-panel {
+                                            &__button {
+                                                font-size: 14px;
+                                                text-transform: uppercase;
+                                                @include transition(0.3s);
+                                            }
+                                            &__content {
+                                                .wc-block-components-order-summary-item {
+                                                    @extend .alt-p;
+                                                    gap: 22px;
+                                                    margin-bottom: 0;
+                                                    @include respond-to-mob('x-large') {
+                                                        flex-wrap: wrap;
+                                                    }
+                                                    &__image {
+                                                        margin-top: 0;
+                                                        width: 50px;
+                                                        img {
+                                                            width: 50px;
+                                                            max-width: 50px;
+                                                        }
+                                                        @include respond-to-mob('x-large') {
+                                                            flex: none;
+                                                            width: 100%;
+                                                        }
+                                                    }
+                                                    &__quantity {
+                                                        right: unset;
+                                                        left: calc(50px - 24px);
+                                                        background: $primary-color;
+                                                        @extend .alt-p;
+                                                        font-weight: $bold;
+                                                        color: $primary-bg;
+                                                        width: 24px;
+                                                        height: 24px;
+                                                        border: none;
+                                                        box-shadow: none;
+                                                        margin-bottom: 0;
+                                                    }
+                                                    &__description {
+                                                        padding: 0 18px 0 0;
+                                                        @include respond-to-mob('x-large') {
+                                                            flex: none;
+                                                            width: 50%;
+                                                            padding: 0;
+                                                        }
+                                                        @include respond-to-mob('medium') {
+                                                            width: 68%;
+                                                        }
+                                                        .wc-block-components-product-metadata {
+                                                            &__description {
+                                                                p, span {
+                                                                    @extend .alt-p;
+                                                                    margin-bottom: 0;
+                                                                    @include respond-to-mob('x-large') {
+                                                                        font-size: 12px;
+                                                                    }
+                                                                }
+                                                            }
+                                                            .wc-block-components-product-details {
+                                                                &__name {
+                                                                    font-weight: $bold;
+                                                                }
+                                                                &__totals {
+                                                                    margin-top: 20px;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    &__individual-prices {
+                                                        display: none;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .wp-block-woocommerce-checkout-order-summary-coupon-form-block {
+                                    padding-bottom: 0;
+                                    .wc-block-components-panel {
+                                        &__button {
+                                            font-size: 14px;
+                                            font-weight: $bold;
+                                            @include transition(0.3s);
+                                            padding-bottom: 0;
+                                            margin-bottom: 0;
+                                            &:hover {
+                                                color: $secondary-color;
+                                            }
+                                        }
+                                    }
+                                    .wc-block-components-totals-coupon {
+                                        &__button {
+                                            @extend .btn-main-ghost;
+                                            height: 50px;           
+                                        }
+                                    }
+                                }
+                                .wpccl-btn-wrapper {
+                                    padding: 5px 16px;
+                                    .wpccl-btn {
+                                        font-size: 14px;
+                                        font-weight: $semi-bold;
+                                        text-decoration: underline;
+                                    }
+                                }
+                                .wp-block-woocommerce-checkout-order-summary-totals-block {
+                                    .wp-block-woocommerce-checkout-order-summary-subtotal-block,
+                                    .wp-block-woocommerce-checkout-order-summary-discount-block,
+                                    .wp-block-woocommerce-checkout-order-summary-shipping-block {
+                                        .wc-block-components-totals-item {
+                                            align-items: flex-end;
+                                            &__label {
+                                                font-size: 14px;
+                                            }
+                                            &__value {
+                                                line-height: 1;
+                                            }
+                                            &__description {
+                                                .wc-block-components-totals-shipping {
+                                                    &__via {
+                                                        font-size: 14px;
+                                                        font-weight: $semi-bold;
+                                                        & + .wc-block-components-shipping-address {
+                                                            font-size: 14px;
+                                                            margin-top: 10px;
+                                                        }
+                                                    }
+                                                    &__change-address {
+                                                        &__link {
+                                                            font-size: 14px;
+                                                            color: $secondary-color;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .wp-block-woocommerce-checkout-order-summary-shipping-block {
+                                        @include add-border(1px, rgba(18,18,18, 0.11), 'top');
+                                        margin-top: 16px;
+                                        .wc-block-components-totals-shipping {
+                                            &__fieldset {
+                                                display: none;
+                                            }
+                                            .wc-block-components-shipping-calculator {
+                                                .wc-block-components-shipping-calculator-address {
+                                                    &__button {
+                                                        @extend .btn-main-ghost;
+                                                        height: 50px;
+                                                        width: auto;
+                                                        min-height: unset;
+                                                        min-width: unset;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            &__main {
+                                .wc-block-components-title.wc-block-components-title {
+                                    @extend h6;
+                                    font-weight: $bold;
+                                    text-transform: uppercase;
+                                }
+                                .wc-block-components-address-card {
+                                    border-color: rgba(18,18,18, 0.8);
+                                }
+                                .wc-block-components-checkout-step {
+                                    &__description {
+                                        @extend .alt-p;
+                                        margin-bottom: 5px;
+                                    }
+                                }
+                                .wc-block-components-radio-control {
+                                    &__input {
+                                        width: 24px;
+                                        height: 24px;
+                                        &:before {
+                                            background: $secondary-color;
+                                        }
+                                    }
+                                }
+                            }
+                            &__terms {
+                                span {
+                                    @extend p;
+                                    margin-bottom: 0;
+                                    a {
+                                        font-weight: $bold;
+                                        text-decoration: underline;
+                                    }
+                                }
+                                &--with-separator {
+
+                                }
+                            }
+                            &__actions_row {
+                                .wc-block-components-checkout-place-order-button {
+                                    @extend .btn-main, .btn-xl;
+                                }
+                            }
+                        }
+                    }
+
+                    .woocommerce {
+                        #btn-razorpay {
+                            @extend .btn-main;
+                        }
+                        #btn-razorpay-cancel {
+                            @extend .btn-main-ghost;
+                            margin-left: 10px;
+                        }
+                    }
+                }
+            }
+        }
+
+        .container {
+            @include respond-to('s-desk') {
+                max-width: 1140px;
+                padding: 0 12px;
+            }
+        }
+    }
+}
+
+
+.featherlight {
+    &.wpccl-featherlight {
+        .featherlight-content {
+            max-width: 600px;
+            border-radius: 5px;
+            .wpccl-popup {
+                &.wpccl-lightbox {
+                    .wpccl-heading {
+                        @extend h6;
+                        color: $primary-font-color;
+                        margin-bottom: 30px;
+                    }
+                    .wpccl-coupons {
+                        .wpccl-coupon {
+                            border-radius: 5px;
+                            @include transition(0.3s);
+                            .wpccl-coupon-info {
+                                .wpccl-coupon-value {
+                                    margin-bottom: 5px;
+                                }
+                                .wpccl-coupon-code-wrap {
+                                    justify-content: flex-start;
+                                    gap: 10px;
+                                    .wpccl-coupon-code {
+                                        font-weight: $bold;
+                                        color: $primary-bg;
+                                        text-transform: uppercase;
+                                        background: $secondary-color;
+                                        border-radius: 5px;
+                                        position: relative;
+                                        overflow: hidden;
+                                        margin: 0;
+                                        border: none;
+                                        z-index: 0;
+                                        &:before {
+                                            content: '';
+                                            @include center-absolute(-1);
+                                            width: calc(100% - 5px);
+                                            height: calc(100% - 5px);
+                                            background: transparent;
+                                            border: 1px dashed $primary-bg;
+                                            border-radius: 4px;
+                                        }
+                                    }
+                                }
+                                .wpccl-coupon-desc {
+                                    font-size: 14px;
+                                    margin-top: 3px;
+                                }
+                            }
+                            .wpccl-coupon-message {
+                                font-size: 15px;
+                                font-weight: $medium;
+                                margin-top: 5px;
+                                .woocommerce-Price-amount {
+                                    font-weight: $bold;
+                                }
+                            }
+                            &.wpccl-coupon-disabled {
+                                pointer-events: none;
+                                .wpccl-coupon-info, .wpccl-coupon-message {
+                                    opacity: 0.5;
                                 }
                             }
                         }
