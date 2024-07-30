@@ -96,7 +96,7 @@
   border-radius: 4px;
   overflow: hidden;
 }
-.woofc-area.woofc-rounded-yes .woofc-inner .woofc-area-mid .woofc-undo .woofc-undo-inner {
+.woofc-area.woofc-rounded-yes .woofc-inner .woofc-area-mid .woofc-undo .woofc-undo-inner, .woofc-area.woofc-rounded-yes .woofc-inner .woofc-area-mid .woofc-notices .woocommerce-message {
   border-radius: 4px;
 }
 .woofc-area.woofc-rounded-yes .woofc-inner .woofc-area-mid .woofc-item .woofc-item-inner {
