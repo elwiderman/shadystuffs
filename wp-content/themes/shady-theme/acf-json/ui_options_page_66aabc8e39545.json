@@ -1,0 +1,23 @@
+{
+    "key": "ui_options_page_66aabc8e39545",
+    "title": "Footer Settings",
+    "active": true,
+    "menu_order": 0,
+    "page_title": "Footer Settings",
+    "menu_slug": "footer-settings",
+    "parent_slug": "theme-general-settings",
+    "advanced_configuration": 1,
+    "icon_url": "",
+    "menu_title": "",
+    "position": "",
+    "redirect": false,
+    "description": "",
+    "menu_icon": [],
+    "update_button": "Update",
+    "updated_message": "Options Updated",
+    "capability": "edit_posts",
+    "data_storage": "options",
+    "post_id": "",
+    "autoload": 1,
+    "modified": 1722465965
+}
