@@ -314,6 +314,14 @@
                             @include respond-to('s-desk') {
                                 gap: 80px;
                             }
+                            &__empty-cart {
+                                &__title {
+                                    @include font($secondary-font, $bold);
+                                    &:before {
+                                        background-color: $secondary-color;
+                                    }
+                                }
+                            }
                             .wc-block-components-main {
                                 flex: none;
                                 width: 100%;
@@ -479,11 +487,80 @@
                                 }
                             }
                         }
+
+                        .wp-block-woocommerce-empty-cart-block {
+                            .back-to-shop {
+                                margin-top: 20px;
+                                & > a {
+                                    @extend .btn-main-ghost;
+                                }
+                            }
+                            .products-wrap {
+                                width: 100%;
+                                &__title {
+                                    text-align: center;
+                                    margin-bottom: 20px;
+                                }
+                                .product-grid {
+                                    min-width: calc(100% + 24px);
+                                    .loop-product-thumb {
+                                        margin-bottom: 40px;
+                                        .product {
+                                            .woocommerce-loop-product {
+                                                &__link {
+                                                    .onsale {
+                                                        left: 0;
+                                                        min-height: auto;
+                                                        min-width: auto;
+                                                        border-radius: 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .product-category {
+                                        margin-bottom: 30px;
+                                        a {
+                                            display: block;
+                                            position: relative;
+                                            z-index: 0;
+                                            &:hover {
+                                                .product-category__thumb {
+                                                    img {
+                                                        transform: scale(1.2);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        &__thumb {
+                                            margin-bottom: 0;
+                                            overflow: hidden;
+                                            img {
+                                                @include transition(0.8s);
+                                            }
+                                        }
+                                        .woocommerce-loop-category__title {
+                                            position: absolute;
+                                            bottom: 15px;
+                                            @extend h3;
+                                            background: $primary-bg;
+                                            padding: 0 15px;
+                                            .count {
+                                                display: none !important;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     .page-title {
                         @extend h5;
                         font-weight: $bold;
                         margin-bottom: 30px;
+                        padding-bottom: 10px;
+                        @include add-border(1px, $form-border, 'bottom');
                     }
                     .cross-sells {
                         overflow: hidden;

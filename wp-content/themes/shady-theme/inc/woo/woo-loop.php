@@ -32,12 +32,42 @@ function shady_redefine_products_per_page( $per_page ) {
     return $per_page;
 }
 
+// update link for the product to show master product instead of variation
+remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10);
+add_action('woocommerce_before_shop_loop_item', 'shady_woocommerce_template_loop_product_link_open', 10);
+function shady_woocommerce_template_loop_product_link_open() {
+    global $product;
+
+    // temporary assignment for the product checking if its a variation or not
+    $temp_product   = $product;
+
+    // this means that its a variation
+    if ($temp_product->get_parent_id() !== 0) {
+        $product    = wc_get_product($temp_product->get_parent_id());
+    } else {
+        $product    = $temp_product;
+    }
+
+    // refer - /woocommerce/includes/wc-template-functions.php for the output
+    $link = apply_filters( 'woocommerce_loop_product_link', get_the_permalink($product->get_id()), $product );
+    echo '<a href="' . esc_url( $link ) . '" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">';
+}
+
 // thumb wrapper and starting of content wrap
 remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
-
 add_action('woocommerce_before_shop_loop_item_title', 'shady_woo_loop_thumb_modifier', 9);
 function shady_woo_loop_thumb_modifier() {
 	global $product;
+
+    // temporary assignment for the product checking if its a variation or not
+    $temp_product   = $product;
+
+    // this means that its a variation
+    if ($temp_product->get_parent_id() !== 0) {
+        $product    = wc_get_product($temp_product->get_parent_id());
+    } else {
+        $product    = $temp_product;
+    }
 	?>
 	<figure class="product__image">
         <?php
@@ -47,7 +77,7 @@ function shady_woo_loop_thumb_modifier() {
                 'alt'   => $product->get_name()
             );
 
-            if (has_post_thumbnail()) :
+            if (has_post_thumbnail($product->get_id())) :
                 echo $product->get_image($img_size, $attr);
             else :
                 $src = product_placeholder($img_size);

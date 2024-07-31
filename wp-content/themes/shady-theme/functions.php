@@ -36,7 +36,7 @@ require_once(get_template_directory().'/inc/ajax.php');
 require_once(get_template_directory().'/inc/widget.php');
 
 // Shortcode
-// require_once(get_template_directory().'/inc/shortcode.php');
+require_once(get_template_directory().'/inc/shortcode.php');
 
 // Custom theme functions
 require_once(get_template_directory().'/inc/theme-functions.php');
