@@ -9,6 +9,26 @@
     width: 100%;
     height: 80px;
     z-index: 1000;
+    @include transition(0.3s);
+    &.shrink {
+        height: 70px;
+        .header {
+            &__nav {
+                box-shadow: 0 0 20px rgba(#1e1e1e, 0.2);
+                &--brand {
+                    .navbar-brand {
+                        img {
+                            height: 45px;
+                            @include respond-to-mob('medium') {
+                                height: 35px;
+                                max-width: max-content;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     &__nav {
         background: $primary-bg;
         @include flex-display(row, space-between, center);
@@ -24,6 +44,7 @@
                 margin: 0;
                 img {
                     height: 60px;
+                    @include transition(0.3s);
                     @include respond-to-mob('medium') {
                         height: 40px;
                         max-width: max-content;

@@ -18,10 +18,6 @@ import Carousels from './Carousels';
 import Home from './Home';
 import Forms from './Forms';
 
-// get the libraries
-// import 'bootstrap';
-// import 'slick-carousel';
-// import 'simplebar';
 
 ready(() => {
     new AppCommon();

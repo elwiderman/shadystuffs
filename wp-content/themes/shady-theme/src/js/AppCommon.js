@@ -17,8 +17,7 @@ export default class AppCommon {
         // this.pageLoading();
         this.goTop();
         this.nav();
-        // this.fancyLightbox();
-        // this.postGallery();
+        this.navScroller();
         this.sizeChartTrigger();
 
         if ($('#mobiSidebar').length) {
@@ -91,6 +90,18 @@ export default class AppCommon {
             e.stopPropagation();
             if ($(e.currentTarget).attr('href') != '#') {
                 location.href = $(e.currentTarget).attr('href');
+            }
+        });
+    }
+
+    navScroller() {
+        $(window).on('scroll', e => {
+            let headerHt = $('header.header').innerHeight();
+
+            if (document.body.scrollTop > headerHt || document.documentElement.scrollTop > headerHt) {
+                $('header').addClass('shrink');
+            } else {
+                $('header').removeClass('shrink');
             }
         });
     }

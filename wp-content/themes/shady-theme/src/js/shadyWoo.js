@@ -12,7 +12,6 @@ export default class Woo {
         if ($('.single-page.single-product').length) {
             this.theQuantityButtons();
             this.moveSizechartBtn();
-            this.getPriceVariation();
         }
         if ($('#shadyCart').length) {
             this.theQuantityButtons();
