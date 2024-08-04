@@ -378,7 +378,7 @@
                             @unlink(FLYING_PRESS_CACHE_DIR . '/preload.txt');
 
                             // Delete all files and subdirectories
-                            $this->rrmdir( FLYING_PRESS_CACHE_DIR );
+                            FlyingPress\Purge::purge_everything();
 
                             @mkdir(FLYING_PRESS_CACHE_DIR, 0755, true);
 

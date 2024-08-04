@@ -4,7 +4,7 @@ Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, post sort, posts sort, post types order
 Requires at least: 2.8
 Tested up to: 6.6.1
-Stable tag: 2.2.4
+Stable tag: 2.2.6
 
 Sort Posts and custom Post Type Objects (custom post types) using a Drag and Drop Sortable JavaScript AJAX interface or default WordPress dashboard. 
 
@@ -93,6 +93,10 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 
 == Change Log ==
+
+= 2.2.6 = 
+ - Remove boolval on the filter 'pto/posts_orderby' to avoid returning wrong FALSE.
+ - FlyingPress cache lear method update.
 
 = 2.2.4 = 
  - Add code comments hints for easier understanding and follow.
