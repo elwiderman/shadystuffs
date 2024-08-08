@@ -4,9 +4,7 @@
 // placeholder wrapper for the sidebar only for mobiles 
 if (is_tax(['collection', 'product_cat']) || is_shop()) :
 	echo '<button class="filter-toggler" id="filterToggle" data-target="#mobiSidebar"><i class="icon-filter"></i></button>';
-	echo "<div class='mobi-sidebar' id='mobiSidebar'>";
-	dynamic_sidebar('shop');
-	echo "</div>";
+	echo "<div class='mobi-sidebar' id='mobiSidebar'></div>";
 endif;
 ?>
 

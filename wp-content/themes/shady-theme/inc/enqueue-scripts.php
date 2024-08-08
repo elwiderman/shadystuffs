@@ -27,6 +27,17 @@ function shady_framework_scripts() {
         ));
     }
 
+    if (is_shop() || is_tax(['collection']) || is_product_category() || is_product_tag()) {
+        wp_enqueue_script('shady-woo-shop', $path . shady_get_hashed_assets('js/shadyShop.js'), '', '', [
+            'strategy'      => 'defer',
+            'in_footer'     => true
+        ]);
+
+        wp_localize_script('shady-woo-shop', 'WPURLS', array(
+            'ajaxurl'       => admin_url('admin-ajax.php'),
+        ));
+    }
+
     // the stylesheets
     global $wp_styles; // Call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
 

@@ -173,7 +173,7 @@
                     * Deprecated filter
                     * do not rely on this anymore
                     */
-                    if( boolval( apply_filters('pto/posts_orderby', $orderBy, $query ) ) === FALSE )
+                    if (  apply_filters('pto/posts_orderby', $orderBy, $query )  === FALSE )
                         return $orderBy;
                         
                     $ignore =   apply_filters('pto/posts_orderby/ignore', FALSE, $orderBy, $query);

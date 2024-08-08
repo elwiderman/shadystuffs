@@ -5,6 +5,7 @@ import $ from 'jquery';
 import * as bootstrap from 'bootstrap';
 
 import { Fancybox } from "@fancyapps/ui";
+import { filter } from 'lodash';
 // import { Tab } from 'bootstrap';
 
 export default class AppCommon {
@@ -154,11 +155,23 @@ export default class AppCommon {
 
     // do the toggle for the sidebar 
     sidebarToggle() {
+        let filters;
         // remove filter off canvas open if more than mobile 
         $(window).on('load resize', e => {
-            if ($(window).width() > 768) {
+            // detach the filters 
+            if ($('#sideBar > #shadySidebar').length) {
+                filters = $('#sideBar > #shadySidebar').detach();
+            } else {
+                filters = $('#mobiSidebar > #shadySidebar').detach();
+            }
+
+            if ($(window).width() < 768) {
+                $('#mobiSidebar').html(filters);
+            } else {
                 $('#mobiSidebar, #filterToggle').removeClass('open');
                 $('body').removeClass('no-overflow');
+
+                $('#sideBar').html(filters);
             }
         });
 

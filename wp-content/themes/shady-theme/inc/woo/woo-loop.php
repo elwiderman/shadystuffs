@@ -26,10 +26,17 @@ function shady_change_password_strength( $strength ) {
     return 3;
 }
 
-add_filter( 'loop_shop_per_page', 'shady_redefine_products_per_page', 9999 );
-function shady_redefine_products_per_page( $per_page ) {
-    $per_page = 32;
+// post per page for shop
+add_filter('loop_shop_per_page', 'shady_redefine_products_per_page', 9999);
+function shady_redefine_products_per_page($per_page) {
+    $per_page = 12;
     return $per_page;
+}
+
+// shop no posts found wrap
+add_action('woocommerce_after_shop_loop', 'shady_no_posts_found', 9);
+function shady_no_posts_found() {
+    echo "<div class='no-products-found'></div>";
 }
 
 // update link for the product to show master product instead of variation
