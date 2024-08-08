@@ -169,6 +169,41 @@
                         }
                     }
                     .woocommerce-product-details {
+                        &__icon-list {
+                            @include flex-display(row, space-between, flex-start);
+                            gap: 10px 5px;
+                            margin-top: 20px;
+                            li {
+                                flex: none;
+                                width: 15%;
+                                @include respond-to-mob('x-large') {
+                                    width: 20%;
+                                }
+                                @include respond-to-mob('medium') {
+                                    width: 30%;
+                                }
+                                .wrap {
+                                    text-align: center;
+                                    img {
+                                        max-width: 65px;
+                                    }
+                                    figcaption {
+                                        font-size: 12px;
+                                        font-weight: $semi-bold;
+                                        line-height: 1.2;
+                                        opacity: 0.6;
+                                        margin-top: 5px;
+                                    }
+                                }
+                            }
+                        }
+                        &__icon-list-note {
+                            font-size: 18px;
+                            margin-top: 20px;
+                            @include respond-to-mob('medium') {
+                                font-size: 16px;
+                            }
+                        }
                         &__short-description {
                             margin-bottom: 20px;
                             margin-top: 20px;

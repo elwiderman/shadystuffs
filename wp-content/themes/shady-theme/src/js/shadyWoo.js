@@ -54,10 +54,12 @@ export default class Woo {
     moveSizechartBtn() {
         let trigger = $('.sizechart-wrap__trigger-sizechart');
 
+        console.log(trigger);
+
         if (trigger.length) {
             trigger.detach();
 
-            $('form.variations_form .variations.cfvsw-variation-disable-logic').find('label[for="pa_size"]').parents('th.label').addClass('size-chart-appended').append(trigger);
+            $('form.variations_form .variations').find('label[for="pa_size"]').parents('th.label').addClass('size-chart-appended').append(trigger);
         }
     }
 

@@ -33,6 +33,12 @@
                     }
                 }
             }
+            &__main-menu {
+                top: 70px;
+                @include respond-to-mob('medium') {
+                    top: 70px;
+                }
+            }
         }
     }
     &__nav {
@@ -361,7 +367,15 @@ body {
             top: 32px;
             &__main-menu {
                 top: calc(32px + 80px);
-                height: calc(100vh - 80px - 32px);
+                height: calc(100dvh - 80px - 32px);
+            }
+            &.shrink {
+                .header {
+                    &__main-menu {
+                        top: calc(32px + 70px);
+                        height: calc(100dvh - 70px - 32px);
+                    }
+                } 
             }
         }
     }
