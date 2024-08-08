@@ -331,7 +331,7 @@
             "label": "Price highlight note",
             "name": "price_highlight_note_text",
             "aria-label": "",
-            "type": "text",
+            "type": "textarea",
             "instructions": "This is the highlight note common for each product and is displayed after the price in the product single page",
             "required": 0,
             "conditional_logic": 0,
@@ -340,18 +340,18 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "Apply coupons at checkout for exclusive  discounts",
+            "default_value": "",
             "maxlength": "",
+            "rows": 2,
             "placeholder": "",
-            "prepend": "",
-            "append": ""
+            "new_lines": ""
         },
         {
             "key": "field_66b41e77aed5b",
             "label": "Icon group note",
             "name": "icon_group_note_text",
             "aria-label": "",
-            "type": "text",
+            "type": "textarea",
             "instructions": "This is the note common for each product and is displayed after the icon group in the product single page",
             "required": 0,
             "conditional_logic": 0,
@@ -360,11 +360,11 @@
                 "class": "",
                 "id": ""
             },
-            "default_value": "The product features an original fan art and is not an official merchandise",
+            "default_value": "",
             "maxlength": "",
+            "rows": 2,
             "placeholder": "",
-            "prepend": "",
-            "append": ""
+            "new_lines": ""
         },
         {
             "key": "field_66b41adcaed56",
@@ -456,5 +456,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1723080387
+    "modified": 1723112469
 }

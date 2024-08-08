@@ -4,7 +4,7 @@
     "fields": [
         {
             "key": "field_6501d2ad3c2ca",
-            "label": "Product Specifications",
+            "label": "Specifications",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -210,6 +210,100 @@
             ]
         },
         {
+            "key": "field_66b49ff6b365b",
+            "label": "Shipping",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_66b4a002b365c",
+            "label": "Show shipping tab?",
+            "name": "show_shipping_tab_bool",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_66b4a033b365d",
+            "label": "Block title",
+            "name": "product_shipping_tab_title_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66b4a002b365c",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Shipping, Returns & Refunds",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_66b4a11e3efed",
+            "label": "Block content",
+            "name": "product_shipping_content_text",
+            "aria-label": "",
+            "type": "wysiwyg",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66b4a002b365c",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "",
+            "tabs": "all",
+            "toolbar": "full",
+            "media_upload": 0,
+            "delay": 1
+        },
+        {
             "key": "field_6501d2ee49897",
             "label": "Size Chart",
             "name": "",
@@ -337,7 +431,20 @@
                         "class": "",
                         "id": ""
                     },
-                    "choices": [],
+                    "choices": [
+                        "Unique Art",
+                        "Vibrant Print",
+                        "Pure cotton",
+                        "Feather touch",
+                        "Color Fast",
+                        "Breathable",
+                        "Durable",
+                        "Anti pilling",
+                        "Anti microbial",
+                        "Pre shrunk true size",
+                        "Unisex Fit",
+                        "Made to order"
+                    ],
                     "default_value": false,
                     "return_format": "value",
                     "multiple": 0,
@@ -368,5 +475,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1723086159
+    "modified": 1723114356
 }

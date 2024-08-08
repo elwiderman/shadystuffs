@@ -97,12 +97,12 @@ function shady_add_cart_quantity_plus_minus() {
 
 // setting max and min quantity input
 add_filter( 'woocommerce_quantity_input_max', 'shady_woo_quantity_input_max' );
-function shady_woo_quantity_input_max( $max ){
+function shady_woo_quantity_input_max($max) {
     $max = 10;
     return $max;
 }
 add_filter( 'woocommerce_quantity_input_min', 'shady_woo_quantity_input_min', 10, 2 );
-function shady_woo_quantity_input_min( $min, $product ){
+function shady_woo_quantity_input_min($min, $product) {
     $min = 1;
     return $min;
 }
@@ -150,6 +150,10 @@ function shady_add_custom_product_tabs($tabs) {
     $tabs['description']['title']       = __('Product Description', 'shady');
     $tabs['description']['priority']    = 20;
 
+    // set review tab priority to 40
+    $tabs['reviews']['priority']        = 40;
+
+    // specs tab
     if (get_field('show_product_spec_bool', $pid)) :
         $title  = get_field('product_spec_title_text', $pid);
         // Add a custom tab
@@ -157,6 +161,16 @@ function shady_add_custom_product_tabs($tabs) {
             'title'     => $title,
             'priority'  => 10,
             'callback'  => 'shady_woo_product_spec_table_tab'
+        );
+    endif;
+    // shipping tab
+    if (get_field('show_shipping_tab_bool', $pid)) :
+        $title  = get_field('product_shipping_tab_title_text', $pid);
+        // Add a custom tab
+        $tabs['shipping'] = array(
+            'title'     => $title,
+            'priority'  => 30,
+            'callback'  => 'shady_woo_product_shipping_tab'
         );
     endif;
 
@@ -168,9 +182,13 @@ function shady_woo_product_spec_table_tab() {
     wc_get_template('single-product/tabs/specs.php');
 }
 
+// render the product shipping tab 
+function shady_woo_product_shipping_tab() {
+    wc_get_template('single-product/tabs/shipping.php');
+}
+
 // set custom image for user in the comments 
 remove_action('woocommerce_review_before', 'woocommerce_review_display_gravatar');
-
 add_action('woocommerce_review_before', 'shady_display_review_gravatar', 10);
 function shady_display_review_gravatar($comment) {
     // Get the comment author's email
@@ -234,6 +252,36 @@ function shady_size_chart_before_quantity() {
     endif;
 }
 
+// show shipping info after add to cart
+add_action('woocommerce_single_product_summary', 'shady_show_shipping_strings_after_add_to_cart', 31);
+function shady_show_shipping_strings_after_add_to_cart() {
+    echo "<div class='woocommerce-product-details__shipping-info'><h6>Ships out in 2-3 business days</h6>";
+    echo do_shortcode('[wpced]');
+    echo "</div>";
+}
+
+// add extra suffix to woo price in single product
+add_filter('woocommerce_get_price_suffix', 'shady_add_extra_price_suffix', 99, 4);
+function shady_add_extra_price_suffix($html, $product, $price, $qty) {
+    if (is_product()) {
+        $price_suffix   = get_field('prod_price_second_suffix_text', 'option');
+        if ($price_suffix) {
+            $html       .= "<span class='woocommerce-price-suffix-second'>{$price_suffix}</span>";
+            return $html;
+        }
+    }
+    return;
+}
+
+add_action('woocommerce_single_product_summary', 'shady_show_custom_string_after_price_in_single', 11);
+function shady_show_custom_string_after_price_in_single() {
+    if (is_product()) {
+        if (get_field('price_highlight_note_text', 'option')) {
+            $note   = nl2br(get_field('price_highlight_note_text', 'option'));
+            echo "<div class='product-higlight-note'><h6>{$note}</h6></div>";
+        }
+    }
+}
 
 
 /* the image section */

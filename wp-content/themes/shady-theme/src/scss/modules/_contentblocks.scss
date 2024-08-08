@@ -73,6 +73,9 @@
                         font-weight: $medium;
                         order: 3;
                     }
+                    .woocommerce-price-suffix-second {
+                        display: none;
+                    }
                 }
             }
             &__title {
