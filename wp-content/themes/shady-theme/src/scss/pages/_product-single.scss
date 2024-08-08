@@ -105,6 +105,8 @@
                             line-height: 1.4;
                         }
                         &__collection {
+                            display: inline-flex;
+                            gap: 5px;
                             margin-right: 10px;
                             a {
                                 background: $alt-font-color;
@@ -139,8 +141,11 @@
                         .woocommerce-Price-currencySymbol {
                             font-size: 70%;
                         }
-                        .woocommerce-price-suffix {
+                        .woocommerce-price-suffix, .woocommerce-price-suffix-second {
                             font-size: 40%;
+                        }
+                        .woocommerce-price-suffix-second {
+                            padding-left: 5px;
                         }
                         del, ins {
                             text-decoration: none;
@@ -168,7 +173,19 @@
                             }
                         }
                     }
+                    .product-higlight-note {
+                        margin: -10px 0 20px;
+                        h6 {
+                            color: $secondary-color;
+                        }
+                    }
                     .woocommerce-product-details {
+                        &__shipping-info {
+                            margin-top: 20px;
+                            h6 {
+                                margin-bottom: 0;
+                            }
+                        }
                         &__icon-list {
                             @include flex-display(row, space-between, flex-start);
                             gap: 10px 5px;
