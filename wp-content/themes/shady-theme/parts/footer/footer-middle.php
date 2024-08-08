@@ -14,7 +14,7 @@ endif;
         <div class="row">
             <div class="col-12">
                 <?php
-                if (get_field('use_local_popular_search_bool', $acf_id)) :
+                if (get_field('use_local_popular_search_bool', $acf_id) && !is_shop()) :
                     if (have_rows('popular_search_repeater', $acf_id)) :
                         echo "<h6 class='footer__middle--block-title'>Popular Searches</h6>";
                         echo "<ul class='footer__middle--search-links'>";

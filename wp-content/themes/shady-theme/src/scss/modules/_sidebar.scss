@@ -6,67 +6,108 @@
         @include respond-to-mob('medium') {
             display: none;
         }
-        .widget-box {
-            &.widget_block {
-                margin-bottom: 30px;
-                .wp-block-heading, .widget-title {
-                    @include font($secondary-font, $regular);
-                    font-size: 17px;
-                    background: #f0f0f0;
-                    line-height: 2; 
-                    padding: 0 20px;
-                }
-                .dgwt-wcas-search-wrapp {
-                    .dgwt-wcas-sf-wrapp {
-                        padding: 0 0 15px;
-                        .dgwt-wcas-search-input {
-                            font-family: $secondary-font;
+    }
+}
+
+#shadySidebar {
+    .accordion {
+        .accordion-item {
+            border: none;
+            .accordion-header {
+                @include font($secondary-font, $bold);
+                .accordion-button {
+                    font-weight: $bold;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    &:after {
+                        content: $icon-plus;
+                        font-family: $icomoon-font-family;
+                        background: unset;
+                        width: auto;
+                        height: auto;
+                    }
+                    &:focus {
+                        box-shadow: none;
+                    }
+                    &:not(.collapsed) {
+                        background: $secondary-color;
+                        color: $primary-bg;
+                        border-color: $secondary-color;
+                        &:after {
+                            content: $icon-minus;
+                            color: $primary-bg;
                         }
-                        button.dgwt-wcas-search-submit {
-                            top: 11px;
-                            left: 14px;
-                        }
                     }
                 }
-                .wc-block-product-categories-list {
-                    .wc-block-product-categories-list-item {
-                        &__name {
-                            font-size: 13px;
-                            font-weight: $semi-bold;
-                            color: rgba($primary-font-color, 0.5);
-                        }
-                    }
-                }
-                .wp-block-woocommerce-attribute-filter {
-                    .wc-block-attribute-filter {
-                        margin-bottom: 0;
-                    }
-                }
-                .wc-block-checkbox-list {
-                    &__checkbox {
-                        margin-top: 15px;
-                    }
-                    li {
-                        .wc-block-components-checkbox {
-                            &__label {
-                                font-size: 13px;
-                                font-weight: $semi-bold;
-                                color: rgba($primary-font-color, 0.5);
+            }
+            .accordion-collapse {
+                .accordion-body {
+                    .filter {
+                        li {
+                            font-size: 0;
+                            .form-check {
+                                min-height: calc(12px * 1.4);
+                                padding-left: 0;
+                                .form-check-input {
+                                    display: none;
+                                    &:checked {
+                                        & + .form-check-label {
+                                            font-weight: $bold;
+                                            &:before {
+                                                opacity: 0;
+                                            }
+                                            &:after {
+                                                color: $secondary-color;
+                                                opacity: 1;
+                                            }
+                                        }
+                                    }
+                                    & + .form-check-label {
+                                        font-size: 12px;
+                                        position: relative;
+                                        padding-left: 20px;
+                                        z-index: 0;
+                                        cursor: pointer;
+                                        &:before, &:after {
+                                            content: $icon-square;
+                                            font-family: $icomoon-font-family;
+                                            position: absolute;
+                                            top: 50%;
+                                            left: 0;
+                                            transform: translateY(-50%);
+                                        }
+                                        &:after {
+                                            content: $icon-check-square;
+                                            opacity: 0;
+                                        }
+                                    }
+                                }
                             }
-                            &__input {
-                                min-height: 15px;
-                                min-width: 15px;
-                                width: 17px;
-                                height: 17px;
-                                border-color: rgba($primary-font-color, 0.5);
-                                margin-right: 10px;
+                        }
+                        &.filter-colors {
+                            li {
+                                .form-check-input {
+                                    & + .form-check-label {
+                                        display: flex;
+                                        justify-content: flex-start;
+                                        align-items: center;
+                                        gap: 8px;
+                                        .color-box {
+                                            width: 12px;
+                                            height: 12px;
+                                            border-radius: 2px;
+                                            @include add-border(1px, $form-border, 'all');
+                                            order: 1;
+                                        }
+                                    }
+                                }
                             }
-                            &__mark {
-                                left: -2px;
-                                top: -1px;
-                                height: 15px;
-                                width: 14px;
-                                fill: $secondary-color;
+                        }
+                        &.filter-stock {
+                            .form-check-label[for="stock-instock"] {
+                                pointer-events: none;
+                                opacity: 0.4;
                             }
                         }
                     }
@@ -82,13 +123,13 @@
     @include respond-to-mob('medium') {
         display: block;
         position: fixed;
-        top: 80px;
+        top: 70px;
         right: 0;
-        width: 90vw;
-        height: calc(100% - 80px);
+        width: 100vw;
+        height: calc(100dvh - 70px);
         transform: translate(100%);
         background: $primary-bg;
-        padding: 40px 10px 20px;
+        padding: 45px 15px 20px;
         margin-top: 0;
         overflow-y: auto;
         @include transition(0.2s);
@@ -97,154 +138,6 @@
             transform: translate(0);
         }
 
-        .widget-box {
-            &.widget_block {
-                padding: 0 10px;
-                margin-bottom: 10px;
-                .wp-block-heading, .widget-title {
-                    font-size: 15px;
-                    line-height: 2; 
-                    background: #f0f0f0;
-                    padding: 0 20px;
-                }
-                .dgwt-wcas-search-wrapp {
-                    .dgwt-wcas-sf-wrapp {
-                        padding: 10px 0;
-                        .dgwt-wcas-search-input {
-                            font-size: 14px;
-                            border-width: 1px;
-                            border-radius: 4px;
-                            padding: 9px 14px 9px 38px;
-                        }
-                        button.dgwt-wcas-search-submit {
-                            top: 16px;
-                            left: 8px;
-                            svg {
-                                width: 13px;
-                                height: 13px;
-                            }
-                        }
-                    }
-                }
-                .wp-block-woocommerce-product-categories {
-                    padding: 0 20px;
-                    .wc-block-product-categories-list {
-                        display: block;
-                        column-gap: 8px;
-                        column-count: 2;
-                        .wc-block-product-categories-list-item {
-                            &__name {
-                                font-size: 13px;
-                                font-weight: $semi-bold;
-                                color: rgba($primary-font-color, 0.5);
-                            }
-                        }
-                    }
-                }
-                .wp-block-woocommerce-filter-wrapper {
-                    .wp-block-woocommerce-attribute-filter {
-                        padding: 0 20px;
-                        .wc-block-checkbox-list {
-                            @include flex-display(row, flex-start, flex-start);
-                            margin: 0 -4px;
-                            &__checkbox {
-                                margin-top: 0;
-                                margin-bottom: 8px;
-                            }
-                            li {
-                                flex: 0 0 50%;
-                                max-width: 50%;
-                                padding: 0 4px;
-                                .wc-block-components-checkbox {
-                                    &__label {
-                                        font-size: 13px;
-                                        font-weight: $semi-bold;
-                                        color: rgba($primary-font-color, 0.5);
-                                    }
-                                    &__input {
-                                        min-height: 15px;
-                                        min-width: 15px;
-                                        width: 17px;
-                                        height: 17px;
-                                        border-color: rgba($primary-font-color, 0.5);
-                                        margin-right: 10px;
-                                    }
-                                    &__mark {
-                                        left: -2px;
-                                        top: -1px;
-                                        height: 15px;
-                                        width: 14px;
-                                        fill: $secondary-color;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                .wc-blocks-filter-wrapper {
-                    .wp-block-woocommerce-stock-filter {
-                        padding: 0 20px;
-                        .wc-block-checkbox-list {
-                            @include flex-display(row, flex-start, flex-start);
-                            margin: 0 -4px;
-                            &__checkbox {
-                                margin-top: 0;
-                                margin-bottom: 8px;
-                            }
-                            li {
-                                flex: 0 0 50%;
-                                max-width: 50%;
-                                padding: 0 4px;
-                                .wc-block-components-checkbox {
-                                    &__label {
-                                        font-size: 13px;
-                                        font-weight: $semi-bold;
-                                        color: rgba($primary-font-color, 0.5);
-                                    }
-                                    &__input {
-                                        min-height: 15px;
-                                        min-width: 15px;
-                                        width: 17px;
-                                        height: 17px;
-                                        border-color: rgba($primary-font-color, 0.5);
-                                        margin-right: 10px;
-                                    }
-                                    &__mark {
-                                        left: -2px;
-                                        top: -1px;
-                                        height: 15px;
-                                        width: 14px;
-                                        fill: $secondary-color;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    .wp-block-woocommerce-price-filter {
-                        .wc-block-price-slider {
-                            padding: 0 20px;
-                            .wc-block-price-filter {
-                                &__range-input-wrapper {
-                                    margin: 20px 0;
-                                }
-                                &__controls {
-                                    .wc-block-components-price-slider {
-                                        &__amount {
-                                            font-size: 14px;
-                                            max-width: 120px;
-                                            padding: 5px 8px;
-                                            &:last-child {
-                                                text-align: right;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -253,7 +146,7 @@
     @include respond-to-mob('medium') {
         display: block;
         position: fixed;
-        top: 80px;
+        top: 75px;
         right: 12px;
         width: 30px;
         height: 30px;

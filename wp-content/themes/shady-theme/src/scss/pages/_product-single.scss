@@ -670,9 +670,20 @@
                                     }
                                     ul {
                                         list-style: circle;
+                                        li {
+                                            &:not(:last-child) {
+                                                margin-bottom: 8px;
+                                            }
+                                        }
+                                        &.xs-spacer-top {
+                                            margin-top: -12px;
+                                        }
                                     }
                                     ol {
                                         list-style: decimal-leading-zero;
+                                    }
+                                    .text-bold {
+                                        font-weight: $bold !important;
                                     }
                                 }
                             }

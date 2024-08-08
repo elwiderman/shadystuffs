@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 echo '<div class="col-md-3"><aside class="sidebar" id="sideBar">';
 
-dynamic_sidebar( 'shop' );
+get_template_part('parts/woo/sidebar');
 
 echo '</aside></div>';
 /* Omit closing PHP tag at the end of PHP files to avoid "headers already sent" issues. */

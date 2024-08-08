@@ -10,17 +10,23 @@
     height: 80px;
     z-index: 1000;
     @include transition(0.3s);
+    @include respond-to-mob('medium') {
+        height: 70px;
+    }
     &.shrink {
         height: 70px;
         .header {
             &__nav {
                 box-shadow: 0 0 20px rgba(#1e1e1e, 0.2);
+                @include respond-to-mob('medium') {
+                    box-shadow: unset;
+                }
                 &--brand {
                     .navbar-brand {
                         img {
                             height: 45px;
                             @include respond-to-mob('medium') {
-                                height: 35px;
+                                height: 45px;
                                 max-width: max-content;
                             }
                         }
