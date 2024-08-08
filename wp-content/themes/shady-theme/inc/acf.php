@@ -2,6 +2,9 @@
 /* 
     setup the acf to save the jsons for syncing between intallations
 */
+// set the row indices for the repeaters to start with 0
+add_filter('acf/settings/row_index_offset', '__return_zero');
+
 // save point
 add_filter('acf/settings/save_json', 'shady_acf_json_save_point');
  
@@ -58,4 +61,24 @@ if( function_exists('acf_add_options_page') ) {
         'redirect'      => false,
         'position'      => 61
     ));    
+}
+
+
+// generate the choices for the icon list of prod single from theme settings
+add_filter('acf/load_field/key=field_66b4353103394', 'adhq_acf_fetch_icon_list_from_settings');
+function adhq_acf_fetch_icon_list_from_settings($field) {
+    // reset choices
+    $field['choices']   = array();
+
+    if (have_rows('prod_iconlist_repeater', 'option')) :
+        while(have_rows('prod_iconlist_repeater', 'option')) : the_row();
+            $info       = wp_strip_all_tags(get_sub_field('label_text'));
+            $index      = get_row_index();
+            // append to choices
+            $field['choices'][$index] = $info;
+        endwhile;
+    endif;
+
+    // return the field
+    return $field;   
 }

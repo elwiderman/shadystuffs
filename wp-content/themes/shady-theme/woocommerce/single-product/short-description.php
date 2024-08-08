@@ -27,7 +27,34 @@ if ( ! $short_description ) {
 	return;
 }
 
-?>
+// show the icon list if exists
+if (have_rows('icon_list_repeater')) :
+	$all_icons	= get_field('prod_iconlist_repeater', 'option');
+	// echo '<pre>';
+	// var_dump(get_field('icon_list_repeater'));
+	// echo '</pre>';
+	echo "<ul class='woocommerce-product-details__icon-list'>";
+	while (have_rows('icon_list_repeater')) : the_row();
+		$index  = get_sub_field('item_select');
+		$icon   = $all_icons[$index]['icon_img'];
+		$text   = $all_icons[$index]['label_text'];
+
+		echo "<li>
+			<figure class='wrap mb-0'>
+				<img class='img-fluid' src='{$icon['url']}' alt='{$icon['alt']}'>
+				<figcaption class='text-uppercase'>{$text}</figcaption>
+			</figure>
+		</li>";
+	endwhile;
+	echo "</ul>";
+
+	$note	= get_field('icon_group_note_text', 'option');
+	echo "<h6 class='woocommerce-product-details__icon-list-note'>{$note}</h6>";
+endif;
+
+// hiding the short description for now 
+/*
 <div class="woocommerce-product-details__short-description">
-	<?php echo $short_description; // WPCS: XSS ok. ?>
+	$short_description; // WPCS: XSS ok.
 </div>
+*/

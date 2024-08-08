@@ -287,6 +287,155 @@
                     "parent_repeater": "field_6522310d0a082"
                 }
             ]
+        },
+        {
+            "key": "field_66b41ac4aed55",
+            "label": "Product Single",
+            "name": "",
+            "aria-label": "",
+            "type": "tab",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "placement": "top",
+            "endpoint": 0,
+            "selected": 0
+        },
+        {
+            "key": "field_66b41cf1aed59",
+            "label": "Price second suffix",
+            "name": "prod_price_second_suffix_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "This gets appended after the main suffix from woocommerce and is visible in the product detail page",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Shipping applied at checkout.",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_66b41d4eaed5a",
+            "label": "Price highlight note",
+            "name": "price_highlight_note_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "This is the highlight note common for each product and is displayed after the price in the product single page",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Apply coupons at checkout for exclusive  discounts",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_66b41e77aed5b",
+            "label": "Icon group note",
+            "name": "icon_group_note_text",
+            "aria-label": "",
+            "type": "text",
+            "instructions": "This is the note common for each product and is displayed after the icon group in the product single page",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "33",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "The product features an original fan art and is not an official merchandise",
+            "maxlength": "",
+            "placeholder": "",
+            "prepend": "",
+            "append": ""
+        },
+        {
+            "key": "field_66b41adcaed56",
+            "label": "Default Icon List",
+            "name": "prod_iconlist_repeater",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "",
+            "button_label": "Add Row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_66b41aefaed57",
+                    "label": "Icon",
+                    "name": "icon_img",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "",
+                    "preview_size": "woocommerce_gallery_thumbnail",
+                    "parent_repeater": "field_66b41adcaed56"
+                },
+                {
+                    "key": "field_66b41cd4aed58",
+                    "label": "Label",
+                    "name": "label_text",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_66b41adcaed56"
+                }
+            ]
         }
     ],
     "location": [
@@ -307,5 +456,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1722465823
+    "modified": 1723080387
 }
