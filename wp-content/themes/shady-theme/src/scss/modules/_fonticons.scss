@@ -28,6 +28,30 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-discount {
+    &:before {
+        content: $icon-discount;
+    }
+}
+
+.icon-price {
+    &:before {
+        content: $icon-price;
+    }
+}
+
+.icon-sale {
+    &:before {
+        content: $icon-sale;
+    }
+}
+
+.icon-tag {
+    &:before {
+        content: $icon-tag;
+    }
+}
+
 .icon-alert-circle {
     &:before {
         content: $icon-alert-circle;
@@ -184,21 +208,21 @@
     }
 }
 
-.icon-shopping-bag {
-    &:before {
-        content: $icon-shopping-bag;
-    }
-}
-
 .icon-shopping-cart {
     &:before {
         content: $icon-shopping-cart;
     }
 }
 
-.icon-tag {
+.icon-shopping-bag {
     &:before {
-        content: $icon-tag;
+        content: $icon-shopping-bag;
+    }
+}
+
+.icon-tag1 {
+    &:before {
+        content: $icon-tag1;
     }
 }
 
