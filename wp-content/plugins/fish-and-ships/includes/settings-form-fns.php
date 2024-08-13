@@ -3,7 +3,7 @@
  * The Pluggable table rules stuff 
  *
  * @package Fish and Ships
- * @version 1.5.3
+ * @version 1.5.8
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -1044,7 +1044,7 @@ function wc_fns_calculate_cost_rule_fn($prev_cost, $cost, $shippable_contents_ru
  * Filter to get all actions
  *
  * @since 1.0.0
- * @version 1.5.4
+ * @version 1.5.8
  *
  * @param $actions (array) maybe incomming  a pair action-id / only-pro, scope (optional), action-name array
  *
@@ -1076,6 +1076,7 @@ function wc_fns_get_actions_fn($actions = array()) {
 	$actions['rename']          = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Rename method title', 'shorted, action name', 'fish-and-ships'));
 	$actions['description']     = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Add subtitle (text under)', 'shorted, action name', 'fish-and-ships'));
 	$actions['total-messages']  = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Change cart totals messages', 'shorted, action name', 'fish-and-ships'));
+	$actions['order-note']      = array('onlypro' => true,  'group' => 'Text / Information', 'scope' => $scope_normal, 'label' => _x('Add order note', 'shorted, action name', 'fish-and-ships'));
 
 	$actions['reset']           = array('onlypro' => true,  'group' => 'Costs calculation', 'scope' => $scope_normal, 'label' => _x('Reset previous costs', 'shorted, action name', 'fish-and-ships'));
 	// $actions['jump_up']         = array('onlypro' => true,  'scope' => $scope_normal, 'label' => _x('Repeat N rules (jump up)', 'shorted, action name', 'fish-and-ships'));

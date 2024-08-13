@@ -3,10 +3,10 @@ Contributors: wpcentrics
 Donate link: https://www.wp-centrics.com/
 Tags: shipping table rate, shipping rate, conditional shipping, table rate shipping
 Requires at least: 4.7
-Tested up to: 6.5
+Tested up to: 6.6
 WC requires at least: 3.0
-WC tested up to: 9.0
-Stable tag: 1.5.7
+WC tested up to: 9.1
+Stable tag: 1.5.8
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -129,7 +129,8 @@ Add custom messages, rename the woocommerce shipping method or add extra info on
 * Math expressions parser to calculate shipping rates [PRO]
 * Shipping boxes packer algorithm [PRO]
 * Hide shipping methods (FnS, WC native and third party) [PRO]
-* NEW: Cart total messages (when there isn't shipping options available) [PRO]
+* Cart total messages (when there isn't shipping options available) [PRO]
+* NEW: Order notes [PRO]
 
 ...all combinable on every rule.
 
@@ -294,6 +295,13 @@ Fish and Ships has widely tested with older and latest; our philosophy is to cov
 15. Apply coupons automatically (Pro)
 
 == Changelog ==
+
+= 1.5.8 - 09/08/2024 =
+* Added special action Add Order Note [Pro]
+* Rare bug solved in few websites: the order of the rules is randomly altered when saving.
+* Fixed one deprecated & one PHP warning messages
+* Checked for WC 9.1
+* Checked for WP 6.6
 
 = 1.5.7 - 03/07/2024 =
 * Added CSS for better shipping settings printing

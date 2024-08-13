@@ -4,7 +4,7 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.5.2
+ * @version 1.5.8
  */
    
 defined( 'ABSPATH' ) || exit;
@@ -114,7 +114,7 @@ if ( !class_exists( 'Fish_n_Ships_Wizard' ) ) {
 		 * Load all messages: news & pointers, from remote, local & third party
 		 * Then remove the dismissed & order it by priority
 		 *
-		 * @since 1.5
+		 * @since 1.5.8
 		 */
 		function load_all_messages() {
 
@@ -140,7 +140,15 @@ if ( !class_exists( 'Fish_n_Ships_Wizard' ) ) {
 
 			// Remove dismissed / delayed
 			foreach ($this->options['closed_news'] as $key => $value ) {
-				if ( $value > time() && isset($this->news_and_pointers[$key]) ) unset ( $this->news_and_pointers[$key] );
+				if ( $value > time() && isset($this->news_and_pointers[$key]) )
+					unset ( $this->news_and_pointers[$key] );
+			}
+			
+			// Show unique?
+			foreach( $this->news_and_pointers as $key=>$data ) 
+			{
+				if( isset( $data['unique'] ) && count( $this->news_and_pointers ) > 1 )
+					unset ( $this->news_and_pointers[$key] );
 			}
 			
 			// Order it

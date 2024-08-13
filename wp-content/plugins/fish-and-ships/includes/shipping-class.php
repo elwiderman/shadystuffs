@@ -5,7 +5,7 @@
  * This is the shipping class that extends WC
  *
  * @package Fish and Ships
- * @version 1.5.2
+ * @version 1.5.8
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -244,7 +244,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * Calculate the shipping costs.
 	 *
 	 * @since 1.0.0
-	 * @version 1.5.2
+	 * @version 1.5.8
 	 *
 	 * @param array $package Package of items from cart.
 	 */
@@ -337,7 +337,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		$all_shippable_contents = $shippable_contents;
 
 		// Get the selection methods that have group capabilities
-		$groupable_sm = apply_filters('wc-fns-groupable-selection-methods', array('by-weight', 'by-price', 'by-volume', 'volumetric', 'volumetric-set', 'quantity', 'n-groups') );
+		$groupable_sm = apply_filters('wc-fns-groupable-selection-methods', array('by-weight', 'by-price', 'by-volume', 'volumetric', 'volumetric-set', 'quantity', 'n-groups', 'any-this-prod', 'none-this-prod') );
 
 		// Since 1.4.13 the foreach is replaced by for, to give support to jump-up, but still experimental
 		// The variable $rule has been renamed as $virtual_count
@@ -466,6 +466,8 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 							}
 
 							//$this->debug_log('[start-collapsable]', 2);
+
+							$subindex = '';
 
 							foreach ($shippable_contents_rule as $key=>$product) {
 								

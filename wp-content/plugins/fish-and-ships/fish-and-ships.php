@@ -3,15 +3,15 @@
  * Plugin Name: Fish and Ships
  * Plugin URI: https://www.wp-centrics.com/
  * Description: A WooCommerce conditional table rate shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.
- * Version: 1.5.7
+ * Version: 1.5.8
  * Author: wpcentrics
  * Author URI: https://www.wp-centrics.com
  * Text Domain: fish-and-ships
  * Domain Path: /languages
  * Requires at least: 4.7
- * Tested up to: 6.5
+ * Tested up to: 6.6
  * WC requires at least: 3.0
- * WC tested up to: 9.0
+ * WC tested up to: 9.1
  * Requires PHP: 7.0
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 } else {
 
-	define ('WC_FNS_VERSION', '1.5.7' );
+	define ('WC_FNS_VERSION', '1.5.8' );
 	define ('WC_FNS_PATH', dirname(__FILE__) . '/' );
 	define ('WC_FNS_URL', plugin_dir_url( __FILE__ ) );
 
@@ -1347,7 +1347,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Sanitize the shipping rules from the admin options form (save)
 		 *
 		 * @since 1.0.0
-		 * @version 1.5.3
+		 * @version 1.5.8
 		 *
 		 * @param $raw_shipping_rules raw stuff from the $_POST object
 		 *
@@ -1483,12 +1483,27 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			}
 
 			// Ensure that any extra rule it's under any normal rule (required for new snippets wizard)
+			
+			// Patch to ensure the right order (since 1.5.8)
+			foreach ($shipping_rules as $index => &$rule) {
+				$rule['original_index'] = $index;
+			}
+			unset($rule); // Avoid unwanted references
+			
 			usort($shipping_rules, function ($a, $b) {
-				if( $a['type'] == $b['type'] ) return 0;
+				if ($a['type'] == $b['type']) {
+					return $a['original_index'] <=> $b['original_index'];
+				}
 				if( $a['type'] == 'normal' ) return -1;
 				return 1;
 			});
 
+			// We will remove the original index after usort
+			foreach ($shipping_rules as &$rule) {
+				unset($rule['original_index']);
+			}
+			unset($rule); // Avoid unwanted references
+			
 			return $shipping_rules;
 		}
 
@@ -2336,6 +2351,10 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			} elseif ( $datatype == 'zone_regions' && $this->im_pro() ) {
 								
 				$options = $Fish_n_Ships_Shipping->get_zone_regions();
+
+			} elseif ( $datatype == 'product_list' && $this->im_pro() ) {
+								
+				$options = $this->get_product_list();
 
 			} else {
 				
