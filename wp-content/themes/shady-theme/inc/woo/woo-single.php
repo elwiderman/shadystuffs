@@ -255,13 +255,13 @@ function shady_size_chart_before_quantity() {
 // show shipping info after add to cart
 add_action('woocommerce_single_product_summary', 'shady_show_shipping_strings_after_add_to_cart', 31);
 function shady_show_shipping_strings_after_add_to_cart() {
-    echo "<div class='woocommerce-product-details__shipping-info'><h6>Ships out in 2-3 business days</h6>";
+    echo "<div class='woocommerce-product-details__shipping-info'><h6>Made to order. Ships out in 2-3 business days</h6>";
     echo do_shortcode('[wpced]');
     echo "</div>";
 }
 
 // add extra suffix to woo price in single product
-add_filter('woocommerce_get_price_suffix', 'shady_add_extra_price_suffix', 99, 4);
+// add_filter('woocommerce_get_price_suffix', 'shady_add_extra_price_suffix', 99, 4);
 function shady_add_extra_price_suffix($html, $product, $price, $qty) {
     if (is_product()) {
         $price_suffix   = get_field('prod_price_second_suffix_text', 'option');

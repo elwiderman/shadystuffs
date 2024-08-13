@@ -3,7 +3,7 @@
  * Local news & pointers, loaded from wizard.php
  *
  * @package Fish and Ships
- * @version 1.5.3
+ * @version 1.5.8
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -231,21 +231,21 @@ if( $wizard_on_method )
 // Announce the new feature only for old users
 if( 
 	$Fish_n_Ships->im_pro() 
-	&& count($local_news_n_pointers) < 1
-	&& version_compare($Fish_n_Ships->get_option('first_version'), '1.5.2', '<' ) 
+	&& version_compare($Fish_n_Ships->get_option('first_version'), '1.5.8', '<' ) 
 ) {
-	$local_news_n_pointers['wizard-free-shipping'] = array(
+	$local_news_n_pointers['nf-order-notes'] = array(
 
 		'type'      => 'pointer',
 		'priority'  => 15,
+		'unique'    => true,
 
 		'title'     => esc_html__( 'New feature!' ),
-		'content'   => '<strong>You can now set the costs per ranges</strong><br><br>Based on weight, volume, volumetric, product quantity or dimensions: All in one rule!',
+		'content'   => 'Now you can add private or customer <strong>order notes</strong> conditionally. Look into Text/Information actions.',
 
 		'where'     => array( 'woocommerce_page_wc-settings' ),
 		'auto_open' => true,
 
-		'anchor'    => '.wc-fns-cost-method:first',
+		'anchor'    => '#wrapper-shipping-rules-table-fns .special-actions-column:first',
 
 		//'close_bt'  => '<span class="dashicons dashicons-dismiss"></span> Finish',
 		//'extra_action'  => 'wizard-end',
@@ -254,7 +254,6 @@ if(
 		'align'     => 'left',
 	);
 }
-
 
 /* Where 
 add_action( 'admin_enqueue_scripts', function( $page ) {
