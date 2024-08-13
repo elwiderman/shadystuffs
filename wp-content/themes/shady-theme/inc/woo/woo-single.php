@@ -280,6 +280,52 @@ function shady_show_custom_string_after_price_in_single() {
             $note   = nl2br(get_field('price_highlight_note_text', 'option'));
             echo "<div class='product-higlight-note'><h6>{$note}</h6></div>";
         }
+
+        // offers
+        echo "
+        <div class='product-higlight-offers'>
+            <h6 class='product-higlight-offers__title'>
+                <i class='icon-price'></i>Offers
+            </h6>
+            <div class='product-higlight-offers__items' id='highlightOfferSlider'>
+                <div>
+                    <div class='item'>
+                        <p class='mb-0'><span>₹150 OFF</span><br>above ₹800</p>
+                    </div>
+                </div>
+                <div>
+                    <div class='item'>
+                        <p class='mb-0'><span>₹200 OFF</span><br>above ₹1,000</p>
+                    </div>
+                </div>
+                <div>
+                    <div class='item'>
+                        <p class='mb-0'><span>₹400 OFF</span><br>above ₹1,400</p>
+                    </div>
+                </div>
+                <div>
+                    <div class='item'>
+                        <p class='mb-0'><span>₹500 OFF</span><br>above ₹2,100</p>
+                    </div>
+                </div>
+                <div>
+                    <div class='item'>
+                        <p class='mb-0'><span>₹700 OFF</span><br>above ₹3,000</p>
+                    </div>
+                </div>
+                <div>
+                    <div class='item'>
+                        <p class='mb-0'><span>₹800 OFF</span><br>above ₹4,000</p>
+                    </div>
+                </div>
+                <div>
+                    <div class='item'>
+                        <p class='mb-0'><span>₹2000 OFF</span><br>above ₹10,000</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        ";
     }
 }
 
@@ -293,4 +339,11 @@ function shady_woo_custom_product_images() {
     if (is_product()) {
         get_template_part('woocommerce/single-product/custom-images');
     }
+}
+
+
+// remove the zoom on hover anim
+add_action( 'wp', 'shady_remove_zoom_lightbox_theme_support', 99 ); 
+function shady_remove_zoom_lightbox_theme_support() { 
+    remove_theme_support( 'wc-product-gallery-zoom' );
 }

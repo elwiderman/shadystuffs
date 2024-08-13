@@ -18,6 +18,10 @@ export default class Carousels {
         if ($('#productSingleCarouselMain').length) {
             this.productSingleCarousel();
         }
+
+        if ($('#highlightOfferSlider').length) {
+            this.prodSingleOfferSlider();
+        }
     }
 
     homeHero() {
@@ -122,6 +126,26 @@ export default class Carousels {
                     'width': parent.width()
                 });
             }
+        });
+    }
+
+    prodSingleOfferSlider() {
+        $('#highlightOfferSlider').slick({
+            dots: false,
+            arrows: true,
+            infinite: false,
+            speed: 800,
+            fade: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            centerMode: false,
+            lazyLoad: 'ondemand',
+            adaptiveHeight: false,
+            variableWidth: true,
+            autoplay: false,
+            rows: 0,
+            prevArrow: '<button class="slick-prev slick-arrow"><i class="icon-chevron-left"></i></button>',
+            nextArrow: '<button class="slick-next slick-arrow"><i class="icon-chevron-right"></i></button>',
         });
     }
 }

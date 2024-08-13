@@ -87,7 +87,7 @@
                 }
                 .entry-summary {
                     .product_title {
-                        @extend h3, .sm;
+                        @extend h5;
                         font-family: $secondary-font;
                         @include respond-to-mob('medium') {
                             font-size: 20px;
@@ -174,15 +174,99 @@
                         }
                     }
                     .product-higlight-note {
-                        margin: -10px 0 20px;
+                        margin: -10px 0 10px;
                         h6 {
+                            font-size: 14px;
+                        }
+                    }
+                    .product-higlight-offers {
+                        margin-bottom: 20px;
+                        &__title {
+                            position: relative;
                             color: $secondary-color;
+                            padding-left: 35px;
+                            z-index: 0;
+                            overflow: hidden;
+                            i {
+                                font-size: 30px;
+                                color: $secondary-color;
+                                position: absolute;
+                                top: 50%;
+                                left: 0;
+                                transform: translateY(-50%);
+                            }
+                        }
+                        &__items {
+                            &:after {
+                                content: '';
+                                position: absolute;
+                                right: 0;
+                                top: 0;
+                                width: 150px;
+                                height: 100%;
+                                background: rgb(255,255,255);
+                                background: linear-gradient(270deg, rgba(255,255,255,1) 30%, rgba(255,255,255,0) 100%);
+                                z-index: 1;
+                            }
+                            .slick-arrow {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 30px;
+                                height: 100%;
+                                background: #f6f6f6;
+                                border: none;
+                                box-shadow: none;
+                                outline: 0 !important;
+                                z-index: 2;
+                                &.slick-next {
+                                    border-radius: 0 5px 5px 0;
+                                }
+                                &.slick-prev {
+                                    left: unset;
+                                    right: 0;
+                                    border-radius: 5px 0 0 5px;
+                                }
+                            }
+                            .slick-list {
+                                padding: 0 40px;
+                                .slick-slide {
+                                    &:not(:last-child) {
+                                        margin-right: 15px;
+                                    }
+                                    .item {
+                                        position: relative;
+                                        background: #f6f6f6;
+                                        text-align: center;
+                                        border-radius: 5px;
+                                        @include add-border(1px, rgba(#000, 0.3), 'all');
+                                        padding: 15px;
+                                        z-index: 0;
+                                        &:before {
+                                            content: '';
+                                            @include center-absolute;
+                                            width: calc(100% - 10px);
+                                            height: calc(100% - 10px);
+                                            border: 1px dashed $secondary-color;
+                                            border-radius: 3px;
+                                        }
+                                        p {
+                                            margin-bottom: 0;
+                                            span {
+                                                font-size: 120%;
+                                                font-weight: $bold;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                     .woocommerce-product-details {
                         &__shipping-info {
                             margin-top: 20px;
                             h6 {
+                                font-size: 15px;
                                 margin-bottom: 0;
                             }
                         }
@@ -262,6 +346,9 @@
                                     position: relative;
                                     z-index: 0;
                                     .sizechart-wrap__trigger-sizechart {
+                                        position: absolute;
+                                        left: 150px;
+                                        top: 0;
                                         display: inline-block;
                                         font-size: 14px;
                                         font-weight: $bold;
@@ -274,6 +361,7 @@
                                 }
                             }
                             .value {
+                                padding-bottom: 8px;
                                 .cfvsw-label-option {
                                     width: 40px;
                                     height: 40px;
@@ -338,7 +426,25 @@
                             }
                         }
                         .single_variation_wrap {
+                            margin-top: -10px;
                             .woocommerce-variation {
+                                .woocommerce-variation-description {
+                                    background: #f6f6f6;
+                                    border-radius: 5px;
+                                    padding: 10px;
+                                    margin-bottom: 5px;
+                                    p {
+                                        font-size: 13px;
+                                        line-height: 1.45;
+                                        margin-bottom: 0;
+                                        a {
+                                            color: $secondary-color;
+                                            &:hover {
+                                                color: $primary-font-color;
+                                            }
+                                        }
+                                    }
+                                }
                                 .woocommerce-variation-price {
                                     .price {
                                         @include flex-display();
@@ -376,7 +482,7 @@
                                 }
                                 .woocommerce-variation-availability {
                                     p.stock {
-                                        font-size: 15px;
+                                        font-size: 14px;
                                         font-weight: $bold;
                                     }
                                 }
@@ -726,9 +832,6 @@
                                             &:not(:last-child) {
                                                 margin-bottom: 8px;
                                             }
-                                        }
-                                        &.xs-spacer-top {
-                                            // margin-top: -12px;
                                         }
                                     }
                                     ol {
