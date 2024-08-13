@@ -54,7 +54,7 @@ export default class Woo {
     moveSizechartBtn() {
         let trigger = $('.sizechart-wrap__trigger-sizechart');
 
-        console.log(trigger);
+        // console.log(trigger);
 
         if (trigger.length) {
             trigger.detach();
