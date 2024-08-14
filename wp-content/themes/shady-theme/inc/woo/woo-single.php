@@ -343,7 +343,7 @@ function shady_woo_custom_product_images() {
 
 
 // remove the zoom on hover anim
-add_action( 'wp', 'shady_remove_zoom_lightbox_theme_support', 99 ); 
+// add_action( 'wp', 'shady_remove_zoom_lightbox_theme_support', 99 ); 
 function shady_remove_zoom_lightbox_theme_support() { 
     remove_theme_support( 'wc-product-gallery-zoom' );
 }
