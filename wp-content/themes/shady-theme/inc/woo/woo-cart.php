@@ -146,3 +146,36 @@ add_action('shady_after_woocommerce/cart-line-items-block', function() {
 add_action('shady_after_woocommerce/cart-order-summary-coupon-form-block', function() {
     echo do_shortcode('[wpccl_button]');
 });
+
+
+// add sequential discounts on total cart value
+add_action( 'woocommerce_cart_calculate_fees', 'shady_discount_based_on_cart_total', 10, 1 );
+function shady_discount_based_on_cart_total( $cart_object ) {
+
+    if ( is_admin() && ! defined( 'DOING_AJAX' ) )
+        return;
+
+    $cart_total = $cart_object->cart_contents_total; // Cart total
+
+    if ($cart_total > 10000) {
+        $discount   = 2000;
+    } elseif ($cart_total > 4000 && $cart_total <= 10000) {
+        $discount   = 800;
+    } elseif ($cart_total > 3000 && $cart_total <= 4000) {
+        $discount   = 700;
+    } elseif ($cart_total > 2100 && $cart_total <= 3000) {
+        $discount   = 500;
+    } elseif ($cart_total > 1400 && $cart_total <= 2100) {
+        $discount   = 400;
+    } elseif ($cart_total > 1000 && $cart_total <= 1400) {
+        $discount   = 200;
+    } elseif ($cart_total > 800 && $cart_total <= 1000) {
+        $discount   = 150;
+    } else {
+        $discount   = 0;
+    }
+
+    if ($discount != 0) {
+        $cart_object->add_fee("Discount", -$discount, true );
+    }
+}

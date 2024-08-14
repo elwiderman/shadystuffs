@@ -426,6 +426,7 @@
 
                                 .wp-block-woocommerce-cart-order-summary-totals-block {
                                     .wp-block-woocommerce-cart-order-summary-subtotal-block,
+                                    .wp-block-woocommerce-cart-order-summary-fee-block,
                                     .wp-block-woocommerce-cart-order-summary-shipping-block {
                                         .wc-block-components-totals-item {
                                             align-items: flex-end;
@@ -1098,6 +1099,7 @@
                                 }
                                 .wp-block-woocommerce-checkout-order-summary-totals-block {
                                     .wp-block-woocommerce-checkout-order-summary-subtotal-block,
+                                    .wp-block-woocommerce-checkout-order-summary-fee-block,
                                     .wp-block-woocommerce-checkout-order-summary-discount-block,
                                     .wp-block-woocommerce-checkout-order-summary-shipping-block {
                                         .wc-block-components-totals-item {
