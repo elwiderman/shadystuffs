@@ -9,6 +9,7 @@ export default class Carousels {
     init() {
         if ($('.single-page.single-home').length) {
             this.homeHero();
+            this.bestSellerCarousels();
         }
 
         if ($('.products-carousel').length || $('#crossSells').length) {
@@ -37,6 +38,46 @@ export default class Carousels {
             cssEase: 'ease',
             lazyLoad: 'ondemand',
             pauseOnHover: true,
+        });
+    }
+
+    bestSellerCarousels() {
+        $('.bestsellers-carousel').slick({
+            dots: false,
+            arrows: false,
+            infinite: true,
+            speed: 800,
+            fade: false,
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            swipeToSlide: true,
+            // waitForAnimate: true,
+            centerMode: false,
+            lazyLoad: 'ondemand',
+            adaptiveHeight: false,
+            variableWidth: false,
+            autoplay: true,
+            autoplaySpeed: 4000,
+            pauseOnHover: true,
+            rows: 0,
+            responsive: [
+                {
+                    breakpoint: 1500,
+                    settings: {
+                        slidesToShow: 4,
+                    }
+                }, {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+                }, {
+                    breakpoint: 700,
+                    settings: {
+                        slidesToShow: 1,
+                    }
+                }
+            ]
         });
     }
 
