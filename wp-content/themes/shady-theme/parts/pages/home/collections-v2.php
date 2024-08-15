@@ -12,7 +12,7 @@ if (get_field('show_collections_bool')) :
     <div class="container">
         <div class="row justify-content-between align-items-center">
             <div class="col-12 col-md-auto">
-                <h2 class="section-title mb-md-0 color-grey"><?php echo $title;?></h2>
+                <h2 class="section-title color-grey" data-text="<?php echo $title;?>"><?php echo $title;?></h2>
             </div>
 
             <div class="col-auto">
@@ -33,7 +33,7 @@ if (get_field('show_collections_bool')) :
                     $alt        = $thumb ? $thumb['alt'] : $title;
 
                     echo "
-                    <div class='col-6 col-md-2 col-xl-auto'>
+                    <div class='col-6 col-md-4 col-xl-auto'>
                         <div class='collection'>
                             <a href='{$perma}' class='collection__perma'>
                                 <figure class='collection__perma--img'>

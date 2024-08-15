@@ -7,10 +7,14 @@ h1 {
     line-height: 1;
     margin: 0;
     &.xxl {
-        font-size: 175px;
+        @include font($secondary-font, $black);
+        font-size: 100px;
         line-height: 1;
+        @include respond-to-mob('s-desk') {
+            font-size: 75px;
+        }
         @include respond-to-mob('medium') {
-            font-size: 65px;
+            font-size: 45px;
         }
     }
 }
