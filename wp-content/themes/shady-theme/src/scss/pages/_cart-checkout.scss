@@ -361,6 +361,9 @@
                                         &__total {
                                             @extend h6;
                                             font-weight: $bold;
+                                            .price {
+                                                padding-top: 5px;
+                                            }
                                         }
                                     }
                                 }
@@ -476,10 +479,35 @@
                                                 }
                                             }
                                         }
+                                        .wc-block-components-totals-item {
+                                            &__value {
+                                                .wc-block-components-totals-shipping {
+                                                    &__change-address {
+                                                        &__link {
+                                                            font-size: 14px;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .wp-block-woocommerce-cart-order-summary-fee-block {
+                                        .wc-block-components-totals-fees {
+                                            &__shady-discount {
+                                                .wc-block-components-totals-item {
+                                                    &__value {
+                                                        color: $woo-green;
+                                                    }
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 .wpccl-btn-wrapper {
                                     padding: 5px 16px;
+                                    @include respond-to-mob('medium') {
+                                        padding-left: 0;
+                                    }
                                     .wpccl-btn {
                                         font-size: 14px;
                                         font-weight: $semi-bold;
@@ -1020,7 +1048,7 @@
                                                     &__quantity {
                                                         right: unset;
                                                         left: calc(50px - 24px);
-                                                        background: $primary-color;
+                                                        background: $secondary-color;
                                                         @extend .alt-p;
                                                         font-weight: $bold;
                                                         color: $primary-bg;
@@ -1121,6 +1149,7 @@
                                                         }
                                                     }
                                                     &__change-address {
+                                                        background: red;
                                                         &__link {
                                                             font-size: 14px;
                                                             color: $secondary-color;
@@ -1146,6 +1175,18 @@
                                                         width: auto;
                                                         min-height: unset;
                                                         min-width: unset;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .wp-block-woocommerce-checkout-order-summary-fee-block {
+                                        .wc-block-components-totals-fees {
+                                            &__shady-discount {
+                                                .wc-block-components-totals-item {
+                                                    &__value {
+                                                        color: $woo-green;
                                                     }
                                                 }
                                             }
