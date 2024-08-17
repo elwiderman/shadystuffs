@@ -329,6 +329,8 @@
                         .variations {
                             margin-bottom: 20px;
                             .label {
+                                display: flex;
+                                align-items: center;
                                 font-size: 14px;
                                 line-height: 1;
                                 padding-bottom: 5px;
@@ -340,17 +342,13 @@
                                         color: $alt-font-color;
                                     }
                                 }
-                                &.size-chart-appended {
+                                &.popup-guide-appended {
                                     @include flex-display;
                                     gap: 40px;
                                     position: relative;
                                     z-index: 0;
-                                    .sizechart-wrap__trigger-sizechart {
-                                        position: absolute;
-                                        left: 150px;
-                                        top: 0;
-                                        display: inline-block;
-                                        font-size: 14px;
+                                    .sizechart-wrap__trigger-sizechart, .fabricguide-wrap__trigger-fabricguide {
+                                        font-size: 15px;
                                         font-weight: $bold;
                                         color: $secondary-color;
                                         line-height: 1;
@@ -542,11 +540,14 @@
                             .single_add_to_cart_button {
                                 @extend .btn-main;
                             }
-                            .sizechart-wrap {
+                            .sizechart-wrap, .fabricguide-wrap {
                                 display: block;
                                 .modal {
                                     .modal-dialog {
                                         .modal-content {
+                                            background: transparent;
+                                            border: none;
+                                            box-shadow: none;
                                             .close {
                                                 position: absolute;
                                                 top: -10px;
@@ -558,9 +559,17 @@
                                                 opacity: 1;
                                             }
                                             .modal-body {
-                                                padding: 10px;
+                                                @include flex-display(row, center, center);
+                                                padding: 0;
                                                 .size-chart {
-                                                    width: 100%;
+                                                    background: $primary-bg;
+                                                    max-width: 100%;
+                                                    max-height: calc(100dvh - 100px);
+                                                    border-radius: 5px;
+                                                    padding: 10px;
+                                                    img {
+                                                        max-height: calc(100dvh - 120px);
+                                                    }
                                                 }
                                             }
                                         }
@@ -799,6 +808,15 @@
                                         }
                                     }
                                 }
+                                .product-shipping-info {
+                                    a {
+                                        font-weight: $bold;
+                                        color: $secondary-color;
+                                        &:hover {
+                                            color: $primary-color;
+                                        }
+                                    }
+                                }
                             }
                             .description-content {
                                 .card-body {
@@ -839,6 +857,10 @@
                                     }
                                     .text-bold {
                                         font-weight: $bold !important;
+                                    }
+                                    a {
+                                        font-weight: $bold;
+                                        color: $secondary-color;
                                     }
                                 }
                             }

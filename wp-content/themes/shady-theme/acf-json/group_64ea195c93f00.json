@@ -305,7 +305,7 @@
         },
         {
             "key": "field_6501d2ee49897",
-            "label": "Size Chart",
+            "label": "Charts\/Guides",
             "name": "",
             "aria-label": "",
             "type": "tab",
@@ -353,6 +353,62 @@
                 [
                     {
                         "field": "field_6501d39a49898",
+                        "operator": "==",
+                        "value": "1"
+                    }
+                ]
+            ],
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "size-chart"
+            ],
+            "post_status": [
+                "publish"
+            ],
+            "taxonomy": "",
+            "return_format": "id",
+            "multiple": 0,
+            "allow_null": 0,
+            "bidirectional": 0,
+            "ui": 1,
+            "bidirectional_target": []
+        },
+        {
+            "key": "field_66be8acdbf1c3",
+            "label": "Show Fabric Guide?",
+            "name": "show_fabric_guide_bool",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "ui_on_text": "",
+            "ui_off_text": "",
+            "ui": 1
+        },
+        {
+            "key": "field_66be8b0cbf1c4",
+            "label": "Select Fabric Guide",
+            "name": "select_fabric_guide_post",
+            "aria-label": "",
+            "type": "post_object",
+            "instructions": "",
+            "required": 1,
+            "conditional_logic": [
+                [
+                    {
+                        "field": "field_66be8acdbf1c3",
                         "operator": "==",
                         "value": "1"
                     }
@@ -475,5 +531,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1723114356
+    "modified": 1723763537
 }

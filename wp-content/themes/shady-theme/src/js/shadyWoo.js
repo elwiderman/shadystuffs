@@ -52,14 +52,28 @@ export default class Woo {
     }
 
     moveSizechartBtn() {
-        let trigger = $('.sizechart-wrap__trigger-sizechart');
+        let guidesObj = [
+            {
+                trigger: $('.sizechart-wrap__trigger-sizechart'),
+                label: 'pa_size'
+            }, {
+                trigger: $('.fabricguide-wrap__trigger-fabricguide'),
+                label: 'pa_fabric'
+            }
+        ];
+        
+        guidesObj.forEach(elem => {
+            this.moveCustomGuideModalsAroundVariations(elem.trigger, elem.label);
+        });
+    }
 
-        // console.log(trigger);
-
+    // this is to move the custom guide modal trigges to be on the sides of the appropriate variation label
+    moveCustomGuideModalsAroundVariations(trigger, labelFor) {
         if (trigger.length) {
             trigger.detach();
+            let label = `label[for="${labelFor}"]`;
 
-            $('form.variations_form .variations').find('label[for="pa_size"]').parents('th.label').addClass('size-chart-appended').append(trigger);
+            $('form.variations_form .variations').find(label).parents('th.label').addClass('popup-guide-appended').append(trigger);
         }
     }
 

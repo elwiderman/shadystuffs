@@ -15,9 +15,6 @@ add_action('admin_head', 'admin_style');
 function admin_style() {
     echo <<<STYLE
 		<style type="text/css" media="all">
-			span.select2-selection {
-				min-width:300px;
-			}
 			body.toplevel_page_sections .wrap h1 {
 				margin: 20px 0;
 				font-weight: bold;
