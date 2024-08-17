@@ -114,7 +114,7 @@
                     },
                     "choices": {
                         "Fabric": "Fabric",
-                        "Colour": "Colour",
+                        "Color": "Color",
                         "Printing": "Printing",
                         "Style": "Style",
                         "Sizes": "Sizes",
@@ -531,5 +531,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1723763537
+    "modified": 1723863369
 }
