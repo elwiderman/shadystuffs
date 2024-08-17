@@ -15,9 +15,6 @@ add_action('admin_head', 'admin_style');
 function admin_style() {
     echo <<<STYLE
 		<style type="text/css" media="all">
-			span.select2-selection {
-				min-width:300px;
-			}
 			body.toplevel_page_sections .wrap h1 {
 				margin: 20px 0;
 				font-weight: bold;
@@ -105,8 +102,8 @@ if (class_exists('WooCommerce')) {
 
     function shady_woocommerce_support() {
         add_theme_support('woocommerce', array(
-            'thumbnail_image_width' => 150,
-            'single_image_width'    => 300,
+            // 'thumbnail_image_width' => 150,
+            // 'single_image_width'    => 300, // removing these to fix blurry
             'product_grid'          => array(
                 'default_rows'    => 3,
                 'min_rows'        => 2,

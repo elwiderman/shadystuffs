@@ -8,7 +8,7 @@ if (have_rows('product_spec_repeater', $pid)) :
     echo "<div class='product-spec-wrap'>";
     while (have_rows('product_spec_repeater', $pid)) : the_row();
         $label      = get_sub_field('label_text', $pid);
-        $info       = get_sub_field('info_text', $pid);
+        $info       = nl2br(get_sub_field('info_text', $pid));
 
         if (get_sub_field('is_info_a_link_bool', $pid)) :
             $link   = get_sub_field('info_link', $pid);

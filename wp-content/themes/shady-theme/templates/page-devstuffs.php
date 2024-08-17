@@ -459,8 +459,89 @@ if (is_user_logged_in() && in_array('administrator', $user->roles)) :
 
     echo "All batches have been processed.";
 
-
     */
+
+    
+/* 
+
+    // copy shipping to products from 600
+    $base_pid   = 600;
+    // shipping tab
+    $ship_bool = get_field('show_shipping_tab_bool', $base_pid);
+    $ship_title = get_field('product_shipping_tab_title_text', $base_pid);
+    $ship_text = get_field('product_shipping_content_text', $base_pid);
+
+    // fabric guide
+    $fabric_bool = get_field('show_fabric_guide_bool', $base_pid);
+    $fabric_post = get_field('select_fabric_guide_post', $base_pid);
+    
+    // specs tab
+    $specs_bool     = get_field('show_product_spec_bool', $base_pid);
+    $specs_title    = get_field('product_spec_title_text', $base_pid);
+    $specs_repeater = get_field('product_spec_repeater', $base_pid);
+
+    echo '<pre>';
+    var_dump($ship_text);
+    var_dump($fabric_post);
+    echo '</pre>';
+
+    $products = wc_get_products([
+        'type'          => 'variable',
+        'limit'         => -1,
+        'exclude'       => [$base_pid],
+        'status'        => 'publish',
+        'return'        => 'ids'
+    ]);
+
+    foreach ($products as $pid) :
+        update_field('show_shipping_tab_bool', $ship_bool, $pid);
+        update_field('product_shipping_tab_title_text', $ship_title, $pid);
+        update_field('product_shipping_content_text', $ship_text, $pid);
+        update_field('show_fabric_guide_bool', $fabric_bool, $pid);
+        update_field('select_fabric_guide_post', $fabric_post, $pid);
+        update_field('show_product_spec_bool', $specs_bool, $pid);
+        update_field('product_spec_title_text', $specs_title, $pid);
+        update_field('product_spec_repeater', $specs_repeater, $pid);
+
+        $all_colors = get_the_terms($pid, 'color');
+        $colors     = [];
+        foreach ($all_colors as $color) {
+            array_push($colors, $color->name);
+        }
+
+        update_sub_field([
+            'product_spec_repeater', 1, 'label_text'
+        ], 'Color', $pid);
+        update_sub_field([
+            'product_spec_repeater', 1, 'info_text'
+        ], implode(' | ', $colors), $pid);
+
+        echo '<pre>';
+        var_dump($pid);
+        // var_dump(get_field('product_shipping_content_text', $pid));
+        echo '</pre>';
+    endforeach;
+ */
+
+    /* foreach ($products as $pid) :
+        $all_colors = get_the_terms($pid, 'color');
+        $colors     = [];
+        foreach ($all_colors as $color) {
+            array_push($colors, $color->name);
+        }
+
+        update_sub_field([
+            'product_spec_repeater', 1, 'label_text'
+        ], 'Color', $pid);
+        update_sub_field([
+            'product_spec_repeater', 1, 'info_text'
+        ], implode(' | ', $colors), $pid);
+
+        echo '<pre>';
+        var_dump($pid);
+        var_dump(get_field('product_spec_repeater', $pid)[1]);
+        echo '</pre>';
+    endforeach; */
 
 else :
     echo '<h1>boom</h1>';

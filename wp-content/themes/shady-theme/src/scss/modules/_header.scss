@@ -26,7 +26,7 @@
                         img {
                             height: 45px;
                             @include respond-to-mob('medium') {
-                                height: 45px;
+                                height: 40px;
                                 max-width: max-content;
                             }
                         }

@@ -148,34 +148,98 @@ add_action('shady_after_woocommerce/cart-order-summary-coupon-form-block', funct
 });
 
 
+
+
+
+
+/*
+// Adjust cart total amount
+add_filter( 'woocommerce_cart_get_total', 'filter_cart_get_total', 10, 1 );
+function filter_cart_get_total( $total ) {
+    $tax_amount = 0;
+
+    foreach( WC()->cart->get_fees() as $fee ) {
+        if(!$fee->taxable && $fee->tax < 0) {
+            $tax_amount -= $fee->tax;
+        }
+    }
+
+    if( $tax_amount != 0 ) {
+        $total += $tax_amount;
+    }
+    return $total;
+}
+
+// Adjust Fee taxes (array of tax totals)
+add_filter( 'woocommerce_cart_get_fee_taxes', 'filter_cart_get_fee_taxes', 10, 1 );
+function filter_cart_get_fee_taxes( $fee_taxes ) {
+    $fee_taxes = array();
+    
+    foreach( WC()->cart->get_fees() as $fee ) {
+        if( $fee->taxable ) {
+            foreach( $fee->tax_data as $tax_key => $tax_amount ) {
+                if( isset($fee_taxes[$tax_key]) ) {
+                    $fee_taxes[$tax_key] += $tax_amount;
+                } else {
+                    $fee_taxes[$tax_key] = $tax_amount;
+                }
+            }
+        }
+    }
+    return $fee_taxes;
+}
+
+// Displayed fees: Remove taxes from non taxable fees with negative amount
+add_filter( 'woocommerce_cart_totals_fee_html', 'filter_cart_totals_fee_html', 10, 2 );
+function filter_cart_totals_fee_html( $fee_html, $fee ) {
+    if (!$fee->taxable && $fee->tax < 0) {
+        return wc_price( $fee->total );
+    }
+    return $fee_html;
+}
+
+// Adjust Order fee item(s) for negative non taxable fees
+add_action( 'woocommerce_checkout_create_order_fee_item', 'alter_checkout_create_order_fee_item', 10, 4 );
+function alter_checkout_create_order_fee_item( $item, $fee_key, $fee, $order ) {
+    if (!$fee->taxable && $fee->tax < 0) {
+        $item->set_taxes(['total' => []]);
+        $item->set_total_tax(0);
+    }
+}
+*/
+
+
 // add sequential discounts on total cart value
-add_action( 'woocommerce_cart_calculate_fees', 'shady_discount_based_on_cart_total', 10, 1 );
-function shady_discount_based_on_cart_total( $cart_object ) {
+add_action('woocommerce_cart_calculate_fees', 'shady_discount_based_on_cart_total', 10, 1);
+function shady_discount_based_on_cart_total($cart_object) {
 
     if ( is_admin() && ! defined( 'DOING_AJAX' ) )
         return;
 
     $cart_total = $cart_object->cart_contents_total; // Cart total
-
+    
     if ($cart_total > 10000) {
-        $discount   = 2000;
+        $discount   = -(2000 / 1.05);
     } elseif ($cart_total > 4000 && $cart_total <= 10000) {
-        $discount   = 800;
+        $discount   = -(800 / 1.05);
     } elseif ($cart_total > 3000 && $cart_total <= 4000) {
-        $discount   = 700;
+        $discount   = -(700 / 1.05);
     } elseif ($cart_total > 2100 && $cart_total <= 3000) {
-        $discount   = 500;
+        $discount   = -(500 / 1.05);
     } elseif ($cart_total > 1400 && $cart_total <= 2100) {
-        $discount   = 400;
+        $discount   = -(400 / 1.05);
     } elseif ($cart_total > 1000 && $cart_total <= 1400) {
-        $discount   = 200;
+        $discount   = -(200 / 1.05);
+        // $discount = -200;
     } elseif ($cart_total > 800 && $cart_total <= 1000) {
-        $discount   = 150;
+        $discount   = -(150 / 1.05);
     } else {
         $discount   = 0;
     }
 
+    // note the / 1.05 is to offset the tax being added on the fee by woocommerce. this will work as long the tax doesnt change :( so far this is the only possible way on the woo cart blocks
+
     if ($discount != 0) {
-        $cart_object->add_fee("Discount", -$discount, true );
+        $cart_object->add_fee(__('Shady Discount', 'shady'), $discount, false);
     }
 }

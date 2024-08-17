@@ -218,6 +218,7 @@ add_action('woocommerce_before_add_to_cart_quantity', 'shady_size_chart_before_q
 function shady_size_chart_before_quantity() {
     global $product;
     $size_chart_pid = get_field('select_size_chart_post', $product->get_id());
+    $fabric_pid     = get_field('select_fabric_guide_post', $product->get_id());
 
     // get the size chart images
     if ($size_chart_pid && get_field('show_size_chart_bool', $product->get_id())) :
@@ -227,10 +228,42 @@ function shady_size_chart_before_quantity() {
         
         <div class="sizechart-wrap">
             <a href="#" class="sizechart-wrap__trigger-sizechart" data-bs-toggle="modal" data-bs-target="#sizeChartPop">
-                <?php _e('See size chart', 'shady');?>
+                <?php _e('Size chart', 'shady');?>
             </a>
     
             <div class="modal fade" id="sizeChartPop" tabindex="-1" aria-labelledby="sizeChartPopLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="icon-x"></i>
+                        </button>
+                        <div class="modal-body">
+                            <figure class="size-chart mb-0 d-none d-lg-block">
+                                <img src="<?php echo $desk['url'];?>" alt="<?php echo $desk['alt'];?>" class="img-fluid">
+                            </figure>
+                            <figure class="size-chart mb-0 d-lg-none">
+                                <img src="<?php echo $mob['url'];?>" alt="<?php echo $mob['alt'];?>" class="img-fluid">
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php
+    endif;
+
+    // get the fabric guide images
+    if ($fabric_pid && get_field('show_fabric_guide_bool', $product->get_id())) :
+        $desk       = get_field('size_chart_for_desktops', $fabric_pid);
+        $mob        = get_field('size_chart_for_mobiles', $fabric_pid);
+        ?>
+        
+        <div class="fabricguide-wrap">
+            <a href="#" class="fabricguide-wrap__trigger-fabricguide" data-bs-toggle="modal" data-bs-target="#fabricGuidePop">
+                <?php _e('Fabric guide', 'shady');?>
+            </a>
+    
+            <div class="modal fade" id="fabricGuidePop" tabindex="-1" aria-labelledby="fabricGuidePopLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
