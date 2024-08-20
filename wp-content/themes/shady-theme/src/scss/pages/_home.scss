@@ -18,6 +18,141 @@
             &.section-hero, &.section-search, &.section-bestsellers {
                 z-index: 2;
             }
+            &.section-hero {
+                position: relative;
+                z-index: 2;
+                .sale-badge, .logo {
+                    position: absolute;
+                    top: 1vw;
+                    right: 1vw;
+                    width: 19vw;
+                    filter: drop-shadow(2px 4px 6px rgba(#000, 0.5));
+                    z-index: 1;
+                }
+                .logo {
+                    top: 22vw;
+                    height: 19vw;
+                    text-align: center;
+                    img {
+                        height: 100%;
+                    }
+                    @include respond-to('x-large') {
+                        left: 50px;
+                        right: unset;
+                        top: 1vw;
+                        height: 15vh;
+                        width: unset;
+                        text-align: right;
+                    }
+                }
+                .home-hero-slider {
+                    .slick-list {
+                        .slick-slide {
+                            .slide {
+                                position: relative;
+                                height: calc(100dvh - 100px);
+                                z-index: 0;
+                                @include respond-to-mob('x-large') {
+                                    height: 60dvh;
+                                }
+                                @include respond-to-mob('medium') {
+                                    height: calc(100vw + 50px);
+                                }
+                                &__bg {
+                                    @include full-absolute(-2);
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    background-size: cover;
+                                    filter: blur(8px);
+                                    @include respond-to-mob('x-large') {
+                                        &:before {
+                                            content: '';
+                                            @include full-absolute(-1);
+                                            background: rgba(#000, 0.35);
+                                        }
+                                    }
+                                }
+                                &__thumb {
+                                    position: absolute;
+                                    bottom: 0;
+                                    right: 0;
+                                    height: 140%;
+                                    img {
+                                        height: 100%;
+                                    }
+                                    @include respond-to-mob('x-large') {
+                                        height: auto;
+                                    }
+                                }
+                                &__content {
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 50px;
+                                    transform: translateY(-50%);
+                                    max-width: 42vw;
+                                    z-index: 2;
+                                    @include respond-to-mob('x-large') {
+                                        left: 25px;
+                                    }
+                                    @include respond-to-mob('medium') {
+                                        left: 0;
+                                        top: 15px;
+                                        transform: unset;
+                                        width: 80vw;
+                                        height: calc(100% - 30px);
+                                        max-width: unset;
+                                        @include flex-display(column, space-between, flex-start);
+                                        padding: 0 25px 0 15px;
+                                    }
+                                    &--text {
+                                        h1, h2 {
+                                            @include font($secondary-font, $medium);
+                                            font-size: 70px;
+                                            color: $primary-bg;
+                                            text-shadow: 3px 3px 5px #0000002b;
+                                            @include respond-to('xxx-large') {
+                                                font-size: 90px;
+                                            }
+                                            @include respond-to-mob('x-large') {
+                                                font-size: 50px;
+                                            }
+                                            @include respond-to-mob('medium') {
+                                                font-size: 25px;
+                                            }
+                                            span {
+                                                &.small {
+                                                    font-size: 40%;
+                                                    font-weight: $regular;
+                                                }
+                                                &.collection {
+                                                    font-weight: $black;
+                                                    font-size: 75%;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    &--btn {
+                                        margin-top: 20px;
+                                        @include respond-to-mob('medium') {
+                                            position: absolute;
+                                            right: -60px;
+                                            bottom: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    @include respond-to-mob('medium') {
+                        .slick-dots {
+                            right: unset;
+                            left: 15px;
+                        }
+                    }
+                }
+            }
+
             &.section-search {
                 .prod-search-wrap {
                     .dgwt-wcas-style-pirx {

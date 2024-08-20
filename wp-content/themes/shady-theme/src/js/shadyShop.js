@@ -44,7 +44,7 @@ export default class ShadyShop {
                     loadingWrap.html(`<span>${randomLoading}</span>`);
                     loadingWrap.show();
                     loadMore.hide();
-                    console.log('loading...');
+                    // console.log('loading...');
                     form.addClass('loading');
                     $('#mobiSidebar, #filterToggle').removeClass('open');
                     $('body').removeClass('no-overflow');
@@ -259,7 +259,7 @@ export default class ShadyShop {
                 // processData: false,
                 // contentType: false,
                 beforeSend: xhr => {
-                    console.log('loading...', data);
+                    // console.log('loading...', data);
                     loadmoreForm.find('button[type="submit"]').addClass('loading');
                     filterFrom.addClass('loading');
                 },
