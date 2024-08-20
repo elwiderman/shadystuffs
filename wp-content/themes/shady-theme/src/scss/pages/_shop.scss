@@ -124,6 +124,9 @@
                                         object-fit: cover;
                                         object-position: center;
                                     }
+                                    @include respond-to-mob('medium') {
+                                        height: 150px;
+                                    }
                                 }
                                 &__title {
                                     position: absolute;

@@ -75,6 +75,8 @@ export default class Carousels {
                     breakpoint: 700,
                     settings: {
                         slidesToShow: 1,
+                        pauseOnHover: false,
+                        centerMode: true,
                     }
                 }
             ]

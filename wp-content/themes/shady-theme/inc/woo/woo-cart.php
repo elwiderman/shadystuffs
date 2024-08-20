@@ -217,6 +217,8 @@ function shady_discount_based_on_cart_total($cart_object) {
         return;
 
     $cart_total = $cart_object->cart_contents_total; // Cart total
+
+    $cart_total = $cart_total * 1.05; // this is to compensate on the tax being added to the cart total
     
     if ($cart_total > 10000) {
         $discount   = -(2000 / 1.05);
@@ -230,7 +232,6 @@ function shady_discount_based_on_cart_total($cart_object) {
         $discount   = -(400 / 1.05);
     } elseif ($cart_total > 1000 && $cart_total <= 1400) {
         $discount   = -(200 / 1.05);
-        // $discount = -200;
     } elseif ($cart_total > 800 && $cart_total <= 1000) {
         $discount   = -(150 / 1.05);
     } else {
