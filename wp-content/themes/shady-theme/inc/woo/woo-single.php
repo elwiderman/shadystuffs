@@ -228,7 +228,7 @@ function shady_size_chart_before_quantity() {
         
         <div class="sizechart-wrap">
             <a href="#" class="sizechart-wrap__trigger-sizechart" data-bs-toggle="modal" data-bs-target="#sizeChartPop">
-                <?php _e('Size chart', 'shady');?>
+                <?php _e('See Size-Chart', 'shady');?>
             </a>
     
             <div class="modal fade" id="sizeChartPop" tabindex="-1" aria-labelledby="sizeChartPopLabel" aria-hidden="true">
@@ -260,7 +260,7 @@ function shady_size_chart_before_quantity() {
         
         <div class="fabricguide-wrap">
             <a href="#" class="fabricguide-wrap__trigger-fabricguide" data-bs-toggle="modal" data-bs-target="#fabricGuidePop">
-                <?php _e('Fabric guide', 'shady');?>
+                <?php _e('See Fabric-Guide', 'shady');?>
             </a>
     
             <div class="modal fade" id="fabricGuidePop" tabindex="-1" aria-labelledby="fabricGuidePopLabel" aria-hidden="true">
@@ -318,7 +318,7 @@ function shady_show_custom_string_after_price_in_single() {
         echo "
         <div class='product-higlight-offers'>
             <h6 class='product-higlight-offers__title'>
-                <i class='icon-price'></i>Offers
+                <i class='icon-price'></i>Offers <span class='color-dark' style='font-size:80%;'>(Discounts applied automatically on final cart value)</span>
             </h6>
             <div class='product-higlight-offers__items' id='highlightOfferSlider'>
                 <div>
