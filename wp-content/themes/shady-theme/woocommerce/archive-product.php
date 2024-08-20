@@ -60,14 +60,23 @@ get_header( 'shop' );
 							$title_color	= '#0d1423';
 						endif;
 
-
-
-
 						if (!is_shop()) : ?>
 						<div class="shop-banner">
 							<div class="overlay"></div>
+							<?php
+							$home_id = get_option('page_on_front');
+							if (get_field('show_discount_badge_bool', $home_id)) :
+								$badge  = get_field('discount_badge_img', $home_id);
+
+								echo "
+								<figure class='shop-banner__sale-badge mb-0'>
+									<img class='img-fluid' src='{$badge['url']}' alt='{$badge['alt']}'>
+								</figure>
+								";
+							endif;
+							?>
 							<figure class="shop-banner__img mb-0">
-								<img class="img-fluid" src="<?=$thumb;?>">
+								<img class="img-fluid" src="<?php echo $thumb;?>">
 							</figure>
 							<h1 class="woocommerce-products-header__title shop-banner__title" style="color:<?php echo $title_color;?>">
 								<?php woocommerce_page_title(); ?>
@@ -103,18 +112,18 @@ get_header( 'shop' );
 
 					woocommerce_product_loop_start();
 
-					// if ( wc_get_loop_prop( 'total' ) ) {
-					// 	while ( have_posts() ) {
-					// 		the_post();
+					/* if ( wc_get_loop_prop( 'total' ) ) {
+						while ( have_posts() ) {
+							the_post(); */
 
-					// 		/**
-					// 		 * Hook: woocommerce_shop_loop.
-					// 		 */
-					// 		do_action( 'woocommerce_shop_loop' );
+							/**
+							 * Hook: woocommerce_shop_loop.
+							 */
+							/* do_action( 'woocommerce_shop_loop' );
 
-					// 		wc_get_template_part( 'content', 'product' );
-					// 	}
-					// }
+							wc_get_template_part( 'content', 'product' );
+						}
+					} */
 
 					woocommerce_product_loop_end();
 

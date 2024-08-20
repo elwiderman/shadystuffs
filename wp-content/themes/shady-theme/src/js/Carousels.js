@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'slick-carousel';
+import gsap from 'gsap';
 
 export default class Carousels {
     constructor() {
@@ -9,6 +10,7 @@ export default class Carousels {
     init() {
         if ($('.single-page.single-home').length) {
             this.homeHero();
+            this.homeHeroV2();
             this.bestSellerCarousels();
         }
 
@@ -38,6 +40,58 @@ export default class Carousels {
             cssEase: 'ease',
             lazyLoad: 'ondemand',
             pauseOnHover: true,
+        });
+    }
+
+    homeHeroV2() {
+        let slider = $('.home-hero-slider');
+
+        slider.on('init', (evt, slick) => {
+            let slide = $(slider).find('.slick-current.slick-active'),
+                thumb = slide.find('.slide__thumb'),
+                animItems = gsap.utils.toArray(slide.find('.to-stagger'));
+
+            let tl = gsap.timeline();
+            tl.from(thumb, {
+                autoAlpha: 0,
+                xPercent: 50,
+                duration: 0.5
+            }, '+=0.6').from(animItems, {
+                autoAlpha: 0,
+                xPercent: -20,
+                stagger: 0.3,
+            });
+        });
+
+        slider.slick({
+            dots: true,
+            arrows: false,
+            infinite: true,
+            autoplay: true,
+            autoplaySpeed: 5000,
+            rows: 0,
+            speed: 800,
+            fade: true,
+            cssEase: 'ease',
+            lazyLoad: 'ondemand',
+            pauseOnHover: true,
+        });
+
+        slider.on('beforeChange', (evt, slick, currentSlide, nextSlide) => {            
+            let slide = slick.$slides[nextSlide],
+                thumb = $(slide).find('.slide__thumb'),
+                animItems = gsap.utils.toArray($(slide).find('.to-stagger'));
+
+            let tl = gsap.timeline();
+            tl.from(thumb, {
+                autoAlpha: 0,
+                xPercent: 50,
+                duration: 0.5
+            }, '+=0.6').from(animItems, {
+                autoAlpha: 0,
+                xPercent: -20,
+                stagger: 0.3,
+            });
         });
     }
 

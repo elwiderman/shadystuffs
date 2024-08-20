@@ -22,6 +22,19 @@ $mob_img    = get_field('hero_banner_mob_img');
                             echo "<img class='img-fluid d-md-none' src='{$mob_img['url']}' alt='{$mob_img['alt']}' width='{$mob_img['width']}' height='{$mob_img['height']}'>";
                         endif;
                         ?>
+
+                        <?php
+                        $home_id = get_option('page_on_front');
+                        if (get_field('show_discount_badge_bool', $home_id)) :
+                            $badge  = get_field('discount_badge_img', $home_id);
+
+                            echo "
+                            <figure class='hero-banner__sale-badge mb-0'>
+                                <img class='img-fluid' src='{$badge['url']}' alt='{$badge['alt']}'>
+                            </figure>
+                            ";
+                        endif;
+                        ?>
                     </figure>
                 </div>
 

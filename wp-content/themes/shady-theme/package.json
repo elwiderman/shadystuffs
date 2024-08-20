@@ -54,6 +54,7 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "domready": "^1.0.8",
+    "gsap": "^3.12.5",
     "jquery": "^3.7.1",
     "lodash": "^4.17.21",
     "select2": "^4.1.0-rc.0",

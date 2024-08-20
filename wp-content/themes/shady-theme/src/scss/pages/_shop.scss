@@ -5,6 +5,9 @@
         .main-wrapper {
             .content-area {
                 padding-left: 50px;
+                @include respond-to-mob('x-large') {
+                    padding-left: 20px;
+                }
                 @include respond-to-mob('medium') {
                     padding-left: 0;
                 }
@@ -114,6 +117,16 @@
                                     background: rgb(39,41,43);
                                     background: linear-gradient(0deg, rgba(39,41,43,1) 19%, rgba(4,52,98,0) 100%);
                                 }
+                                &__sale-badge {
+                                    position: absolute;
+                                    top: 10px;
+                                    right: 10px;
+                                    width: 100px;
+                                    z-index: 2;
+                                    @include respond-to('medium') {
+                                        width: 100px;
+                                    }
+                                }
                                 &__img {
                                     width: 100%;
                                     position: relative;
@@ -123,6 +136,9 @@
                                         height: 100%;
                                         object-fit: cover;
                                         object-position: center;
+                                    }
+                                    @include respond-to-mob('s-desk') {
+                                        height: 200px;
                                     }
                                     @include respond-to-mob('medium') {
                                         height: 150px;
@@ -134,6 +150,9 @@
                                     left: 15px;
                                     z-index: 1;
                                     @extend h1;
+                                    @include respond-to-mob('s-desk') {
+                                        font-size: 40px;
+                                    }
                                     @include respond-to-mob('medium') {
                                         font-size: 25px;
                                     }
