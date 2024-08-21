@@ -1,6 +1,6 @@
 <?php
 // the popular searches
-
+$acf_id         = false;
 if (is_page() || is_singular(['post', 'product'])) :
     $acf_id     = get_the_ID();
 elseif (is_tax()) :
@@ -14,7 +14,7 @@ endif;
         <div class="row">
             <div class="col-12">
                 <?php
-                if (get_field('use_local_popular_search_bool', $acf_id) && !is_shop()) :
+                if (isset($acf_id) && get_field('use_local_popular_search_bool', $acf_id)) :
                     if (have_rows('popular_search_repeater', $acf_id)) :
                         echo "<h6 class='footer__middle--block-title'>Popular Searches</h6>";
                         echo "<ul class='footer__middle--search-links'>";
@@ -45,7 +45,7 @@ endif;
 
             <div class="col-12">
                 <?php
-                if (get_field('use_local_footer_meta_text_bool', $acf_id)) :
+                if (isset($acf_id) && get_field('use_local_footer_meta_text_bool', $acf_id)) :
                     $meta   = get_field('footer_meta_text', $acf_id);
                     echo "<div class='footer__middle--meta'>{$meta}</div>";
                 else :

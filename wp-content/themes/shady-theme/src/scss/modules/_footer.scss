@@ -12,6 +12,10 @@
             }
         }
         &--menu {
+            @include respond-to-mob('medium') {
+                column-count: 2;
+                column-gap: 20px;
+            }
             li {
                 font-size: 0;
                 &:not(:last-child) {
