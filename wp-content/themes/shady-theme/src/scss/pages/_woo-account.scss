@@ -541,6 +541,7 @@
                                         align-items: center;
                                         gap: 10px;
                                         li {
+                                            min-width: 240px;
                                             .theChampLogin {
                                                 @include flex-display(row, center);
                                                 width: 100%;
@@ -577,6 +578,34 @@
                                                     }
                                                     &:hover {
                                                         background: darken(#4285F4, 10);
+                                                    }
+                                                }
+                                                &.theChampFacebookLogin {
+                                                    background: #0165E1;
+                                                    @include add-border(1px, #0165E1, 'all');
+                                                    .theChampFacebookLogoContainer {
+                                                        width: unset;
+                                                        height: unset;
+                                                        border-radius: unset;
+                                                        background: unset;
+                                                        margin: unset;
+                                                    }
+                                                    .theChampLoginSvg {
+                                                        background-color: $primary-bg;
+                                                        padding-top: 0;
+                                                    }
+                                                    &:after {
+                                                        content: attr(title);
+                                                        font-size: 16px;
+                                                        font-weight: $semi-bold;
+                                                        font-style: normal;
+                                                        color: $primary-bg;
+                                                        display: block;
+                                                        width: 100%;
+                                                        padding: 0 10px 0 50px;
+                                                    }
+                                                    &:hover {
+                                                        background: darken(#0165E1, 10);
                                                     }
                                                 }
                                             }
