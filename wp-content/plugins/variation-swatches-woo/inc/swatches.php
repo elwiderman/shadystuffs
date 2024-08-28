@@ -428,11 +428,17 @@ class Swatches {
 	 */
 	public function variation_attribute_html_shop_page() {
 		global $product;
+
 		if ( ! $this->settings[ CFVSW_GLOBAL ]['enable_swatches_shop'] ) {
 			return;
 		}
 
 		if ( ! $this->requires_shop_settings() ) {
+			return;
+		}
+
+		// Return of product is not found.
+		if ( empty( $product ) ) {
 			return;
 		}
 
@@ -443,14 +449,18 @@ class Swatches {
 		if ( ! $product->get_available_variations() ) {
 			return;
 		}
+
 		$product_id = $product->get_id();
 		$settings   = $this->settings[ CFVSW_SHOP ];
+
 		// Get Available variations?
 		$get_variations       = count( $product->get_children() ) <= apply_filters( 'woocommerce_ajax_variation_threshold', 30, $product );
 		$available_variations = $get_variations ? $product->get_available_variations() : false;
 		$attributes           = $product->get_variation_attributes();
+
 		// Catlog mode functionality.
 		$count_attr_for_catalog = '';
+		
 		if ( ! empty( $settings['special_attr_archive'] ) ) {
 			$count_attr_for_catalog = count( $attributes ) > 1 ? 'data-cfvsw-catalog=1' : '';
 			$attributes             = $this->catalog_show_attr_shop_page( $settings, $product_id, $attributes );
@@ -540,7 +550,8 @@ class Swatches {
 	 * @since 1.0.0
 	 */
 	public function inline_css() {
-		$style = $this->settings[ CFVSW_STYLE ];
+		$style    = $this->settings[ CFVSW_STYLE ];
+		$settings = array();
 
 		if ( $this->requires_shop_settings() ) {
 			$settings = $this->settings[ CFVSW_SHOP ]['override_global'] ? $this->settings[ CFVSW_SHOP ] : array_merge( $this->settings[ CFVSW_SHOP ], $this->settings[ CFVSW_GLOBAL ] );
@@ -558,12 +569,12 @@ class Swatches {
 		}
 
 		$custom_css .= ':root {';
-		$custom_css .= "--cfvsw-swatches-font-size: {$settings['font_size']}px;";
-		$custom_css .= "--cfvsw-swatches-border-color: {$style['border_color']};";
-		$custom_css .= "--cfvsw-swatches-border-color-hover: {$style['border_color']}80;";
+		$custom_css .= ! empty( $settings['font_size'] ) ? "--cfvsw-swatches-font-size: {$settings['font_size']}px;" : '';
+		$custom_css .= ! empty( $style['border_color'] ) ? "--cfvsw-swatches-border-color: {$style['border_color']};" : '';
+		$custom_css .= ! empty( $style['border_color'] ) ? "--cfvsw-swatches-border-color-hover: {$style['border_color']}80;" : '';
 		$custom_css .= ! empty( $settings['border_width'] ) ? "--cfvsw-swatches-border-width: {$settings['border_width']}px;" : '';
 		$custom_css .= ! empty( $style['label_font_size'] ) ? "--cfvsw-swatches-label-font-size: {$style['label_font_size']}px;" : '';
-		$custom_css .= "--cfvsw-swatches-tooltip-font-size: {$style['tooltip_font_size']}px;";
+		$custom_css .= ! empty( $style['tooltip_font_size'] ) ? "--cfvsw-swatches-tooltip-font-size: {$style['tooltip_font_size']}px;" : '';
 		$custom_css .= '}';
 
 		if ( ! empty( $custom_css ) ) {
@@ -585,6 +596,12 @@ class Swatches {
 		}
 		if ( $this->requires_global_settings() ) {
 			$settings = $this->settings[ CFVSW_GLOBAL ];
+		}
+
+		// If the disable type is not set or empty in any case, then simply hide the attributes.
+		if ( empty( $settings['disable_attr_type'] ) ) {
+			$disable_class = 'cfvsw-swatches-hide';
+			return $disable_class;
 		}
 
 		switch ( $settings['disable_attr_type'] ) {

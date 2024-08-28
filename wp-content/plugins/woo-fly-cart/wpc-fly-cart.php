@@ -3,7 +3,7 @@
 Plugin Name: WPC Fly Cart for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: WPC Fly Cart is an interactive mini cart for WooCommerce. It allows users to update product quantities or remove products without reloading the page.
-Version: 5.7.2
+Version: 5.8.0
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: woo-fly-cart
@@ -17,7 +17,7 @@ WC tested up to: 9.1
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WOOFC_VERSION' ) && define( 'WOOFC_VERSION', '5.7.2' );
+! defined( 'WOOFC_VERSION' ) && define( 'WOOFC_VERSION', '5.8.0' );
 ! defined( 'WOOFC_LITE' ) && define( 'WOOFC_LITE', __FILE__ );
 ! defined( 'WOOFC_FILE' ) && define( 'WOOFC_FILE', __FILE__ );
 ! defined( 'WOOFC_URI' ) && define( 'WOOFC_URI', plugin_dir_url( __FILE__ ) );
@@ -103,14 +103,10 @@ if ( ! function_exists( 'woofc_init' ) ) {
 					add_shortcode( 'woofc_cart_link', [ $this, 'shortcode_cart_link' ] );
 
 					// ajax
-					add_action( 'wp_ajax_woofc_update_qty', [ $this, 'ajax_update_qty' ] );
-					add_action( 'wp_ajax_nopriv_woofc_update_qty', [ $this, 'ajax_update_qty' ] );
-					add_action( 'wp_ajax_woofc_remove_item', [ $this, 'ajax_remove_item' ] );
-					add_action( 'wp_ajax_nopriv_woofc_remove_item', [ $this, 'ajax_remove_item' ] );
-					add_action( 'wp_ajax_woofc_undo_remove', [ $this, 'ajax_undo_remove' ] );
-					add_action( 'wp_ajax_nopriv_woofc_undo_remove', [ $this, 'ajax_undo_remove' ] );
-					add_action( 'wp_ajax_woofc_empty_cart', [ $this, 'ajax_empty_cart' ] );
-					add_action( 'wp_ajax_nopriv_woofc_empty_cart', [ $this, 'ajax_empty_cart' ] );
+					add_action( 'wc_ajax_woofc_update_qty', [ $this, 'ajax_update_qty' ] );
+					add_action( 'wc_ajax_woofc_remove_item', [ $this, 'ajax_remove_item' ] );
+					add_action( 'wc_ajax_woofc_undo_remove', [ $this, 'ajax_undo_remove' ] );
+					add_action( 'wc_ajax_woofc_empty_cart', [ $this, 'ajax_empty_cart' ] );
 				}
 
 				public static function get_settings() {
@@ -223,7 +219,7 @@ if ( ! function_exists( 'woofc_init' ) ) {
 						'wc-cart-fragments'
 					], WOOFC_VERSION, true );
 					wp_localize_script( 'woofc-frontend', 'woofc_vars', apply_filters( 'woofc_vars', [
-							'ajax_url'              => admin_url( 'admin-ajax.php' ),
+							'wc_ajax_url'           => WC_AJAX::get_endpoint( '%%endpoint%%' ),
 							'nonce'                 => wp_create_nonce( 'woofc-security' ),
 							'scrollbar'             => self::get_setting( 'perfect_scrollbar', 'yes' ),
 							'auto_show'             => self::get_setting( 'auto_show_ajax', 'yes' ),

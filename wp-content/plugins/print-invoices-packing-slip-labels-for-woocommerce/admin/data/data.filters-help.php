@@ -107,16 +107,6 @@ $wf_filters_help_doc_lists=array(
 				$fromaddress[\'new_field\']=\'new field value\';<br /><br />
 				return $fromaddress;<br />'
 		),
-		'wf_pklist_add_additional_info'=> array(
-			'title' => __('Add additional information','print-invoices-packing-slip-labels-for-woocommerce'),
-			'description'=> __('Add additional info','print-invoices-packing-slip-labels-for-woocommerce'),
-			'params'=>'$additional_info, $template_type, $order',
-			'function_name'=>'wt_pklist_add_additional_data',
-			'function_code'=>'
-				$additional_info.=\'Additional text\';<br />
-				return $additional_info;<br />
-			',
-		),
 	),
 
 	'product_table' => array(
@@ -172,19 +162,6 @@ $wf_filters_help_doc_lists=array(
 			'function_code'=>'
 				$product_total=\'New total price\';<br />
 				return $product_total;<br />',
-		),
-		'wf_pklist_package_product_table_additional_column_val'=> array(
-			'title' => __('Add additional column in product table of package documents','print-invoices-packing-slip-labels-for-woocommerce'),
-			'description'=> __('You can add additional column head via `wf_pklist_alter_product_table_head` filter. You need to add column data via this filter. (Works with Packing List, Shipping Label and Delivery note only)','print-invoices-packing-slip-labels-for-woocommerce'),
-			'params'=>'$column_data, $template_type, $columns_key, $_product, $item, $order',
-			'function_name'=>'wt_pklist_package_add_custom_col_vl',
-			'function_code'=>'				
-				if($columns_key==\'new_col\')<br />
-				{ <br />
-					&nbsp;&nbsp;&nbsp;&nbsp; $column_data=\'Column data\'; <br />
-				}<br />
-				return $column_data;<br />
-			',
 		),
 		'wf_pklist_alter_package_product_table_columns'=> array(
 			'title' => __('Alter product table column in package documents','print-invoices-packing-slip-labels-for-woocommerce'),
@@ -260,19 +237,6 @@ $wf_filters_help_doc_lists=array(
 			'function_code'=>'
 				$product_total_formated=\'New product total formatted\';<br />
 				return $product_total_formated;<br />'
-		),
-		'wf_pklist_product_table_additional_column_val'=> array(
-			'title' => __('Add additional column in product table','print-invoices-packing-slip-labels-for-woocommerce'),
-			'description'=> __('You can add additional column head via `wf_pklist_alter_product_table_head` filter. You need to add column data via this filter. (Works with Invoice and Dispatch label only)','print-invoices-packing-slip-labels-for-woocommerce'),
-			'params'=>'$column_data, $template_type, $columns_key, $_product, $order_item, $order',
-			'function_name'=>'wt_pklist_add_custom_col_vl',
-			'function_code'=>'				
-				if($columns_key==\'new_col\')<br />
-				{ <br />
-					&nbsp;&nbsp;&nbsp;&nbsp; $column_data=\'Column data\'; <br />
-				}<br />
-				return $column_data;<br />
-			',
 		),
 		'wf_pklist_alter_product_table_columns'=> array(
 			'title' => __('Alter product table column','print-invoices-packing-slip-labels-for-woocommerce'),
@@ -355,18 +319,6 @@ $wf_filters_help_doc_lists=array(
 		),
 	),
 	'others'=>array(
-		'wf_pklist_order_additional_item_meta'=> array(
-			'title'=> __('Alter additional item meta','print-invoices-packing-slip-labels-for-woocommerce'),
-			'description'=> __('Alter additional item meta','print-invoices-packing-slip-labels-for-woocommerce'),
-			'params'=>'$order_item_meta_data, $template_type, $order',
-			'function_name'=>'wf_pklist_add_order_meta',
-			'function_code'=>'			
-				/* get post meta */<br/>
-				$order_id = $order->get_id(); <br/>
-				$meta=get_post_meta($order_id, \'_meta_key\', true);<br/>
-				$order_item_meta_data=$meta;<br />
-				return $order_item_meta_data;<br />'
-		),
 		'wf_pklist_toggle_received_seal'=> array(
 			'title' => __('Hide/Show received seal in invoice','print-invoices-packing-slip-labels-for-woocommerce'),
 			'description'=> __('Hide/Show received seal in invoice.','print-invoices-packing-slip-labels-for-woocommerce'),

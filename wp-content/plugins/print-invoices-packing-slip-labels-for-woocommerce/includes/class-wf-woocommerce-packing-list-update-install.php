@@ -46,6 +46,7 @@ class Wf_Woocommerce_Packing_List_Update_Install
             update_option('wfpklist_basic_version_prev',$wt_pklist_ver);
             self::install_tables();
             self::wt_pklist_action_scheduler_for_saving_default_templates(0);
+            self::use_migrate_values();
             do_action('wt_pklist_update_settings_module_wise_on_update');
             update_option('wfpklist_basic_version',WF_PKLIST_VERSION);
         }
@@ -123,5 +124,18 @@ class Wf_Woocommerce_Packing_List_Update_Install
         }
         //creating table for saving template data================
 	}
+
+    public function use_migrate_values() {
+        $show_preview = Wf_Woocommerce_Packing_List::get_option( 'woocommerce_wf_packinglist_preview' );
+        if ( !empty( $show_preview )
+            && ( 'enabled' === $show_preview || 'disabled' === $show_preview )
+        ) {
+            if ( 'enabled' === $show_preview ) {
+                Wf_Woocommerce_Packing_List::update_option( 'woocommerce_wf_packinglist_preview', 'No' );
+            } else if ( 'disabled' === $show_preview ) {
+                Wf_Woocommerce_Packing_List::update_option( 'woocommerce_wf_packinglist_preview', 'Yes' );
+            }
+        }
+    }
 }
 }

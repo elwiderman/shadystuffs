@@ -44,7 +44,7 @@ class Term_Meta_Config {
 	 */
 	public function __construct() {
 		// Taking taxonomy name from $_REQUEST['taxonomy'] and whatever string we get from $_REQUEST['taxonomy'] we will add in prefix in these actions we are not saving directly so nonce is not required.
-		$this->taxonomy = isset( $_REQUEST['taxonomy'] ) ? sanitize_title( $_REQUEST['taxonomy'] ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$this->taxonomy = isset( $_REQUEST['taxonomy'] ) && ! is_array( $_REQUEST['taxonomy'] ) ? sanitize_title( $_REQUEST['taxonomy'] ) : ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$this->helper   = new Helper();
 		add_action( $this->taxonomy . '_add_form_fields', [ $this, 'add_form_fields' ] );
 		add_action( $this->taxonomy . '_edit_form_fields', [ $this, 'edit_form_fields' ], 10 );

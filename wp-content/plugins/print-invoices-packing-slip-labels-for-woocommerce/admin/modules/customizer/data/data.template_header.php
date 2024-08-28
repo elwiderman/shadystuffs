@@ -3,7 +3,7 @@ if (!defined('ABSPATH')){
     exit;
 }
 $the_options=!isset($the_options) ? Wf_Woocommerce_Packing_List::get_settings() : $the_options;
-$print_preview=isset($the_options['woocommerce_wf_packinglist_preview']) ? $the_options['woocommerce_wf_packinglist_preview'] : 'disabled';
+$print_preview=isset($the_options['woocommerce_wf_packinglist_preview']) ? $the_options['woocommerce_wf_packinglist_preview'] : 'No';
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,14 +40,33 @@ $print_preview=isset($the_options['woocommerce_wf_packinglist_preview']) ? $the_
 		}
 		.wfte_received_seal{ page-break-inside:avoid; }
 		</style>
-		<script>
-		function wf_document_options(print_preview)
-		{
-			if(print_preview=='enabled')
-			{
-				window.print();
+		<?php 
+
+			$document_action = '';
+			$print_orders = array();
+			
+			if ( isset( $_REQUEST['attaching_pdf']) && isset( $_REQUEST['button_location'] ) && 'email' === sanitize_text_field( $_REQUEST['button_location'] ) ) {
+				if ( isset( $_REQUEST['type'] ) && false !== strpos( sanitize_text_field( $_REQUEST['type'] ) , 'print_' ) ) {
+					$document_action = 'print';
+				}
 			}
-		}
-		</script>
+			
+			
+			if( ( 'No' === $print_preview && 'print' === $document_action ) || ( isset( $print_orders ) && is_array( $print_orders ) && count( $print_orders ) > 0 ) ){
+			?>
+			<script>
+				
+				window.onload = function() {
+					
+					window.print();
+					setTimeout(function() {
+						document.documentElement.style.display = 'none';
+						window.close();
+					}, 20);
+				};
+			</script>
+			<?php
+			}
+		?>
    </head>
-<body onload="wf_document_options('<?php echo $print_preview;?>')">
+<body>

@@ -24,7 +24,7 @@ $pro_installed = false;
 <?php
 }
 ?>
-<div class="wrap wt_wrap" style="float: initial;">
+<div class="wt_wrap" style="float: initial;">
     <div class="wt_heading_section">
         <h2 class="wp-heading-inline">
         <?php _e('Settings','print-invoices-packing-slip-labels-for-woocommerce');?>: <?php _e('Shipping label','print-invoices-packing-slip-labels-for-woocommerce');?>

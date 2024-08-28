@@ -651,28 +651,6 @@ class Wf_Woocommerce_Packing_List_CustomizerLib {
 
 					//additional product meta
 					$addional_product_meta = '';
-					if ( isset( $the_options[ 'wf_' . $template_type . '_product_meta_fields' ] ) && is_array( $the_options[ 'wf_' . $template_type . '_product_meta_fields' ] ) && count( $the_options[ 'wf_' . $template_type . '_product_meta_fields' ] ) > 0 ) {
-						$selected_product_meta_arr = $the_options[ 'wf_' . $template_type . '_product_meta_fields' ];
-						$product_meta_arr          = Wf_Woocommerce_Packing_List::get_option( 'wf_product_meta_fields' );
-						if ( ! is_array( $product_meta_arr ) ) {
-							$product_meta_arr = array();
-						}
-						foreach ( $selected_product_meta_arr as $value ) {
-							if ( isset( $product_meta_arr[ $value ] ) ) {
-								$meta_data = get_post_meta( $product_id, $value, true );
-								if ( '' === $meta_data && $variation_id > 0 ) {
-									$meta_data = get_post_meta( $parent_id, $value, true );
-								}
-								if ( is_array( $meta_data ) ) {
-									$output_data = ( self::wf_is_multi( $meta_data ) ? '' : implode( ', ', $meta_data ) );
-								} else {
-									$output_data = $meta_data;
-								}
-								$addional_product_meta .= ( '' !== $output_data ) ? '<small>' . $product_meta_arr[ $value ] . ' : ' . $output_data . '</small><br>' : '';
-							}
-						}
-					}
-
 					/**
 					*   @since 3.0.5 Compatible with Extra product option (theme complete)
 					*/
@@ -920,36 +898,6 @@ class Wf_Woocommerce_Packing_List_CustomizerLib {
 							//additional product meta
 							$addional_product_meta  = '';
 							$meta_data_formated_arr = array();
-							if ( isset( $the_options[ 'wf_' . $template_type . '_product_meta_fields' ] ) && is_array( $the_options[ 'wf_' . $template_type . '_product_meta_fields' ] ) && count( $the_options[ 'wf_' . $template_type . '_product_meta_fields' ] ) > 0 ) {
-								$selected_product_meta_arr = $the_options[ 'wf_' . $template_type . '_product_meta_fields' ];
-								$product_meta_arr          = Wf_Woocommerce_Packing_List::get_option( 'wf_product_meta_fields' );
-								foreach ( $selected_product_meta_arr as $value ) {
-									if ( isset( $product_meta_arr[ $value ] ) ) {
-										$meta_data = get_post_meta( $product_id, $value, true );
-										if ( '' === $meta_data && $variation_id > 0 ) {
-											$meta_data = get_post_meta( $parent_id, $value, true );
-										}
-										if ( is_array( $meta_data ) ) {
-											$output_data = ( self::wf_is_multi( $meta_data ) ? '' : implode( ', ', $meta_data ) );
-										} else {
-											$output_data = $meta_data;
-										}
-
-										if ( '' !== $output_data ) {
-											$meta_info_arr = array(
-												'key'   => $value,
-												'title' => __( $product_meta_arr[ $value ], 'print-invoices-packing-slip-labels-for-woocommerce' ),
-												'value' => __( $output_data, 'print-invoices-packing-slip-labels-for-woocommerce' ),
-											);
-											$meta_info_arr = apply_filters( 'wf_pklist_alter_product_meta', $meta_info_arr, $template_type, $_product, $order_item, $order );
-											if ( is_array( $meta_info_arr ) && isset( $meta_info_arr['title'] ) && isset( $meta_info_arr['value'] ) && $meta_info_arr['value'] != '' ) {
-												$meta_data_formated_arr[] = '<span class="wt_pklist_product_meta_item" data-meta-id="' . esc_attr( $value ) . '"><label>' . wp_kses_post( $meta_info_arr['title'] ) . '</label> : ' . wp_kses_post( $meta_info_arr['value'] ) . '</span>';
-											}
-										}
-									}
-								}
-							}
-
 							/**
 							*   @since 2.8.0 Compatible with Extra product option (theme complete)
 							*/
@@ -1361,7 +1309,7 @@ class Wf_Woocommerce_Packing_List_CustomizerLib {
 				if ( empty( $res_vat ) ) {
 					$res_vat = Wt_Pklist_Common::get_order_meta( $order_id, $vat_val, true );
 				}
-				if ( ! empty( $res_vat ) && ! is_string( $res_vat ) ) {
+				if ( ! empty( $res_vat ) && is_string( $res_vat ) ) {
 					break;
 				}
 			}
@@ -1910,11 +1858,13 @@ class Wf_Woocommerce_Packing_List_CustomizerLib {
 			'wfte_product_table_payment_method',
 			'wfte_customer_note',
 		);
-		$hide_on_empty_fields = apply_filters( 'wf_pklist_alter_hide_empty_from_pro', $hide_on_empty_fields );
-		$hide_on_empty_fields = apply_filters( 'wf_pklist_alter_hide_empty', $hide_on_empty_fields, $template_type );
+		$hide_on_empty_fields = apply_filters( 'wf_pklist_alter_hide_empty_from_pro', $hide_on_empty_fields ); // empty fields from premium add-ons.
+		$hide_on_empty_fields = apply_filters( 'wf_pklist_alter_hide_empty', $hide_on_empty_fields, $template_type ); // empty fields from free version.
+		$hide_on_empty_fields = apply_filters( 'wf_pklist_alter_hide_empty_from_html', $hide_on_empty_fields, $html, $template_type ); // empty fields from customizer add-on.
+
 		foreach ( $hide_on_empty_fields as $key => $value ) {
 			if ( isset( $find_replace[ '[' . $value . ']' ] ) ) {
-				if ( '' === $find_replace[ '[' . $value . ']' ] ) {
+				if ( '' === trim($find_replace[ '[' . $value . ']' ]) ) {
 					if ( 'wfte_company_logo_url' === $value ) {
 						$html = self::addClass( 'wfte_company_logo_img_box', $html, self::TO_HIDE_CSS );
 					} else {
@@ -2012,10 +1962,10 @@ class Wf_Woocommerce_Packing_List_CustomizerLib {
 		$find_replace['[wfte_product_table_shipping]']       = '$0.00';
 		$find_replace['[wfte_product_table_cart_discount]']  = '$0.00';
 		$find_replace['[wfte_product_table_order_discount]'] = '$0.00';
-		$find_replace['[wfte_product_table_total_tax]']      = '$0.00';
+		$find_replace['[wfte_product_table_total_tax]']      = '$2.00';
 		$find_replace['[wfte_product_table_fee]']            = '$0.00';
 		$find_replace['[wfte_product_table_payment_method]'] = 'PayPal';
-		$find_replace['[wfte_product_table_payment_total]']  = '$100.00';
+		$find_replace['[wfte_product_table_payment_total]']  = '$102.00';
 		$find_replace['[wfte_product_table_coupon]']         = '{ABCD100}';
 		$find_replace['[wfte_barcode_url]']                  = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEYAAAAeAQMAAACrPfpdAAAABlBMVEX///8AAABVwtN+AAAAAXRSTlMAQObYZgAAABdJREFUGJVj+MzDfPg8P/NnG4ZRFgEWAHrncvdCJcw9AAAAAElFTkSuQmCC';
 

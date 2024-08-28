@@ -24,10 +24,8 @@ if ( ! class_exists( 'Wpccl_Frontend' ) ) {
 			add_shortcode( 'wpccl_list', [ $this, 'list_shortcode' ] );
 
 			// ajax
-			add_action( 'wp_ajax_wpccl_load_coupons', [ $this, 'ajax_load_coupons' ] );
-			add_action( 'wp_ajax_nopriv_wpccl_load_coupons', [ $this, 'ajax_load_coupons' ] );
-			add_action( 'wp_ajax_wpccl_apply_coupon', [ $this, 'ajax_apply_coupon' ] );
-			add_action( 'wp_ajax_nopriv_wpccl_apply_coupon', [ $this, 'ajax_apply_coupon' ] );
+			add_action( 'wc_ajax_wpccl_load_coupons', [ $this, 'ajax_load_coupons' ] );
+			add_action( 'wc_ajax_wpccl_apply_coupon', [ $this, 'ajax_apply_coupon' ] );
 		}
 
 		public function enqueue_scripts() {
@@ -53,7 +51,7 @@ if ( ! class_exists( 'Wpccl_Frontend' ) ) {
 			wp_enqueue_style( 'wpccl-frontend', WPCCL_URI . 'assets/css/frontend.css' );
 			wp_enqueue_script( 'wpccl-frontend', WPCCL_URI . 'assets/js/frontend.js', [ 'jquery' ], WPCCL_VERSION, true );
 			wp_localize_script( 'wpccl-frontend', 'wpccl_vars', [
-				'ajax_url'    => admin_url( 'admin-ajax.php' ),
+				'wc_ajax_url' => WC_AJAX::get_endpoint( '%%endpoint%%' ),
 				'nonce'       => wp_create_nonce( 'wpccl-security' ),
 				'timezone'    => get_option( 'timezone_string' ),
 				'countdown'   => Wpccl_Helper::get_setting( 'countdown', 'no' ),

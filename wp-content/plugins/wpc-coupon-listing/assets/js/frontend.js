@@ -19,7 +19,8 @@
     $link.addClass('wpccl-coupon-loading');
 
     $.ajax({
-      type: 'POST', url: wpccl_vars.ajax_url, data: {
+      type: 'POST', url: wpccl_vars.wc_ajax_url.toString().
+          replace('%%endpoint%%', 'wpccl_apply_coupon'), data: {
         action: 'wpccl_apply_coupon',
         coupon_code: coupon,
         nonce: wpccl_vars.nonce,
@@ -55,7 +56,8 @@ function wpccl_load_coupons() {
   jQuery('#wpccl-popup .wpccl-coupons').addClass('wpccl-coupons-loading');
 
   jQuery.ajax({
-    type: 'POST', url: wpccl_vars.ajax_url, data: {
+    type: 'POST', url: wpccl_vars.wc_ajax_url.toString().
+        replace('%%endpoint%%', 'wpccl_load_coupons'), data: {
       action: 'wpccl_load_coupons', nonce: wpccl_vars.nonce,
     }, success: function(response) {
       jQuery('#wpccl-popup .wpccl-coupons').

@@ -119,19 +119,28 @@
 	        				}
 	        			});
 	        		}
-	        		var action_url=wf_pklist_params.print_action_url+'&type='+action+'&post='+(order_id_arr.join(','))+'&_wpnonce='+wf_pklist_params.nonces.wf_packlist;
+					var action_url = wf_pklist_params.print_action_url + '&type=' + action + '&post=' + (order_id_arr.join(',')) + '&_wpnonce=' + wf_pklist_params.nonces.wf_packlist + '&wt-pdf-bulk=1';
+					var is_this_print_button = (-1 !== action_url.indexOf('type=print_'));
 	        		if(is_confirmation_needed)
 	        		{
 	        			if(confirm(wf_pklist_params.msgs.invoice_not_gen_bulk))
-                  		{
-                  			window.open(action_url,'_blank');
-	                        setTimeout(function(){
-	                            window.location.reload(true);  
-	                           },1000);
+						{
+							if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) { 
+								window.open(action_url,'_blank');
+							} else {
+								do_print_document_in_admin_page( action_url, true);
+							}
+							setTimeout(function(){
+								window.location.reload(true);  
+							},1000);
                   		}
 	        		}else
 	        		{
-	        			window.open(action_url,'_blank');
+						if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) { 
+							window.open(action_url,'_blank');
+						} else {
+							do_print_document_in_admin_page( action_url, true);	
+						}	
 	        		}
 	        	}
 	        }
@@ -381,6 +390,23 @@ var wf_settings_form=
 				is_valid=false;
 				return false;
 			}			
+		});
+
+		form_elm.find('[min]').each(function () { 
+			var elm = jQuery(this);
+			if(elm.is(':visible') && typeof elm.attr('min') !== 'undefined' && elm.attr('min').trim() !== '' ) {
+				if( elm.attr('min') > elm.val().trim() )
+				{
+					var prnt=elm.parents('tr');
+					var label=prnt.find('th label');
+					
+					var temp_elm=jQuery('<div />').html(label.html());
+					temp_elm.find('.wt_pklist_required_field').remove();
+					wf_notify_msg.error('<b><i>'+temp_elm.text()+'</i> </b>'+wf_pklist_params.msgs.min_value_error+' '+elm.attr('min'));
+					is_valid=false;
+					return false;
+				}	
+			}
 		});
 		return is_valid;
 	}
@@ -720,6 +746,7 @@ var wt_field_group=
 
 function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(url,a)
 {
+	var is_this_print_button = (-1 !== url.indexOf('type=print_'));
 	/*
 	1 - invoice/proforma invoice number
 	2 - invoice for free order
@@ -744,46 +771,63 @@ function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(url,a)
 		
 		if(true === wf_pklist_params.msgs.pop_dont_show_again){
 			url = url+'&wt_dont_show_again=1';
-			window.open(url, "Print", "width=800, height=600");
+			window.open(url, '_blank');
 			setTimeout(function () {
 				window.location.reload(true);
-			}, 1000);
+			}, 1000);   
 		}else{
 			var elm=jQuery('.wt_doc_create_confirm_popup');
 			if(jQuery('.wt_doc_create_confirm_popup').length === 0){
 				if(confirm (invoice_prompt))
 				{                         
-					window.open(url, "Print", "width=800, height=600");
-					setTimeout(function () {
-						window.location.reload(true);
-					}, 1000);
+					if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) { 
+						window.open(url, '_blank');
+						setTimeout(function () {
+							window.location.reload(true);
+						}, 1000);   
+					} else {
+						do_print_document_in_admin_page(url,false,true);  
+					}	
 				} else {
 					return false;
 				}
-			}else{
+			} else {
+				
+				// admin - order edit page print triggers
 				elm.children().find('.message').html(invoice_prompt);
+				elm.children().find('.wt_doc_create_confirm_popup_main,.wt_doc_create_confirm_popup_footer').show();
 				wf_popup.showPopup(elm);
 
-				jQuery('.wt_doc_create_confirm_popup_yes').on('click',function(){
+				jQuery('.wt_doc_create_confirm_popup_yes').on('click', function () {
 					if(jQuery('#wt_dont_show_again_doc_create').is(':checked')){
 						url = url+'&wt_dont_show_again=1';
 					}
-					jQuery('.wf_pklist_popup_close').trigger('click');
-					window.open(url, "Print", "width=800, height=600");
-					setTimeout(function () {
-						window.location.reload(true);
-					}, 1000);
+
+					if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) {
+						jQuery('.wf_pklist_popup_cancel').trigger('click');
+						window.open(url, '_blank');
+						setTimeout(function () {
+							window.location.reload(true);
+						}, 1000);     
+					} else {
+						jQuery('.wf_pklist_popup_cancel').trigger('click');
+						do_print_document_in_admin_page(url,false,true);  
+					}
 				});
 			}
 		}
     }
     else
-    {
-        window.open(url, "Print", "width=800, height=600");     
-		setTimeout(function () {
-			window.location.reload(true);
-		}, 1000);                      
-    }
+	{
+		if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) { 
+			window.open(action_url, '_blank');
+			setTimeout(function () {
+				window.location.reload(true);
+			}, 1000);   
+		} else {
+			do_print_document_in_admin_page(url);
+		}           
+	}
     return false;
 };
 
@@ -1592,3 +1636,109 @@ jQuery(document).ready(function(){
 	wt_pklist_temp_files.Set();
 	wt_customizer_pro_fields_popup.Set();
 });
+
+// javascript
+// Document print button in order edit page.
+handlePrintButtonClicked();
+function handlePrintButtonClicked() {
+	document.addEventListener('DOMContentLoaded', function () {
+		var printButtons = document.querySelectorAll('.wt_pklist_admin_print_document_btn');
+		printButtons.forEach(function (button) {
+			if (false === button.classList.contains("class-name")) {
+				button.addEventListener('click', function (e) {
+					e.preventDefault();
+					var action_url = this.getAttribute('href');
+					if ( 'Yes' === wf_pklist_params.show_document_preview || ( "logged_in" === wf_pklist_params.document_access_type && '' === wf_pklist_params.is_user_logged_in ) ) {
+						window.open(action_url, '_blank');
+					} else {
+						// window.open(action_url, '_blank');
+						do_print_document_in_admin_page(action_url);
+					}
+				});
+			}
+		});
+	});
+}
+
+function do_print_document_in_admin_page( url, is_bulk_print = false, reload_page = false ) {
+	var newWindow = window.open('', '_blank');
+	if (newWindow) {
+		newWindow.document.open();
+		newWindow.document.write(wf_pklist_params.msgs.generating_document_text);
+		newWindow.document.close();
+		newWindow.document.body.style.cursor = 'progress';
+	}
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	xhr.onload = function () {
+		if (200 === this.status) {
+			var responseText = xhr.responseText;
+			var contentType = xhr.getResponseHeader("Content-Type");
+			if (contentType && contentType.includes("text/plain")) {
+				// Close the new window immediately if the content is plain text
+				if (newWindow) {
+					newWindow.close();
+				}
+				// Show the alert message after closing the window
+				setTimeout(function () {
+					alert(responseText);
+				}, 100); // A short delay to ensure the window closes before alert
+				return;
+			}
+			
+			if (newWindow) {
+				// Write an iframe to the new tab
+				newWindow.document.open();
+				newWindow.document.write('<html><head><title>'+wf_pklist_params.msgs.generating_document_text+'</title></head><body><iframe id="printIframe" style="width: 100%; height: 100%; border: none;"></iframe></body></html>');
+				newWindow.document.close();
+				
+				// Get the iframe element
+				var printIframe = newWindow.document.getElementById('printIframe');
+				printIframe.style.display = 'none';
+				// Write the response to the iframe
+				var iframeDoc = printIframe.contentDocument || printIframe.contentWindow.document;
+				iframeDoc.open();
+				iframeDoc.write(xhr.responseText);
+				iframeDoc.close();
+	
+				// Set the title of the new window from the iframe content
+				var iframeTitle = iframeDoc.title || 'Document';
+				newWindow.document.title = iframeTitle;
+
+				setTimeout(function() {
+					printIframe.contentWindow.focus();
+					printIframe.contentWindow.print();
+					newWindow.document.body.style.cursor = 'auto';
+
+					// Remove the iframe after printing
+					newWindow.document.body.removeChild(printIframe);
+					newWindow.close();
+					if (true === is_bulk_print) {
+						// here comes the bulk print.
+					} else if ( true === reload_page ) {
+						window.location.reload(true);
+					}
+				}, 500);
+	
+			} else {
+				alert(wf_pklist_params.msgs.new_tab_open_error);
+			}
+		} else {
+			if (newWindow) {
+				newWindow.document.body.style.cursor = 'auto'; // Reset cursor on error
+			}
+			alert(wf_pklist_params.msgs.error_loading_data);
+		}
+	};
+
+	xhr.onerror = function () {
+		if (newWindow) {
+			newWindow.document.body.style.cursor = 'auto'; // Reset cursor on request error
+		}
+		alert(wf_pklist_params.msgs.request_error);
+		setTimeout(function () { 
+			jQuery('.wf_cst_overlay, .wf_pklist_popup').hide();
+		},1000);
+	};
+	xhr.send();
+}

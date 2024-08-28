@@ -116,8 +116,8 @@ class Wf_Woocommerce_Packing_List {
 			self::$base_version = WF_PKLIST_VERSION;
 		}else 
 		{
-			$this->version = '4.6.0';
-			self::$base_version = '4.6.0';
+			$this->version = '4.6.1';
+			self::$base_version = '4.6.1';
 		}
 		if(defined('WF_PKLIST_PLUGIN_NAME'))
 		{
@@ -406,9 +406,12 @@ class Wf_Woocommerce_Packing_List {
 		$this->loader->add_filter( "wt_promotion_banner_screens", $this->plugin_admin, "wt_promotion_banner_screens" );
 
 		/**
-		 * @since 4.6.0 - Filter to add the pre requisites filter for html rendering of the documents.
+		 * Update the version migrated values when updating the settings.
+		 *
+		 * @since 4.6.1
 		 */
 		$this->loader->add_filter( 'wt_pklist_add_filters_before_rendering_pdf', $this->plugin_admin, 'pdf_before_rendering_filters', 10, 3 );
+		$this->loader->add_action( 'wf_pklist_intl_after_setting_update', $this->plugin_admin, 'update_plugin_settings_with_migration', 10, 2 );
 	}
 
 	private function define_common_hooks() {
@@ -532,7 +535,7 @@ class Wf_Woocommerce_Packing_List {
     }
 
 	/**
-	 * Get the print button in order email
+	 * Get the print button in order email and order details page in my account
 	 *
 	 * @param object $order
 	 * @param int|string $order_id
@@ -554,12 +557,13 @@ class Wf_Woocommerce_Packing_List {
 				'_wpnonce'			=> wp_create_nonce(WF_PKLIST_PLUGIN_NAME),
 				'lang'				=> get_locale(),
 				'access_key'    	=> $order->get_order_key(),
+				'button_location'	=> true === $email_button ? 'email' : 'order_details',
 			), site_url() );
 			$invoice_url	= esc_url_raw($document_link);
 			$style			= '';
-			$email_button_class = '';
+			$button_class = '';
 			if( $email_button ) {
-				$email_button_class = 'wt_pklist_email_btn';
+				$button_class = 'wt_pklist_email_btn';
 				$template_type = ( false !== strpos( $action, 'print_' ) ) ? str_replace('print_','',$action) : '';
 				$style_arr = array(
 					'background'		=> '#0085ba',
@@ -576,8 +580,17 @@ class Wf_Woocommerce_Packing_List {
 						$style .= $style_key.':'.$style_value.';';
 					}
 				}
+			} else {
+				$template_type = str_replace(array('print_', 'download_'), '', $action);
+				if ( !empty( $template_type ) ) {
+					if ( false !== strpos( $action, 'print_' ) ) {
+						$button_class = 'wt_pklist_'.$template_type.'_print';
+					} else {
+						$button_class = 'wt_pklist_'.$template_type.'_download';
+					}
+				}
 			}
-			$button	= '<a class="button button-primary '.esc_attr( $email_button_class ).'" style="'.esc_attr($style).'" target="_blank" href="'.$invoice_url.'">'.wp_kses_post($label).'</a><br><br>';
+			$button	= '<a class="button button-primary '.esc_attr( $button_class ).'" style="'.esc_attr($style).'" target="_blank" href="'.$invoice_url.'">'.wp_kses_post($label).'</a><br><br>';
 			echo $button;
 		}
     }
@@ -639,10 +652,10 @@ class Wf_Woocommerce_Packing_List {
 			'woocommerce_wf_packinglist_sender_contact_number'	=> '',
 			'woocommerce_wf_packinglist_sender_vat'				=> '',
 			'woocommerce_wf_state_code_disable'					=> 'no',
-			'woocommerce_wf_packinglist_preview'				=> 'enabled',
+			'woocommerce_wf_packinglist_preview'				=> 'No',
 			'woocommerce_wf_packinglist_package_type'			=> 'single_packing', //just keeping to avoid errors
 			'woocommerce_wf_packinglist_boxes'					=> array(),
-			'woocommerce_wf_add_rtl_support'					=> 'No',
+			'woocommerce_wf_add_rtl_support'					=> 'Yes',
 			'active_pdf_library'								=> 'dompdf',
 			'woocommerce_wf_generate_for_taxstatus'				=> $wt_tax,
 			'wf_additional_data_fields'							=> array(),
@@ -715,7 +728,7 @@ class Wf_Woocommerce_Packing_List {
 
 	public static function single_checkbox_fields($base_id='',$tab_name=''){
 		$settings['wt_main_general'] = array(
-			'woocommerce_wf_packinglist_preview' => 'disabled',
+			'woocommerce_wf_packinglist_preview' => 'No',
 			'woocommerce_wf_state_code_disable' => "no",
 			'woocommerce_wf_add_rtl_support' => "No",
 			'wt_pklist_common_print_button_enable' => 'No',
