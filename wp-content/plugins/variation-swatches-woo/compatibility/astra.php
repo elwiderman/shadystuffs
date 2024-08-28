@@ -70,7 +70,7 @@ class Astra {
 	public function override_hover_effect_change( $style ) {
 		$helper               = new Helper();
 		$get_shop_page_option = $helper->get_option( CFVSW_GLOBAL );
-		return ! empty( $get_shop_page_option['enable_swatches_shop'] ) && 'swap' === $style ? '' : $style;
+		return ! $get_shop_page_option['enable_swatches_shop'] && 'swap' === $style ? '' : $style;
 	}
 
 	/**

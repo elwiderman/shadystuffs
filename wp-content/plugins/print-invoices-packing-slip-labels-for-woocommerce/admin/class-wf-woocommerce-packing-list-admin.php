@@ -85,6 +85,7 @@ class Wf_Woocommerce_Packing_List_Admin {
 	{
 		wp_enqueue_style('wp-color-picker');
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wf-woocommerce-packing-list-admin.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name.'-banners', plugin_dir_url( __FILE__ ) . 'css/wf-woocommerce-packing-list-admin-banners.css', array(), $this->version, 'all' );
 		if(!empty(self::not_activated_pro_addons())){
 			wp_enqueue_style( $this->plugin_name.'-addons-page', plugin_dir_url( __FILE__ ) . 'css/wf-woocommerce-packing-list-admin-addons-page.css', array(), $this->version, 'all' );
 		}
@@ -124,6 +125,9 @@ class Wf_Woocommerce_Packing_List_Admin {
 			'order_meta_autocomplete' => json_encode($order_meta_autocomplete),
 			'is_rtl' => $is_rtl,
 			'wt_plugin_data' => $wt_pklist_plugin_data,
+			'show_document_preview' => Wf_Woocommerce_Packing_List::get_option( 'woocommerce_wf_packinglist_preview' ),
+			'document_access_type'	=> Wf_Woocommerce_Packing_List::get_option('wt_pklist_print_button_access_for'),
+			'is_user_logged_in'	=> is_user_logged_in(),
 			'msgs'=>array(
 				'settings_success'=>__('Settings updated.','print-invoices-packing-slip-labels-for-woocommerce'),
 				'all_fields_mandatory'=>__('All fields are mandatory','print-invoices-packing-slip-labels-for-woocommerce'),
@@ -147,6 +151,11 @@ class Wf_Woocommerce_Packing_List_Admin {
 				'buy_pro_prompt_edit_order_meta_desc' => __('You can edit an existing item by using its key.','print-invoices-packing-slip-labels-for-woocommerce'),
 				'pop_dont_show_again' => $dont_show_again,
 				'add_date_string_text' => __("Add","print-invoices-packing-slip-labels-for-woocommerce"),
+				'request_error' => __('Request error.','print-invoices-packing-slip-labels-for-woocommerce'),
+				'error_loading_data' => __('Error loading data.','print-invoices-packing-slip-labels-for-woocommerce'),
+				'min_value_error' => __( 'minimum value should be', 'print-invoices-packing-slip-labels-for-woocommerce'),
+				'generating_document_text' => __( 'Generating document...', 'print-invoices-packing-slip-labels-for-woocommerce' ),
+				'new_tab_open_error' => __( 'Failed to open new tab. Please check your browser settings.', 'print-invoices-packing-slip-labels-for-woocommerce' ),
 			)
 		);
 		wp_localize_script($this->plugin_name, 'wf_pklist_params', $params);
@@ -645,6 +654,14 @@ class Wf_Woocommerce_Packing_List_Admin {
 											$print_node_attr = $is_show_prompt;
 										}else
 										{
+											if(false !== strpos($action, 'download_'))
+											{
+												$item_css_class .=' wt_pklist_admin_download_document_btn';
+
+											}elseif(false !== strpos($action, 'print_'))
+											{
+												$item_css_class .=' wt_pklist_admin_print_document_btn';
+											}
 											$href_attr=' href="'.esc_url($url).'"';
 											$print_node_attr = 0;
 										}
@@ -670,6 +687,14 @@ class Wf_Woocommerce_Packing_List_Admin {
 			<?php
 	        }elseif("list_page" === $button_location)
 	        {
+				if(false !== strpos($action, 'download_'))
+				{
+					$css_class .=' wt_pklist_admin_download_document_btn';
+
+				}elseif(false !== strpos($action, 'print_'))
+				{
+					$css_class .=' wt_pklist_admin_print_document_btn';
+				}
 	        ?>
 				<li>
 					<a class="<?php echo esc_attr($confirmation_clss);?> <?php echo esc_attr($css_class);?>" data-id="<?php echo esc_attr($order_id);?>" <?php echo $onclick;?> <?php echo $href_attr;?> target="_blank" title="<?php echo esc_attr($tooltip);?>" <?php echo $custom_attr;?> ><?php echo wp_kses_post($label);?></a>
@@ -918,6 +943,19 @@ class Wf_Woocommerce_Packing_List_Admin {
 			{
 				remove_action('wp_footer', 'wp_admin_bar_render', 1000);
 				$action = (isset($_GET['type']) ? sanitize_text_field($_GET['type']) : '');
+
+				// Set the option to show the banner after the bulk print
+				$document_actions_for_banner = array(
+					'print_invoice',
+					'download_invoice',
+					'print_packinglist',
+					'download_packinglist',
+				);
+
+				if ( in_array( $action, $document_actions_for_banner ) && false === get_option( 'wt_pklist_banner_after_bulk_print_ipc' ) ) {
+					update_option( 'wt_pklist_banner_after_bulk_print_ipc', 1 );
+					do_action( 'wt_pklist_show_banner_after_bulk_print_ipc' );
+				}
 
 				// Removes the WooCommerce filter, that is validating the quantity to be an int
 				remove_filter('woocommerce_stock_amount', 'intval');
@@ -3928,7 +3966,8 @@ class Wf_Woocommerce_Packing_List_Admin {
 							<input type="checkbox" id="wt_dont_show_again_doc_create"> '.__("Do not show again","print-invoices-packing-slip-labels-for-woocommerce").'
 						</div>
 					</div>
-					<div class="wf_pklist_popup_footer" style="float:left;">
+					
+					<div class="wt_doc_create_confirm_popup_footer wf_pklist_popup_footer" style="float:left;">
 						<button type="button" name="" class="button-secondary wf_pklist_popup_cancel" style="color: #3157A6;border-color: #3157A6;">
 							'.__("Cancel","print-invoices-packing-slip-labels-for-woocommerce").'
 						</button>
@@ -3937,6 +3976,14 @@ class Wf_Woocommerce_Packing_List_Admin {
 						</button>	
 					</div>
 					</div>
+				</div>
+				<div class="wt_pklist_document_generating_popup wf_pklist_popup" style="width:40%;text-align:left;">
+					<div class="wt_doc_create_confirm_popup_main_loading">
+						<div class="loading_message">'.__("Generating the document...", "print-invoices-packing-slip-labels-for-woocommerce").'</div>
+					</div>
+					<button type="button" name="" class="button-secondary wf_pklist_popup_cancel" style="">
+							'.__("Cancel","print-invoices-packing-slip-labels-for-woocommerce").'
+						</button>
 				</div>';
 			echo $data;
 		}
@@ -4855,4 +4902,20 @@ class Wf_Woocommerce_Packing_List_Admin {
 		return $currency_symbol;
 	}
 
+	/**
+	 * Update the plugin settings with migrated values
+	 * 
+	 * @since 4.6.1
+	 */
+	public function update_plugin_settings_with_migration( $options, $base_id ) {
+		if ( '' === $base_id ) {
+			if ( isset( $options['woocommerce_wf_packinglist_preview'] ) ) {
+				if ( 'enabled' === $options['woocommerce_wf_packinglist_preview'] ) {
+					Wf_Woocommerce_Packing_List::update_option( 'woocommerce_wf_packinglist_preview', 'No' );
+				} else if ( 'disabled' === $options['woocommerce_wf_packinglist_preview'] ) {
+					Wf_Woocommerce_Packing_List::update_option( 'woocommerce_wf_packinglist_preview', 'Yes' );
+				}
+			}
+		}
+	}
 }

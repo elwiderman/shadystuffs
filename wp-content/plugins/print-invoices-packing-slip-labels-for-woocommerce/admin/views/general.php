@@ -193,8 +193,8 @@ $print_separate_button_for_documents    = apply_filters('wt_pklist_individual_pr
                             'label' => __("Preview before printing","print-invoices-packing-slip-labels-for-woocommerce"),
                             'id' => 'woocommerce_wf_packinglist_preview',
                             'name' => 'woocommerce_wf_packinglist_preview',
-                            'value' => "enabled",
-                            'checkbox_fields' => array('enabled'=> __("Preview documents before printing","print-invoices-packing-slip-labels-for-woocommerce")),
+                            'value' => "Yes",
+                            'checkbox_fields' => array('Yes'=> __("Preview documents before printing","print-invoices-packing-slip-labels-for-woocommerce")),
                             'class' => "woocommerce_wf_packinglist_preview",
                             'col' => 3,
                             'tooltip' => true

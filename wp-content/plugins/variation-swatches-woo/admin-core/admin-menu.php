@@ -48,6 +48,8 @@ class Admin_Menu {
 		add_action( 'admin_enqueue_scripts', [ $this, 'settings_page_scripts' ] );
 		add_action( 'wp_ajax_cfvsw_update_settings', [ $this, 'cfvsw_update_settings' ] );
 		add_action( 'admin_head', [ $this, 'hide_notices' ] );
+		// Let WooCommerce know, CartFlows Pro is compatible with HPOS.
+		add_action( 'before_woocommerce_init', array( $this, 'declare_woo_hpos_compatibility' ) );
 	}
 
 	/**
@@ -256,5 +258,15 @@ class Admin_Menu {
 			remove_all_actions( 'admin_notices' );
 		}
 
+	}
+
+	/**
+	 *  Declare the woo HPOS compatibility.
+	 */
+	public function declare_woo_hpos_compatibility() {
+
+		if ( class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' ) ) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', CFVSW_FILE, true );
+		}
 	}
 }

@@ -1,10 +1,103 @@
-(function( $ ) {
-	'use strict';
-	$(function() {
-
+handlePrintButtonClickedInMyAccoutPage();
+function handlePrintButtonClickedInMyAccoutPage() {
+	document.addEventListener('DOMContentLoaded', function () {
+		var printButtons = document.querySelectorAll('.wt_pklist_invoice_print, .wt_pklist_packinglist_print, .wt_pklist_deliverynote_print, .wt_pklist_dispatchlabel_print, .wt_pklist_shippinglabel_print, .wt_pklist_proformainvoice_print' );
+		printButtons.forEach(function (button) {
+			button.addEventListener('click', function (e) {
+				e.preventDefault();
+				var action_url = this.getAttribute('href');
+				if ( 'Yes' === wf_pklist_params_public.show_document_preview || ( "logged_in" === wf_pklist_params_public.document_access_type && '' === wf_pklist_params_public.is_user_logged_in ) ) {
+					window.open(action_url, '_blank');
+				} else {
+					do_print_document_in_myaccount_page(action_url);
+				}
+			});
+		});
 	});
-})( jQuery );
+}
 
+function do_print_document_in_myaccount_page( url, is_bulk_print = false, reload_page = false ) {
+	var newWindow = window.open('', '_blank');
+	if (newWindow) {
+		newWindow.document.open();
+		newWindow.document.write(wf_pklist_params_public.msgs.generating_document_text);
+		newWindow.document.close();
+		newWindow.document.body.style.cursor = 'progress';
+	}
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true);
+	xhr.onload = function () {
+		var responseText = xhr.responseText;
+        var contentType = xhr.getResponseHeader("Content-Type");
+        if (contentType && contentType.includes("text/plain")) {
+            // Close the new window immediately if the content is plain text
+            if (newWindow) {
+                newWindow.close();
+            }
+            // Show the alert message after closing the window
+            setTimeout(function () {
+                alert(responseText);
+            }, 100); // A short delay to ensure the window closes before alert
+            return;
+		}
+		
+		if (200 === this.status) {
+			if (newWindow) {
+				// Write an iframe to the new tab
+				newWindow.document.open();
+				newWindow.document.write('<html><head><title>'+wf_pklist_params_public.msgs.generating_document_text+'</title></head><body><iframe id="printIframe" style="width: 100%; height: 100%; border: none;"></iframe></body></html>');
+				newWindow.document.close();
+	
+				// Get the iframe element
+				var printIframe = newWindow.document.getElementById('printIframe');
+				printIframe.style.display = 'none';
+				// Write the response to the iframe
+				var iframeDoc = printIframe.contentDocument || printIframe.contentWindow.document;
+				iframeDoc.open();
+				iframeDoc.write(xhr.responseText);
+				iframeDoc.close();
+				
+				var iframeTitle = iframeDoc.title || 'Document';
+				newWindow.document.title = iframeTitle;
+
+				// Set the title of the new window from the iframe content
+				setTimeout(function () {
+					printIframe.contentWindow.focus();
+					printIframe.contentWindow.print();
+					newWindow.document.body.style.cursor = 'auto';
+
+					// Remove the iframe after printing
+					newWindow.document.body.removeChild(printIframe);
+					newWindow.close();
+					if (true === is_bulk_print) {
+						// here comes the code for bulk print.
+					} else if ( true === reload_page ) {
+						window.location.reload(true);
+					}
+				}, 500);
+	
+			} else {
+				alert(wf_pklist_params_public.msgs.new_tab_open_error);
+			}
+		} else {
+			if (newWindow) {
+				newWindow.document.body.style.cursor = 'auto'; // Reset cursor on error
+			}
+			alert(wf_pklist_params_public.msgs.error_loading_data);
+		}
+	};
+
+	xhr.onerror = function () {
+		if (newWindow) {
+			newWindow.document.body.style.cursor = 'auto'; // Reset cursor on request error
+		}
+		alert(wf_pklist_params_public.msgs.request_error);
+		setTimeout(function () { 
+			jQuery('.wf_cst_overlay, .wf_pklist_popup').hide();
+		},1000);
+	};
+	xhr.send();
+}
 
 function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(url,a)
 {
@@ -32,14 +125,14 @@ function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(url,a)
 		
 		if(true === wf_pklist_params_public.msgs.pop_dont_show_again){
 			url = url+'&wt_dont_show_again=1';
-			window.open(url, "Print", "width=800, height=600");
+			window.open(url, '_blank');
 			setTimeout(function () {
 				window.location.reload(true);
-			}, 1000);
+			}, 1000);   
 		}else{
 			if(confirm (invoice_prompt))
-			{                         
-				window.open(url, "Print", "width=800, height=600");
+			{       
+				window.open(url, '_blank');
 				setTimeout(function () {
 					window.location.reload(true);
 				}, 1000);
@@ -50,14 +143,10 @@ function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(url,a)
 	}
 	else
 	{
-		window.open(url, "Print", "width=800, height=600");     
+		window.open(url, '_blank');
 		setTimeout(function () {
 			window.location.reload(true);
-		}, 1000);                      
+		}, 1000);                   
 	}
 	return false;
 }
-
-jQuery(document).ready(function(){
-	
-});

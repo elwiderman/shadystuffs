@@ -195,18 +195,22 @@
       if (confirm(woofc_vars.confirm_empty_text)) {
         woofc_cart_loading();
 
-        $.post(woofc_vars.ajax_url, data, function(response) {
-          woofc_cart_reload();
-          $(document.body).trigger('woofc_cart_emptied');
-        });
+        $.post(woofc_vars.wc_ajax_url.toString().
+                replace('%%endpoint%%', 'woofc_empty_cart'), data,
+            function(response) {
+              woofc_cart_reload();
+              $(document.body).trigger('woofc_cart_emptied');
+            });
       }
     } else {
       woofc_cart_loading();
 
-      $.post(woofc_vars.ajax_url, data, function(response) {
-        woofc_cart_reload();
-        $(document.body).trigger('woofc_cart_emptied');
-      });
+      $.post(woofc_vars.wc_ajax_url.toString().
+              replace('%%endpoint%%', 'woofc_empty_cart'), data,
+          function(response) {
+            woofc_cart_reload();
+            $(document.body).trigger('woofc_cart_emptied');
+          });
     }
   });
 
@@ -260,7 +264,8 @@
       action: 'woofc_undo_remove', item_key: undo_key, nonce: woofc_nonce(),
     };
 
-    $.post(woofc_vars.ajax_url, data, function(response) {
+    $.post(woofc_vars.wc_ajax_url.toString().
+        replace('%%endpoint%%', 'woofc_undo_remove'), data, function(response) {
       woofc_cart_reload();
     });
 
@@ -292,7 +297,8 @@ function woofc_update_qty(cart_item_key, cart_item_qty) {
     nonce: woofc_nonce(),
   };
 
-  jQuery.post(woofc_vars.ajax_url, data, function(response) {
+  jQuery.post(woofc_vars.wc_ajax_url.toString().
+      replace('%%endpoint%%', 'woofc_update_qty'), data, function(response) {
     woofc_cart_reload();
 
     jQuery(document.body).
@@ -313,7 +319,8 @@ function woofc_remove_item($item) {
     nonce: woofc_nonce(),
   };
 
-  jQuery.post(woofc_vars.ajax_url, data, function(response) {
+  jQuery.post(woofc_vars.wc_ajax_url.toString().
+      replace('%%endpoint%%', 'woofc_remove_item'), data, function(response) {
     if (!response || !response.fragments) {
       return;
     }

@@ -4,8 +4,8 @@ Donate link: https://wpclever.net
 Tags: woocommerce, wpc, coupon listing, coupon
 Requires at least: 4.0
 Tested up to: 6.6
-Version: 1.2.2
-Stable tag: 1.2.2
+Version: 1.3.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -69,6 +69,9 @@ Users can enable or disable display the list of available coupons right on the m
 4. Now when purchasing, the buyer can choose a coupon from the list
 
 == Changelog ==
+
+= 1.3.0 =
+* Updated: Using WC_AJAX for frontend
 
 = 1.2.2 =
 * Fixed: Compatible with WP 6.6 & Woo 9.1

@@ -3,7 +3,7 @@
 Plugin Name: WPC Coupon Listing for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: WPC Coupon Listing will display coupons in a list on the cart and checkout page for the buyer easy to use.
-Version: 1.2.2
+Version: 1.3.0
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: wpc-coupon-listing
@@ -15,7 +15,7 @@ WC requires at least: 3.0
 WC tested up to: 9.1
 */
 
-! defined( 'WPCCL_VERSION' ) && define( 'WPCCL_VERSION', '1.2.2' );
+! defined( 'WPCCL_VERSION' ) && define( 'WPCCL_VERSION', '1.3.0' );
 ! defined( 'WPCCL_LITE' ) && define( 'WPCCL_LITE', __FILE__ );
 ! defined( 'WPCCL_FILE' ) && define( 'WPCCL_FILE', __FILE__ );
 ! defined( 'WPCCL_PATH' ) && define( 'WPCCL_PATH', plugin_dir_path( __FILE__ ) );
