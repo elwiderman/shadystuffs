@@ -116,8 +116,8 @@ class Wf_Woocommerce_Packing_List {
 			self::$base_version = WF_PKLIST_VERSION;
 		}else 
 		{
-			$this->version = '4.6.1';
-			self::$base_version = '4.6.1';
+			$this->version = '4.6.2';
+			self::$base_version = '4.6.2';
 		}
 		if(defined('WF_PKLIST_PLUGIN_NAME'))
 		{
@@ -352,7 +352,7 @@ class Wf_Woocommerce_Packing_List {
 		
 		$this->loader->add_filter('woocommerce_checkout_fields',$this->plugin_admin,'add_checkout_fields'); /* Add additional checkout fields */		
 
-		$this->loader->add_action('init',$this->plugin_admin,'print_window',10); /* to print the invoice and packinglist */
+		$this->loader->add_action('init',$this->plugin_admin,'print_window',11); /* to print the invoice and packinglist */
 
 		$this->plugin_admin->admin_modules();
 		$this->plugin_public->common_modules();

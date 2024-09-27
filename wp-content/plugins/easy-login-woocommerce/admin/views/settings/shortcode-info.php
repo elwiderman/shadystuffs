@@ -29,6 +29,15 @@
 			</p>
 		</li>
 	</ul>
+
+</div>
+
+<div class="xoo-el-popup-info">
+	<h3>Redirections</h3>
+	<h5>There are 3 ways to set the redirections in form</h5>
+	- You can set them manually in the settings.<br><br>
+	- You can set them using shortcodes. Check shortcodes below.<br><br>
+	- You can set ?redirect_to parameter in URL bar. For eg: https://websiteurl.com?redirect_to=https://websiteurl.com/mypage
 </div>
 
 

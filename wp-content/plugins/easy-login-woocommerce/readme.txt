@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/xootix
 Tags: social login, login customizer, registration, popup, custom registration fields
 Requires at least: 3.0.1
 Tested up to: 6.6
-Stable tag: 2.7.4
+Stable tag: 2.7.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,14 @@ theme/templates/easy-login-woocommerce/globals/ For more info, check template he
 10. Shortcodes
 
 == Changelog ==
+= 2.7.6 =
+* Fix - error for non-woocommerce users
+
+= 2.7.5 =
+* New - added new redirect option - using URL. ?redirect_to=
+* New - Checkout block "login" link now opens the popup.
+* Fix - OTP Login add-on causing crash
+- Template update => xoo-el-login-section.php | xoo-el-register-section.php
 
 = 2.7.4 =
 * New - Added separate shortcode option for woocommerce checkout page

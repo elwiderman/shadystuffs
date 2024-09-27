@@ -3,7 +3,7 @@
  * The Pluggable table rules stuff 
  *
  * @package Fish and Ships
- * @version 1.5.8
+ * @version 1.5.9
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * Filter to get all selection methods
  *
  * @since 1.0.0
- * @version 1.5
+ * @version 1.5.9
  *
  * @param $methods (array) maybe incomming a pair method-id / method-name array
  *
@@ -36,9 +36,12 @@ function wc_fns_get_selection_methods_fn($methods = array()) {
 	$methods['volumetric']         = array('onlypro' => true,  'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Volumetric', 'shorted, select-by conditional', 'fish-and-ships'));
 	$methods['volumetric-set']     = array('onlypro' => true,  'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Volumetric set', 'shorted, select-by conditional', 'fish-and-ships'));
 
-	$methods['min-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Min dimension', 'shorted, select-by conditional', 'fish-and-ships'));
-	$methods['mid-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Mid dimension', 'shorted, select-by conditional', 'fish-and-ships'));
-	$methods['max-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Max dimension', 'shorted, select-by conditional', 'fish-and-ships'));
+	$methods['min-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Min dimension (L/W/H)', 'shorted, select-by conditional', 'fish-and-ships'));
+	$methods['mid-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Mid dimension (L/W/H)', 'shorted, select-by conditional', 'fish-and-ships'));
+	$methods['max-dimension']      = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Max dimension (L/W/H)', 'shorted, select-by conditional', 'fish-and-ships'));
+	$methods['length']             = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Length', 'shorted, select-by conditional', 'fish-and-ships'));
+	$methods['width']              = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Width', 'shorted, select-by conditional', 'fish-and-ships'));
+	$methods['height']             = array('onlypro' => false, 'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Height', 'shorted, select-by conditional', 'fish-and-ships'));
 	$methods['lwh-dimensions']     = array('onlypro' => true,  'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Length+Width+Height', 'shorted, select-by conditional', 'fish-and-ships'));
 	$methods['lgirth-dimensions']  = array('onlypro' => true,  'group' => 'Product data', 'scope' => $scope_all,   'label' => _x('Length+Girth (L+2W+2H)', 'shorted, select-by conditional', 'fish-and-ships'));
 
@@ -70,7 +73,7 @@ function wc_fns_get_selection_methods_fn($methods = array()) {
  * Filter to get the HTML selection fields for one method (centralised for all methods)
  *
  * @since 1.0.0
- * @version 1.2.11
+ * @version 1.5.9
  *
  * @param $html (HTML) maybe incomming html
  * @param $rule_nr (integer) the rule number
@@ -110,6 +113,9 @@ function wc_fns_get_html_details_method_fn($html, $rule_nr, $sel_nr, $method_id,
 		case 'min-dimension':
 		case 'mid-dimension':
 		case 'max-dimension':
+		case 'length':
+		case 'width':
+		case 'height':
 			$html .= $Fish_n_Ships->get_min_max_comp_html($rule_nr, $sel_nr, $method_id, get_option('woocommerce_dimension_unit'), $values, 'sel', 'selection', 'val_info', 'ge', 'less')
 					. $Fish_n_Ships->cant_get_group_by_method_html($rule_nr, $sel_nr, $method_id, $values);
 			break;
@@ -153,7 +159,7 @@ function wc_fns_get_html_details_method_fn($html, $rule_nr, $sel_nr, $method_id,
  * Filter to sanitize one selection criterion and his auxiliary fields prior to save in the database (centralised for all methods)
  *
  * @since 1.0.0
- * @version 1.5
+ * @version 1.5.9
  *
  * @param $rule_sel (array) 
  *
@@ -209,6 +215,9 @@ function wc_fns_sanitize_selection_fields_fn($rule_sel) {
 		case 'min-dimension':
 		case 'mid-dimension':
 		case 'max-dimension':
+		case 'length':
+		case 'width':
+		case 'height':
 			$allowed = array('min','max', 'min_comp', 'max_comp' );
 			break;
 
@@ -284,6 +293,9 @@ function wc_fns_sanitize_selection_fields_fn($rule_sel) {
 			case 'min-dimension':
 			case 'mid-dimension':
 			case 'max-dimension':
+			case 'length':
+			case 'width':
+			case 'height':
 				$rule_sel['values']['min'] = $Fish_n_Ships->sanitize_number($rule_sel['values']['min'], 'positive-decimal');
 				$rule_sel['values']['max'] = $Fish_n_Ships->sanitize_number($rule_sel['values']['max'], 'positive-decimal');
 				$rule_sel['values']['min_comp'] = $Fish_n_Ships->sanitize_allowed($rule_sel['values']['min_comp'],
@@ -351,7 +363,7 @@ function wc_fns_sanitize_selection_operators_fn($rule_sel) {
  * Filter to check matching elements for selection method
  *
  * @since 1.0.0
- * @version 1.4.13
+ * @version 1.5.9
  *
  * Be aware! Since 1.1.9, a 5th parameter was added
  *
@@ -386,6 +398,9 @@ function wc_fns_check_matching_selection_method_fn($rule_groups, $selector, $gro
 		case 'min-dimension':
 		case 'mid-dimension':
 		case 'max-dimension':
+		case 'length':
+		case 'width':
+		case 'height':
 		case 'quantity':
 			
 			// Only price-related min/max fields can have currency suffix (fixed on v1.2.3)
@@ -440,6 +455,9 @@ function wc_fns_check_matching_selection_method_fn($rule_groups, $selector, $gro
 			case 'min-dimension':
 			case 'mid-dimension':
 			case 'max-dimension':
+			case 'length':
+			case 'width':
+			case 'height':
 			case 'quantity':
 			
 				$value = $group->get_total($selector['method']);

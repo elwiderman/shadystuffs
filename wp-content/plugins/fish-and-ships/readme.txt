@@ -5,8 +5,8 @@ Tags: shipping table rate, shipping rate, conditional shipping, table rate shipp
 Requires at least: 4.7
 Tested up to: 6.6
 WC requires at least: 3.0
-WC tested up to: 9.1
-Stable tag: 1.5.8
+WC tested up to: 9.3
+Stable tag: 1.5.9
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -295,6 +295,10 @@ Fish and Ships has widely tested with older and latest; our philosophy is to cov
 15. Apply coupons automatically (Pro)
 
 == Changelog ==
+
+= 1.5.9 - 17/09/2024 =
+* Added Length, Width and Height selection methods (use it instead of Min/Mid/Max dimensions if you can't rotate the boxes)
+* Checked for WC 9.3
 
 = 1.5.8 - 09/08/2024 =
 * Added special action Add Order Note [Pro]

@@ -8,12 +8,28 @@ function handlePrintButtonClickedInMyAccoutPage() {
 				var action_url = this.getAttribute('href');
 				if ( 'Yes' === wf_pklist_params_public.show_document_preview || ( "logged_in" === wf_pklist_params_public.document_access_type && '' === wf_pklist_params_public.is_user_logged_in ) ) {
 					window.open(action_url, '_blank');
+				} else if ( window.innerWidth <= 768 ) { // check for the mobile device
+					do_print_document_in_myaccount_page_in_mobile_device( action_url );
 				} else {
 					do_print_document_in_myaccount_page(action_url);
 				}
 			});
 		});
 	});
+}
+
+function do_print_document_in_myaccount_page_in_mobile_device( url ) {
+	var newWindow = window.open(url, '_blank');
+	// Once the new window has loaded, trigger the print dialog
+	newWindow.onload = function() {
+		newWindow.focus();  // Focus the new window before printing
+		newWindow.print();
+
+		// Optionally close the window after printing (mobile browsers may block this)
+		setTimeout(function() {
+			newWindow.close();
+		}, 2000);  // Adjust the delay if necessary
+	};
 }
 
 function do_print_document_in_myaccount_page( url, is_bulk_print = false, reload_page = false ) {

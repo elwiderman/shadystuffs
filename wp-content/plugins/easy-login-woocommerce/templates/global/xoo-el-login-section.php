@@ -9,16 +9,14 @@
  * maintain compatibility. We try to do this as little as possible, but it does
  * happen.
  * @see     https://docs.xootix.com/easy-login-woocommerce/
- * @version 2.5
+ * @version 2.7.5
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$redirect 	= xoo_el_helper()->get_general_option( 'm-red-login' );
-$redirect 	= !empty( $redirect ) ? $redirect : sanitize_text_field( $_SERVER['REQUEST_URI'] );
-
+$redirect 	= $args['forms']['login']['redirect'];
 
 //Login Fields
 xoo_el_fields()->get_fields_html('login');

@@ -7,7 +7,7 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.5.3
+ * @version 1.5.9
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -202,7 +202,7 @@ class Fish_n_Ships_group {
 	 * calculate one total
 	 *
 	 * @since 1.0.0
-	 * @version 1.5.2
+	 * @version 1.5.9
 	 */
 
 	public function calculate($what) {
@@ -266,6 +266,27 @@ class Fish_n_Ships_group {
 
 					$dimensions = $Fish_n_Ships->get_dimensions_ordered($product);
 					$item_value = $dimensions[0];
+					$value      = $item_value;
+					break;
+
+				case 'length':
+
+					$dimensions = $Fish_n_Ships->get_dimensions_ordered($product);
+					$item_value = $dimensions['length'];
+					$value      = $item_value;
+					break;
+
+				case 'width':
+
+					$dimensions = $Fish_n_Ships->get_dimensions_ordered($product);
+					$item_value = $dimensions['width'];
+					$value      = $item_value;
+					break;
+
+				case 'height':
+
+					$dimensions = $Fish_n_Ships->get_dimensions_ordered($product);
+					$item_value = $dimensions['height'];
 					$value      = $item_value;
 					break;
 

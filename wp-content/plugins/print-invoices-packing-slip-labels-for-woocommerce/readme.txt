@@ -1,10 +1,10 @@
 === WooCommerce PDF Invoices, Packing Slips, Delivery Notes and Shipping Labels ===
 Contributors: WebToffee
-Version: 4.6.1
+Version: 4.6.2
 Tags: WooCommerce PDF invoices, WooCommerce invoice, packing slips, shipping label, print invoice
 Requires at least: 3.0.1
 Tested up to: 6.6
-Stable tag: 4.6.1
+Stable tag: 4.6.2
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -56,7 +56,7 @@ When you sell internationally, it is a standard requirement in many countries to
 
 Furthermore, it establishes an extra line of communication between you and the customer and adds a human touch.
 
-&#9989; Tested OK with WooCommerce 9.2.3
+&#9989; Tested OK with WooCommerce 9.3.3
 &#9989; Tested OK up to PHP 8.2
 
 
@@ -277,6 +277,12 @@ Yes. The plugin addresses the needs of a multilingual website and is compatible 
 17. Invoice general settings
 
 == Changelog ==
+
+= 4.6.2 2024-09-26 =
+* [Fix] - Compatibility issues with the WOOCS Currency Switcher.
+* [Fix] - JavaScript conflicts with the WebToffee Import/Export plugin.
+* [Fix] - Print preview issue on mobile devices.
+* [Compatibility] - Tested OK with WooCommerce v9.3.3
 
 = 4.6.1 2024-08-28 =
 * [Fix] - Resolved the issue where the automatic cleanup interval time could be set below 1440 minutes
@@ -997,11 +1003,8 @@ Yes. The plugin addresses the needs of a multilingual website and is compatible 
  
 == Upgrade Notice ==
 
-= 4.6.1 =
-* [Fix] - Resolved the issue where the automatic cleanup interval time could be set below 1440 minutes
-* [Tweak] - Directly open the print window without showing a preview in the browser when the preview option is disabled
-* [Tweak] - Added a notification message for the payment received stamp when the mPDF add-on is active
-* [Tweak] - Defaulted the RTL support option to enabled
-* [Tweak] - Included additional system information on the system configuration page
-* [Tweak] - Removed unnecessary filters from the filter page
-* [Compatibility] - Tested OK with WooCommerce v9.2.3
+= 4.6.2 =
+* [Fix] - Compatibility issues with the WOOCS Currency Switcher.
+* [Fix] - JavaScript conflicts with the WebToffee Import/Export plugin.
+* [Fix] - Print preview issue on mobile devices.
+* [Compatibility] - Tested OK with WooCommerce v9.3.3

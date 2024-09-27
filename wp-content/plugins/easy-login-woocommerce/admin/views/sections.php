@@ -35,6 +35,7 @@ $sections = array(
 		'title' => 'Redirects',
 		'id' 	=> 'gl_red',
 		'tab' 	=> 'general',
+		'desc' 	=> 'There are other ways to handle redirections, please check info tab.'
 	),
 
 	array(

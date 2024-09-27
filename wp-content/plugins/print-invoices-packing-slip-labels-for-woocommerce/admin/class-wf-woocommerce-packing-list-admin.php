@@ -1779,6 +1779,7 @@ class Wf_Woocommerce_Packing_List_Admin {
 		$symbols			= ( '4.1.0' > WC()->version ) ? self::wf_get_woocommerce_currency_symbols() : get_woocommerce_currency_symbols();
 		$currency_pos		= get_option('woocommerce_currency_pos') ? get_option('woocommerce_currency_pos') : 'left';
     	$wc_currency_symbol = isset( $symbols[ $user_currency ] ) ? $symbols[ $user_currency ] : '';
+		$wc_currency_symbol = apply_filters( 'woocommerce_currency_symbol', $wc_currency_symbol, $user_currency );
 		$decimal			= get_option('woocommerce_price_num_decimals') ? wc_get_price_decimals() : 0;
     	$decimal_sep		= get_option('woocommerce_price_decimal_sep') ? wc_get_price_decimal_separator() : '.';
 		$thousand_sep		= get_option('woocommerce_price_thousand_sep') ? wc_get_price_thousand_separator() : ',';
@@ -1805,7 +1806,6 @@ class Wf_Woocommerce_Packing_List_Admin {
 		$decimal_sep 		= ( "" === trim( $decimal_sep ) ) ? "." : $decimal_sep;
 		$thousand_sep		= ( "" === trim( $thousand_sep ) ) ? ',' : $thousand_sep;
 
-		$wc_currency_symbol = apply_filters( 'woocommerce_currency_symbol', $wc_currency_symbol, $user_currency );
 		$wc_currency_symbol = apply_filters( 'wt_pklist_alter_currency_symbol', $wc_currency_symbol, $symbols, $user_currency, $order, $price );
 
 		$currency_pos 		= apply_filters( 'wt_pklist_alter_currency_symbol_position', $currency_pos, $symbols, $wc_currency_symbol, $user_currency, $order, $price );

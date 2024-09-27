@@ -279,15 +279,10 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			$delivery_date_u = '';
 			$is_min          = $is_max = false;
 			$rule            = self::get_rule( $product );
-			$date_format     = apply_filters( 'wpced_date_format', Wpced_Backend()->get_setting( 'date_format', 'M j, Y' ) );
-
-			if ( empty( $date_format ) ) {
-				$date_format = 'M j, Y';
-			}
 
 			if ( ! empty( $rule['min'] ) ) {
 				$min_time        = self::get_date( $rule['min'], $rule['scheduled'] );
-				$delivery_date   .= wp_date( $date_format, $min_time );
+				$delivery_date   .= self::date_format( $min_time );
 				$delivery_date_u = $min_time;
 
 				if ( empty( $rule['max'] ) ) {
@@ -305,7 +300,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 					$is_max = true;
 				}
 
-				$delivery_date   .= wp_date( $date_format, $max_time );
+				$delivery_date   .= self::date_format( $max_time );
 				$delivery_date_u .= $max_time;
 			}
 
@@ -350,7 +345,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 				}
 			}
 
-			return apply_filters( 'wpced_get_product_date', $product_date );
+			return apply_filters( 'wpced_get_product_date', $product_date, $product, $type, $context );
 		}
 
 		function show_date_archive_position( $pos = 'none' ) {
@@ -424,8 +419,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			$items = WC()->cart->get_cart();
 
 			if ( is_array( $items ) && ( count( $items ) > 0 ) ) {
-				$date_format = apply_filters( 'wpced_date_format', Wpced_Backend()->get_setting( 'date_format', 'M j, Y' ) );
-				$overall     = [];
+				$overall = [];
 
 				foreach ( $items as $item ) {
 					$rule      = self::get_rule( $item['data'] );
@@ -447,7 +441,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 				if ( ! empty( $overall ) ) {
 					sort( $overall );
 
-					$delivery_date = wp_date( $date_format, end( $overall ) );
+					$delivery_date = self::date_format( end( $overall ) );
 					$delivery_text = Wpced_Backend()->get_setting( 'text_cart_overall', /* translators: date */ esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' ) );
 
 					if ( empty( $delivery_text ) ) {
@@ -475,6 +469,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			$current_time         = current_time( 'h:i a' );
 			$current_date         = current_time( 'm/d/Y' );
 			$extra_time_line      = Wpced_Backend()->get_setting( 'extra_time_line' );
+			$date_format          = apply_filters( 'wpced_date_format', Wpced_Backend()->get_setting( 'date_format', 'M j, Y' ) );
 			$current_date_skipped = false;
 
 			while ( self::check_skipped( strtotime( $current_date ) ) && ( $j <= 100 ) ) {
@@ -501,7 +496,27 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 				$i ++;
 			}
 
-			return apply_filters( 'wpced_get_date', end( $available ), $days, $scheduled );
+			$get_date = end( $available );
+
+			if ( $date_format === 'days' ) {
+				$get_date = absint( round( ( $get_date - current_time( 'U' ) ) / ( 24 * 60 * 60 ) ) );
+			}
+
+			return apply_filters( 'wpced_get_date', $get_date, $days, $scheduled );
+		}
+
+		function date_format( $time ) {
+			$date_format = apply_filters( 'wpced_date_format', Wpced_Backend()->get_setting( 'date_format', 'M j, Y' ) );
+
+			if ( empty( $date_format ) ) {
+				$date_format = 'M j, Y';
+			}
+
+			if ( $date_format === 'days' ) {
+				return absint( $time );
+			}
+
+			return wp_date( $date_format, $time );
 		}
 
 		function check_skipped( $time ) {

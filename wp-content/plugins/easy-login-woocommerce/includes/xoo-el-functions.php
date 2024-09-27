@@ -260,7 +260,6 @@ function xoo_el_get_form( $args = array() ){
 
 	$args = xoo_recursive_parse_args( $args, $defaults );
 
-
 	if( $args['forms']['single']['enable'] === 'yes' ){
 		$defaults['form_active'] = 'single';
 	}
@@ -301,6 +300,29 @@ function xoo_el_get_form( $args = array() ){
 		unset( $args['forms'][ 'resetpw' ] );
 	}
 
+
+
+	//Handling redirects
+	if( isset( $_GET['redirect_to'] ) && $_GET['redirect_to'] ){
+		$args['forms']['register']['redirect'] = $args['forms']['login']['redirect'] = esc_url( $_GET['redirect_to'] );
+	}
+	else{
+
+		if( !isset( $args['forms']['register']['redirect'] ) || !$args['forms']['register']['redirect'] ){
+			$regRedirect 							= xoo_el_helper()->get_general_option( 'm-red-register' );
+			$args['forms']['register']['redirect']	= !empty( $regRedirect ) ? $regRedirect : sanitize_text_field( $_SERVER['REQUEST_URI'] );
+		}
+
+
+		if( !isset( $args['forms']['login']['redirect'] ) || !$args['forms']['login']['redirect'] ){
+			$loginRedirect 						= xoo_el_helper()->get_general_option( 'm-red-login' );
+			$args['forms']['login']['redirect']	= !empty( $loginRedirect ) ? $loginRedirect : sanitize_text_field( $_SERVER['REQUEST_URI'] );
+		}
+		
+	}
+
+
+	$args = apply_filters( 'xoo_el_form_args', $args );
 
 	return xoo_el_helper()->get_template( 'xoo-el-form.php', array( 'args' => $args ), '', $args['return'] );
 }
@@ -593,6 +615,16 @@ function xoo_el_add_inline_form_redirects( $form, $args ){
 	}
 
 }
-add_action( 'xoo_el_form_end', 'xoo_el_add_inline_form_redirects', 10, 2 );
+//add_action( 'xoo_el_form_end', 'xoo_el_add_inline_form_redirects', 10, 2 );
+
+
+/* Country flag fix for OTP login previous version */
+function xoo_el_ml_old_cc_fix( $fields ){
+	if( version_compare( XOO_ML_VERSION , '2.5.2', '<' ) && isset( $fields['xoo-ml-reg-phone-cc'] ) ){
+		$fields['xoo-ml-reg-phone-cc']['use_select2'] = 'yes';
+	}
+	return $fields;
+}
+add_filter( 'xoo_ml_el_login_form_input_fields', 'xoo_el_ml_old_cc_fix' );
 
 ?>
