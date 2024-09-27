@@ -173,6 +173,19 @@
                             display: none;
                         }
                     }
+
+                    &.xoo-el-action-sc {
+                        font-size: 10px;
+                        @include respond-to-mob('medium') {
+                            font-size: 0;
+                        }
+                        &:before {
+                            content: $icon-user;
+                            font-family: $icomoon-font-family;
+                            font-size: 20px;
+                            line-height: 1;
+                        }
+                    }
                 }
             }
             .navbar-cart {

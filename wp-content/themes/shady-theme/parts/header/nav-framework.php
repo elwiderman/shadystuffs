@@ -23,23 +23,22 @@ $logo       = get_field('logo_img', 'option');
             </a>
         </div>
         <div class="header__nav--right">
-            <div class="navbar-wishlist">
-                <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>wishlist/" title="<?php _e('My Wishlist','shady'); ?>">
-                    <i class="icon-heart"></i>
-                    <span><?php _e('Wishlist','shady'); ?></span>
-                </a>
-            </div>
+            <?php if (is_user_logged_in()) : ?>
+                <div class="navbar-wishlist">
+                    <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>wishlist/" title="<?php _e('My Wishlist','shady'); ?>">
+                        <i class="icon-heart"></i>
+                        <span><?php _e('Wishlist','shady'); ?></span>
+                    </a>
+                </div>
+            <?php endif; ?>
             <div class="navbar-account">
-                <a href="<?php echo get_permalink(get_option('woocommerce_myaccount_page_id')); ?>" title="<?php _e('My Account','shady'); ?>">
-                    <i class="icon-user"></i>
-                    <span><?php _e('My Account','shady'); ?></span>
-                </a>
+                <?php
+                echo do_shortcode('[xoo_el_action type="login" display="link" text="Login/Signup" change_to="myaccount" redirect_to="?login=success"]');
+                // echo do_shortcode('[xoo_el_action type="login" display="link" text="Click here to login/continue with your socials." change_to_text="Logout or create a new account." redirect_to="?login=success"]');
+                ?>
             </div>
             
             <?php if (function_exists('WC') && (!is_cart() && !is_checkout())) : ?>
-            <!-- <div class="navbar-cart">
-                <?php //dynamic_sidebar('menu-cart');?>
-            </div> -->
             <?php nav_cart();?>
             <?php endif;?>
 

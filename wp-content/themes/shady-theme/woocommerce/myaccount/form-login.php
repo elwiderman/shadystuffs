@@ -10,9 +10,9 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
+ * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 7.0.1
+ * @version 9.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,7 +28,7 @@ do_action( 'woocommerce_before_customer_login_form' ); ?>
 	
 		<div class="col-12 col-md-5 col-xl-4">
 			<div class="social-login">
-				<?php echo do_shortcode('[TheChamp-Login title="Login with your Social Networks"]'); ?>
+				<?php echo do_shortcode('[TheChamp-Login title="Login with your Social Networks" redirect_to="?login=success"]');?>
 			</div>
 		</div>
 	
