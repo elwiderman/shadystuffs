@@ -142,6 +142,8 @@ $rules      = Wpced_Backend()->get_rules();
 								echo '<option value="' . esc_attr( $df ) . '" ' . selected( $date_format, $df, false ) . '>' . current_time( $df ) . '</option>';
 							}
 
+							echo '<option value="days" ' . selected( $date_format, 'days', false ) . '>' . esc_html__( 'Days count', 'wpc-estimated-delivery-date' ) . '</option>';
+
 							echo '</select>';
 							?>
                         </td>

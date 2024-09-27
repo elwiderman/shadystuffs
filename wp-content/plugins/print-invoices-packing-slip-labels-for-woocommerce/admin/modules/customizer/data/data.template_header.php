@@ -57,12 +57,11 @@ $print_preview=isset($the_options['woocommerce_wf_packinglist_preview']) ? $the_
 			<script>
 				
 				window.onload = function() {
-					
 					window.print();
 					setTimeout(function() {
 						document.documentElement.style.display = 'none';
 						window.close();
-					}, 20);
+					}, 2000);
 				};
 			</script>
 			<?php

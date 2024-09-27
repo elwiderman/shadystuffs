@@ -53,7 +53,7 @@ class Xoo_El_Frontend{
 
 		wp_enqueue_script( 'xoo-el-js', XOO_EL_URL.'/assets/js/xoo-el-js.js', array('jquery'), XOO_EL_VERSION, true ); // Main JS
 
-		wp_localize_script( 'xoo-el-js', 'xoo_el_localize', array(
+		$localizeData = array(
 			'adminurl'  		=> admin_url().'admin-ajax.php',
 			'redirectDelay' 	=> apply_filters( 'xoo_el_redirect_delay', 300 ),
 			'html' 				=> array(
@@ -69,8 +69,19 @@ class Xoo_El_Frontend{
 			'aoDelay' 			=> $this->glSettings['ao-delay'],
 			'loginClass' 		=> xoo_el_helper()->get_advanced_option('m-login-class'),
 			'registerClass' 	=> xoo_el_helper()->get_advanced_option('m-register-class'),
-			'errorLog' 			=> xoo_el_helper()->get_advanced_option('m-error-log')
-		) );
+			'errorLog' 			=> xoo_el_helper()->get_advanced_option('m-error-log'),
+		);
+
+		if( class_exists('woocommerce') ){
+			$localizeData['checkout'] =  array(
+				'loginEnabled' 		=> $this->glSettings['m-en-chkout'],
+				'loginRedirect' 	=> esc_url( $_SERVER['REQUEST_URI'] )
+			);
+		}
+
+		$localizeData = apply_filters( 'xoo_el_localize_data', $localizeData );
+
+		wp_localize_script( 'xoo-el-js', 'xoo_el_localize', $localizeData );
 
 	}
 

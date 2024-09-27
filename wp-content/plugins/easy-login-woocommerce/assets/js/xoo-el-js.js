@@ -253,6 +253,14 @@ jQuery(document).ready(function($){
 			this.$popup.on( 'click', '.xoo-el-action-btn', this.setScrollBarOnSubmit.bind(this) );
 			$(window).on('hashchange load', this.openViaHash.bind(this) );
 			this.triggerPopupOnClick(); //Open popup using link
+			if( xoo_el_localize.checkout && xoo_el_localize.checkout.loginEnabled === 'yes' ){
+				$('body').on( 'click', '.wc-block-checkout__login-prompt, .wc-block-must-login-prompt', this.checkoutPageLinkClick.bind(this) );
+			}
+		}
+
+		checkoutPageLinkClick(e){
+			e.preventDefault();
+			$(e.currentTarget).attr('data-redirect', xoo_el_localize.checkout.loginRedirect).addClass('xoo-el-login-tgr').trigger('click');
 		}
 
 		triggerPopupOnClick(){

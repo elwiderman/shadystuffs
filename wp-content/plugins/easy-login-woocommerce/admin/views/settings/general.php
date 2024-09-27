@@ -130,11 +130,11 @@ if( class_exists( 'woocommerce' ) ){
 
 	$settings[] = array(
 		'callback' 		=> 'checkbox',
-		'title' 		=> 'Checkout page form shortcode',
+		'title' 		=> 'Replace Checkout page login',
 		'id' 			=> 'm-en-chkout',
 		'section_id' 	=> 'gl_wc',
 		'default' 		=> 'yes',
-		'desc' 			=> 'If checked & login on checkout is enabled, this will replace login form.'
+		'desc' 			=> 'This will replace checkout page login form, make sure to enable "Login during checkout" from woocommerce settings'
 	);
 
 	$settings[] = array(
@@ -142,7 +142,7 @@ if( class_exists( 'woocommerce' ) ){
 		'title' 		=> 'Checkout page form shortcode',
 		'id' 			=> 'm-chkout-sc',
 		'section_id' 	=> 'gl_wc',
-		'default' 		=> '[xoo_el_inline_form active="login"]',
+		'default' 		=> '[xoo_el_inline_form active="login" login_redirect="same" register_redirect="same"]',
 		'desc' 			=> 'Checkout page form shortcode. See info tab for shortcode details',
 		'args' 			=> array(
 			'rows' => 2,
