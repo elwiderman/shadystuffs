@@ -24,6 +24,9 @@ export default class AppCommon {
         if ($('#mobiSidebar').length) {
             this.sidebarToggle();
         }
+
+        // sale popup
+        this.saleNoticePopupTrigger();
     }
 
     // page loading anim
@@ -190,5 +193,16 @@ export default class AppCommon {
                 $('body').addClass('no-overflow');
             }
         });
+    }
+
+    // trigger the sale notice popup in all pages
+    saleNoticePopupTrigger() {
+        if (('#salePop').length) {
+            let modal = new bootstrap.Modal($('#salePop')[0]);
+
+            setTimeout(() => {
+                modal.show();
+            }, 400);
+        }
     }
 }

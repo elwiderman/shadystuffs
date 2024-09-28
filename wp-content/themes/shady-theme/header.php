@@ -38,6 +38,8 @@ endif;
 <?php
 // add required template part
 get_template_part('parts/header/nav', 'framework');
+
+get_template_part('parts/header/sale-popup');
 ?>
 
 <div class="main-content-wrap">

@@ -200,3 +200,54 @@
     transform: translate(-50%, -50%);
     margin: 0 auto !important;
 }
+
+
+#salePop {
+    .modal-dialog {
+        @include respond-to('s-desk') {
+            max-width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @include respond-to('xxx-large') {
+            max-width: 550px;
+        }
+        .modal-content {
+            position: relative;
+            background: transparent;
+            border: none;
+            @include respond-to('s-desk') {
+                max-width: 400px;
+                width: auto;
+            }
+            @include respond-to('xxx-large') {
+                max-width: 550px;
+            }
+            .close {
+                position: absolute;
+                top: -20px;
+                right: -30px;
+                z-index: 1;
+                background: transparent;
+                border: none;
+                color: $secondary-color;
+                @include respond-to-mob('medium') {
+                    top: -40px;
+                    right: 0;
+                    font-size: 30px;
+                }
+            }
+            .modal-body {
+                padding: 0;
+                .sale-pop {
+                    text-align: center;
+                    img {
+                        max-width: 80vw;
+                        max-height: 70dvh;
+                    }
+                }
+            }
+        }
+    }
+}
