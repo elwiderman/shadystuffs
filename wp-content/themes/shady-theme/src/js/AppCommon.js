@@ -26,7 +26,9 @@ export default class AppCommon {
         }
 
         // sale popup
-        this.saleNoticePopupTrigger();
+        if ($('#salePop').length) {
+            this.saleNoticePopupTrigger();
+        }
     }
 
     // page loading anim
@@ -196,13 +198,17 @@ export default class AppCommon {
     }
 
     // trigger the sale notice popup in all pages
-    saleNoticePopupTrigger() {
-        if (('#salePop').length) {
-            let modal = new bootstrap.Modal($('#salePop')[0]);
+    saleNoticePopupTrigger() {        
+        let modal = new bootstrap.Modal($('#salePop')[0]);
 
-            setTimeout(() => {
-                modal.show();
-            }, 400);
-        }
+        setTimeout(() => {
+            modal.show();
+        }, 400);
+
+
+        $('#salePop').on('click', e => {
+            e.preventDefault();
+            modal.hide();
+        });
     }
 }

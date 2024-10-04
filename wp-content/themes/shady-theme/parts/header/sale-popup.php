@@ -1,12 +1,8 @@
 <?php
 // site wide sale popup - shows on all pages except prod singe cart and checkout
 
-// echo '<pre>';
-// var_dump(get_field('show_sitewide_popup_bool', 'option'));
-// echo '</pre>';
-
 if (get_field('show_sitewide_popup_bool', 'option')) :
-    if (!is_product() && !is_cart() && !is_checkout()) :
+    if (!is_product() && !is_cart() && !is_checkout() && !is_account_page()) :
         $popup      = get_field('popup_img', 'option');
         ?>
         <div class="modal fade" id="salePop" tabindex="-1" aria-labelledby="salePopLabel" aria-hidden="true">
