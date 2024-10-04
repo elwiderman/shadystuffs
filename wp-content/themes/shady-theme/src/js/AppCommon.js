@@ -24,6 +24,11 @@ export default class AppCommon {
         if ($('#mobiSidebar').length) {
             this.sidebarToggle();
         }
+
+        // sale popup
+        if ($('#salePop').length) {
+            this.saleNoticePopupTrigger();
+        }
     }
 
     // page loading anim
@@ -189,6 +194,21 @@ export default class AppCommon {
                 $(target).addClass('open');
                 $('body').addClass('no-overflow');
             }
+        });
+    }
+
+    // trigger the sale notice popup in all pages
+    saleNoticePopupTrigger() {        
+        let modal = new bootstrap.Modal($('#salePop')[0]);
+
+        setTimeout(() => {
+            modal.show();
+        }, 400);
+
+
+        $('#salePop').on('click', e => {
+            e.preventDefault();
+            modal.hide();
         });
     }
 }
