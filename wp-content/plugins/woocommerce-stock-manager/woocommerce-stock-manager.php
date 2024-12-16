@@ -3,16 +3,16 @@
  * Plugin Name: Stock Manager for WooCommerce
  * Plugin URI: https://www.storeapps.org/woocommerce-plugins/
  * Description: Manage product's stock and price in your WooCommerce store. Export/Import inventory, track history, sort and more...
- * Version: 3.1.0
+ * Version: 3.2.0
  * Author: StoreApps
  * Author URI: https://www.storeapps.org/
  * Developer: StoreApps
  * Developer URI: https://www.storeapps.org/
  * Requires at least: 5.0.0
- * Tested up to: 6.6
+ * Tested up to: 6.7.1
  * Requires PHP: 5.6+
  * WC requires at least: 3.5.0
- * WC tested up to: 9.1.2
+ * WC tested up to: 9.4.2
  * Requires Plugins: woocommerce
  * Text Domain: woocommerce-stock-manager
  * Domain Path: /languages/
@@ -378,7 +378,7 @@ function get_woocommerce_stock_manager_plugin_data() {
 	if ( ! function_exists( 'get_plugin_data' ) ) {
 		require_once ABSPATH . 'wp-admin/includes/plugin.php';
 	}
-	return get_plugin_data( WSM_PLUGIN_FILE );
+	return get_plugin_data( WSM_PLUGIN_FILE, true, false );
 }
 
 /**
@@ -420,10 +420,10 @@ function wsm_may_be_show_sa_in_app_offer() {
 		$args     = array(
 			'file'           => STOCKDIR . 'sa-includes/',
 			'prefix'         => 'wsm',              // prefix/slug of your plugin.
-			'option_name'    => 'sa_wsm_offer_bfcm_2022',
-			'campaign'       => 'sa_bfcm_2022',
-			'start'          => '2022-11-22 06:31:00',
-			'end'            => '2022-12-01 07:30:00',
+			'option_name'    => 'sa_wsm_offer_bfcm_2024',
+			'campaign'       => 'sa_bfcm_2024',
+			'start'          => '2024-11-26 07:00:00',
+			'end'            => '2024-12-06 06:30:00',
 			'is_plugin_page' => $is_wsm_admin ? true : false,   // page where you want to show offer, do not send this if no plugin page is there and want to show offer on Products page.
 		);
 		$sa_offer = SA_WSM_In_App_Offer::get_instance( $args );

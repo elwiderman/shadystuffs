@@ -4,9 +4,9 @@ if ( ! defined( 'WPINC' ) ) {
 }
 // step 1 field values
 $sample_logo    = WF_PKLIST_PLUGIN_URL . 'admin/images/uploader_sample_img.png';
-$order_statuses = wc_get_order_statuses();
+$wc_email_classes = Wt_Pklist_Common::wt_pdf_get_wc_email_classes( true ); // Get default wc email classes.
 $invoice_module_id = Wf_Woocommerce_Packing_List::get_module_id('invoice');
-$company_name           = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_packinglist_companyname');
+$company_name = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_packinglist_companyname');
 $street         = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_packinglist_sender_address_line1');
 $street_line_2  = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_packinglist_sender_address_line2');
 $city           = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_packinglist_sender_city');
@@ -28,7 +28,7 @@ if( strstr( $country_arr, ':' ))
 }
 
 // step 2 field values
-$attach_invoice = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_add_invoice_in_customer_mail',$invoice_module_id);
+$attach_invoice = Wf_Woocommerce_Packing_List::get_option('wt_pdf_invoice_attachment_wc_email_classes',$invoice_module_id);
 $invoice_no_type = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_invoice_as_ordernumber',$invoice_module_id);
 $invoice_no_format = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_invoice_number_format',$invoice_module_id);
 $prefix = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_invoice_number_prefix',$invoice_module_id);
@@ -37,6 +37,25 @@ $invoice_start_number = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_
 $invoice_no_length = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_invoice_padding_number',$invoice_module_id);
 $date_frmt_tooltip=__('Click to append with existing data','print-invoices-packing-slip-labels-for-woocommerce');
 $template_type = "invoice";
+$query = new WC_Order_Query( array(
+    'limit' => 1,
+    'orderby' => 'date',
+    'order' => 'DESC',
+    'parent'=>0,
+) );
+
+$orders = $query->get_orders();
+$order_number = "123";
+if(count($orders)>0)
+{
+    $order=$orders[0];
+    $order_number=$order->get_order_number();
+}
+
+$current_invoice_number =(int) Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_Current_Invoice_number',$invoice_module_id);
+$current_invoice_number_in_db = $current_invoice_number=($current_invoice_number<0 ? 0 : $current_invoice_number);
+$inv_num=++$current_invoice_number;
+$use_wc_order_number = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_invoice_as_ordernumber',$invoice_module_id);
 ?>
 <style>
 .wt_wrap{background-color: #F1F8FE;}
@@ -47,67 +66,15 @@ $template_type = "invoice";
 .wt_wrap_wizard_form_steps{float: left; width: 100%;}
 .wt_wrap_wizard_form_steps_progress{float: left;width: 10%;padding: 2em;}
 .wt_wrap_wizard_form_steps_fields{float: left;width: 75%;padding: 2em;}
-ul.progress-bar {
-  height: 150px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-}
-ul.progress-bar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 5px;
-  background: transparent;
-  width: 5px;
-  height: 100vh;
-}
-ul.progress-bar li {
-    background: #f1f8fe;
-    border-radius: 100px;
-    width: 15px;
-    height: 15px;
-    z-index: 1;
-    border: 1px solid #F1F8FE;
-    position: relative;
-}
+ul.progress-bar { height: 150px; list-style: none; margin: 0; padding: 0; position: relative; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden;}
+ul.progress-bar::after { content: ""; position: absolute; top: 0; left: 5px; background: transparent; width: 5px; height: 100vh; }
+ul.progress-bar li { background: #f1f8fe; border-radius: 100px; width: 15px; height: 15px; z-index: 1; border: 1px solid #F1F8FE; position: relative;}
 ul.progress-bar li.step_active{background: #056BE7;}
-ul.progress-bar li span{
-    position: absolute;
-    left: 20px;
-    width: 5em;
-}
-/* ul.progress-bar li.stop ~ li {
-  background: #777;
-}
-ul.progress-bar li.stop ~ li::after {
-  height: 0;
-} */
-ul.progress-bar li::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    top: 15px;
-    left: 6px;
-    background: #F1F8FE;
-    width: 3px;
-    height: 50px;
-}
-ul.progress-bar li:last-child::after {
-  display: none;
-}
-
-ul.progress-bar li.step_active::after{
-    background: #056be7;
-}
-ul.progress-bar li.stop_active::after{
-    background: #F1F8FE;
-}
+ul.progress-bar li span{ position: absolute; left: 20px; width: 5em;}
+ul.progress-bar li::after { content: ""; position: absolute; bottom: 0; top: 15px; left: 6px; background: #F1F8FE; width: 3px; height: 50px; }
+ul.progress-bar li:last-child::after {display: none;}
+ul.progress-bar li.step_active::after{ background: #056be7; }
+ul.progress-bar li.stop_active::after{background: #F1F8FE;}
 .wt_form_wizard_field_col,.wt_form_wizard_field_row{width: 100%;float: left;}
 .wt_form_wizard_field_col{margin: 0 1.5em 0 0;}
 .wt_form_wizard_field_col label{width: 100%;float: left;padding: 5px 0;}
@@ -120,7 +87,7 @@ ul.progress-bar li.stop_active::after{
 .wt_form_wizard_field_col_4{width: 22%;}
 .wt_form_wizard_field_col_5{width: 15%;}
 .wt_form_wizard_field_col_3_4{width: 70%;}
-.woocommerce_wf_add_invoice_in_customer_mail_label{float: initial !important;}
+.wt_pdf_invoice_attachment_wc_email_classes_label{float: initial !important; cursor: pointer;}
 .wt_wrap_wizard_form_steps h3{margin: 0 0 1em 0;}
 .wt_form_wizard_help_text{font-style: italic;color: #6E7681;}
 .wt_form_wizard_footer{float: left;width: 100%;}
@@ -233,12 +200,12 @@ ul.progress-bar li.stop_active::after{
                         <div class="wt_form_wizard_field_row">
                             <div class="wt_form_wizard_field_col_2 wt_form_wizard_field_col">
                                 <?php 
-                                    foreach($order_statuses as $or_st => $or_st_label){ 
+                                    foreach($wc_email_classes as $or_st => $or_st_label){ 
                                         $checked = in_array($or_st, $attach_invoice) ? 'checked' : '';
                                 ?>
                                     <div class="wt_pklist_checkbox_div">
-                                        <input type="checkbox" name="woocommerce_wf_add_invoice_in_customer_mail[]" value="<?php esc_attr_e($or_st); ?>" id="<?php echo esc_attr('woocommerce_wf_add_invoice_in_customer_mail_label_'.$or_st); ?>" <?php echo $checked; ?>>
-                                        <span class="woocommerce_wf_add_invoice_in_customer_mail_label" for="<?php echo esc_attr('woocommerce_wf_add_invoice_in_customer_mail_label_'.$or_st); ?>"> <?php esc_html_e($or_st_label); ?></span>
+                                        <input type="checkbox" name="wt_pdf_invoice_attachment_wc_email_classes[]" value="<?php esc_attr_e($or_st); ?>" id="<?php echo esc_attr('wt_pdf_invoice_attachment_wc_email_classes_label_'.$or_st); ?>" <?php echo esc_attr($checked); ?>>
+                                        <label class="wt_pdf_invoice_attachment_wc_email_classes_label" for="<?php echo esc_attr('wt_pdf_invoice_attachment_wc_email_classes_label_'.$or_st); ?>"> <?php esc_html_e($or_st_label); ?></label>
                                     </div>
                                 <?php } ?>
                             </div>
@@ -296,27 +263,6 @@ ul.progress-bar li.stop_active::after{
                         </div>
                         <div class="wt_form_wizard_field_row">
                             <div class="wt_form_wizard_field_col_1 wt_form_wizard_field_col">
-                                <?php 
-                                    $query = new WC_Order_Query( array(
-                                        'limit' => 1,
-                                        'orderby' => 'date',
-                                        'order' => 'DESC',
-                                        'parent'=>0,
-                                    ) );
-                                    
-                                    $orders = $query->get_orders();
-                                    $order_number = "123";
-                                    if(count($orders)>0)
-                                    {
-                                        $order=$orders[0];
-                                        $order_number=$order->get_order_number();
-                                    }
-
-                                    $current_invoice_number =(int) Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_Current_Invoice_number',$invoice_module_id);
-                                    $current_invoice_number_in_db = $current_invoice_number=($current_invoice_number<0 ? 0 : $current_invoice_number);
-                                    $inv_num=++$current_invoice_number;
-                                    $use_wc_order_number = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_invoice_as_ordernumber',$invoice_module_id);
-                                ?>
                                 <input type="hidden" value="<?php echo esc_attr($order_number); ?>" id="sample_invoice_number_pdf_fw">
                                 <input type="hidden" id="sample_current_invoice_number_pdf_fw" value="<?php echo esc_attr($current_invoice_number); ?>">
                                 <div id="invoice_number_prev_div" style="width: auto;border: 1px solid #dadadc;padding: 5px 12px;border-radius: 5px;display: inline-block;background: #f0f0f1;margin-top:25px;">

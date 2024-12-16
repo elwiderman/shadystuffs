@@ -36,7 +36,7 @@ class Wt_Pklist_Common
     private $version;
     private static $instance = null;
     public static $modules = array(
-        'wt_wc_product'
+        'wt-wc-product'
     );
     private static $hpos_enabled = null;
     private static $default_meta_values = array();
@@ -61,7 +61,7 @@ class Wt_Pklist_Common
     public function load_common_modules(){
         if(!empty(self::$modules)){
             foreach(self::$modules as $c_module){
-                $module_file    = plugin_dir_path( __FILE__ )."modules/".$c_module."/".$c_module.".php";
+                $module_file    = plugin_dir_path( __FILE__ )."modules/".$c_module."/class-".$c_module.".php";
                 if(file_exists($module_file)){
                     require_once $module_file;
                 }
@@ -594,5 +594,151 @@ class Wt_Pklist_Common
 		$accepted_args = isset( $filter[3] ) ? $filter[3] : 1;
 		return compact( 'hook_name', 'callback', 'priority', 'accepted_args' );
 	}
+
+    /**
+     * Get all the settings page slugs of pdf invoice plugin and its add-ons
+     *
+     * @return array
+     */
+    public static function wt_pdf_get_all_settings_page_slugs() {
+        $pdf_settings_pages = array(
+            'wf_woocommerce_packing_list',
+            'wf_woocommerce_packing_list_invoice',
+            'wf_woocommerce_packing_list_packinglist',
+            'wf_woocommerce_packing_list_deliverynote',
+            'wf_woocommerce_packing_list_shippinglabel',
+            'wf_woocommerce_packing_list_dispatchlabel',
+            'wf_woocommerce_packing_list_picklist',
+            'wf_woocommerce_packing_list_proformainvoice',
+            'wf_woocommerce_packing_list_addresslabel',
+        );
+        return apply_filters( 'wt_pdf_all_settings_page_slugs', $pdf_settings_pages );
+    }
+    
+    /**
+	 * To get all the email classes from WooCommerce
+     * @since 4.7.0
+	 * 
+	 * @return array
+	 */
+	public static function wt_pdf_get_wc_email_classes( $default_wc_emails_only = false ) {
+		if ( empty( $_GET['page'] ) || 
+            !in_array( $_GET['page'], self::wt_pdf_get_all_settings_page_slugs() ) ) {
+			return array();
+		}
+
+		// Get all email classes from WooCommerce
+		if ( function_exists( 'WC' ) ) {
+			$mailer = WC()->mailer();
+		} else {
+			global $woocommerce;
+
+			if ( empty( $woocommerce ) ) {
+				return apply_filters( 'wt_pklist_wc_email_classes', array() );
+			}
+
+			$mailer = $woocommerce->mailer();
+		}
+		$wc_emails = $mailer->get_emails();
+
+		// Emails that are not related to orders
+		$non_order_emails = array(
+			'customer_reset_password',
+			'customer_new_account'
+		);
+
+		$emails = array();
+		foreach ($wc_emails as $class => $email) {
+			if ( !is_object( $email ) ) {
+				continue;
+			}
+			if ( !in_array( $email->id, $non_order_emails ) ) {
+				switch ( $email->id ) {
+					case 'new_order':
+						$emails[$email->id] = sprintf('%s (%s)', $email->title, __( 'Admin email', 'print-invoices-packing-slip-labels-for-woocommerce' ) );
+						break;
+					case 'customer_invoice':
+						$emails[$email->id] = sprintf('%s (%s)', $email->title, __( 'Manual email', 'print-invoices-packing-slip-labels-for-woocommerce' ) );
+						break;
+					default:
+						$emails[$email->id] = $email->title;
+						break;
+				}
+			}
+		}
+
+        if ( !empty( $emails ) ) {
+            // Renewal order email classes.
+            $renewal_order_emails = array(
+                'new_renewal_order' => __( 'Admin email (Renewal order)', 'print-invoices-packing-slip-labels-for-woocommerce' ),
+                'customer_renewal_invoice' => __( 'Manual email (Renewal order)', 'print-invoices-packing-slip-labels-for-woocommerce' ),
+                'customer_on_hold_renewal_order' => __( 'Order on-hold (Renewal order)', 'print-invoices-packing-slip-labels-for-woocommerce' ),
+                'customer_processing_renewal_order' => __( 'Order processing (Renewal order)', 'print-invoices-packing-slip-labels-for-woocommerce' ),
+                'customer_completed_renewal_order' => __( 'Order completed (Renewal order)', 'print-invoices-packing-slip-labels-for-woocommerce' ),
+            );
+
+            $emails = array_merge( $emails, $renewal_order_emails );
+            $emails = array_unique( $emails );
+
+            if ( $default_wc_emails_only ) {
+                $default_wc_emails = self::default_wc_email_classes();
+                $emails = array_intersect_key( $emails, array_flip( $default_wc_emails ) );
+                return $emails;
+            }
+        }
+        
+		return apply_filters( 'wt_pklist_wc_email_classes', $emails );
+	}
+
+    /**
+     *  Get the order statuses and correspoding WC email classes mapping array
+     *  @since 4.7.0
+     *  @return array
+     */
+    public static function wc_order_status_email_class_mapping () {
+        
+        $status_with_classes = array(
+            'wc-cancelled' => 'cancelled_order',
+            'wc-failed' => 'failed_order',
+            'wc-on-hold' => 'customer_on_hold_order',
+            'wc-processing' => 'customer_processing_order',
+            'wc-completed' => 'customer_completed_order',
+            'wc-refunded' => 'customer_refunded_order',
+            'customer_note' => 'customer_note',
+            'customer_invoice' => 'customer_invoice',
+        );
+        return apply_filters( 'wt_pdf_wc_order_status_email_class_mapping', $status_with_classes );
+    }
+    
+    public static function default_wc_email_classes () {
+        
+        return array(
+            'cancelled_order',
+            'failed_order',
+            'customer_on_hold_order',
+            'customer_processing_order',
+            'customer_completed_order',
+            'customer_refunded_order',
+        );
+    }
+
+
+    /**
+     * To Check if the current date is on or between the start and end date of black friday and cyber monday banner for 2024.
+     * @since 4.7.0
+     */
+    public static function is_bfcm_season() {
+        $start_date = new DateTime( '25-NOV-2024, 12:00 AM', new DateTimeZone( 'Asia/Kolkata' ) ); // Start date.
+        $current_date = new DateTime( 'now', new DateTimeZone( 'Asia/Kolkata' ) ); // Current date.
+        $end_date = new DateTime( '02-DEC-2024, 11:59 PM', new DateTimeZone( 'Asia/Kolkata' ) ); // End date.
+
+        /**
+         * check if the date is on or between the start and end date of black friday and cyber monday banner for 2024.
+         */
+        if ( $current_date < $start_date  || $current_date >= $end_date) {
+            return false;
+        }
+        return true;
+    }
 }
 }

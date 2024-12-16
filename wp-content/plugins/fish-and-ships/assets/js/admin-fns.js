@@ -2,7 +2,7 @@
  * Javascript for the shipping method functionality.
  *
  * @package Fish and Ships
- * @version 1.5.4
+ * @version 1.6.2
  */
 
 jQuery(document).ready(function($) {
@@ -470,9 +470,10 @@ jQuery(document).ready(function($) {
 
 		// Now, we will copy the non-imported fields
 		var ignore = ['select', 'undefined', 'fns-serial', 'fns-register'];
-
-		$('input, select, button', form ).each( function ( index, el) {
-			
+	
+		// Prevent an embeded form inside the main form (WC Shipping & Tax plugin) sice 1.6.2
+		$('input, select, button', form ).not('#mainform form input, #mainform form select, #mainform form button').each( function ( index, el)
+		{	
 			name = $(el).attr('name');
 
 			if ( typeof (name) != 'undefined' && $.inArray( name, ignore ) == -1 && name.substr(0, 14) != 'shipping_rules') {
@@ -517,6 +518,32 @@ jQuery(document).ready(function($) {
 	/*******************************************************
 	    2. Global shipping rules table
 	 *******************************************************/
+
+    // Remove unused legacies
+	const selectedLegacy = [];
+	$('#shipping-rules-table-fns select').each(function ()
+	{
+		// Collect all selected legacy values
+		$(this)
+			.find('option:selected[data-legacy]')
+			.each(function () {
+				const legacyValue = $(this).data('legacy');
+				if (!selectedLegacy.includes(legacyValue)) {
+					selectedLegacy.push(legacyValue);
+				}
+			});
+    });
+    $('#shipping-rules-table-fns option[data-legacy]').each(function ()
+	{
+		// Remove unused
+		const $option = $(this);
+		const legacyValue = $option.data('legacy');
+
+		if (!selectedLegacy.includes(legacyValue)) {
+			$option.remove();
+		}
+    });
+
 
 	// Save radios
 	$("#shipping-rules-table-fns input:radio").each(function (index, element) {
@@ -849,6 +876,8 @@ jQuery(document).ready(function($) {
 		
 		// restart tips
 		$( document.body ).trigger( 'init_tooltips' );
+
+		updateAjaxifiedInfo();
 	}
 	
 	// Tune [PRO] text in selectors
@@ -1046,6 +1075,135 @@ jQuery(document).ready(function($) {
 		}
 		//return false;
 	});
+
+
+
+	/* AJAX info if needed */
+	let timeoutAjaxInfoId;
+
+	function updateAjaxifiedInfo()
+	{
+		// We will collect all ajaxified info selectors, to update it in only one request
+		const elements = [];
+		$('.selection_wrapper').each(function(idx, sel_wrapper)
+		{
+			if( $('.wc-fns-ajax-info', sel_wrapper).length==0 )
+				return; // No ajax info to update here
+			
+			const element = $(sel_wrapper).find('input, select, textarea').serializeArray();
+			elements.push(element);
+		});
+				
+	    const simplifiedInfo = elements.map(el => {
+			var rule_number  = 0;
+			var el_number    = 0;
+			var method_id    = '';
+			var type         = '';
+
+			el = el.map(field => {
+
+				// Here we seek for the selector method_id
+				var regex = /shipping_rules\[(\d+)\]\[(\w+)\]\[(\d+)\]/;
+				var matches = field.name.match(regex);
+
+				if (matches) {
+
+					const name    = matches[2];
+
+					if( name == 'sel' )
+					{
+						type         = 'selector';
+						rule_number  = matches[1];
+						el_number    = matches[3];
+						method_id    = field.value;
+						return false;
+					}
+					
+					return {
+						name:   name,
+						value:  field.value
+					};
+				}
+
+				// Here we seek for the fields names + values
+				var regex = /shipping_rules\[(\d+)\]\[(\w+)\]\[([\w-]+)\]\[([\w-]+)\]\[(\d+)\]$/;
+				var matches = field.name.match(regex);
+								
+				if (matches) {
+
+					const name    = matches[4];
+
+					return {
+						name:   name,
+						value:  field.value
+					};
+				}
+
+				return false;
+			});
+
+			return {
+				rule_number :  rule_number,
+				el_number   :  el_number,
+				method_id   :  method_id,
+				type        :  type,
+				fields      :  el.filter(field => field !== false)
+			};
+		});
+		
+		// Send it via AJAX
+		$.ajax({
+			url: ajaxurl,
+			method: 'POST',
+			data: { 
+				action: 'wc_fns_messages', 
+				data: JSON.stringify( simplifiedInfo ) 
+			},
+			success: function(data) {
+
+				var JSONreply = typeof data === "string" ? JSON.parse(data) : data;
+
+				// Loop into replies
+				JSONreply.forEach(function(item) {
+					
+					if( item.type == 'selector' )
+					{
+						const cont  = jQuery('.selection-rules-column').eq(item.rule_number);
+						const el    = jQuery('.selection_wrapper', cont).eq(item.el_number);
+						
+						if( jQuery('.wc-fns-ajax-info', el).html() != item.message )
+						{
+							jQuery('.wc-fns-ajax-info', el).html('<span class="wc-fns-spinner"></span>');
+							setTimeout( function() {
+								jQuery('.wc-fns-ajax-info', el).html( item.message );
+							}, 400);
+						}
+					}
+				});
+			},
+			error: function(xhr, status, error) {
+				console.log("Error in AJAX:", error);
+			}
+		});
+	}
+
+	// Watch the ajaxified info related fields only
+	$('#shipping-rules-table-fns > tbody').on( 'input', '.wc-fns-ajax-info-field', function(event)
+	{
+		cont = $(event.target).closest('.selection_wrapper');
+		
+		if( $('.wc-fns-ajax-info', cont).length==0 )
+			return; // No ajax info to update here
+		
+		// Cancel any previous timeout
+		clearTimeout(timeoutAjaxInfoId);
+
+		// Define a new timeout
+		timeoutAjaxInfoId = setTimeout(() => {
+			updateAjaxifiedInfo();
+		}, 300);
+	});
+
 
 	// Show or hide the general volumetric weight factor field if some selector use it
 	function check_volumetric() {
@@ -1704,8 +1862,9 @@ jQuery(document).ready(function($) {
 			fnslogspag:         page,
 			fnslogsperpag:      $("select[name='fnslogsperpag']").val(),
 
-			_wpnonce :          $("#_wpnonce").val(),
-			_wp_http_referer :  $("input[name='_wp_http_referer']").val(),
+			// Prevent an embeded form inside the main form (WC Shipping & Tax plugin) sice 1.6.2
+			_wpnonce :          $('input[name="_wpnonce"]').not('form form input').val(),
+			_wp_http_referer :  $("input[name='_wp_http_referer']").not('form form input').val(),
 		};
 
 				
@@ -2576,7 +2735,7 @@ jQuery(document).ready(function($) {
 		$('#mainform')
 			.append( $('input:checked', cont).clone() )
 			.append( '<input type="hidden" name="keep_current" value="1" />' )
-			.find('.woocommerce-save-button').trigger('click');
+			.find('.woocommerce-save-button').prop('disabled', false).trigger('click');
 			
 		return false;
 	});
@@ -2601,7 +2760,7 @@ jQuery(document).ready(function($) {
 			.append( $('select', cont).clone() )
 			.append( '<input type="hidden" name="wc-fns-samples[]" value="'+key+'" />' )
 			.append( '<input type="hidden" name="keep_current" value="0" />' )
-			.find('.woocommerce-save-button').trigger('click');
+			.find('.woocommerce-save-button').prop('disabled', false).trigger('click');
 			
 		return false;
 	});

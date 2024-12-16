@@ -309,7 +309,7 @@ class Swatches {
 					$tooltip       = $settings['tooltip'] ? $term_name : '';
 					$style         = $common_style;
 					$inner_style   = 'background-color:' . $color . ';';
-					$html         .= "<div class='cfvsw-swatches-option' data-slug='" . esc_attr( $slug ) . "' data-title='" . esc_attr( $term_name ) . "' data-tooltip='" . esc_attr( $tooltip ) . "' style=" . esc_attr( $style ) . '><div class="cfvsw-swatch-inner" style="' . esc_attr( $inner_style ) . '"></div></div>';
+					$html         .= "<div class='cfvsw-swatches-option ' data-slug='" . esc_attr( $slug ) . "' data-title='" . esc_attr( $term_name ) . "' data-tooltip='" . esc_attr( $tooltip ) . "' style=" . esc_attr( $style ) . '><div class="cfvsw-swatch-inner" style="' . esc_attr( $inner_style ) . '"></div></div>';
 				}
 				$html .= $more ? '<span class="cfvsw-more-link" style="line-height:' . esc_attr( $min_height ) . '">' . $more . '</span' : '';
 				$html .= '</div>';
@@ -323,8 +323,9 @@ class Swatches {
 					$tooltip       = $settings['tooltip'] ? $term_name : '';
 					$style         = $common_style;
 					$inner_style   = "background-image:url('" . esc_url( $image ) . "');background-size:cover;";
-					$html         .= "<div class='cfvsw-swatches-option cfvsw-image-option' data-slug='" . esc_attr( $slug ) . "' data-title='" . esc_attr( $term_name ) . "' data-tooltip='" . esc_attr( $tooltip ) . "' style=" . esc_attr( $style ) . '>';
-					$html         .= '<div class="cfvsw-swatch-inner" style="' . $inner_style . '"></div></div>';
+
+					$html .= "<div class='cfvsw-swatches-option cfvsw-image-option' data-slug='" . esc_attr( $slug ) . "' data-title='" . esc_attr( $term_name ) . "' data-tooltip='" . esc_attr( $tooltip ) . "' style=" . esc_attr( $style ) . '>';
+					$html .= '<div class="cfvsw-swatch-inner" style="' . $inner_style . '"></div></div>';
 				}
 				$html .= $more ? '<span class="cfvsw-more-link" style="line-height:' . esc_attr( $min_height ) . '">' . $more . '</span' : '';
 				$html .= '</div>';
@@ -460,7 +461,7 @@ class Swatches {
 
 		// Catlog mode functionality.
 		$count_attr_for_catalog = '';
-		
+
 		if ( ! empty( $settings['special_attr_archive'] ) ) {
 			$count_attr_for_catalog = count( $attributes ) > 1 ? 'data-cfvsw-catalog=1' : '';
 			$attributes             = $this->catalog_show_attr_shop_page( $settings, $product_id, $attributes );
@@ -616,6 +617,7 @@ class Swatches {
 
 		return $disable_class;
 	}
+
 
 	/**
 	 * Returns the position of swatches on shop page

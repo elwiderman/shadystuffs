@@ -63,8 +63,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			add_action( 'woocommerce_before_variations_form', [ $this, 'before_variations_form' ] );
 
 			// AJAX
-			add_action( 'wp_ajax_wpced_reload_dates', [ $this, 'ajax_reload_dates' ] );
-			add_action( 'wp_ajax_nopriv_wpced_reload_dates', [ $this, 'ajax_reload_dates' ] );
+			add_action( 'wc_ajax_wpced_reload_dates', [ $this, 'ajax_reload_dates' ] );
 
 			// Cart
 			if ( Wpced_Backend()->get_setting( 'cart_item', 'no' ) === 'yes' ) {
@@ -92,7 +91,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			wp_enqueue_style( 'wpced-frontend', WPCED_URI . 'assets/css/frontend.css', [], WPCED_VERSION );
 			wp_enqueue_script( 'wpced-frontend', WPCED_URI . 'assets/js/frontend.js', [ 'jquery' ], WPCED_VERSION, true );
 			wp_localize_script( 'wpced-frontend', 'wpced_vars', [
-				'ajax_url'     => admin_url( 'admin-ajax.php' ),
+				'wc_ajax_url'  => WC_AJAX::get_endpoint( '%%endpoint%%' ),
 				'nonce'        => wp_create_nonce( 'wpced-security' ),
 				'reload_dates' => apply_filters( 'wpced_reload_dates', wc_string_to_bool( Wpced_Backend()->get_setting( 'reload_dates', 'no' ) ) )
 			] );
@@ -282,7 +281,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 
 			if ( ! empty( $rule['min'] ) ) {
 				$min_time        = self::get_date( $rule['min'], $rule['scheduled'] );
-				$delivery_date   .= self::date_format( $min_time );
+				$delivery_date   .= self::format_date( $min_time );
 				$delivery_date_u = $min_time;
 
 				if ( empty( $rule['max'] ) ) {
@@ -300,7 +299,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 					$is_max = true;
 				}
 
-				$delivery_date   .= self::date_format( $max_time );
+				$delivery_date   .= self::format_date( $max_time );
 				$delivery_date_u .= $max_time;
 			}
 
@@ -335,7 +334,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 				}
 
 				$wrapper_id    = is_a( $product, 'WC_Product_Variation' ) ? $product->get_parent_id() : $product_id;
-				$wrapper_class = apply_filters( 'wpced_wrapper_class', 'wpced wpced-' . $wrapper_id . ' wpced-' . $context . ' wpced-' . ( isset( $rule['key'] ) ? $rule['key'] : 'default' ), $product, $type, $context );
+				$wrapper_class = apply_filters( 'wpced_wrapper_class', 'wpced wpced-' . $wrapper_id . ' wpced-' . $context . ' wpced-' . ( $rule['key'] ?? 'default' ), $product, $type, $context );
 
 				if ( ! empty( $delivery_date ) ) {
 					$product_date = '<div class="' . esc_attr( $wrapper_class ) . '" data-id="' . esc_attr( $wrapper_id ) . '"><div class="wpced-inner">' . sprintf( $delivery_text, $delivery_date ) . '</div></div>';
@@ -441,7 +440,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 				if ( ! empty( $overall ) ) {
 					sort( $overall );
 
-					$delivery_date = self::date_format( end( $overall ) );
+					$delivery_date = self::format_date( end( $overall ) );
 					$delivery_text = Wpced_Backend()->get_setting( 'text_cart_overall', /* translators: date */ esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' ) );
 
 					if ( empty( $delivery_text ) ) {
@@ -469,7 +468,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			$current_time         = current_time( 'h:i a' );
 			$current_date         = current_time( 'm/d/Y' );
 			$extra_time_line      = Wpced_Backend()->get_setting( 'extra_time_line' );
-			$date_format          = apply_filters( 'wpced_date_format', Wpced_Backend()->get_setting( 'date_format', 'M j, Y' ) );
+			$date_format          = self::get_date_format();
 			$current_date_skipped = false;
 
 			while ( self::check_skipped( strtotime( $current_date ) ) && ( $j <= 100 ) ) {
@@ -505,8 +504,8 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			return apply_filters( 'wpced_get_date', $get_date, $days, $scheduled );
 		}
 
-		function date_format( $time ) {
-			$date_format = apply_filters( 'wpced_date_format', Wpced_Backend()->get_setting( 'date_format', 'M j, Y' ) );
+		function format_date( $time ) {
+			$date_format = self::get_date_format();
 
 			if ( empty( $date_format ) ) {
 				$date_format = 'M j, Y';
@@ -517,6 +516,19 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			}
 
 			return wp_date( $date_format, $time );
+		}
+
+		function get_date_format() {
+			$date_format        = Wpced_Backend()->get_setting( 'date_format', 'M j, Y' );
+			$date_format_custom = Wpced_Backend()->get_setting( 'date_format_custom', 'M j, Y' );
+
+			if ( ( $date_format === 'custom' ) && ! empty( $date_format_custom ) ) {
+				$date_format = $date_format_custom;
+			}
+
+			$date_format = apply_filters( 'wpced_date_format', $date_format );
+
+			return apply_filters( 'wpced_get_date_format', $date_format );
 		}
 
 		function check_skipped( $time ) {

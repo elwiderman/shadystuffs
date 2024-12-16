@@ -69,4 +69,11 @@ if(isset($_GET['debug']))
     </div>
     <div class="wf_settings_right" style="display:none;">
     </div>
-</div>
+</div><?php
+/**
+ * Fires at the end of the settings page.
+ *
+ * @since 4.7.0
+ */
+do_action('wt_pdf_plugin_settings_after_wrap');
+?>

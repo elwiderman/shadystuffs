@@ -372,6 +372,68 @@ $field_settings = array(
 		'info' 		=> 'UI for searching select options'
 	),
 
+	'max_filesize'	=> array(
+		'type' 		=> 'number',
+		'id'		=> 'max_filesize',
+		'section' 	=> 'basic',
+		'title' 	=> 'Maximum File Size',
+		'width'		=> 'half',
+		'value'		=> '2',
+		'info'		=> 'File Size in MB',
+	),
+
+	'file_multiple' 	=> array(
+		'type' 		=> 'checkbox',
+		'id'		=> 'file_multiple',
+		'section' 	=> 'basic',	
+		'title' 	=> 'Multiple Files',
+		'width'		=> 'half',
+		'value'		=> 'yes',
+	),
+
+	'file_multiple_max' 	=> array(
+		'type' 		=> 'number',
+		'id'		=> 'file_multiple_max',
+		'section' 	=> 'basic',	
+		'title' 	=> 'Maximum number of files',
+		'width'		=> 'half',
+		'value'		=> 3,
+		'info' 		=> 'When Multiple files are allowed'
+	),
+
+	'file_type'	=> array(
+		'type' 		=> 'text',
+		'id'		=> 'file_type',
+		'section' 	=> 'basic',
+		'title' 	=> 'File Type',
+		'width'		=> 'half',
+		'value'		=> '.png, .jpg, .pdf',
+		'info'		=> 'Use comma separated values. For eg: .png, .jpg, .pdf. Leave empty for any file type',
+	),
+
+
+	'upload_layout' => array(
+		'type' 		=> 'select',
+		'id'		=> 'upload_layout',
+		'section' 	=> 'basic',
+		'title' 	=> 'Layout',
+		'options' 	=> array(
+			'profile' 	=> 'Profile',
+			'file' 		=> 'Default File Upload',
+		),
+		'width'		=> 'half',
+		'value'		=> 'profile',
+	),
+
+	'profile_icon_size' => array(
+		'type' 		=> 'number',
+		'id'		=> 'profile_icon_size',
+		'section' 	=> 'basic',
+		'title' 	=> 'Profile Icon Size',
+		'width'		=> 'half',
+		'value'		=> 80,
+	),
+
 
 	/**
 	  * Advanced section

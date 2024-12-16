@@ -7,7 +7,7 @@
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.5.9
+ * @version 1.6.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -188,12 +188,16 @@ class Fish_n_Ships_group {
 	/**
 	 * Totals calculation. Maybe cached
 	 *
+	 * Be aware! Since 1.6.2 a second optional parameter has been added: $selector
+	 *
+	 * @since 1.0.0
+	 * @version 1.6.2
 	 */
 
-	public function get_total($what) {
+	public function get_total($what, $selector = false) {
 		
 		// not cached? recalculate
-		if (!isset($this->totals[$what])) $this->calculate($what);
+		if (!isset($this->totals[$what])) $this->calculate( $what, $selector );
 		
 		return $this->totals[$what];
 	}
@@ -201,11 +205,13 @@ class Fish_n_Ships_group {
 	/**
 	 * calculate one total
 	 *
+	 * Be aware! Since 1.6.2 a second optional parameter has been added: $selector
+	 *
 	 * @since 1.0.0
-	 * @version 1.5.9
+	 * @version 1.6.2
 	 */
 
-	public function calculate($what) {
+	public function calculate($what, $selector = false) {
 		
 		global $Fish_n_Ships;
 		
@@ -300,7 +306,8 @@ class Fish_n_Ships_group {
 				default:
 					
 					// external call, for 3rd party selection method
-					$external = apply_filters('wc_fns_group_external_calculate', array(), $what, $product, $qty);
+					// Be aware! Since 1.6.2 a 5th parameter has been added: $selector (needed in PR_PAU for field ID)
+					$external = apply_filters( 'wc_fns_group_external_calculate', array(), $what, $product, $qty, $selector );
 					
 					$item_value  = isset($external['item_value']) ? $external['item_value'] : 'unknown selection method';
 					$value       += isset($external['value'])     ? $external['value']      : 0;

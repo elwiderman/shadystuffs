@@ -199,27 +199,26 @@ class Wf_Woocommerce_Packing_List_Invoice
 	}
 
 	/**
-	* 	Declaring validation rule for form fields in settings form
+	* 	Declaring validation rule for form fields in settings form.
 	* 	@since 2.6.2
-	* 	@since 4.0.5	Added the field `woocommerce_wf_add_invoice_in_customer_mail`
+	* 	@since 4.0.5	Added the field `woocommerce_wf_add_invoice_in_customer_mail`.
+	*   @since 4.7.0    Removed the field `woocommerce_wf_add_invoice_in_customer_mail` and added the field `wt_pdf_invoice_attachment_wc_email_classes`.
 	* 	
 	*/
 	public function alter_validation_rule($arr, $base_id)
 	{
-		if($base_id === $this->module_id)
-		{
-			$arr=array(
-	        	'woocommerce_wf_generate_for_orderstatus'=>array('type'=>'text_arr'),
-	        	'woocommerce_wf_attach_'.$this->module_base=>array('type'=>'text_arr'),
-	        	'wf_'.$this->module_base.'_contactno_email'=>array('type'=>'text_arr'),
-	        	'wf_woocommerce_invoice_show_print_button'=>array('type'=>'text_arr'),
-	        	'woocommerce_wf_Current_Invoice_number'=>array('type'=>'int'),
-				'woocommerce_wf_invoice_start_number'=>array('type'=>'int'),
-				'woocommerce_wf_invoice_padding_number'=>array('type'=>'int'),
-				'wf_woocommerce_invoice_show_print_button'=>array('type'=>'text_arr'),
-				'woocommerce_wf_add_invoice_in_customer_mail'=>array('type'=>'text_arr'),
+		if($base_id === $this->module_id) {
+			$arr = array(
+				'woocommerce_wf_generate_for_orderstatus' => array('type' => 'text_arr'),
+				'woocommerce_wf_attach_' . $this->module_base => array('type' => 'text_arr'),
+				'wf_' . $this->module_base . '_contactno_email' => array('type' => 'text_arr'),
+				'wf_woocommerce_invoice_show_print_button' => array('type' => 'text_arr'),
+				'woocommerce_wf_Current_Invoice_number' => array('type' => 'int'),
+				'woocommerce_wf_invoice_start_number' => array('type' => 'int'),
+				'woocommerce_wf_invoice_padding_number' => array('type' => 'int'),
+				'wf_woocommerce_invoice_show_print_button' => array('type' => 'text_arr'),
+				'wt_pdf_invoice_attachment_wc_email_classes' => array('type' => 'text_arr'),
 			);
-
 		}
 		return $arr;
 	}
@@ -228,6 +227,7 @@ class Wf_Woocommerce_Packing_List_Invoice
 	*	Declaring multi select form fields in settings form 
 	* 	@since 2.6.2
 	* 	@since 4.0.5 Added the field `woocommerce_wf_add_invoice_in_customer_mail`
+	* 	@since 4.7.0 Removed the field `woocommerce_wf_add_invoice_in_customer_mail` and added the field `wt_pdf_invoice_attachment_wc_email_classes`
 	* 	
 	*/
 	public function alter_multi_select_fields($arr, $base_id)
@@ -239,7 +239,7 @@ class Wf_Woocommerce_Packing_List_Invoice
 	        	'woocommerce_wf_generate_for_orderstatus'=>array(),
 	        	'woocommerce_wf_attach_'.$this->module_base=>array(),
 	        	'wf_woocommerce_invoice_show_print_button'=>array(),
-	        	'woocommerce_wf_add_invoice_in_customer_mail' => array(),
+	        	'wt_pdf_invoice_attachment_wc_email_classes' => array(),
 	        );
 		}
 		return $arr;
@@ -1279,8 +1279,8 @@ class Wf_Woocommerce_Packing_List_Invoice
 
 	/**
 	*	Default form fields and their values for invoice settings page
-	* 	@since 4.0.5	Added the fields `woocommerce_wf_add_invoice_in_customer_mail`
-	* 					`woocommerce_wf_add_invoice_in_admin_mail`
+	* 	@since 4.0.5	Added the fields `woocommerce_wf_add_invoice_in_customer_mail` and `woocommerce_wf_add_invoice_in_admin_mail`.
+	*	@since 4.7.0	Removed the fields `woocommerce_wf_add_invoice_in_customer_mail`,`woocommerce_wf_add_invoice_in_admin_mail` and added the field `wt_pdf_invoice_attachment_wc_email_classes`.
 	* 	
 	*/ 
 	public function default_settings($settings,$base_id)
@@ -1292,7 +1292,6 @@ class Wf_Woocommerce_Packing_List_Invoice
 	        	'woocommerce_wf_attach_invoice'=>array(),
 	        	'woocommerce_wf_packinglist_logo'=>'',
 	        	'woocommerce_wf_add_invoice_in_mail'=>'No',
-	        	'woocommerce_wf_add_invoice_in_admin_mail' => 'No',
 	        	'woocommerce_wf_packinglist_frontend_info'=>'Yes',
 	        	'woocommerce_wf_invoice_number_format'=>"[number]",
 				'woocommerce_wf_Current_Invoice_number'=>1,
@@ -1313,8 +1312,8 @@ class Wf_Woocommerce_Packing_List_Invoice
 	        	'wf_woocommerce_invoice_prev_install_orders' => 'No',
 	        	'wt_pklist_total_tax_column_display_option' => 'amount',
 	        	'wf_woocommerce_invoice_show_print_button' => array('order_listing','order_details','order_email'),
-	        	'woocommerce_wf_add_invoice_in_customer_mail' => array(),
 				'woocommerce_wt_use_latest_settings_invoice' => 'Yes',
+				'wt_pdf_invoice_attachment_wc_email_classes' => array(),
 			);
 			return $settings;
 		}else
@@ -1323,10 +1322,11 @@ class Wf_Woocommerce_Packing_List_Invoice
 		}
 	}
 
-	/*
+	/** 
 	*	@since v3.0.3 - Changed the radio button fields to checkbox
 	*	This function is for getting the values for checkbox fields when they are unchecked,
 	*	since the PHP will sent the $_POST the unchecked fields.
+	*	@since 4.7.0 - Added the field `wt_pdf_invoice_attachment_wc_email_classes` and removed the fields `woocommerce_wf_add_invoice_in_admin_mail`.
 	*/
 	public function single_checkbox_fields($settings,$base_id,$tab_name){
 		if($base_id === $this->module_id)
@@ -1335,7 +1335,6 @@ class Wf_Woocommerce_Packing_List_Invoice
 			$settings['wt_invoice_general'] = array(
 				'woocommerce_wf_enable_invoice'						=> "No",
 				'woocommerce_wf_add_'.$this->module_base.'_in_mail'	=> "No",
-				'woocommerce_wf_add_invoice_in_admin_mail' 		=> "No",
 				'woocommerce_wf_packinglist_frontend_info'			=> "Yes",
 				'wf_woocommerce_invoice_prev_install_orders' 		=> "No",
 				'wf_woocommerce_invoice_free_orders' 				=> "No",
@@ -1358,7 +1357,7 @@ class Wf_Woocommerce_Packing_List_Invoice
 				'wf_'.$this->module_base.'_contactno_email'		=> array(),
 				'wf_woocommerce_invoice_show_print_button'		=> array(),
 				'woocommerce_wf_generate_for_orderstatus' 		=> array(),
-				'woocommerce_wf_add_invoice_in_customer_mail' 	=> array(),
+				'wt_pdf_invoice_attachment_wc_email_classes' 	=> array(),
 			);
 		}
 		return $settings;
@@ -1482,60 +1481,57 @@ class Wf_Woocommerce_Packing_List_Invoice
 
 	/**
 	*	@since 2.8.0 - Added option to not generate the invoice number for free orders
+	* 	@since 4.7.0 - Changed the feature to send the attachemnt as per the selected email classes instead of order status
 	*
 	*/
 	public function add_email_attachments($attachments, $order, $order_id, $email_class_id)
-	{ 		
+	{ 	
+		/**
+		 * Check if the free order is enabled or not to attach the invoice document.
+		 */	
 		$free_order_enable = Wf_Woocommerce_Packing_List::get_option('wf_woocommerce_invoice_free_orders',$this->module_id);
-
 		if("No" === $free_order_enable){
 			if(0 === \intval($order->get_total())){
 				return $attachments;
 			}
 		}
 
-		$attach_pdf_to_customer_email = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_add_invoice_in_customer_mail', $this->module_id);
+		$chosen_wc_email_classes = Wf_Woocommerce_Packing_List::get_option( 'wt_pdf_invoice_attachment_wc_email_classes', $this->module_id );
+		$chosen_wc_email_classes = apply_filters( 'wf_pklist_alter_'.$this->module_base.'_attachment_mail_type', $chosen_wc_email_classes, $order_id, $email_class_id, $order );
+		$chosen_wc_email_classes = array_unique( $chosen_wc_email_classes );
+		$generate_invoice_for = Wf_Woocommerce_Packing_List::get_option( 'woocommerce_wf_generate_for_orderstatus', $this->module_id );
+		$generate_invoice_for = apply_filters( 'wf_pklist_alter_'.$this->module_base.'_attachment_order_status', $generate_invoice_for, $order_id, $email_class_id, $order );
 
-		if("Yes" === Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_add_'.$this->module_base.'_in_admin_mail', $this->module_id) || !empty($attach_pdf_to_customer_email))
-        {
-        	/* check order email types */		
-			$attach_to_mail_for=array('new_order', 'customer_completed_order', 'customer_invoice', 'customer_on_hold_order', 'customer_processing_order');
-			/* check order email types for renewal order */
-			$attach_to_mail_for=array_merge($attach_to_mail_for,array('new_renewal_order','customer_renewal_invoice','customer_completed_renewal_order','customer_on_hold_renewal_order','customer_processing_renewal_order'));
-			$attach_to_mail_for=apply_filters('wf_pklist_alter_'.$this->module_base.'_attachment_mail_type', $attach_to_mail_for, $order_id, $email_class_id, $order);
-			/* To avoid the duplication when using the filter */
-			$attach_to_mail_for = array_unique($attach_to_mail_for);
-			$is_attach = false;
-			
-			if(in_array($email_class_id, $attach_to_mail_for)){
-				
-				/* check order statuses to generate invoice */
-				$generate_invoice_for=Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_generate_for_orderstatus', $this->module_id);
-				if(in_array('wc-'.$order->get_status(), $generate_invoice_for) && in_array('wc-'.$order->get_status(), $attach_pdf_to_customer_email)){
-					$is_attach = true;
-				}
-
-				/* Attach PDF to admin email when new order is placed with chosen order status */
-				if("Yes" === Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_add_'.$this->module_base.'_in_admin_mail', $this->module_id) && "new_order" === $email_class_id && in_array('wc-'.$order->get_status(), $generate_invoice_for)){
-	                $is_attach = true;
-	                $is_attach = apply_filters('wt_pklist_enable_new_order_email_attachment',$is_attach,$order,$this->module_base);
-	            }
+		/**
+		 * Check if the current email class and current order status are selected for attaching the invoice document.
+		 * Or if the order has already an invoice number generated.
+		 */
+		if( !empty( $chosen_wc_email_classes ) && in_array( $email_class_id, $chosen_wc_email_classes ) ) {
+			if ( ( !empty( $generate_invoice_for ) && in_array( 'wc-'.$order->get_status(), $generate_invoice_for ) ) ||
+				( empty( $generate_invoice_for ) && !empty( Wt_Pklist_Common::get_order_meta( $order_id, 'wf_invoice_number', true )  ) ) ) {
+				$attachments[] = $this->prepare_pdf_attachments( $order_id );
 			}
-			
+		}
 
-			if($is_attach) 
-			{                             	 
-           		if(!is_null($this->customizer))
-		        { 
-		        	$order_ids=array($order_id);
-		        	$pdf_name=$this->customizer->generate_pdf_name($this->module_base,$order_ids);
-		        	$this->customizer->template_for_pdf=true;
-		        	$html=$this->generate_order_template($order_ids,$pdf_name);
-		        	$attachments[]=$this->customizer->generate_template_pdf($html,$this->module_base, $pdf_name, 'attach');
-		        }
-           	}
-        }
         return $attachments;
+	}
+
+	/**
+	 * To Prepare the PDF attachments
+	 *
+	 * @param int|string $order_id
+	 * @return string	$attachment
+	 */
+	public function prepare_pdf_attachments( $order_id ) {
+		$attachment = '';
+		if ( !empty( $order_id ) && !is_null( $this->customizer ) ) {
+			$order_ids = array( $order_id );
+			$pdf_name = $this->customizer->generate_pdf_name($this->module_base,$order_ids);
+			$this->customizer->template_for_pdf = true;
+			$html = $this->generate_order_template( $order_ids, $pdf_name );
+			$attachment = $this->customizer->generate_template_pdf( $html, $this->module_base, $pdf_name, 'attach' );
+		}
+		return $attachment;
 	}
 
 	/**
@@ -2061,6 +2057,22 @@ class Wf_Woocommerce_Packing_List_Invoice
 	 */
 	public function get_plugin_data( $plugin_data, $page ) {
 		return ( $this->module_id === $page ) ? array( $this->module_base =>  get_option( $this->module_id ) ) : $plugin_data;
+	}
+
+	public function get_attachment_for_ubl_invoice( $order_ids ) {
+		$this->customizer = new Wf_Woocommerce_Packing_List_Customizer();
+		$this->module_base = 'invoice';
+		$attachments = array();
+		$pdf_name = $this->customizer->generate_pdf_name( $this->module_base, $order_ids );
+		$this->customizer->template_for_pdf = true;
+		$html = $this->generate_order_template( $order_ids, $pdf_name );
+		$attachments[] = $this->customizer->generate_template_pdf( $html, $this->module_base, $pdf_name, 'attach' );
+		return $attachments;
+	}
+
+	public function get_attachment_name_for_ubl_invoice( $order_ids ) {
+		$this->customizer = new Wf_Woocommerce_Packing_List_Customizer();
+		return $this->customizer->generate_pdf_name( $this->module_base, $order_ids );
 	}
 }
 new Wf_Woocommerce_Packing_List_Invoice();

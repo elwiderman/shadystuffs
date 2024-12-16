@@ -141,11 +141,19 @@ jQuery(document).ready(function($){
 
 			$button.html( xoo_el_localize.html.spinner ).addClass('xoo-el-processing');
 
-			var form_data = $form.serialize() + '&action=xoo_el_form_action' + '&display=' + container.display;
+			var form_data = new FormData($form[0]);
+
+			form_data.append( 'action', 'xoo_el_form_action' );
+			form_data.append( 'display', container.display );
+
 
 			$.ajax({
 				url: xoo_el_localize.adminurl,
 				type: 'POST',
+				processData: false,
+    			contentType: false,
+    			cache: false,
+    			enctype: 'multipart/form-data',
 				data: form_data,
 				complete: function( xhr, status ){
 					$button.removeClass('xoo-el-processing').html(buttonTxt);
@@ -421,7 +429,7 @@ jQuery(document).ready(function($){
 
 
   	if( xoo_el_localize.loginClass && $( '.'+xoo_el_localize.loginClass ).length ){
-  		$( '.'+xoo_el_localize.loginClass ).on( 'click', function(e){
+  		$( 'body:not(.logged-in) .'+xoo_el_localize.loginClass ).on( 'click', function(e){
   			e.preventDefault();
   			e.stopImmediatePropagation();
   			$( '.xoo-el-login-tgr' ).trigger('click');
@@ -429,12 +437,14 @@ jQuery(document).ready(function($){
   	}
 
   	if( xoo_el_localize.registerClass && $( '.'+xoo_el_localize.registerClass ).length ){
-  		$( '.'+xoo_el_localize.registerClass ).on( 'click', function(e){
+  		$( 'body:not(.logged-in) .'+xoo_el_localize.registerClass ).on( 'click', function(e){
   			e.preventDefault();
   			e.stopImmediatePropagation();
   			$( '.xoo-el-reg-tgr' ).trigger('click');
   		} );
   	}
+
+
 
 
 })

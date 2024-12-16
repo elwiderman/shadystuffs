@@ -10,7 +10,7 @@ class Xoo_El_Fields{
 	protected static $_instance = null;
 
 	public $skipFields = array(
-		'xoo_el_reg_username', 'xoo-el-sing-user', 'xoo_el_reg_email', 'xoo_el_reg_fname', 'xoo_el_reg_lname', 'xoo_el_reg_pass', 'xoo_el_reg_pass_again',
+		'xoo_el_reg_username', 'xoo-el-sing-user', 'xoo_el_reg_email', 'xoo_el_reg_fname', 'xoo_el_reg_lname', 'xoo_el_reg_pass', 'xoo_el_reg_pass_again', 'xoo_el_reg_userrole'
 	);
 
 	public static function get_instance(){
@@ -43,7 +43,7 @@ class Xoo_El_Fields{
 		else if( $type === 'myaccount' ){
 			foreach ( $fields as $field_id => $field_data )  {
 				//Skip if predefined field
-				if( !isset( $field_data['settings']['display_myacc'] ) || $field_data['settings']['display_myacc'] !== 'yes' ){
+				if( !isset( $field_data['settings']['display_myacc'] ) || $field_data['settings']['display_myacc'] !== 'yes' || $field_data['input_type'] === 'file' ){
 					unset( $fields[ $field_id ] );
 				}
 			}

@@ -79,6 +79,7 @@ body.fns-popup {
 		background:#f8f8f8;
 		font-size: 13px;
 		line-height: 1.4em;
+		z-index: 101 !important;
 	}
 	&.rtl .ui-dialog.ui-widget-content {
 		right: auto;
@@ -203,7 +204,9 @@ p.fns-tabbed {
 body.fns-popup div.ui-widget-overlay,
 body div.ui-widget-overlay.fns-loading {
 	opacity:1;
-	background:rgba(0,0,0,0.7)
+	background:rgba(0,0,0,0.7);
+	z-index: 100 !important;
+	position: fixed !important;
 }
 
 

@@ -4,8 +4,8 @@ Tags: woocommerce, mail, email, email template, email templates, email design, p
 Donate link: https://www.kadencewp.com/about-us/
 Requires PHP: 5.2.4
 Requires at least: 5.3
-Tested up to: 6.3
-Stable tag: 1.5.13
+Tested up to: 6.7.1
+Stable tag: 1.5.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,6 +98,9 @@ assist you with verification, CVE assignment, and notify the
 developers of this plugin.
 
 == Changelog ==
+
+= 1.5.14 =
+* Update: adjusting needs payment checks on invoices to a more flexible function.
 
 = 1.5.13 =
 * Fix: PHP deprecated notice.

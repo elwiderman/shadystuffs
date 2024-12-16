@@ -658,7 +658,7 @@ class Wf_Woocommerce_Packing_List_Admin {
 											{
 												$item_css_class .=' wt_pklist_admin_download_document_btn';
 
-											}elseif(false !== strpos($action, 'print_'))
+											}elseif( false !== strpos($action, 'print_') && false === strpos( $action, 'print_ubl' ) ) // UBL document doesnot need this class, as it is handled for print popup screen.
 											{
 												$item_css_class .=' wt_pklist_admin_print_document_btn';
 											}
@@ -3986,6 +3986,28 @@ class Wf_Woocommerce_Packing_List_Admin {
 						</button>
 				</div>';
 			echo $data;
+
+			$data_ublinvoice = '<div class="wt_doc_create_confirm_popup_ublinvoice wf_pklist_popup" style="width:40%;text-align:left;">
+					<div style="float:left;padding:20px;">
+					<div class="wt_doc_create_confirm_popup_main_ublinvoice wf_pklist_popup_body">
+						<div class="message" style="float:left; box-sizing:border-box; width:100%; padding:0px 5px; margin-bottom:15px;">
+						</div>
+						<div id="wt_dont_show_again_doc_create_div_ublinvoice" style="float: left;box-sizing: border-box;width: 100%;padding: 0px 5px;margin-bottom: 5px;">
+							<input type="checkbox" id="wt_dont_show_again_doc_create_ublinvoice"> '.__("Do not show again","print-invoices-packing-slip-labels-for-woocommerce").'
+						</div>
+					</div>
+					
+					<div class="wt_doc_create_confirm_popup_ublinvoice_footer wf_pklist_popup_footer" style="float:left;">
+						<button type="button" name="" class="button-secondary wf_pklist_popup_cancel" style="color: #3157A6;border-color: #3157A6;">
+							'.__("Cancel","print-invoices-packing-slip-labels-for-woocommerce").'
+						</button>
+						<button type="button" name="" class="button-primary wt_doc_create_confirm_popup_yes_ublinvoice" style="background: #3157A6;">
+							'.__("Generate","print-invoices-packing-slip-labels-for-woocommerce").'
+						</button>	
+					</div>
+					</div>
+				</div>';
+			echo $data_ublinvoice;
 		}
 	}
 
@@ -4772,7 +4794,7 @@ class Wf_Woocommerce_Packing_List_Admin {
 			);
 
 			$invoice_module_fields = array(
-				'woocommerce_wf_add_invoice_in_customer_mail' => 'woocommerce_wf_add_invoice_in_customer_mail',
+				'wt_pdf_invoice_attachment_wc_email_classes' => 'wt_pdf_invoice_attachment_wc_email_classes',
 				'woocommerce_wf_invoice_as_ordernumber' => 'woocommerce_wf_invoice_as_ordernumber_pdf_fw',
 				'woocommerce_wf_invoice_number_format'	=> 'woocommerce_wf_invoice_number_format_pdf_fw',
 				'woocommerce_wf_invoice_number_prefix' 	=> 'woocommerce_wf_invoice_number_prefix_pdf_fw',
@@ -4789,22 +4811,32 @@ class Wf_Woocommerce_Packing_List_Admin {
 
 			foreach($invoice_module_fields as $i_key => $i_post_key){
 				
-				if('woocommerce_wf_add_invoice_in_customer_mail' === $i_key){
-					if(isset($_POST['woocommerce_wf_add_invoice_in_customer_mail'])){
-						$invoice_gen_status = $_POST['woocommerce_wf_add_invoice_in_customer_mail'];
-						$i_val = $_POST['woocommerce_wf_add_invoice_in_customer_mail'];
-					}else{
-						$invoice_gen_status = array('wc-completed','wc-processing');
-						$i_val = array();
+				if('wt_pdf_invoice_attachment_wc_email_classes' === $i_key){
+
+					$invoice_gen_status = array('wc-completed','wc-processing');
+					$i_val = array();
+					
+					if(isset($_POST['wt_pdf_invoice_attachment_wc_email_classes'])){
+						$order_status_wc_class_arr = Wt_Pklist_Common::wc_order_status_email_class_mapping();
+						if ( !empty( $order_status_wc_class_arr ) ) {
+							$invoice_gen_status = array();
+							foreach ( $order_status_wc_class_arr as $order_status => $wc_email_class ) {
+								if ( in_array( $wc_email_class, array_map('sanitize_text_field', $_POST['wt_pdf_invoice_attachment_wc_email_classes']) ) ) {
+									$invoice_gen_status[] = $order_status;
+								}
+							}
+						}
+						$i_val = array_map('sanitize_text_field', $_POST['wt_pdf_invoice_attachment_wc_email_classes']);
 					}
+
 					Wf_Woocommerce_Packing_List::update_option('woocommerce_wf_generate_for_orderstatus',$invoice_gen_status,$invoice_module_id);
 				}else{
 					$i_val = isset($_POST[$i_post_key]) ? sanitize_text_field($_POST[$i_post_key]) : '';
 				}
-				Wf_Woocommerce_Packing_List::update_option($i_key,$i_val,$invoice_module_id);
+				Wf_Woocommerce_Packing_List::update_option($i_key, $i_val, $invoice_module_id);
 			}
-			$out['status']=true;
-	        $out['msg']=__('Settings Updated', 'print-invoices-packing-slip-labels-for-woocommerce');
+			$out['status'] = true;
+			$out['msg'] = esc_html__('Settings Updated', 'print-invoices-packing-slip-labels-for-woocommerce');
 		}
 		echo json_encode($out);
 		exit();
@@ -4832,17 +4864,18 @@ class Wf_Woocommerce_Packing_List_Admin {
 	}
 
 	/**
-	 *  Screens to show promotional banner
+	 *  Screens to show Black Friday and Cyber Monday Banner
 	 * 
-	 *  @since 4.2.1
+	 *  @since 4.7.0
 	 */
-	public function wt_promotion_banner_screens( $screen_ids ) {
+	public function wt_bfcm_banner_screens( $screen_ids ) {
 		$screen_ids[] = 'toplevel_page_wf_woocommerce_packing_list';
 		$screen_ids[] = 'invoice-packing_page_wf_woocommerce_packing_list_invoice';
 		$screen_ids[] = 'invoice-packing_page_wf_woocommerce_packing_list_packinglist';
 		$screen_ids[] = 'invoice-packing_page_wf_woocommerce_packing_list_deliverynote';
 		$screen_ids[] = 'invoice-packing_page_wf_woocommerce_packing_list_shippinglabel';
-		$screen_ids[] = 'invoice-packing_page_wf_woocommerce_packing_list_dispatchlabel'; // Plugin settings page
+		$screen_ids[] = 'invoice-packing_page_wf_woocommerce_packing_list_dispatchlabel'; // Plugin settings page.
+		$screen_ids[] = 'invoice-packing_page_wf_woocommerce_packing_list_premium_extension'; // Premium extension page.
 		return $screen_ids;
 	}
 
@@ -4917,5 +4950,23 @@ class Wf_Woocommerce_Packing_List_Admin {
 				}
 			}
 		}
+	}
+
+	/**
+	 * To add the element after particular key in array
+	 */
+	public static function wt_add_array_element_to_position( $settings, $new_element, $after_key ) {
+		$new_settings = array();
+		
+		foreach ( $settings as $key => $value ) {
+			$new_settings[ $key ] = $value; // Add the current element to the new array.
+			
+			// When you reach the desired key, add the new element immediately after it.
+			if ( $key === $after_key ) {
+				$new_settings = array_merge( $new_settings, $new_element );
+			}
+		}
+		
+		return $new_settings;
 	}
 }

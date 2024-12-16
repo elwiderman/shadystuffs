@@ -1,23 +1,32 @@
 === WooCommerce PDF Invoices, Packing Slips, Delivery Notes and Shipping Labels ===
 Contributors: WebToffee
-Version: 4.6.2
+Version: 4.7.1
 Tags: WooCommerce PDF invoices, WooCommerce invoice, packing slips, shipping label, print invoice
 Requires at least: 3.0.1
 Tested up to: 6.6
-Stable tag: 4.6.2
+Stable tag: 4.7.1
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Create and print PDF invoices, packing lists/packing slips, delivery notes and shipping labels for your WooCommerce orders.
+Create and print WooCommerce PDF invoices, packing lists/packing slips, delivery notes, and shipping labels. Generate or print UBL invoices for WooCommerce.
 
 == Description ==
+Easily create and print WooCommerce PDF invoices, packing slips, delivery notes, and shipping labels. Additionally, generate UBL and XML invoices tailored for your WooCommerce store to enhance your order processing efficiency.
 
 == Introduction ==
 
 WooCommerce Print Invoice, Packing Slip, Delivery Note and Shipping Label plugin helps you generate PDF invoices, packing lists / packing slips, delivery notes, dispatch labels and shipping labels from the WooCommerce orders page. WooCommerce, by default, doesn't allow you to print any of these documents from your orders page. Using this extension, you can very well streamline your online store's shipping and order processes.
 
 **See how the plugin works: <a rel="nofollow" href="https://tastewp.com/new?pre-installed-plugin-slug=woocommerce&pre-installed-plugin-slug=print-invoices-packing-slip-labels-for-woocommerce&redirect=admin.php%3Fpage%3Dwf_woocommerce_packing_list&ni=true">Try out demo</a>** 
+
+== New Updates - UBL Invoices (BETA) ==
+* Generate UBL invoices for WooCommerce Orders
+* Print XML invoices
+* Attach UBL invoices with WooCommerce Order emails
+* Supports 6 UBL invoice formats
+* Map WooCommerce tax classes to UBL tax categories
+
 
 == Features ==
 
@@ -32,6 +41,7 @@ WooCommerce Print Invoice, Packing Slip, Delivery Note and Shipping Label plugin
 * <strong>Customization of shipping label</strong>: Shipping labels can be customized by adding barcodes, tracking numbers, and more. 
 * <strong>Option to bulk print</strong>: Bulk print all labels from orders page.
 * <strong>Send invoice PDF by email</strong>: Enable stores to send PDF invoice by email.
+* <strong>Generate UBL Invoices</strong>: Generate and print UBL and XML invoices for WooCommerce orders.
 * <strong>Print invoice from My-Account page:</strong> Allow logged-in customers to print their invoice from the My-Account page.
 * <strong>Choose invoice template</strong>: Choose from classic and standard invoice templates.
 * <strong>Auto-generate customized invoice number</strong>: Auto-generate customized invoice number with provision to set prefix, suffix as well as padding (number of digits of the invoice number) for your invoice number or, set order number as the invoice number.
@@ -69,7 +79,7 @@ The plugin is compatible with the following third party plugins/themes:
 &#8226; [Multi-Currency for WooCommerce, by VillaTheme](https://villatheme.com/extensions/woo-multi-currency/)
 &#8226; [WOOCS - WooCommerce Currency Switcher](https://pluginus.net/shop/wordpress-plugins/woocommerce/woocommerce-currency-switcher/)
 &#8226; [Sequential Order Numbers by WooCommerce](https://woocommerce.com/products/sequential-order-numbers-pro/)
-
+&#8226; [EAN, UPC, ISBN Generator: Product Barcode Inventory for WooCommerce](https://wordpress.org/plugins/ean-for-woocommerce/)
 == Supported languages ==
 
 * FR (French)
@@ -275,8 +285,20 @@ Yes. The plugin addresses the needs of a multilingual website and is compatible 
 15. Support for RTL languages using Add-on
 16. Supports different document types
 17. Invoice general settings
+18. Ubl Invoice settings
 
 == Changelog ==
+
+= 4.7.1 2024-10-28 =
+* [Fix] - Resolved "Uncaught Error: Class 'WT_WC_Product' not found" when using premium add-ons.
+* [Fix] - Addressed migration issues from order statuses to WooCommerce order email classes that were introduced in version 4.7.0.
+
+= 4.7.0 2024-10-23 =
+* [New] - Introduced the Beta version of UBL (XML) invoice support.
+* [Enhancement] - Extended UBL invoice support for PEPPOL, Romania, Austria, the Netherlands, Italy, and Spain
+* [Enhancement] - Updated the invoice PDF attachment to be based on the order email rather than the order status in the form wizard and invoice settings.
+* [Enhancement] - Added a dedicated button for UBL invoice printing on the order listing and details pages.
+* [Enhancement] - Introduced an option to request new features.
 
 = 4.6.2 2024-09-26 =
 * [Fix] - Compatibility issues with the WOOCS Currency Switcher.
@@ -1003,8 +1025,6 @@ Yes. The plugin addresses the needs of a multilingual website and is compatible 
  
 == Upgrade Notice ==
 
-= 4.6.2 =
-* [Fix] - Compatibility issues with the WOOCS Currency Switcher.
-* [Fix] - JavaScript conflicts with the WebToffee Import/Export plugin.
-* [Fix] - Print preview issue on mobile devices.
-* [Compatibility] - Tested OK with WooCommerce v9.3.3
+= 4.7.1 =
+* [Fix] - Resolved "Uncaught Error: Class 'WT_WC_Product' not found" when using premium add-ons.
+* [Fix] - Addressed migration issues from order statuses to WooCommerce order email classes that were introduced in version 4.7.0.

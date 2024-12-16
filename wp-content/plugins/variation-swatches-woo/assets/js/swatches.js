@@ -188,6 +188,14 @@
 				'.cfvsw-swatches-container .cfvsw-swatches-option[data-slug]',
 				SW.chooseOption
 			);
+
+			// Adding a compatibility of Load More Products for WooCommerce Plugin's Ajax call for loading the products on shop page.
+			$( document ).on(
+				'berocket_ajax_products_infinite_loaded',
+				function () {
+					SW.firstTime();
+				}
+			);
 		},
 	};
 
@@ -200,6 +208,7 @@
 			return;
 		}
 		onClickSwatchesOption( swatchesOption );
+		addVariationFunctionality();
 	} );
 
 	$( 'body' ).on(
@@ -484,7 +493,7 @@
 		);
 	}
 
-	$( window ).load( function () {
+	$( window ).on( 'load', function () {
 		addVariationFunctionality();
 	} );
 

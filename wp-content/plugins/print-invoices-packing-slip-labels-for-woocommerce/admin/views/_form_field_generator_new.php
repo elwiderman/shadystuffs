@@ -43,8 +43,8 @@ Class WT_Form_Field_Builder{
         }
 
         if(is_array($label)){
-        	$label_style = $label["style"];
-        	$label = $label["text"];
+        	$label_style = isset( $label["style"] ) ? $label["style"] : "";
+        	$label = ( $label["text"] ) ? $label["text"] : "";
         }
         $mandatory_star = ($mandatory ? '<span class="wt_pklist_required_field">*</span>' : '');
         return sprintf('<th scope="row"><label for="" style="%1$s">%2$s</label></th>',esc_attr($label_style),wp_kses_post($label).$mandatory_star.$html);
