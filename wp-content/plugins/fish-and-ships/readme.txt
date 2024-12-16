@@ -1,12 +1,12 @@
-﻿=== Fish and Ships - Most flexible shipping table rate. A WooCommerce shipping rate ===
+﻿=== Fish and Ships - Most flexible table rate shipping for WooCommerce ===
 Contributors: wpcentrics
 Donate link: https://www.wp-centrics.com/
-Tags: shipping table rate, shipping rate, conditional shipping, table rate shipping
+Tags: table rate shipping, shipping rates, conditional shipping
 Requires at least: 4.7
-Tested up to: 6.6
+Tested up to: 6.7
 WC requires at least: 3.0
-WC tested up to: 9.3
-Stable tag: 1.5.9
+WC tested up to: 9.4
+Stable tag: 1.6.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,9 +15,9 @@ Best table rate shipping method for WooCommerce: easy and flexible table rate. S
 
 == Description ==
 
-###The best WooCommerce shipping table rate plugin
+###The best WooCommerce table rate shipping plugin
 
-A **conditional shipping method table rate for WooCommerce**: It allows you to set up weight-based **shipping rates** or any other criteria such as price, volume, quantity, or category
+A **conditional table rate shipping method for WooCommerce**: It allows you to set up weight-based **shipping rates** or any other criteria such as price, volume, quantity, or category
 
 You can also configure conditional free shipping, conditional local pickup, conditional flat rate or any shipping rate.
 
@@ -30,7 +30,7 @@ NOW WITH +60 SAMPLES READY TO USE: Choose from 25 fullcases and 38 snippets, mak
 = Exact fit shipping rates for your WooCommerce shop =
 Most online shops set generic shipping rates: too much for some products and too low for others... are you?
 
-###A flexible shipping table rate where anything can be set & combined
+###A flexible table rate shipping where anything can be set & combined
 
 - **Conditional shipping**
 - **Free shipping** 
@@ -50,9 +50,9 @@ Most online shops set generic shipping rates: too much for some products and too
 
 ...any combination, nested as needed. Really!
 
-###Setup exact shipping rates through a shipping table rate
+###Setup exact shipping rates through a table rate shipping
 
-Fish and Ships is a **WooCommerce shipping table rate** based method that helps you to increase sales and avoid costs losses, through an easy-to-use shipping table rate cost, with multiple conditional options (as needed).
+Fish and Ships is a **WooCommerce table rate shipping** based method that helps you to increase sales and avoid costs losses, through an easy-to-use table rate shipping cost, with multiple conditional options (as needed).
 
 You can set multiple conditional rules on the table rate: based on price, weight, product quantity on cart, dimensions, volume, shipping class, product tag, and product category.
 
@@ -157,11 +157,11 @@ Apart of the table rules, you'll find this options on the method:
 
 = Other 3rd party plugins supported =
 
+* Support for Plugin Republic's WooCommerce Product Add-Ons Ultimate: [link](https://pluginrepublic.com/wordpress-plugins/woocommerce-product-add-ons-ultimate/)
 * Support for StudioWombat Advanced Product Fields for WooCommerce: [link](https://wordpress.org/plugins/advanced-product-fields-for-woocommerce/)
 * Support for WPC Product Bundles: [link](https://wordpress.org/plugins/woo-product-bundle/)
-* Support for the plugin Uni CPO: [link](https://wordpress.org/plugins/uni-woo-custom-product-options/)
 * Support for the Skyverge Measurement Price Calculator plugin: [link](https://woocommerce.com/products/measurement-price-calculator/) [PRO]
- 
+* Support for the plugin Uni CPO: [link](https://wordpress.org/plugins/uni-woo-custom-product-options/) 
 
 = ...and much, much more: =
 
@@ -295,6 +295,20 @@ Fish and Ships has widely tested with older and latest; our philosophy is to cov
 15. Apply coupons automatically (Pro)
 
 == Changelog ==
+
+= 1.6.2 - 11/12/2024 =
+* Compatible with Plugin Republic's WooCommerce Product Add-Ons Ultimate (PR_PAU)
+* The method description is now editable (shown in shipping zone screen, admin side)
+* Fixed incompatibility bug with WC Shipping & Tax plugin
+
+= 1.6.1 - 18/11/2024 =
+* Checked for WC 9.4
+* Checked for WP 6.7
+* Fixed CSS bug in some installations that affect the help/settings popups in the shipping method configuration screens
+* Fixed bug in notices system
+
+= 1.6 - 30/09/2024 =
+* XSS vulnerability fixed
 
 = 1.5.9 - 17/09/2024 =
 * Added Length, Width and Height selection methods (use it instead of Min/Mid/Max dimensions if you can't rotate the boxes)

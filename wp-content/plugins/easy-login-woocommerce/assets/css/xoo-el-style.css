@@ -461,6 +461,10 @@ span.xoo-el-loginvia {
     margin: 0 0 1.41575em;
 }
 
+.xoo-aff-myacc-field .select2-container {
+    max-width: 100%;
+}
+
 span.xoo-el-resetpw-hnotice {
     text-align: center;
     display: block;
@@ -643,3 +647,30 @@ body.rtl .xoo-aff-cont-tel .xoo-aff-input-group {
     flex-wrap: wrap;
 }
 
+
+.xoo-el-popup-active .select2-container {
+    z-index: 99999999999!important;
+}
+
+.xoo-el-popup-active.xoo-el-container {
+    content-visibility: visible!important;
+}
+
+
+.xoo-ff-files {
+    display: flex;
+    flex-direction: column;
+    line-break: anywhere;
+    margin-top: 10px;
+}
+
+.xoo-ff-files a {
+    padding: 2px 0;
+}
+
+.xoo-ff-files > div > span {
+    color: red;
+    margin-left: 5px;
+    font-weight: 600;
+    cursor: pointer;
+}

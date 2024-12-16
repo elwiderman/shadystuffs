@@ -27,12 +27,13 @@ if( class_exists( 'Xoo_Aff_fields' ) ){
 		public function add_el_predefined_fields(){
 			$this->fields = xoo_el()->aff->fields;
 			$this->predefined_field_username();
+			$this->predefined_field_userrole();
 			$this->predefined_field_useremail();
 			$this->predefined_field_firstname();
 			$this->predefined_field_lastname();
 			$this->predefined_field_userpassword();
 			$this->predefined_field_userpasswordagain();
-			$this->predefined_mailchimp_subscribe();
+			
 			$this->predefined_field_terms();
 			$this->login_predefined_field_useremail();
 			$this->login_predefined_field_userpassword();
@@ -40,6 +41,11 @@ if( class_exists( 'Xoo_Aff_fields' ) ){
 			$this->resetpw_predefined_field_password();
 			$this->resetpw_predefined_field_passwordagain();
 			$this->predefined_field_single();
+
+
+			$this->predefined_mailchimp_subscribe();
+			$this->predfined_mc4wp_subscribe();
+			$this->predfined_mailpoet_subscribe();
 		}
 
 
@@ -84,6 +90,82 @@ if( class_exists( 'Xoo_Aff_fields' ) ){
 				),
 				'class'
 			);
+
+			$this->fields->create_field_settings(
+				$field_type_id,
+				$setting_options
+			);
+
+			$this->fields->add_field(
+				$field_id,
+				$field_type_id,
+				array(
+					'unique_id' => $field_id,
+					'required' 	=> 'yes',
+				)
+			);
+
+		}
+
+
+		public function predefined_field_userrole(){
+
+			global $wp_roles;
+
+			$field_type_id = $field_id = 'xoo_el_reg_userrole';
+
+			if (!isset($wp_roles)) {
+				$wp_roles = new WP_Roles();
+			}
+
+			$user_roles = array();
+
+			foreach ( $wp_roles->roles as $role_id => $role_data ) {
+
+				if( $role_id === 'administrator' ) continue;
+
+			 	$user_roles[$role_id] = array(
+			 		'label' 	=> $role_data['name'],
+			 		'value' 	=> $role_id,
+			 		'checked' 	=> '',
+			 	);
+			}
+
+			$this->fields->add_type(
+				$field_type_id,
+				'select_list',
+				'User Role',
+				array(
+					'is_selectable' => 'no',
+					'can_delete'	=> 'no',
+					'icon' 			=> 'fas fa-user',
+				)
+			);
+				
+			$setting_options = array(
+				'active' => array(
+					'value' => 'no'
+				),
+				'required',
+				'show_label', 
+				'label',
+				'cols',
+				'icon' => array(
+					'value' => 'far fa-user'
+				),
+				'use_select2',
+				'placeholder' => array(
+					'value' => 'User Role',
+				),
+				'select_list' => array(
+					'value' => $user_roles
+				),
+				'unique_id' => array(
+					'disabled' => 'disabled',
+				),
+				'class'
+			);
+
 
 			$this->fields->create_field_settings(
 				$field_type_id,
@@ -380,27 +462,18 @@ if( class_exists( 'Xoo_Aff_fields' ) ){
 		}
 
 
-		public function predefined_mailchimp_subscribe(){
+		public function newsletter_field( $field_id, $args = array() ){
 
-			$mailchimp_id = false;
+			$args = wp_parse_args( $args, array(
+				'fieldTitle' => ''
+			) );
 
-			if( function_exists( 'run_mailchimp_woocommerce' ) ){
-				$mailchimp_id = 'mailchimp_woocommerce_newsletter';
-			}
-
-			if( function_exists('mc4wp') ){
-				$mailchimp_id = 'mc4wp-subscribe';
-			}
-
-			//If no mailchimp plugin, return
-			if( !$mailchimp_id ) return;
-
-			$field_type_id = $field_id = $mailchimp_id;
+			$field_type_id = $field_id;
 
 			$this->fields->add_type(
 				$field_type_id,
 				'checkbox_single',
-				'Mailchimp Newsletter',
+				$args['fieldTitle'],
 				array(
 					'is_selectable' => 'no',
 					'can_delete'	=> 'no',
@@ -445,6 +518,39 @@ if( class_exists( 'Xoo_Aff_fields' ) ){
 					'unique_id' => $field_id,
 				)
 			);
+		}
+
+
+		public function predfined_mc4wp_subscribe(){
+
+			if( !function_exists('run_mailchimp_woocommerce') ) return;
+
+			$this->newsletter_field( 'mailchimp_woocommerce_newsletter', array(
+				'fieldTitle' => 'Mailchimp Newsletter'
+			) );
+
+		}
+
+
+		public function predefined_mailchimp_subscribe(){
+
+			if( !function_exists('mc4wp') ) return;
+
+			$this->newsletter_field( 'mc4wp-subscribe', array(
+				'fieldTitle' => 'Mailchimp Newsletter (MC4WP)'
+			) );
+
+		}
+
+
+		public function predfined_mailpoet_subscribe(){
+
+			if( !defined('MAILPOET_VERSION') ) return;
+
+			$this->newsletter_field( 'xoo-mailpoet-subscribe', array(
+				'fieldTitle' => 'MailPoet Newsletter'
+			) );
+
 		}
 
 

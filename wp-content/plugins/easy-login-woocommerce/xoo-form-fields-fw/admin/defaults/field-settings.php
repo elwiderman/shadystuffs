@@ -205,8 +205,54 @@ $field_settings = array(
 		'password_visibility',
 		'unique_id',
 		'class'
-	)
+	),
 
+	'xoo_aff_upload' => array(
+		'active',
+		'required',
+		'show_label',
+		'label',
+		'cols',
+		'icon' => array(
+			'value' => 'fas fa-cloud-upload-alt'
+		),
+		'max_filesize',
+		'file_type',
+		'file_multiple',
+		'file_multiple_max',
+		'unique_id',
+		'class'
+	),
+
+
+	'xoo_aff_profile_photo' => array(
+		'active',
+		'required',
+		'show_label',
+		'label' => array(
+			'value' => 'Upload your Photo'
+		),
+		'cols',
+		'icon' => array(
+			'value' => 'fas fa-user-circle'
+		),
+		'upload_layout',
+		'profile_icon_size',
+		'max_filesize',
+		'file_type' => array(
+			'value' => '.png, .jpg'
+		),
+		'file_multiple' => array(
+			'value' => 'no',
+			'visible' => 'no',
+		),
+		'file_multiple_max' => array(
+			'value' => 1,
+			'visible' => 'no'
+		),
+		'unique_id',
+		'class'
+	),
 	
 );
 

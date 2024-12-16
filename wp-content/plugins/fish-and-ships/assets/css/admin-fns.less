@@ -3,7 +3,7 @@
  *
  * @package Fish and Ships
  * @since 1.1.12
- * @version 1.5.4
+ * @version 1.6.2
  */
 
 /*************************************************
@@ -40,6 +40,17 @@
     margin: -1em 0 0 -3px;
 }
 
+/* ajafixied info */
+#wrapper-shipping-rules-table-fns .wc-fns-ajax-info {
+	position: relative;
+	margin-top: 5px;
+	.wc-fns-spinner {
+		position: static;
+		float: none;
+		margin: 0;
+	}
+}
+
 /* ajaxified selectors */
 .wc-fns-ajax-fields {
 	padding-top:5px;
@@ -49,6 +60,7 @@
 	position:relative;
 	left:auto;
 	top:auto;	
+	margin: auto;
 }
 
 .wc-fns-spinner {
@@ -208,7 +220,12 @@ body.mc-tabs-fns .nav-tab-wrapper {
 #shipping-rules-table-fns tr.odd {
 	background: rgba(0,0,0,0.03);
 }
-
+#shipping-rules-table-fns .content {
+	animation: none !important; // aruba fatturazione bug
+}
+ .wc-fns-mid-input {
+	width: 120px;
+}
 /* Extra rules */
 #shipping-rules-table-fns .fns-ruletype-title th {
 	/*color: #fff;

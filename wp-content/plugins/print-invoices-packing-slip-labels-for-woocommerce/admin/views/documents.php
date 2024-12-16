@@ -60,6 +60,7 @@ $wt_pklist_doc_modules_all = array(
                 'picklist' => array(
                     'label' => __("Picklist","print-invoices-packing-slip-labels-for-woocommerce"),
                     'module_type' => 'pro',
+                    'bfcm_banner' => true,
                 ),
             ),
             'width' => 'wt_doc_col-3',
@@ -72,6 +73,7 @@ $wt_pklist_doc_modules_all = array(
                 'addresslabel' => array(
                     'label' => __("Address labels","print-invoices-packing-slip-labels-for-woocommerce"),
                     'module_type' => 'pro',
+                    'bfcm_banner' => true,
                 ),
             ),
             'width' => 'wt_doc_col-3',
@@ -84,6 +86,7 @@ $wt_pklist_doc_modules_all = array(
                 'proformainvoice' => array(
                     'label' => __("Proforma invoice","print-invoices-packing-slip-labels-for-woocommerce"),
                     'module_type' => 'pro',
+                    'bfcm_banner' => true,
                 ),
             ),
             'width' => 'wt_doc_col-3',
@@ -197,6 +200,15 @@ $document_module_labels=Wf_Woocommerce_Packing_List_Public::get_document_module_
                     }
                 ?>
                 </div>
+
+                <?php
+                /**
+                 * @since 4.7.0
+                 * Black Friday Cyber Monday banner offer
+                 */ 
+                if( "pro" === $this_doc_mod['module_type'] && !is_plugin_active( $doc_mod['file_path'] ) && isset( $this_doc_mod['bfcm_banner'] ) && $this_doc_mod['bfcm_banner'] && true === Wt_Pklist_Common::is_bfcm_season() ){
+                    echo '<div class="wt-bfcm-banner-2024-offer">'.esc_html__( '30% OFF', 'print-invoices-packing-slip-labels-for-woocommerce' ).'</div>';
+                }?>
             </div>
             <?php
         }

@@ -5,12 +5,12 @@
  *
  * It will show logs, delete old ones and does the user manual deletion also.
  *
- * Logs will be deleted after 7 days, but you can change this defining this constant into your wp-config.php:<br />
+ * Logs will be deleted after 7 days, but you can change this defining this constant into your wp-config.php:
  * define('WC_FNS_DAYS_LOG', 15); // for 15 days
  *
  * @package Fish and Ships
  * @since 1.0.0
- * @version 1.5.3
+ * @version 1.6
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -125,7 +125,7 @@ if ( count($logs_index) == 0 ) {
 
 	$html .= '<div id="fnslogs"><div id="wc_fns_logs_list" class="updated woocommerce-message inline" style="display:none"><p>' 
 			. esc_html__('This shipping method have not logs yet (or maybe you should refresh this list to see if there are new ones).', 'fish-and-ships')
-			. '</p><p><a id="fns_logs_reload" href="'.esc_attr($reload_url).'" data-fns-logs-pag="' . esc_attr($logs_pag) . '" data-instance_id="'.esc_attr($instance_id).'" class="button button-small"><span class="dashicons dashicons-update"></span> ' . esc_html__('Refresh', 'fish-and-ships') . '</a></p></div></div>';
+			. '</p><p><a id="fns_logs_reload" href="'.esc_url($reload_url).'" data-fns-logs-pag="' . esc_attr($logs_pag) . '" data-instance_id="'.esc_attr($instance_id).'" class="button button-small"><span class="dashicons dashicons-update"></span> ' . esc_html__('Refresh', 'fish-and-ships') . '</a></p></div></div>';
 } else {
 
 	// Table header
@@ -140,7 +140,7 @@ if ( count($logs_index) == 0 ) {
 		<th class="thin">' . esc_html__('See', 'fish-and-ships') . '</th>
 		<th class="thin">' . esc_html__('Shipping cost', 'fish-and-ships') . '</th>
 		<th>' . esc_html_x('Cart Items', 'table cell title, number of items', 'fish-and-ships') . 
-		'<a id="fns_logs_reload" href="'.esc_attr($reload_url).'" data-fns-logs-pag="' . esc_attr($logs_pag) . '" data-instance_id="'.esc_attr($instance_id).'" class="button button-small"><span class="dashicons dashicons-update"></span> ' . esc_html__('Refresh', 'fish-and-ships') . '</a></th>
+		'<a id="fns_logs_reload" href="'.esc_url($reload_url).'" data-fns-logs-pag="' . esc_attr($logs_pag) . '" data-instance_id="'.esc_attr($instance_id).'" class="button button-small"><span class="dashicons dashicons-update"></span> ' . esc_html__('Refresh', 'fish-and-ships') . '</a></th>
 	</thead>
 	<tbody>';
 	
@@ -187,7 +187,7 @@ if ( count($logs_index) == 0 ) {
 				$html .= esc_html( $user->data->display_name );
 			}
 						
-			$html .= '</td><td class="thin"><a href="' . esc_attr(add_query_arg(array('fns_remove_log' => false, 'fns_see_log' => $active ? false : $log['name']), $current_url)) . '#fnslogs" data-fns-log="' . esc_attr($log['name']) . '" class="open_close">';
+			$html .= '</td><td class="thin"><a href="' . esc_url(add_query_arg(array('fns_remove_log' => false, 'fns_see_log' => $active ? false : $log['name']), $current_url)) . '#fnslogs" data-fns-log="' . esc_attr($log['name']) . '" class="open_close">';
 			
 			$html .= '<span class="fns-open">[' . esc_html__('Open', 'fish-and-ships') . ']</span><span class="fns-close">[' . esc_html__('Close', 'fish-and-ships') . ']</span></a></td>';
 			
@@ -232,7 +232,7 @@ if ( count($logs_index) == 0 ) {
 		if ( $logs_pag > 2 ) {
 
 			$first_url = add_query_arg ( 'fnslogspag', false, $current_url ) . '#fnslogs';
-			$html .= '<a class="first-page button" href="'.$first_url.'" data-fns-logs-pag="1" data-instance_id="'.$instance_id.'"><span class="screen-reader-text">'
+			$html .= '<a class="first-page button" href="'.esc_url($first_url).'" data-fns-logs-pag="1" data-instance_id="'.$instance_id.'"><span class="screen-reader-text">'
 					  . esc_html__( 'First page' ) . '</span><span aria-hidden="true">&laquo;</span></a>';
 			
 		} else {
@@ -243,7 +243,7 @@ if ( count($logs_index) == 0 ) {
 		if ( $logs_pag > 1 ) {
 
 			$prev_url = add_query_arg ( 'fnslogspag', $logs_pag == 1 ? false : $logs_pag -1, $current_url ) . '#fnslogs';
-			$html .= '<a class="prev-page button" href="'.esc_attr($prev_url).'" data-fns-logs-pag="' . esc_attr($logs_pag -1) . '" data-instance_id="'.esc_attr($instance_id).'">
+			$html .= '<a class="prev-page button" href="'.esc_url($prev_url).'" data-fns-logs-pag="' . esc_attr($logs_pag -1) . '" data-instance_id="'.esc_attr($instance_id).'">
 					  <span class="screen-reader-text">' . esc_html__( 'Previous page' ) . '</span><span aria-hidden="true">&lsaquo;</span></a>';
 
 		} else {
@@ -257,7 +257,7 @@ if ( count($logs_index) == 0 ) {
 		if ( $logs_pag < $total_pages ) {
 
 			$next_url = add_query_arg ( 'fnslogspag', $logs_pag +1, $current_url ) . '#fnslogs';
-			$html .= '<a class="next-page button" href="'.esc_attr($next_url).'" data-fns-logs-pag="' . esc_attr($logs_pag +1) . '" data-instance_id="'.esc_attr($instance_id).'">
+			$html .= '<a class="next-page button" href="'.esc_url($next_url).'" data-fns-logs-pag="' . esc_attr($logs_pag +1) . '" data-instance_id="'.esc_attr($instance_id).'">
 					  <span class="screen-reader-text">' . esc_html__( 'Next page' ) . '</span><span aria-hidden="true">&rsaquo;</span></a>';
 		
 		} else {
@@ -268,7 +268,7 @@ if ( count($logs_index) == 0 ) {
 		if ( $logs_pag +1 < $total_pages ) {
 
 			$last_url = add_query_arg ( 'fnslogspag', $total_pages, $current_url ) . '#fnslogs';
-			$html .= '<a class="last-page button" href="' . esc_attr($last_url) . '" data-fns-logs-pag="' . esc_attr($total_pages) . '" data-instance_id="'.esc_attr($instance_id).'">
+			$html .= '<a class="last-page button" href="' . esc_url($last_url) . '" data-fns-logs-pag="' . esc_attr($total_pages) . '" data-instance_id="'.esc_attr($instance_id).'">
 					  <span class="screen-reader-text">' . esc_html__( 'Last page' ) . '</span><span aria-hidden="true">&raquo;</span></a>';
 		
 		} else {

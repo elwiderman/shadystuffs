@@ -23,19 +23,7 @@ if (!defined('ABSPATH')) {
             wp_nonce_field('wf-update-invoice-'.WF_PKLIST_POST_TYPE);
         }
         $date_frmt_tooltip=__('Click to append with existing data','print-invoices-packing-slip-labels-for-woocommerce');
-        $order_statuses_customer = Wf_Woocommerce_Packing_List::get_option('woocommerce_wf_generate_for_orderstatus',$this->module_id);
-        $order_statuses_for_customer = array();
-        foreach($order_statuses_customer as $cus_ord_status){
-            if(isset($order_statuses[$cus_ord_status])){
-                $order_statuses_for_customer[$cus_ord_status] = $order_statuses[$cus_ord_status];
-            }
-        }
-
-        // Get an instance of the WC_emails Object 
-        $wc_emails = WC()->mailer();
-        $emails_array = $wc_emails->get_emails();
-        $new_order_email = $emails_array['WC_Email_New_Order'];
-        $new_order_recipient = $new_order_email->recipient;
+        $invoice_attachment_wc_email_classes = Wf_Woocommerce_Packing_List::get_option('wt_pdf_invoice_attachment_wc_email_classes',$this->module_id);
         ?>
         <table class="wf-form-table">
             <tbody>
@@ -103,30 +91,19 @@ if (!defined('ABSPATH')) {
                             'ref_id' => 'woocommerce_wf_generate_for_orderstatus',
                         ),
 
-                        'woocommerce_wf_add_invoice_in_admin_mail' => array(
-                            'type' => 'wt_single_checkbox',
-                            'label' => __("Attach invoice PDF to admin email","print-invoices-packing-slip-labels-for-woocommerce"),
-                            'id' => 'woocommerce_wf_add_invoice_in_admin_mail',
-                            'name' => 'woocommerce_wf_add_invoice_in_admin_mail',
-                            'value' => "Yes",
-                            'checkbox_fields' => array('Yes'=> __("Enable to attach invoice PDF to the new order email notification","print-invoices-packing-slip-labels-for-woocommerce")),
-                            'class' => "woocommerce_wf_add_invoice_in_admin_mail",
-                            'col' => 3,
-                        ),
-
-                        'woocommerce_wf_add_invoice_in_customer_mail' => array(
+                        'wt_pdf_invoice_attachment_wc_email_classes' => array(
                             'type' => 'wt_select2_checkbox',
-                            'label' => __("Attach invoice pdf in customer email","print-invoices-packing-slip-labels-for-woocommerce"),
-                            'name' => 'woocommerce_wf_add_invoice_in_customer_mail',
-                            'id' => 'woocommerce_wf_add_invoice_in_customer_mail_st',
-                            'value' => $order_statuses_for_customer,
-                            'checkbox_fields' => $order_statuses_for_customer,
-                            'class' => 'woocommerce_wf_add_invoice_in_customer_mail',
+                            'label' => __("Attach invoice pdf in WooCommerce Email","print-invoices-packing-slip-labels-for-woocommerce"),
+                            'name' => 'wt_pdf_invoice_attachment_wc_email_classes',
+                            'id' => 'wt_pdf_invoice_attachment_wc_email_classes_st',
+                            'value' => $invoice_attachment_wc_email_classes,
+                            'checkbox_fields' => Wt_Pklist_Common::wt_pdf_get_wc_email_classes(),
+                            'class' => 'wt_pdf_invoice_attachment_wc_email_classes',
                             'col' => 3,
-                            'placeholder' => __("Choose order status","print-invoices-packing-slip-labels-for-woocommerce"),
-                            'help_text' => __("Invoice in PDF format will be attached with the order email for chosen order statuses.","print-invoices-packing-slip-labels-for-woocommerce"),
+                            'placeholder' => __("Choose email classes","print-invoices-packing-slip-labels-for-woocommerce"),
+                            'help_text' => __("Select email classes that match the order statuses selected under the `Automate invoice creation` option. If no order status is selected, you must manually generate invoice to attach it with these order emails.","print-invoices-packing-slip-labels-for-woocommerce"),
                             'alignment' => 'vertical_with_label',
-                            'ref_id' => 'woocommerce_wf_add_invoice_in_customer_mail',
+                            'ref_id' => 'wt_pdf_invoice_attachment_wc_email_classes',
                         ),
 
                         'wf_woocommerce_invoice_show_print_button' => array(

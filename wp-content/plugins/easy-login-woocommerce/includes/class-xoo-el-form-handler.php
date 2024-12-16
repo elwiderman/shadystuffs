@@ -290,13 +290,35 @@ class Xoo_El_Form_Handler{
 					throw new Xoo_Exception( $message );
 				}
 
+				$fieldsWithFiles = array();
+
 				foreach ( $fieldValues as $field_id => $field_value ) {
 
 					//Add extra data for custom fields
 					if( in_array( $field_id , xoo_el_fields()->skipFields ) ) continue;
 
+					//Set field value to false for FILES, we will use it later after creating account.
+					if( $reg_admin_fields[ $field_id ]['input_type'] === 'file' ){
+						$fieldsWithFiles[$field_id] = $field_value;
+						$field_value 				= '';
+					}
+
 					$reg_extra_data[ $field_id ] = $field_value;
 					
+				}
+
+
+				//Check if user role value received is one of user roles allowed
+				if( isset( $fieldValues['xoo_el_reg_userrole'] ) ){
+
+					$userRoleSelected = sanitize_text_field( $fieldValues['xoo_el_reg_userrole'] );
+
+					if( !isset( $reg_admin_fields[ 'xoo_el_reg_userrole' ] ) || !isset( $reg_admin_fields[ 'xoo_el_reg_userrole' ]['settings']['select_list'][ $userRoleSelected ] ) ){
+						throw new Xoo_Exception( 'Error selecting user role, please try again' );
+					}
+
+					$reg_extra_data[ 'userRoleSelected' ] = $userRoleSelected;
+
 				}
 
 				
@@ -321,11 +343,27 @@ class Xoo_El_Form_Handler{
 					$username = '';
 				}
 
+
+				if( !empty( $fieldsWithFiles ) ){
+					$attachmentIDS = xoo_el_helper()->upload_files_as_attachment( $fieldsWithFiles );
+					if( is_wp_error( $attachmentIDS ) ){
+						throw new Xoo_Exception( $attachmentIDS );
+					}
+				}
+
+
 				$new_customer = self::create_customer( $email, $username, $password, $reg_extra_data );
 
 
 				if ( is_wp_error( $new_customer ) ) {
 					throw new Xoo_Exception( $new_customer );
+				}
+
+
+				if( isset( $attachmentIDS ) && !empty( $attachmentIDS ) ){
+					foreach ( $attachmentIDS as $field_id => $ids ) {
+						update_user_meta( $new_customer, $field_id, $ids );
+					}
 				}
 
 
@@ -432,7 +470,7 @@ class Xoo_El_Form_Handler{
 			'user_login' => $username,
 			'user_pass'  => $password,
 			'user_email' => $email,
-			'role'       => esc_attr( self::$glSettings['m-user-role'] ),
+			'role'       => isset( $extra_data['userRoleSelected'] ) ? $extra_data['userRoleSelected'] : esc_attr( self::$glSettings['m-user-role'] ),
 		);
 		
 		$new_customer_data = apply_filters( 'xoo_el_register_new_customer_data', $customer_data );

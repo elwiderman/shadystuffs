@@ -5,7 +5,7 @@
  * This is the shipping class that extends WC
  *
  * @package Fish and Ships
- * @version 1.5.8
+ * @version 1.6.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -47,11 +47,8 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		$this->option_name           = 'woocommerce_'. $Fish_n_Ships->id .'_'. $this->instance_id .'_settings';
 
 		$this->method_title          = $Fish_n_Ships->im_pro() ? 'Fish and Ships Pro' : 'Fish and Ships';
+		$this->method_description    = $this->get_method_description();
 
-		// Since WC 8.4 the method type has been removed.
-		$mt = version_compare( WC()->version, '8.4.0', '<') ? '' : $this->method_title . '. ';
-
-		$this->method_description    = $mt . __('A WooCommerce shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.', 'fish-and-ships');
 		$this->supports              = array(
 			'shipping-zones',
 			'instance-settings',
@@ -81,7 +78,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * Init user set variables.
 	 *
 	 * @since 1.0.0
-	 * @version 1.5.2
+	 * @version 1.6.2
 	 */
 	public function load_settings() {
 		$this->title                    = $this->get_option( 'title' );
@@ -96,7 +93,8 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		$this->min_shipping_price       = $this->get_option( 'min_shipping_price' );
 		$this->max_shipping_price       = $this->get_option( 'max_shipping_price' );
 		$this->write_logs               = $this->get_option( 'write_logs' );
-
+		$this->method_description       = $this->get_option( 'method_description', '' );
+		
 		$this->shipping_rules           = $this->get_shipping_rules();
 		
 		if ($this->write_logs == 'everyone') {
@@ -108,6 +106,33 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 		} else {
 			$this->write_logs_boolean = false;
 		}
+	}
+	
+	/**
+	 * Get default method description
+	 *
+	 * @since 1.6.2
+	 */
+	public function get_default_method_description() {
+		
+		// Since WC 8.4 the method type has been removed.
+		$default_method_description  = version_compare( WC()->version, '8.4.0', '<') ? '' : $this->method_title . '. ';
+		$default_method_description .= __('A WooCommerce shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.', 'fish-and-ships');
+		
+		return $default_method_description;
+	}
+	
+	/**
+	 * Get method description. Fallback to default
+	 *
+	 * @since 1.6.2
+	 */
+	public function get_method_description()
+	{
+		if( trim( $this->method_description ) == '' )
+			return $this->get_default_method_description();
+		
+		return $this->method_description;
 	}
 	
 	/**
@@ -244,7 +269,7 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 	 * Calculate the shipping costs.
 	 *
 	 * @since 1.0.0
-	 * @version 1.5.8
+	 * @version 1.6.2
 	 *
 	 * @param array $package Package of items from cart.
 	 */
@@ -307,12 +332,12 @@ class WC_Fish_n_Ships extends WC_Shipping_Method {
 				
 				$n_shippable += $Fish_n_Ships->get_quantity($product);
 			
-				$this->debug_log('- ' . $Fish_n_Ships->get_name($product) . ' (' . $Fish_n_Ships->get_quantity($product) . ')', 0);
+				$this->debug_log('- #' . $Fish_n_Ships->get_prod_or_variation_id($product) . ' ' . $Fish_n_Ships->get_name($product) . ' (' . $Fish_n_Ships->get_quantity($product) . ')', 0);
 			
 			} else {
 				$n_non_shippable += $Fish_n_Ships->get_quantity($product);
 
-				$this->debug_log('- ' . $Fish_n_Ships->get_name($product) . ' ( non-shippable )', 0);
+				$this->debug_log('- #' . $Fish_n_Ships->get_prod_or_variation_id($product) . ' ' . $Fish_n_Ships->get_name($product) . ' ( non-shippable )', 0);
 			}
 		}
 				$this->log_totals['cart_qty'] = ($n_shippable + $n_non_shippable) . ($n_non_shippable == 0 ? ' shippable prods.' : ' prods, ' . $n_shippable . ' shippable');

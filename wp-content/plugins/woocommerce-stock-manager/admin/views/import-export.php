@@ -84,18 +84,15 @@ function stock_auto_utf( $s ) {
 							'data'     : jsonObject
 						};
 						jQuery.post(ajaxurl, data, function( response ) {
-							var data, filename, link;
+							var filename, link;
 							var csv = convertArrayOfObjectsToCSV({
 								datas: JSON.parse( response )
 							});
 							if (csv == null) return;
 							filename = 'stock-manager-export.csv';
-							if (!csv.match(/^data:text\/csv/i)) {
-								csv = 'data:text/csv;charset=utf-8,' + csv;
-							}
-							data = encodeURI(csv);
+							let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 							link = document.createElement('a');
-							link.setAttribute('href', data);
+							link.setAttribute('href', URL.createObjectURL(blob));
 							link.setAttribute('download', filename);
 							link.click();
 						});

@@ -75,6 +75,18 @@ $pro_installed = false;
         <div style="position:relative;width:30%;float:left;">
             <div class="wt_pro_addon_tile_doc" style="<?php echo is_rtl() ? 'left:0;' : 'right:0;'; ?>">
                 <div class="wt_pro_addon_widget_doc">
+                <?php
+                    /**
+                     * @since 4.7.0 - Add offer for Black Friday Cyber Monday 2024
+                     */
+                    if( Wt_Pklist_Common::is_bfcm_season() ) {
+                       ?>
+                <div class="bfcm_doc_settings">
+                    <img src="<?php echo esc_url(WF_PKLIST_PLUGIN_URL . 'admin/modules/banner/assets/images/bfcm-doc-settings-coupon.svg'); ?>">
+                </div>
+                       <?php
+                    }
+                ?>
                     <div class="wt_pro_addon_widget_wrapper_doc">
                         <p><?php _e('Get advanced features for your','print-invoices-packing-slip-labels-for-woocommerce'); ?></p>
                         <div class="wt_pro_addon_widget_wrapper_doc_logo_title">

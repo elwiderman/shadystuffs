@@ -213,7 +213,7 @@ if ( !class_exists( 'Fish_n_Ships_WAPF' ) ) {
 			echo '<div class="notice wc-fns-wizard must">'
 				. '<h3>Fish and ships 3rd-party compatibility</h3>' 
 				. '<p>Now Fish and Ships gives compatibility for StudioWombat Advanced Product Fields for WooCommerce (WAPF).</p>'
-				. '<a href="' . add_query_arg('wc-fns-wizard', 'off') . '" class="button" data-ajax="wizard" data-param="off">' . esc_html__('Thanks, don\'t show me again', 'fish-and-ships') . '</a></p>'
+				. '<a href="' . esc_url( add_query_arg('wc-fns-wizard', 'off') ) . '" class="button" data-ajax="wizard" data-param="off">' . esc_html__('Thanks, don\'t show me again', 'fish-and-ships') . '</a></p>'
 				. '</div>';
 
 		}

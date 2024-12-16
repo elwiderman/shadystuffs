@@ -80,6 +80,7 @@ class Wf_Woocommerce_Packing_List_Public {
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->load_public_modules();
 	}
 
 	/**
@@ -206,5 +207,20 @@ class Wf_Woocommerce_Packing_List_Public {
 	{
 		$labels=apply_filters('wf_pklist_alter_document_module_labels',self::$modules_label);
 		return $labels;
+	}
+
+	public static function load_public_modules() {
+		$public_modules = array(
+			'ubl'
+		);
+		$public_modules = apply_filters( 'wf_pklist_public_modules', $public_modules );
+
+		foreach ( $public_modules as $module ) {
+			$module_file = plugin_dir_path(__FILE__) . "modules/{$module}/class-wt-pklist-pdf-{$module}.php";
+
+			if ( file_exists( $module_file ) ) {
+				require_once $module_file;
+			}
+		}
 	}
 }

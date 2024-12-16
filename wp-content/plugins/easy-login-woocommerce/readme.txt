@@ -3,8 +3,8 @@ Contributors: XootiX, xootixsupport
 Donate link: https://www.paypal.me/xootix
 Tags: social login, login customizer, registration, popup, custom registration fields
 Requires at least: 3.0.1
-Tested up to: 6.6
-Stable tag: 2.7.6
+Tested up to: 6.7
+Stable tag: 2.8.3
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -89,6 +89,34 @@ theme/templates/easy-login-woocommerce/globals/ For more info, check template he
 10. Shortcodes
 
 == Changelog ==
+
+= 2.8.3 =
+* New Field - User role
+* Compatibility with paid membership pro plugin
+
+
+= 2.8.2 =
+* New Field - Profile Picture
+
+= 2.8.1 =
+* Fix - Deprecated warning in PHP 8.2
+
+= 2.8 =
+* New - Profile builder add-on ( allow logged in users to update their profile fields )
+* Improved - File Upload field
+
+= 2.7.9 =
+* Fix - WP Rocket recent update hiding popup
+
+= 2.7.8 =
+* Fix - Mailpoet compatibility
+
+= 2.7.7 =
+* New - Upload file field
+* New - Use firstname/lastname/username in shortcode [xoo_el_action]
+* New - Mailpoet compatibility
+* Fix - WPML shortcode compatibility
+
 = 2.7.6 =
 * Fix - error for non-woocommerce users
 

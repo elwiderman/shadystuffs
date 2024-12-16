@@ -124,6 +124,19 @@ if ( $template_type === 'packinglist' ) {
 				<img src="<?php echo esc_url( WF_PKLIST_PLUGIN_URL.'admin/images/other_solutions/promote_crown.png' ); ?>" style="width: 14px;height: 13px;margin-right: 7px;"><?php  echo __( 'Upgrade To Premium', 'print-invoices-packing-slip-labels-for-woocommerce' ); ?>
 			</a>
 		</div>
+		<?php
+		/**
+		 * @since 4.7.0 - Add offer for Black Friday Cyber Monday 2024
+		 */
+		if( Wt_Pklist_Common::is_bfcm_season() ) {
+			?>
+		<div class="wt_pklist_customizer_promotion_footer_bfcm_banner" style="position:relative;">
+				<img src="<?php echo esc_url( WF_PKLIST_PLUGIN_URL.'admin/modules/banner/assets/images/bfcm-packingslip-customizer.svg' ); ?>" style="vertical-align:bottom;">
+			</a>
+		</div>
+		<?php
+			}
+		?>
 	</div>
 	<?php
 		} // end of is_pro_customizer false and popup available for template type.

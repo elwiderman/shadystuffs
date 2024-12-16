@@ -3,7 +3,7 @@
  * The WC-way form for the shipping method options.
  *
  * @package Fish and Ships
- * @version 1.5
+ * @version 1.6.2
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -191,6 +191,14 @@ foreach ( $currencies as $currency => $symbol ) {
 	);
 }
 
+$settings['method_description'] = array(
+		'title'         => __( 'Method description', 'fish-and-ships' ),
+		'type'          => 'textarea',
+		'default'       => $this->get_default_method_description(),
+		'description'   => __( 'This text will replace the default method description (displayed in the shipping zone screen on the admin side).', 'fish-and-ships'),
+		'desc_tip' 		=> __( 'This text can help you or others remember this method\'s settings without needing to enter here and review all the details again.', 'fish-and-ships' ),
+);
+
 $settings['write_logs'] = array(
 		'title'         => __( 'Write logs', 'fish-and-ships' ),
 		'type'          => 'select',
@@ -204,6 +212,7 @@ $settings['write_logs'] = array(
 		'description'   => __( 'Really useful if you are testing your newly-configured shipping method.', 'fish-and-ships') . '<br>' . __('The logs will be stored in your database and are not sent anywhere.', 'fish-and-ships'),
 		'desc_tip' 		=> __( 'It can aid in understanding why the shipping costs are not what you expect, and/or help us to debug.', 'fish-and-ships' ) . ' ' . __('Click to open detailed help about all input fields.', 'fish-and-ships' ),
 );
+
 
 // The logs panel
 $settings['the_logs'] = array(

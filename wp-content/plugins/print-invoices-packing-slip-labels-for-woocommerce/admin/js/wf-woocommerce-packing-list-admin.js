@@ -120,7 +120,7 @@
 	        			});
 	        		}
 					var action_url = wf_pklist_params.print_action_url + '&type=' + action + '&post=' + (order_id_arr.join(',')) + '&_wpnonce=' + wf_pklist_params.nonces.wf_packlist + '&wt-pdf-bulk=1';
-					var is_this_print_button = (-1 !== action_url.indexOf('type=print_'));
+					var is_this_print_button = ( ( -1 !== action_url.indexOf('type=print_') ) && ( -1 === action_url.indexOf( 'type=print_ubl') )  );
 	        		if(is_confirmation_needed)
 	        		{
 	        			if(confirm(wf_pklist_params.msgs.invoice_not_gen_bulk))
@@ -744,9 +744,12 @@ var wt_pdf_field_group =
 	}
 };
 
-function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(url,a)
+function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(given_url,a)
 {
-	var is_this_print_button = (-1 !== url.indexOf('type=print_'));
+	var url = '';
+	url = given_url;
+	
+	var is_this_print_button = (-1 !== url.indexOf('type=print_') && (-1 === url.indexOf('type=print_ubl')));
 	/*
 	1 - invoice/proforma invoice number
 	2 - invoice for free order
@@ -820,7 +823,96 @@ function wf_Confirm_Notice_for_Manually_Creating_Invoicenumbers(url,a)
     else
 	{
 		if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) { 
-			window.open(action_url, '_blank');
+			window.open(url, '_blank');
+			setTimeout(function () {
+				window.location.reload(true);
+			}, 1000);   
+		} else {
+			do_print_document_in_admin_page(url);
+		}           
+	}
+    return false;
+};
+
+function wf_Confirm_Notice_for_Manually_Creating_Ubl_Invoicenumbers(given_url_ublinvoice,a)
+{
+	var url = '';
+	url = given_url_ublinvoice;
+	var is_this_print_button = (-1 !== url.indexOf('type=print_') && (-1 === url.indexOf('type=print_ubl')));
+	/*
+	1 - invoice/proforma invoice number
+	2 - invoice for free order
+	3 - empty from address for invoice
+	11 - creditnote number
+	
+	*/
+    if((1 === a || "1" === a) || (2 === a || "2" === a) || (3 === a || "3" === a) || ("11" === a || 11 === a))
+    {
+    	if("2" === a || 2 === a){
+    		var invoice_prompt = wf_pklist_params.msgs.invoice_number_prompt_free_order;
+    	}else if("11" === a || 11 === a){
+    		var invoice_prompt = wf_pklist_params.msgs.creditnote_number_prompt;
+    	}else if("3" === a || 3 === a){
+    		var invoice_prompt = wf_pklist_params.msgs.invoice_number_prompt_no_from_addr;
+    		alert(invoice_prompt);
+    		return false;
+    	}else{
+    		var msg_title=((1 === a || "1" === a) ? wf_pklist_params.msgs.invoice_title_prompt : a);
+    		var invoice_prompt = msg_title+' '+wf_pklist_params.msgs.invoice_number_prompt;
+    	}
+		
+		if(true === wf_pklist_params.msgs.pop_dont_show_again){
+			url = url+'&wt_dont_show_again=1';
+			window.open(url, '_blank');
+			setTimeout(function () {
+				window.location.reload(true);
+			}, 1000);   
+		}else{
+			var elm=jQuery('.wt_doc_create_confirm_popup_ublinvoice');
+			if(jQuery('.wt_doc_create_confirm_popup_ublinvoice').length === 0){
+				if(confirm (invoice_prompt))
+				{                         
+					if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) { 
+						window.open(url, '_blank');
+						setTimeout(function () {
+							window.location.reload(true);
+						}, 1000);   
+					} else {
+						do_print_document_in_admin_page(url,false,true);  
+					}	
+				} else {
+					return false;
+				}
+			} else {
+				
+				// admin - order edit page print triggers
+				elm.children().find('.message').html(invoice_prompt);
+				elm.children().find('.wt_doc_create_confirm_popup_main_ublinvoice,.wt_doc_create_confirm_popup_ublinvoice_footer').show();
+				wf_popup.showPopup(elm);
+
+				jQuery('.wt_doc_create_confirm_popup_yes_ublinvoice').on('click', function () {
+					if(jQuery('#wt_dont_show_again_doc_create_ublinvoice').is(':checked')){
+						url = url+'&wt_dont_show_again=1';
+					}
+
+					if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) {
+						jQuery('.wf_pklist_popup_cancel').trigger('click');
+						window.open(url, '_blank');
+						setTimeout(function () {
+							window.location.reload(true);
+						}, 1000);     
+					} else {
+						jQuery('.wf_pklist_popup_cancel').trigger('click');
+						do_print_document_in_admin_page(url,false,true);  
+					}
+				});
+			}
+		}
+    }
+    else
+	{
+		if (false === is_this_print_button || 'Yes' === wf_pklist_params.show_document_preview) { 
+			window.open(url, '_blank');
 			setTimeout(function () {
 				window.location.reload(true);
 			}, 1000);   

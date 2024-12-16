@@ -432,7 +432,7 @@ class Xoo_Aff_Fields{
 	public function sort_by_priority( $data = array() ){
 		if( !is_array( $data ) || empty( $data ) ) return $data;
 		uasort( $data, function( $a, $b ){
-			if( $a['priority'] === $b['priority'] ){
+			if( !isset( $a['priority'] ) || !isset( $b['priority'] ) || $a['priority'] === $b['priority'] ){
 				return 0;
 			}
 			return $a['priority'] > $b['priority']  ? 1 : -1;
@@ -469,8 +469,6 @@ class Xoo_Aff_Fields{
 				continue;
 			}
 
-
-
 			//Force default field values
 			if( isset( $fields_before[ $field_id ] ) ){
 				$fields[ $field_id ]['settings'] = array_merge( $field_data['settings'], $fields_before[ $field_id ]['settings'] ); 
@@ -485,8 +483,10 @@ class Xoo_Aff_Fields{
 
 				//if setting value needs sorting
 				if( isset( $setting_data['sort'] ) && $setting_data['sort'] === "yes" ){
-					$fields[ $field_id ][ 'settings' ][ $setting_id ] = $this->sort_by_priority( $field_data['settings'][ $setting_id ] );
+					$fields[ $field_id ][ 'settings' ][ $setting_id ] = $this->sort_by_priority( $fields[ $field_id ][ 'settings' ][ $setting_id ] );
 				}
+
+
 
 			}
 
@@ -579,6 +579,8 @@ class Xoo_Aff_Fields{
 			'settings' 	 => $settings,
 			'priority'	 => !$field_priority ? $this->set_default_priority() : $field_priority
 		) ;
+
+
 	}
 
 
@@ -654,6 +656,7 @@ class Xoo_Aff_Fields{
 					'priority' 	=> '',
 				)
 			)
+
 		);
 
 	}
@@ -728,7 +731,7 @@ class Xoo_Aff_Fields{
 				$setting,
 				$setting_options[$setting_option_id]
 			);
-			
+
 			if( !isset( $this->sections[ $setting['section'] ] ) ) continue;
 
 			$this->add_setting( $setting['id'], $setting['title'], $setting['type'], $field_type_id, $setting );
@@ -851,6 +854,7 @@ class Xoo_Aff_Fields{
 			'autofocus'         => '',
 			'priority'          => '',
 			'icon' 				=> '',
+			'validation' 		=> true,
 		);
 
 
@@ -869,7 +873,9 @@ class Xoo_Aff_Fields{
 
 		$args = apply_filters( 'xoo_aff_'.$this->plugin_slug.'_input_args', $args );
 
-		$input_type = $args['input_type'];
+		$input_type 	= $args['input_type'];
+
+		$layout_profile = isset( $args['upload_layout'] ) && $args['upload_layout'] === 'profile';
 
 		//Handle strings passed as array
 		$handle_strings = array( 'class', 'label_class', 'cont_class' );
@@ -897,25 +903,34 @@ class Xoo_Aff_Fields{
 			$args['custom_attributes']['select2'] = 'yes';
 		}
 
-		if ( $args['maxlength'] ) {
-			$args['custom_attributes']['maxlength'] = absint( $args['maxlength'] );
-		}
+		if( $args['validation'] ){
 
-		if ( $args['minlength'] ) {
-			$args['custom_attributes']['minlength'] = absint( $args['minlength'] );
-		}
+			if ( $args['maxlength'] ) {
+				$args['custom_attributes']['maxlength'] = absint( $args['maxlength'] );
+			}
+
+			if ( $args['minlength'] ) {
+				$args['custom_attributes']['minlength'] = absint( $args['minlength'] );
+			}
 
 
-		if ( $args['max'] ) {
-			$args['custom_attributes']['max'] = $args['max'];
-		}
+			if ( $args['max'] ) {
+				$args['custom_attributes']['max'] = $args['max'];
+			}
 
-		if ( $args['min'] ) {
-			$args['custom_attributes']['min'] = $args['min'];
-		}
+			if ( $args['min'] ) {
+				$args['custom_attributes']['min'] = $args['min'];
+			}
 
-		if ( $args['step'] ) {
-			$args['custom_attributes']['step'] = $args['step'];
+			if ( $args['step'] ) {
+				$args['custom_attributes']['step'] = $args['step'];
+			}
+
+			if ( $args['required'] === "yes" ) {
+				$args['class'][] = 'xoo-aff-required';
+				$args['custom_attributes']['required'] = '	';
+			}
+
 		}
 
 		if ( ! empty( $args['autocomplete'] ) ) {
@@ -926,13 +941,27 @@ class Xoo_Aff_Fields{
 			$args['custom_attributes']['autofocus'] = 'autofocus';
 		}
 
-		if ( $args['required'] === "yes" ) {
-			$args['class'][] = 'xoo-aff-required';
-			$args['custom_attributes']['required'] = '	';
-		}
-
+		
 		if( isset( $args['rows'] ) ){
 			$args['custom_attributes']['rows'] = $args['rows'];
+		}
+
+		if( $args['input_type'] === 'file' ){
+
+			$args['custom_attributes']['accept'] = $args['file_type'];
+
+			if( $args['file_multiple'] === "yes" ){
+				$args['custom_attributes']['multiple'] = 'multiple';
+			}
+
+			if( $args['file_type'] ){
+				$args['custom_attributes']['accept'] = $args['file_type'];
+			}
+
+			if( $args['value'] && !empty( $args['value'] ) ){
+				unset( $args['custom_attributes']['required'] );
+			}
+			
 		}
 
 
@@ -947,11 +976,19 @@ class Xoo_Aff_Fields{
 			$args['class'][] = 'xoo-aff-input-date';
 		}
 
+
 		$args['class'] = array_merge( $args['class'], array(
 			'xoo-aff-'.$input_type
 		) );
 
 		$args['cont_class'][] = $field_id.'_cont';
+
+		if( $layout_profile ){
+			$args['cont_class'][] = 'xoo-aff-file-profile-cont';
+		}
+
+
+		$args = apply_filters( 'xoo_aff_'.$this->plugin_slug.'_before_html_input_args', $args );
 
 
 		$custom_attributes 	= implode( ' ', $custom_attributes );
@@ -975,8 +1012,16 @@ class Xoo_Aff_Fields{
 
 		$field_html = '<div class="'.$cont_class.'">'; //Open DIV parent 1
 
+		if( $layout_profile ){
+			$field_html .= '<label class="xoo-aff-file-profile">';
+		}
+
 		if( $label ){
-			$field_html .= '<label for='.$field_id.' class="xoo-aff-label">'.$label.'</label>';
+			$label_html  = '<label for='.$field_id.' class="xoo-aff-label">'.$label.'</label>';
+
+			if( !$layout_profile ){
+				$field_html .= $label_html;
+			}
 		}
 		
 		//Show Icons
@@ -985,16 +1030,24 @@ class Xoo_Aff_Fields{
 			$field_html .= '<span class="xoo-aff-input-icon '.esc_attr( $args['icon'] ).'"></span>';
 		}
 
+		if( $layout_profile ){
+			$field_html .= '<i class="fas fa-plus-circle xoo-ff-file-pladd"></i>';
+			$field_html .= '<i class="fas fa-check-circle xoo-ff-file-plcheck"></i>';
+			$field_html .= '<img class="xoo-ff-file-preview" alt="Preview" style="display: none;">';
+		}
+	
+		$input_html = '';
+
 		switch ( $input_type ) {
 			
 			case 'password':
 			case 'email':
 			case 'number':
 			case 'tel':
-				$field_html .= '<input type="' . $input_type . '" class="' . $class . '" name="' . $field_id . '" placeholder="' . $placeholder . '"  value="' . $value . '" ' . $custom_attributes . '/>';
+				$input_html .= '<input type="' . $input_type . '" class="' . $class . '" name="' . $field_id . '" placeholder="' . $placeholder . '"  value="' . $value . '" ' . $custom_attributes . '/>';
 
 				if( isset( $args['password_visibility'] ) && $args['password_visibility'] === 'yes' ){
-					$field_html .= '<div class="xoo-aff-pw-toggle">
+					$input_html .= '<div class="xoo-aff-pw-toggle">
 					<span class="xoo-aff-pwtog-show"><i class="far fa-eye"></i></span>
 					<span class="xoo-aff-pwtog-hide"><i class="far fa-eye-slash"></i></span>
 					</div>';
@@ -1005,11 +1058,15 @@ class Xoo_Aff_Fields{
 			case 'text':
 			case 'date':
 			case 'phone':
-				$field_html .= '<input type="text" class="' . $class . '" name="' . $field_id . '" placeholder="' . $placeholder . '"  value="' . $value . '" ' . $custom_attributes . '/>';
+				$input_html .= '<input type="text" class="' . $class . '" name="' . $field_id . '" placeholder="' . $placeholder . '"  value="' . $value . '" ' . $custom_attributes . '/>';
 				break;
 
 			case 'textarea':
-				$field_html .= '<textarea class="' . $class . '" name="' . $field_id . '" placeholder="' . $placeholder . '" ' . $custom_attributes . '>'. $value .'</textarea>';
+				$input_html .= '<textarea class="' . $class . '" name="' . $field_id . '" placeholder="' . $placeholder . '" ' . $custom_attributes . '>'. $value .'</textarea>';
+				break;
+
+			case 'file':
+				$input_html .= '<input type="' . $input_type . '" class="' . $class . '" name="' . $field_id . '[]" placeholder="' . $placeholder . '" ' . $custom_attributes . '/>';
 				break;
 
 
@@ -1036,7 +1093,7 @@ class Xoo_Aff_Fields{
 					}
 
 					$checkbox_html .= '</div>';
-					$field_html .= $checkbox_html;
+					$input_html .= $checkbox_html;
 				}
 				
 				break;
@@ -1057,7 +1114,7 @@ class Xoo_Aff_Fields{
 					}
 
 					$radio_html .= '</div>';
-					$field_html .= $radio_html;
+					$input_html .= $radio_html;
 				}
 				break;
 
@@ -1077,7 +1134,7 @@ class Xoo_Aff_Fields{
 				}
 
 				$select_html .= '</select>';
-				$field_html .= $select_html;
+				$input_html .= $select_html;
 				
 				break;
 
@@ -1095,10 +1152,14 @@ class Xoo_Aff_Fields{
 				}
 
 				$select_html .= '</select>';
-				$field_html .= $select_html;
+				$input_html .= $select_html;
 
 				break;
 		}
+
+		$input_html = apply_filters( 'xoo_aff_'.$this->plugin_slug.'_input_raw_html', $input_html, $args ); // near input
+
+		$field_html .= $input_html;
 
 		$field_html = apply_filters( 'xoo_aff_'.$this->plugin_slug.'_input_html', $field_html, $args ); // near input
 
@@ -1107,6 +1168,27 @@ class Xoo_Aff_Fields{
 		}
 
 		if( $args['icon'] ){
+			$field_html .= '</div>';
+		}
+
+		if( $layout_profile ){
+			if( $label ){
+				$field_html .= $label_html;
+			}
+			$field_html .= '</label>';
+		}
+
+		if( $input_type === 'file' && $value && !empty( $value ) ){
+			$field_html .= '<div class="xoo-ff-files">';
+			foreach ( $value as $attachment_id ) {
+				$url 		 = wp_get_attachment_url($attachment_id);
+				if( $url ){
+					$field_html .= '<div>';
+					$field_html .= '<a target="__blank" href="'.$url.'" class="xoo-ff-file-link">'.basename( get_attached_file( $attachment_id ) ).'</a><span class="xoo-ff-file-remove" data-id="'.$attachment_id.'">X</span>';
+					$field_html .= '<input type="hidden" name="'.$field_id.'_form_saved[]" value="'.$attachment_id.'">';
+					$field_html .= '</div>';
+				}
+			}
 			$field_html .= '</div>';
 		}
 
@@ -1271,16 +1353,111 @@ class Xoo_Aff_Fields{
 
 		foreach ( $fields as $field_id => $field_data ) {
 
-			$settings = $field_data[ 'settings' ];
+			$settings 	= $field_data[ 'settings' ];
+			$input_type = $field_data['input_type'];
 
 			if( empty( $settings ) || in_array( $field_id , $do_not_validate_ids ) || $settings['active'] !== "yes") continue;
 
 			//Field Validation
-			$userVal 	= isset( $values[ $field_id ] ) ? ( is_array( $_POST[ $field_id ] ) ? array_map( 'sanitize_text_field', $_POST[ $field_id ] ) : esc_attr( trim( $values[ $field_id ] ) ) ) : '';
-			$label 		= isset( $settings['label'] ) && trim( $settings['label'] ) ? trim( $settings['label'] ) : trim( $settings['placeholder'] );
+			$userVal 				= isset( $values[ $field_id ] ) ? ( is_array( $_POST[ $field_id ] ) ? array_map( 'sanitize_text_field', $_POST[ $field_id ] ) : esc_attr( trim( $values[ $field_id ] ) ) ) : '';
+			$label 					= isset( $settings['label'] ) && trim( $settings['label'] ) ? trim( $settings['label'] ) : trim( $settings['placeholder'] );
+
+			if( $input_type === 'file' ){
+
+				$savedAttachments 		= isset( $values[ $field_id.'_attachments' ] ) && !empty( $values[ $field_id.'_attachments' ] ) ? $values[ $field_id.'_attachments' ] : array();
+				$formSavedAttachments 	= isset( $values[ $field_id.'_form_saved' ] ) && !empty( $values[ $field_id.'_form_saved' ] ) ? $values[ $field_id.'_form_saved' ] : array();
+				$updatedSavedAttachments = array_intersect( $savedAttachments, $formSavedAttachments );
+
+				$fieldValues[ $field_id.'_attachments' ] = $updatedSavedAttachments; //if files are modified from frontend form
+
+				$files 				= array();
+				$isFileUploaded 	= !( empty($_FILES) || ( isset( $_FILES[$field_id] ) && ( !$_FILES[$field_id]['name'] || !$_FILES[$field_id]['name'][0]  ) ) );
+
+				// Throws a message if no file is selected
+				if( !$isFileUploaded ){
+
+					if( $settings['required'] === "yes" && empty( $updatedSavedAttachments ) ){
+						$errors->add( 'file-empty', sprintf( esc_attr__( '%s - File not selected.', $this->plugin_slug ), $label, ), $field_id );
+					}
+					
+				}
+				else{
+
+					if( $settings['file_multiple'] !== 'yes' && !empty( $updatedSavedAttachments ) ){
+						$errors->add( 'file-one-allowed', sprintf( esc_attr__( '%s - You can upload only one file. Please delete the previously attached file.', $this->plugin_slug ), $label, ), $field_id );
+						break;
+					}
+
+					//Organize raw files in proper format
+					$rawf 		= $_FILES[$field_id];
+					
+					$file_size 	= 0;
+
+					foreach( $rawf['name'] as $index => $name ) {
+
+						if ( $rawf['name'][$index] ) { 
+
+							$file = array( 
+								'name' 		=> $rawf['name'][$index],
+								'type' 		=> $rawf['type'][$index], 
+								'tmp_name' 	=> $rawf['tmp_name'][$index], 
+								'error' 	=> $rawf['error'][$index],
+								'size' 		=> $rawf['size'][$index]
+							);
+
+							$file_size += $file['size'];
+
+						}
+
+						$files[] = $file; 
+				
+					}
+
+					if( $settings['file_multiple'] === 'yes' && isset( $settings['file_multiple_max'] ) && ( $settings['file_multiple_max'] < ( count( $files ) + count( $updatedSavedAttachments ) ) ) ){
+						$errors->add( 'file-one-allowed', sprintf( esc_attr__( '%1$s - You can upload only %2$s file.', $this->plugin_slug ), $label, $settings['file_multiple_max'] ), $field_id );
+						break;
+					}
+
+					
+				}
+
+
+
+				if( $isFileUploaded && !empty( $files ) ){
+
+					//Check for file extension
+					$allowed_extensions = array_map( 'trim',explode( ',', str_replace('.', '', $settings['file_type'] ) ) );
+
+					foreach ( $files as $index => $file ) {
+
+						$file_type 			= wp_check_filetype( $file['name'] );
+
+						$file_extension 	= $file_type['ext'];
+
+						if ( !in_array( $file_extension, $allowed_extensions ) ) {
+							$errors->add( 'file-invalid', sprintf( esc_attr__( 'Invalid file extension, only allowed: %s', $this->plugin_slug ), implode(', ', $allowed_extensions ) ), $field_id );
+							break;
+						}
+						
+					}
+
+
+					// Check for file size limit
+					$allowed_file_size_mb 	= $settings['max_filesize'] ? $settings['max_filesize'] : 1; //In MB
+					$allowed_file_size_kb  	=  $allowed_file_size_mb * 1024 * 1024;// Here we are setting the file size limit to 500 KB = 500 × 1024
+
+					if ( $file_size >= $allowed_file_size_kb ) {
+						$errors->add( 'file-size', sprintf( esc_attr__( 'File size limit exceeded, file size should be smaller than %0.1f MB', $this->plugin_slug ), $allowed_file_size_mb ), $field_id );
+					}
+
+					$userVal = $files;
+
+				}
+	
+			}	
 
 			//If required and value is empty
-			if( isset($settings['required']) && $settings['required'] === "yes" &&  !$userVal ){
+			if( isset($settings['required']) && $settings['required'] === "yes" &&  !$userVal && $input_type !== 'file' ){
 
 				switch ( $field_data['input_type'] ) {
 					case 'checkbox_single':

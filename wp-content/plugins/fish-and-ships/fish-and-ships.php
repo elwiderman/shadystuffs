@@ -3,15 +3,15 @@
  * Plugin Name: Fish and Ships
  * Plugin URI: https://www.wp-centrics.com/
  * Description: A WooCommerce conditional table rate shipping method. Easy to understand and easy to use, it gives you an incredible flexibility.
- * Version: 1.5.9
+ * Version: 1.6.2
  * Author: wpcentrics
  * Author URI: https://www.wp-centrics.com
  * Text Domain: fish-and-ships
  * Domain Path: /languages
  * Requires at least: 4.7
- * Tested up to: 6.6
+ * Tested up to: 6.7
  * WC requires at least: 3.0
- * WC tested up to: 9.3
+ * WC tested up to: 9.4
  * Requires PHP: 7.0
  * License: GPLv2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 
 } else {
 
-	define ('WC_FNS_VERSION', '1.5.9' );
+	define ('WC_FNS_VERSION', '1.6.2' );
 	define ('WC_FNS_PATH', dirname(__FILE__) . '/' );
 	define ('WC_FNS_URL', plugin_dir_url( __FILE__ ) );
 
@@ -73,7 +73,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Constructor.
 		 *
 		 * @since 1.0.0
-		 * @version 1.5
+		 * @version 1.6.2
 		 */
 		public function __construct() {
 
@@ -99,6 +99,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			add_action( 'wp_ajax_wc_fns_logs',         array($this, 'wc_fns_logs') );
 			add_action( 'wp_ajax_wc_fns_logs_pane',    array($this, 'wc_fns_logs_pane') );
 			add_action( 'wp_ajax_wc_fns_fields',       array($this, 'wc_fns_fields') );
+			add_action( 'wp_ajax_wc_fns_messages',     array($this, 'wc_fns_messages') );
 			add_action( 'wp_ajax_wc_fns_freemium',     array($this, 'wc_fns_freemium') );
 			
 			if ( $this->im_pro() ) 
@@ -2268,16 +2269,98 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			return $html;
 		}
 
+		
+		
 		/**
-		 * Get textarea field
+		 * Get an integer field (can be used for asking IDs), with or without currency especific for duplication
+		 * With the unit
 		 *
-		 * @since 1.4.13
+		 * @since 1.6.2
 		 *
 		 * @param $field_name (string) the field name
 		 * @param $rule_nr (integer) rule ordinal (starting 0)
 		 * @param $sel_nr (integer) selector ordinal inside rule (starting 0)
 		 * @param $method_id (mixed) method id
-		 * @param $value for populate the field
+		 * @param curr_sufix used on multicurrency: EUR, USD, etc. Be aware! main currency is empty for legacy
+		 * @param $units for the input (mixed)
+		 * @param $values (array) for populate fields
+		 * @param $ambit_field (mixed) for class reference only
+		 * @param $ambit(mixed) for class reference only
+		 * @param $tips (string) field related helper tip
+		 * @param $comp (string) in comparison fields with LE/E/GE/G helper variation tip
+		 * @param $positive_only (boolean) true by default
+		 * @param $extra_class (string) 
+		 *
+		 * @return $html (HTML code) form code for the fields min / max
+		 *
+		 */
+		function get_integer_field( $field_name, $rule_nr, $sel_nr, $method_id, $curr_sufix, $units, $values, $ambit_field, $ambit, $tips, $comp, $positive_only=true, $extra_class='' ) {
+			
+			if ($curr_sufix != '' ) $curr_sufix = '-' . $curr_sufix;
+			if ($comp != '') $comp = '_' . $comp;
+			
+			$value = '';
+			if ( isset($values[$field_name . $curr_sufix]) ) $value = $values[$field_name . $curr_sufix];
+
+			$html = '<input type="text" name="shipping_rules[' . $rule_nr . ']['.$ambit_field.']['.$method_id.']['.$field_name.$curr_sufix.']['.$sel_nr.']" size="4" value="' . esc_attr( $this->format_number( $value, $positive_only ? 'positive-integer' : 'integer' ) ) . '" data-wc-fns-tip="i18n_'.$field_name.'_' . $tips . esc_attr($comp) . '"'
+					. ' class="' . ( $positive_only ? 'wc_fns_input_positive_integer' : 'wc_fns_input_integer' ) . ' wc_fns_input_tip ' . $extra_class . '" placeholder="0" autocomplete="off">';
+			
+			if( $units != '' )
+				$html .=  '<span class="units">'.$units.'</span>';
+			
+			return $html;
+		}
+
+		/**
+		 * Get text field (can be used for asking Labels), with or without currency especific for duplication
+		 * With the unit
+		 *
+		 * @since x.x.x
+		 *
+		 * @param $field_name (string) the field name
+		 * @param $rule_nr (integer) rule ordinal (starting 0)
+		 * @param $sel_nr (integer) selector ordinal inside rule (starting 0)
+		 * @param $method_id (mixed) method id
+		 * @param curr_sufix used on multicurrency: EUR, USD, etc. Be aware! main currency is empty for legacy
+		 * @param $units for the input (mixed)
+		 * @param $values (array) for populate fields
+		 * @param $ambit_field (mixed) for class reference only
+		 * @param $ambit(mixed) for class reference only
+		 * @param $tips (string) field related helper tip
+		 * @param $comp (string) in comparison fields with LE/E/GE/G helper variation tip
+		 * @param $extra_class (string) 
+		 *
+		 * @return $html (HTML code) form code for the fields min / max
+		 *
+		 */
+		function get_text_field( $field_name, $rule_nr, $sel_nr, $method_id, $curr_sufix, $units, $values, $ambit_field, $ambit, $tips, $comp = '', $extra_class='' ) {
+			
+			if ($curr_sufix != '' ) $curr_sufix = '-' . $curr_sufix;
+			if ($comp != '') $comp = '_' . $comp;
+			
+			$value = '';
+			if ( isset($values[$field_name . $curr_sufix]) ) $value = $values[$field_name . $curr_sufix];
+
+			$html = '<input type="text" name="shipping_rules[' . $rule_nr . ']['.$ambit_field.']['.$method_id.']['.$field_name.$curr_sufix.']['.$sel_nr.']" size="8" value="' . esc_attr( $value ) . '" data-wc-fns-tip="i18n_'.$field_name.'_' . $tips . esc_attr($comp) . '"'
+					. ' class="wc_fns_input_tip '.$extra_class.'" placeholder="" autocomplete="off">';
+			
+			if( $units != '' )
+				$html .=  '<span class="units">'.$units.'</span>';
+			
+			return $html;
+		}
+		
+		/**
+		 * Get textarea field
+		 *
+		 * @since 1.4.13
+		 * @version 1.6.2
+		 *
+		 * @param $field_name (string) the field name
+		 * @param $rule_nr (integer) rule ordinal (starting 0)
+		 * @param $sel_nr (integer) selector ordinal inside rule (starting 0)
+		 * @param $method_id (mixed) method id
+		 * @param $values for populate the field
 		 * @param $ambit_field (mixed) for class reference only
 		 * @param $tips (string) field related helper tip
 		 * @param $placeholder (string) placeholder text
@@ -2285,15 +2368,15 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * @return $html (HTML code) form code for the fields min / max
 		 *
 		 */
-		function get_textarea_field( $field_name, $rule_nr, $sel_nr, $method_id, $value, $ambit_field, $tips, $placeholder='')
+		function get_textarea_field( $field_name, $rule_nr, $sel_nr, $method_id, $values, $ambit_field, $tips, $placeholder='')
 		{
-			if( is_array( $value ) )
-				$value = reset($value);
+			$value = '';
+			if ( isset($values[$field_name]) ) $value = $values[$field_name];
 
 			$html = '<textarea name="shipping_rules[' . $rule_nr . ']['.$ambit_field.']['.$method_id.']['.$field_name.']['.$sel_nr.']" 
 						data-wc-fns-tip="i18n_'.$field_name.'_' . $tips . '"' . ' class="wc_fns_input_tip" placeholder="' . esc_attr($placeholder) . '" autocomplete="off">';
 			
-			$html .= print_r($value, true) . '</textarea>';
+			$html .= esc_html($value) . '</textarea>';
 				
 			return $html;
 		}
@@ -2302,7 +2385,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * Get a multiple selector field
 		 *
 		 * @since 1.0.0
-		 * @version 1.4.13
+		 * @version 1.6.2
 		 *
 		 * @param $rule_nr (integer) rule ordinal (starting 0)
 		 * @param $sel_nr (integer) selector ordinal inside rule (starting 0)
@@ -2351,6 +2434,10 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			} elseif ( $datatype == 'zone_regions' && $this->im_pro() ) {
 								
 				$options = $Fish_n_Ships_Shipping->get_zone_regions();
+
+			} elseif ( $datatype == 'wapf_multiple' ) {
+				
+				$options = array( 'SUM all values', 'Multiply all', 'Average value', 'Get first value', 'Get last value', 'Evaluate false' );
 
 			} elseif ( $datatype == 'product_list' && $this->im_pro() ) {
 								
@@ -2597,6 +2684,7 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 		 * used for selectors and actions selects
 		 *
 		 * @since 1.5.4
+		 * @version 1.6.2
 		 *
 		 * @param $methods (array) array of methods
 		 * @param $sel_method_id (string) the option selected
@@ -2656,11 +2744,13 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 						$class[] = 'only_pro';
 
 						$html .= '<option value="pro" ';
+						if( ! empty($method['legacy']) ) $html .= 'data-legacy="' . esc_attr($method['legacy']) . '" ';
 						if ( $sel_method_id == $method['method_id'] ) $html .= 'selected ';
 						$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($method['label'] . ' [PRO]') . '</option>';
 
 					} else {
 						$html .= '<option value="' . esc_attr( $method['method_id'] ) . '" ';
+						if( ! empty($method['legacy']) ) $html .= 'data-legacy="' . esc_attr($method['legacy']) . '" ';
 						if ($sel_method_id == $method['method_id']) $html .= 'selected ';
 						$html .= 'class="' . esc_attr( implode( ' ', $class) ) . '">' . esc_html($method['label']) . '</option>';
 					}
@@ -2976,6 +3066,59 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 			exit();
 		}
 
+		/**
+		 * Ajaxified messages methods. Contextual info in the table rules
+		 *
+		 * @since 1.6.2
+		 */
+		function wc_fns_messages()
+		{				
+			$reply = array();
+			if( isset( $_POST['data'] ) )
+			{
+				$data = json_decode(stripslashes($_POST['data']), true);
+
+				if( json_last_error() === JSON_ERROR_NONE && is_array($data) )
+				{
+					foreach( $data as $element )
+					{
+						if( ! is_array($element) || ! isset($element['type']) || ! isset( $element['method_id'] ) )
+							continue;
+
+						if( ! isset($element['rule_number']) || ! isset( $element['el_number'] ) )
+							continue;
+
+						$type         = sanitize_key( $element['type'] );
+						$rule_number  = intval($element['rule_number']);
+						$el_number    = intval($element['el_number']); // selector number or action number (future) inside rule
+						$method_id    = sanitize_key( $element['method_id'] );
+						$rawfields    = empty( $element['fields'] ) ? false : $element['fields'];
+
+						if( ! is_array( $rawfields ) )
+							continue;
+
+						$raw_params = array();
+						foreach( $rawfields as $field )
+						{
+							if( ! empty($field['name']) )
+							{
+								$raw_params[ $field['name'] ] = isset($field['value']) ? $field['value'] : '';
+							}
+						}
+
+						if( $type=='selector' && $this->is_valid_selector($method_id) )
+						{
+							$message = apply_filters('wc_fns_get_messages_method', '', $type, $method_id, $raw_params );
+							
+							$reply[] = array( 'type' => $type, 'rule_number' => $rule_number, 'el_number' => $el_number, 'message' => $message );
+						}
+					}
+				}
+			}
+			echo json_encode( $reply );
+			exit();
+		}
+
 		
 		/*****************************************************************
 			Admin nav small things
@@ -3095,6 +3238,12 @@ if ( defined('WC_FNS_VERSION') || class_exists( 'Fish_n_Ships' ) ) {
 				require WC_FNS_PATH . '3rd-party/fns-wapf.php';
 			}
 					
+			// Plugin Republic's WooCommerce Product Add-Ons Ultimate (PR_PAU)
+			// @since 1.6.2
+			if ( defined( 'PEWC_PLUGIN_VERSION' ) && version_compare(PEWC_PLUGIN_VERSION, '3.0') >= 0 && pewc_has_migrated() ) {
+				require WC_FNS_PATH . '3rd-party/fns-pr_pau.php';
+			}
+
 			// Register plugin text domain for translations files
 			load_plugin_textdomain( 'fish-and-ships', false, basename( dirname( __FILE__ ) ) . '/languages' );
 			
