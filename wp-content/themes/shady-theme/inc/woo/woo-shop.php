@@ -81,3 +81,48 @@ function shady_woo_breadcrumb_orverride($crumbs, $breadcrumb) {
     }
     return $crumbs;
 }
+
+
+
+// adding custom order status for managing the doc uploads to the orders
+add_filter( 'woocommerce_register_shop_order_post_statuses', 'shady_register_custom_order_status' );
+function shady_register_custom_order_status( $order_statuses ) {
+    // Status must start with "wc-"!
+    $order_statuses['wc-shipped'] = array(
+        'label'                     => 'Shipped',
+        'public'                    => false,
+        'exclude_from_search'       => false,
+        'show_in_admin_all_list'    => true,
+        'show_in_admin_status_list' => true,
+        'label_count'               => _n_noop('Shipped <span class="count">(%s)</span>', 'Shipped <span class="count">(%s)</span>', 'shady'),
+    );
+   return $order_statuses;
+}
+ 
+add_filter( 'wc_order_statuses', 'shady_show_custom_order_status_single_order_dropdown' );
+function shady_show_custom_order_status_single_order_dropdown( $order_statuses ) {
+    $order_statuses['wc-shipped']   = 'Shipped';
+    return $order_statuses;
+}
+
+
+
+/* 
+    custom email template for sending shipping info
+*/
+add_filter( 'woocommerce_email_classes', 'shady_register_wc_custom_email_class' );
+function shady_register_wc_custom_email_class( $email_classes ) {
+    // Include the email class file
+    include_once 'class-wc-shipped-email.php';
+
+    // Register the email class
+    $email_classes['WC_Shipped_Email'] = new WC_Shipped_Email();
+
+    return $email_classes;
+}
+// register this custom email so that WooCommerce recognizes it.
+add_filter( 'woocommerce_email_actions', 'shady_add_wc_custom_email_action' );
+function shady_add_wc_custom_email_action( $email_actions ) {
+    $email_actions[] = 'woocommerce_order_status_changed';
+    return $email_actions;
+}
