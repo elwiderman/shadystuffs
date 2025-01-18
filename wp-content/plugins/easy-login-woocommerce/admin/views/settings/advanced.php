@@ -16,10 +16,10 @@ $settings = array(
 
 	array(
 		'callback' 		=> 'checkbox',
-		'title' 		=> 'Show error log messages',
+		'title' 		=> 'Show debug message',
 		'id' 			=> 'm-error-log',
 		'section_id' 	=> 'av_main',
-		'default' 		=> 'yes',
+		'default' 		=> 'no',
 	),
 
 	array(

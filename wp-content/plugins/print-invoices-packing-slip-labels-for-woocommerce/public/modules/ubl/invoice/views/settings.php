@@ -3,12 +3,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$rates                       = \WC_Tax::get_tax_rate_classes();
+$rates = array();
+
+if ( method_exists( '\WC_Tax', 'get_tax_rate_classes' ) ) {
+    $rates = \WC_Tax::get_tax_rate_classes();
+}
+
 $formatted_rates             = array();
 $formatted_rates['standard'] = esc_html__( 'Standard', 'print-invoices-packing-slip-labels-for-woocommerce' );
 
 foreach ( $rates as $rate ) {
-    if ( empty( $rate->slug ) ) {
+    if ( ! is_object( $rate ) || empty( $rate->slug ) ) {
         continue;
     }
     $formatted_rates[ $rate->slug ] = ! empty( $rate->name ) ? esc_attr( $rate->name ) : esc_attr( $rate->slug );

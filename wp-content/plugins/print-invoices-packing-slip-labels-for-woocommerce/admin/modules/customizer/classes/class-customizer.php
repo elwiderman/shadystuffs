@@ -913,10 +913,11 @@ class Wf_Woocommerce_Packing_List_CustomizerLib {
 								if ( ! empty( $epo_tc_meta_data ) ) {
 									foreach ( $epo_tc_meta_data as $key => $epo ) {
 										if ( $epo && is_array( $epo ) ) {
-											$tmcart_option_name       = $epo['name'];
-											$tmcart_option_value      = $epo['value'];
+											$tmcart_option_name  = isset( $epo['name'] ) && is_string( $epo['name'] ) ? $epo['name'] : '';
+											$tmcart_option_value = isset( $epo['value'] ) && is_string( $epo['value'] ) ? $epo['value'] : '';
+											$tmcart_option_price = isset( $epo['price'] ) ? $epo['price'] : '0.00';
 											$tmcart_option_price      = Wf_Woocommerce_Packing_List_Admin::wf_display_price( $user_currency, $order, $epo['price'] );
-											$tmcart_option_qty        = (float) $epo['quantity'];
+											$tmcart_option_qty = isset( $epo['quantity'] ) ? (float) $epo['quantity'] : 0;
 											$meta_data_formated_arr[] = '<small style="line-height:18px;"><span style="white-space: pre-wrap;">' . wp_kses_post( $tmcart_option_name ) . ' : ' . wp_kses_post( $tmcart_option_value ) . '</span><br><span style="white-space: pre-wrap;">Cost : ' . wp_kses_post( $tmcart_option_price ) . '</span><br><span style="white-space: pre-wrap;">Qty : ' . wp_kses_post( $tmcart_option_qty ) . '</span><br></small>';
 										}
 									}

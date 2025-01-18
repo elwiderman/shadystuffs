@@ -25,14 +25,28 @@ class Wf_Woocommerce_Packing_List_Sequential_Number
 
 	/**
 	* Get order date timestamp
-	* @since 4.0.0
+	* @since 4.0.0.
+	* @updated 4.7.2 Updated to get the date from the order object.
 	* @return integer
 	*/
-    protected static function get_orderdate_timestamp($order_id)
-    {
-    	$order_date=get_the_date('Y-m-d h:i:s A',$order_id);
-		return strtotime($order_date);
-    }
+	protected static function get_orderdate_timestamp( $order_id )
+	{
+		$order = wc_get_order( $order_id );
+
+		if ( is_object( $order ) ) {
+			$order_date = $order->get_date_created();
+
+			if ( is_string( $order_date ) ) {
+				return strtotime($order_date);
+
+			}else if ( $order_date instanceof WC_DateTime ) {
+				return $order_date->getTimestamp();
+			}
+		}
+
+		// Fallback: Use the WordPress function to get a timestamp if needed
+		return strtotime( get_the_date( 'Y-m-d H:i:s', $order_id ) );
+	}
 
     /**
 	* Function to generate sequential number

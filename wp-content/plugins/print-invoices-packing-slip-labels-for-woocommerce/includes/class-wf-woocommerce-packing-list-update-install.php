@@ -77,7 +77,7 @@ class Wf_Woocommerce_Packing_List_Update_Install
             self::install_tables();
             update_option('wfpklist_basic_version',WF_PKLIST_VERSION);
             update_option( 'wt_pklist_new_install' , 1);
-        } else {
+        } elseif ( ! empty( $wt_pklist_ver ) && version_compare( trim( $wt_pklist_ver ),WF_PKLIST_VERSION ) < 0 ){
             // update
             self::install_tables();
             self::use_migrate_values();

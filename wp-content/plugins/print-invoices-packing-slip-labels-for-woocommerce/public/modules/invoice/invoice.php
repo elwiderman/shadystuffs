@@ -1054,6 +1054,12 @@ class Wf_Woocommerce_Packing_List_Invoice
 
     public static function generate_invoice_number($order, $force_generate=true,$free_ord="") 
     {	
+		$generate_invoice = apply_filters('wt_pklist_generate_invoice_number',true,$order);
+
+		if ( ! $generate_invoice ) {
+			return '';
+		}
+
     	$order_id = (WC()->version < '2.7.0') ? $order->id : $order->get_id();
 	    $wf_invoice_id = Wt_Pklist_Common::get_order_meta($order_id, 'wf_invoice_number', true);
 		

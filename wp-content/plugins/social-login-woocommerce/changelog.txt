@@ -1,0 +1,5 @@
+== 1.4 ==
+Added apple and X login
+
+== 1.3 ==
+Added support for single patter form

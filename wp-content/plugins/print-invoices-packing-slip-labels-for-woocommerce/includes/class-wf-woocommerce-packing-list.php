@@ -116,8 +116,8 @@ class Wf_Woocommerce_Packing_List {
 			self::$base_version = WF_PKLIST_VERSION;
 		}else 
 		{
-			$this->version = '4.7.1';
-			self::$base_version = '4.7.1';
+			$this->version = '4.7.2';
+			self::$base_version = '4.7.2';
 		}
 		if(defined('WF_PKLIST_PLUGIN_NAME'))
 		{
@@ -234,8 +234,7 @@ class Wf_Woocommerce_Packing_List {
 	private function set_locale() {
 
 		$plugin_i18n = new Wf_Woocommerce_Packing_List_i18n();
-
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
+		$this->loader->add_action( 'init', $plugin_i18n, 'load_plugin_textdomain' );
 
 	}
 

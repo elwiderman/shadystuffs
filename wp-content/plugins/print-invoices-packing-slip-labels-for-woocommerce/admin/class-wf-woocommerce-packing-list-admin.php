@@ -1726,7 +1726,7 @@ class Wf_Woocommerce_Packing_List_Admin {
 		*/
 		$wt_pklist_language_list=apply_filters('wt_pklist_alter_language_list', get_option('wt_pklist_languages_list',array()));
 
-		return $wt_pklist_language_list;
+		return (array) $wt_pklist_language_list;
 	}
 
 	/**
@@ -4561,6 +4561,11 @@ class Wf_Woocommerce_Packing_List_Admin {
 
 						    $chunk_size=1024 * 1024;
 						    $handle=@fopen($file_path, 'rb');
+
+							if ( ! $handle ) {
+								exit();
+							}
+
 						    while(!feof($handle))
 						    {
 						        $buffer = fread($handle, $chunk_size);

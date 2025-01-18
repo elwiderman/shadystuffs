@@ -201,7 +201,7 @@ class Wt_Pklist_Common
         
 		// WC3.0 fallback to properties
 		$property = str_replace('-', '_', sanitize_title( ltrim($meta_key, '_') ) );
-		if ( empty( $meta_value ) && is_callable( array( $order, "get_{$property}" ) ) ) {
+        if ( empty( $meta_value ) && method_exists( $order, "get_{$property}" ) && is_callable( array( $order, "get_{$property}" ) ) ) {
 			$meta_value = $order->{"get_{$property}"}( 'view' );
 		}
 

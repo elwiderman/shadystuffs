@@ -112,7 +112,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			wp_send_json( $dates );
 		}
 
-		public static function get_rule( $product ) {
+		public static function get_rule( $product, $shipping_method = null ) {
 			$ignore = ! $product->exists() || ! $product->is_purchasable() || ! $product->is_in_stock() || $product->is_type( 'external' ) || $product->is_virtual();
 
 			if ( apply_filters( 'wpced_ignore', $ignore, $product ) ) {
@@ -121,7 +121,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 
 			$get_rule    = [];
 			$user_zone   = Wpced_Helper()->get_shipping_zone();
-			$user_method = Wpced_Helper()->get_selected_method();
+			$user_method = $shipping_method ?: Wpced_Helper()->get_selected_method();
 			$product_id  = $product->get_id();
 			$enable      = get_post_meta( $product_id, 'wpced_enable', true ) ?: 'global';
 			$rules       = $default_rule = [];
@@ -411,6 +411,20 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 		}
 
 		function show_cart_overall_date() {
+			$overall_date = self::get_overall_date();
+
+			if ( ! empty( $overall_date ) ) {
+				if ( Wpced_Backend()->get_setting( 'cart_overall', 'yes' ) === 'yes_text' ) {
+					echo '<tr><td colspan="100" class="wpced-cart">' . esc_html( $overall_date ) . '</td></tr>';
+				} else {
+					echo '<tr><td colspan="100" class="wpced-cart"><span class="wpced"><span class="wpced-inner">' . esc_html( $overall_date ) . '</span></span></td></tr>';
+				}
+			}
+
+			return null;
+		}
+
+		function get_overall_date( $shipping_method = null ) {
 			if ( ! isset( WC()->cart ) ) {
 				return null;
 			}
@@ -418,29 +432,54 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 			$items = WC()->cart->get_cart();
 
 			if ( is_array( $items ) && ( count( $items ) > 0 ) ) {
-				$overall = [];
+				$format      = Wpced_Backend()->get_setting( 'cart_overall_format', 'latest' );
+				$overall_min = [];
+				$overall_max = [];
 
 				foreach ( $items as $item ) {
-					$rule      = self::get_rule( $item['data'] );
-					$item_time = '';
+					$rule     = self::get_rule( $item['data'], $shipping_method );
+					$item_min = $item_max = '';
 
 					if ( ! empty( $rule['min'] ) ) {
-						$item_time = self::get_date( $rule['min'], $rule['scheduled'] );
+						$item_min = $item_max = self::get_date( $rule['min'], $rule['scheduled'] );
 					}
 
 					if ( ! empty( $rule['max'] ) ) {
-						$item_time = self::get_date( $rule['max'], $rule['scheduled'] );
+						$item_max = self::get_date( $rule['max'], $rule['scheduled'] );
+
+						if ( empty( $item_min ) ) {
+							$item_min = $item_max;
+						}
 					}
 
-					if ( ! empty( $item_time ) ) {
-						$overall[] = $item_time;
+					if ( ! empty( $item_min ) ) {
+						$overall_min[] = $item_min;
+					}
+
+					if ( ! empty( $item_max ) ) {
+						$overall_max[] = $item_max;
 					}
 				}
 
-				if ( ! empty( $overall ) ) {
-					sort( $overall );
+				if ( ! empty( $overall_min ) && ! empty( $overall_max ) ) {
+					sort( $overall_min );
+					sort( $overall_max );
 
-					$delivery_date = self::format_date( end( $overall ) );
+					switch ( $format ) {
+						case 'earliest':
+							$delivery_date = self::format_date( reset( $overall_min ) );
+							break;
+
+						case 'earliest_latest':
+							$delivery_date = self::format_date( reset( $overall_min ) ) . apply_filters( 'wpced_dates_separator', ' - ' ) . self::format_date( end( $overall_max ) );
+							break;
+
+						case 'latest':
+						default:
+							$delivery_date = self::format_date( end( $overall_max ) );
+							break;
+					}
+
 					$delivery_text = Wpced_Backend()->get_setting( 'text_cart_overall', /* translators: date */ esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' ) );
 
 					if ( empty( $delivery_text ) ) {
@@ -448,11 +487,7 @@ if ( ! class_exists( 'Wpced_Frontend' ) ) {
 							esc_html__( 'Overall estimated dispatch date: %s', 'wpc-estimated-delivery-date' );
 					}
 
-					if ( Wpced_Backend()->get_setting( 'cart_overall', 'yes' ) === 'yes_text' ) {
-						echo '<tr><td colspan="100" class="wpced-cart">' . sprintf( $delivery_text, $delivery_date ) . '</td></tr>';
-					} else {
-						echo '<tr><td colspan="100" class="wpced-cart"><span class="wpced"><span class="wpced-inner">' . sprintf( $delivery_text, $delivery_date ) . '</span></span></td></tr>';
-					}
+					return apply_filters( 'wpced_get_overall_date', sprintf( $delivery_text, $delivery_date ), $shipping_method );
 				}
 			}
 

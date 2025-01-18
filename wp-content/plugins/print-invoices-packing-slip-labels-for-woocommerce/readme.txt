@@ -1,24 +1,22 @@
 === WooCommerce PDF Invoices, Packing Slips, Delivery Notes and Shipping Labels ===
 Contributors: WebToffee
-Version: 4.7.1
+Version: 4.7.2
 Tags: WooCommerce PDF invoices, WooCommerce invoice, packing slips, shipping label, print invoice
 Requires at least: 3.0.1
-Tested up to: 6.6
-Stable tag: 4.7.1
+Tested up to: 6.7
+Stable tag: 4.7.2
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Create and print WooCommerce PDF invoices, packing lists/packing slips, delivery notes, and shipping labels. Generate or print UBL invoices for WooCommerce.
+Create and print WooCommerce PDF invoices, UBL or XML invoices, packing lists/packing slips, delivery notes, and shipping labels.
 
 == Description ==
 Easily create and print WooCommerce PDF invoices, packing slips, delivery notes, and shipping labels. Additionally, generate UBL and XML invoices tailored for your WooCommerce store to enhance your order processing efficiency.
 
 == Introduction ==
 
-WooCommerce Print Invoice, Packing Slip, Delivery Note and Shipping Label plugin helps you generate PDF invoices, packing lists / packing slips, delivery notes, dispatch labels and shipping labels from the WooCommerce orders page. WooCommerce, by default, doesn't allow you to print any of these documents from your orders page. Using this extension, you can very well streamline your online store's shipping and order processes.
-
-**See how the plugin works: <a rel="nofollow" href="https://tastewp.com/new?pre-installed-plugin-slug=woocommerce&pre-installed-plugin-slug=print-invoices-packing-slip-labels-for-woocommerce&redirect=admin.php%3Fpage%3Dwf_woocommerce_packing_list&ni=true">Try out demo</a>** 
+WooCommerce Print Invoice, Packing Slip, Delivery Note and Shipping Label plugin helps you generate PDF invoices, packing lists / packing slips, delivery notes, dispatch labels and shipping labels from the WooCommerce orders page. WooCommerce, by default, doesn't allow you to print any of these documents from your orders page. Using this free invoices & labels plugin, you can very well streamline your online store's shipping and order processes.
 
 == New Updates - UBL Invoices (BETA) ==
 * Generate UBL invoices for WooCommerce Orders
@@ -40,7 +38,7 @@ WooCommerce Print Invoice, Packing Slip, Delivery Note and Shipping Label plugin
 * <strong>Customization of invoice</strong>: Customize invoices by adding your store logo, store name, and VAT, etc.
 * <strong>Customization of shipping label</strong>: Shipping labels can be customized by adding barcodes, tracking numbers, and more. 
 * <strong>Option to bulk print</strong>: Bulk print all labels from orders page.
-* <strong>Send invoice PDF by email</strong>: Enable stores to send PDF invoice by email.
+* <strong>Send printable invoice PDF by email</strong>: Enable stores to send PDF invoice by email.
 * <strong>Generate UBL Invoices</strong>: Generate and print UBL and XML invoices for WooCommerce orders.
 * <strong>Print invoice from My-Account page:</strong> Allow logged-in customers to print their invoice from the My-Account page.
 * <strong>Choose invoice template</strong>: Choose from classic and standard invoice templates.
@@ -53,24 +51,20 @@ WooCommerce Print Invoice, Packing Slip, Delivery Note and Shipping Label plugin
 * <strong>Show tax info easily in documents</strong>: Our plugin provides inbuilt support for all the major tax related plugins by populating pre-defined meta keys such _billing_vat, _billing_vat_number, _billing_eu_vat_number. As a result, it will be easier for you to display tax on invoices and other documents.
 * <strong> Custom PDF file names for invoices</strong>: Assign custom PDF filenames for PDF invoices with prefix, order number etc.
 
-= New updates =
-* Add <strong>order meta or custom meta</strong> in the invoice.
-* Add <strong>QR code</strong> in the invoice that reads order number or other custom details using our premium addon plugin.
+== Why Are Invoice PDFs and Packing Lists Important? ==
+
+Including an invoice and packing list with your shipped package is not just a good practice - it’s essential. These documents confirm the contents of the package, provide your contact information, and include critical purchase details, ensuring a smooth transaction for both you and your customer.
+
+For international sales, many countries require invoices as part of their standard shipping regulations. These invoices must include key order details, such as your company name and address, the customer’s billing address, and a detailed breakdown of the order, including taxes and totals.
+
+Beyond compliance, these documents enhance customer experience by adding a human touch and serving as an additional communication channel between you and your buyer.
 
 
-== Why do you need PDF invoices, packing lists, etc.? ==
-
-It is a good practice to include an invoice and a packing list when you are shipping a package. It serves as a confirmation of what the package contains along with your contact information and the details of the purchase. 
-
-When you sell internationally, it is a standard requirement in many countries to include an invoice. The invoice should contain all the required order details such as the name and address of your company, the billing address of your customer, and a list of all order items including taxes and totals.
-
-Furthermore, it establishes an extra line of communication between you and the customer and adds a human touch.
-
-&#9989; Tested OK with WooCommerce 9.3.3
+&#9989; Tested OK with WooCommerce 9.4.3
 &#9989; Tested OK up to PHP 8.2
 
 
-== Third party compatibility ==
+== Third Party Compatibility ==
 The plugin is compatible with the following third party plugins/themes:
 &#8226; [EU VAT Number - WooCommerce](https://woocommerce.com/products/eu-vat-number/)
 &#8226; [WooCommerce EU VAT Assistant. Aelia](https://aelia.co/shop/eu-vat-assistant-woocommerce/)
@@ -80,6 +74,7 @@ The plugin is compatible with the following third party plugins/themes:
 &#8226; [WOOCS - WooCommerce Currency Switcher](https://pluginus.net/shop/wordpress-plugins/woocommerce/woocommerce-currency-switcher/)
 &#8226; [Sequential Order Numbers by WooCommerce](https://woocommerce.com/products/sequential-order-numbers-pro/)
 &#8226; [EAN, UPC, ISBN Generator: Product Barcode Inventory for WooCommerce](https://wordpress.org/plugins/ean-for-woocommerce/)
+
 == Supported languages ==
 
 * FR (French)
@@ -106,7 +101,7 @@ For better Unicode and RTL language support for all the generated documents, we 
 To add QR code in WooCommerce invoices we would recommend you to use below add-on plugin that reads order number, invoice number or other custom details.
 [QR Code Add-on for WooCommerce PDF Invoices by WebToffee](https://www.webtoffee.com/product/qr-code-addon-for-woocommerce-pdf-invoices/ "QR Code Add-on for PDF invoice plugin by WebToffee").
 
-== Pro version of the plugin ==
+== Premium Add-ons for WooCommerce Invoices and Other Documents ==
 
 The premium version of the PDF Invoices, Packing slips, Delivery notes, and Shipping Labels premium plugin is available in five variations. 
 
@@ -118,7 +113,7 @@ The premium version of the PDF Invoices, Packing slips, Delivery notes, and Ship
 
 You only have to install the plugin that offers the documents that are required for you.
 
-== Key Premium Version Features ==
+== Key Features of WooCommerce Invoices Plugin & Add-ons ==
 <blockquote>
 
 <ul>
@@ -288,6 +283,20 @@ Yes. The plugin addresses the needs of a multilingual website and is compatible 
 18. Ubl Invoice settings
 
 == Changelog ==
+
+= 4.7.2 2024-12-19 =
+[Fix] - Notice - Function _load_textdomain_just_in_time was called incorrectly.
+[Fix] - The order date was not retrieved from the order object.
+[Fix] - Added the security fixes on the customizer input fields.
+[Tweak] - Removed the weight column from the product table in the default packing slip template.
+[Tweak] - Added the filter called wt_pklist_generate_invoice_number` .
+[Tweak] - Added a new parameter $lang to the filter wf_pklist_alter_find_replace.
+[Tweak] -  Added a new text domain custom_wt_pdf_invoice to support the translation for the dynamic strings.
+[Enhancement] - Invoice number layout changed.
+[Enhancement] - Invoice number preview layout changed.
+[Enhancement] - Added rename functionality to documents and changed the document layout in the Customizer.
+[Compatibility] - Tested OK with WordPress 6.7.
+[Compatibility] - Tested OK with WooCommerce 9.4.3.
 
 = 4.7.1 2024-10-28 =
 * [Fix] - Resolved "Uncaught Error: Class 'WT_WC_Product' not found" when using premium add-ons.
@@ -1025,6 +1034,16 @@ Yes. The plugin addresses the needs of a multilingual website and is compatible 
  
 == Upgrade Notice ==
 
-= 4.7.1 =
-* [Fix] - Resolved "Uncaught Error: Class 'WT_WC_Product' not found" when using premium add-ons.
-* [Fix] - Addressed migration issues from order statuses to WooCommerce order email classes that were introduced in version 4.7.0.
+= 4.7.2 =
+[Fix] - Notice - Function _load_textdomain_just_in_time was called incorrectly.
+[Fix] - The order date was not retrieved from the order object.
+[Fix] - Added the security fixes on the customizer input fields.
+[Tweak] - Removed the weight column from the product table in the default packing slip template.
+[Tweak] - Added the filter called wt_pklist_generate_invoice_number` .
+[Tweak] - Added a new parameter $lang to the filter wf_pklist_alter_find_replace.
+[Tweak] -  Added a new text domain custom_wt_pdf_invoice to support the translation for the dynamic strings.
+[Enhancement] - Invoice number layout changed.
+[Enhancement] - Invoice number preview layout changed.
+[Enhancement] - Added rename functionality to documents and changed the document layout in the Customizer.
+[Compatibility] - Tested OK with WordPress 6.7.
+[Compatibility] - Tested OK with WooCommerce 9.4.3.

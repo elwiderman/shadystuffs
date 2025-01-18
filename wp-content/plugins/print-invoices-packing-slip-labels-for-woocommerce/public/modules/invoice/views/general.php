@@ -93,7 +93,7 @@ if (!defined('ABSPATH')) {
 
                         'wt_pdf_invoice_attachment_wc_email_classes' => array(
                             'type' => 'wt_select2_checkbox',
-                            'label' => __("Attach invoice pdf in WooCommerce Email","print-invoices-packing-slip-labels-for-woocommerce"),
+                            'label' => __("Attach invoice PDF to selected WooCommerce emails.","print-invoices-packing-slip-labels-for-woocommerce"),
                             'name' => 'wt_pdf_invoice_attachment_wc_email_classes',
                             'id' => 'wt_pdf_invoice_attachment_wc_email_classes_st',
                             'value' => $invoice_attachment_wc_email_classes,
@@ -101,7 +101,7 @@ if (!defined('ABSPATH')) {
                             'class' => 'wt_pdf_invoice_attachment_wc_email_classes',
                             'col' => 3,
                             'placeholder' => __("Choose email classes","print-invoices-packing-slip-labels-for-woocommerce"),
-                            'help_text' => __("Select email classes that match the order statuses selected under the `Automate invoice creation` option. If no order status is selected, you must manually generate invoice to attach it with these order emails.","print-invoices-packing-slip-labels-for-woocommerce"),
+                            'help_text' => __("Select email types corresponding to the order statuses under Automate invoice creation option. If none are selected, invoices must be generated manually to be attached to emails.","print-invoices-packing-slip-labels-for-woocommerce"),
                             'alignment' => 'vertical_with_label',
                             'ref_id' => 'wt_pdf_invoice_attachment_wc_email_classes',
                         ),
