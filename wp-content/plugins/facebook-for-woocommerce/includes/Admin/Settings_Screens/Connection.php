@@ -30,14 +30,20 @@ class Connection extends Abstract_Settings_Screen {
 	 * Connection constructor.
 	 */
 	public function __construct() {
-
-		$this->id    = self::ID;
-		$this->label = __( 'Connection', 'facebook-for-woocommerce' );
-		$this->title = __( 'Connection', 'facebook-for-woocommerce' );
+		add_action( 'init', array( $this, 'initHook' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 
 		add_action( 'admin_notices', array( $this, 'add_notices' ) );
+	}
+
+	/**
+	 * Initializes this settings page's properties.
+	 */
+	public function initHook(): void {
+		$this->id    = self::ID;
+		$this->label = __( 'Connection', 'facebook-for-woocommerce' );
+		$this->title = __( 'Connection', 'facebook-for-woocommerce' );
 	}
 
 
@@ -159,16 +165,23 @@ class Connection extends Abstract_Settings_Screen {
 		);
 
 		// if the catalog ID is set, update the URL and try to get its name for display
-		if ( $catalog_id = $static_items['catalog']['value'] ) {
-
-			$static_items['catalog']['url'] = "https://facebook.com/products/catalogs/{$catalog_id}";
-
+		$catalog_id = $static_items['catalog']['value'];
+		if ( !empty( $catalog_id ) ) {
+			$static_items['catalog']['url'] = "https://www.facebook.com/commerce/catalogs/{$catalog_id}/products/";
 			try {
 				$response = facebook_for_woocommerce()->get_api()->get_catalog( $catalog_id );
 				if ( $name = $response->name ) {
 					$static_items['catalog']['value'] = $name;
 				}
 			} catch ( ApiException $exception ) {
+				// Log the exception with additional information
+				facebook_for_woocommerce()->log(
+					sprintf(
+						'Connection failed for catalog %s: %s ',
+						$catalog_id,
+						$exception->getMessage(),
+					)
+				);
 			}
 		}
 
@@ -281,13 +294,14 @@ class Connection extends Abstract_Settings_Screen {
 
 				<?php if ( $is_connected ) : ?>
 
-					<a href="<?php echo esc_url( facebook_for_woocommerce()->get_connection_handler()->get_manage_url() ); ?>" class="button button-primary">
-						<?php esc_html_e( 'Manage Connection', 'facebook-for-woocommerce' ); ?>
-					</a>
-
-					<a href="<?php echo esc_url( facebook_for_woocommerce()->get_connection_handler()->get_disconnect_url() ); ?>" class="uninstall">
+					<a href="<?php echo esc_url( facebook_for_woocommerce()->get_connection_handler()->get_disconnect_url() ); ?>" class="button button-primary uninstall" onclick="return confirmDialog();">
 						<?php esc_html_e( 'Disconnect', 'facebook-for-woocommerce' ); ?>
 					</a>
+					<script>
+						function confirmDialog() {
+							return confirm( 'Are you sure you want to disconnect from Facebook?' );
+						}
+					</script>
 
 				<?php else : ?>
 
