@@ -4,15 +4,16 @@
  * Plugin Name: PhonePe Payment Solutions
  * Plugin URI: https://github.com/PhonePe/
  * Description: Using this plugin you can accept payments through PhonePe. After activating this plugin, you can see the PhonePe option linked to the checkout page of woocommerce site. On configuring with the provided Merchant credentials, you can enable this plugin in Preprod/Prod environment.
- * Version: 2.0.11
+ * Version: 3.0.3
  * Author: PhonePe
- * Requires PHP: 5.6
+ * Requires PHP: 8.2
  */
 
 require_once __DIR__ . '/debug.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
-
+use PhonePe\payments\v2\standardCheckout\StandardCheckoutClient;
 
 $woocommerce_b2bpg_configs_json = file_get_contents(__DIR__ . '/config.json');
 $woocommerce_b2bpg_configs = json_decode($woocommerce_b2bpg_configs_json, true);
@@ -27,7 +28,15 @@ if (!defined('PPEX_WC_PG_PLUGIN_DIR_LANGUAGES')) {
 }
 
 if (!defined('PPEX_WC_BUSINESS_DASHBOARD_LINK')) {
-  define('PPEX_WC_BUSINESS_DASHBOARD_LINK', '<a href="https://www.phonepe.com/business-solutions/payment-gateway/register/" target="_blank" aria-label="Plugin Additional Links" style="color:purple;"> New to PhonePe PG? Register here!</a>');
+  define('PPEX_WC_BUSINESS_DASHBOARD_LINK', 'To get started, simply grab your <strong>Client ID</strong> and <strong>API Key</strong> from the <strong>Developer Settings</strong> page on your <a href="https://business.phonepe.com/developer-settings/api-keys/" target="_blank" aria-label="Plugin Additional Links" style="color:purple;">PhonePe Dashboard</a>.');
+}
+
+if (!defined('PPEX_WC_ONBOARDING_LINK')) {
+  define('PPEX_WC_ONBOARDING_LINK', 'New to PhonePe PG? <a href="https://www.phonepe.com/business-solutions/payment-gateway/register/" target="_blank" aria-label="Plugin Additional Links" style="color:purple;">Register here!</a>');
+}
+
+if (!defined('PPEX_WC_HELP_CENTRE_LINK')) {
+  define('PPEX_WC_HELP_CENTRE_LINK', 'Need help? Contact our <a href="https://business.phonepe.com/faq/" target="_blank" aria-label="Plugin Additional Links" style="color:purple;">support</a> team — we are here to assist!');
 }
 
 if (!defined('PPEX_WC_PG_ICON_URL')) {
@@ -55,7 +64,10 @@ function ppex_woocommerce_phonepe_init() {
   }
 
   function phonepe_show_message($content) {
-    return '<div class="phonepe_response box ' . htmlentities(sanitize_text_field($_GET['type'])) . '-box">' . htmlentities(urldecode($_GET['phonepe_response'])) . '</div>' . $content;
+    $type = isset($_GET['type']) ? htmlentities(sanitize_text_field($_GET['type'])) : '';
+    $phonepe_response = isset($_GET['phonepe_response']) ? htmlentities(urldecode($_GET['phonepe_response'])) : '';
+    
+    return '<div class="phonepe_response box ' . $type . '-box">' . $phonepe_response . '</div>' . $content;
   }
 
   // Gateway class
@@ -71,8 +83,8 @@ function ppex_woocommerce_phonepe_init() {
     private $wc_b2b_pg_client;
     private $network_manager;
     private $paypage_loading_mode;
-
-
+    private $standard_checkout_client;
+    private $pg_v2_client;
 
     public function __construct() {
       $this->init_plugin_vars();
@@ -86,19 +98,19 @@ function ppex_woocommerce_phonepe_init() {
 
       $this->has_fields = false;
       $this->supports = ['products'];
-      $this->init_form_fields();
       $this->init_settings();
+      $this->init_form_fields();
 
       $this->title = 'PhonePe Payment Solutions';
-      $this->method_description = PPEX_WC_BUSINESS_DASHBOARD_LINK . '<br/> Pay Securely using UPI, Cards, or NetBanking';
+      $this->method_description =  'Pay Securely using UPI, Cards, or NetBanking <br/> <br/>' . PPEX_WC_BUSINESS_DASHBOARD_LINK . '<br/> ' . PPEX_WC_ONBOARDING_LINK . '<br/> ' . PPEX_WC_HELP_CENTRE_LINK;
       $this->description = 'All UPI apps, Debit and Credit Cards, and NetBanking accepted | Powered by PhonePe';
 
       $this->icon = PPEX_WC_PG_ICON_URL;
 
       $this->merchant_context = new PPEX_Merchant_Context(
-        $this->settings['merchantIdentifier'],
-        $this->settings['saltKey'],
-        $this->settings['Index']
+        isset($this->settings['merchantIdentifier']) ? $this->settings['merchantIdentifier'] : null,
+        isset($this->settings['saltKey']) ? $this->settings['saltKey'] : null,
+        isset($this->settings['Index']) ? $this->settings['Index'] : null,
       );
 
       $this->plugin_context = new PPEX_Plugin_Context(
@@ -106,13 +118,19 @@ function ppex_woocommerce_phonepe_init() {
         PPEX_PG_Constants::WOOCOMMERCE,
         WOOCOMMERCE_VERSION,
         B2BPG_WOOCOMMERCE_PLUGIN_VERSION,
-        $this->settings['envType'],
-        $this->settings['payPageFlag']
+        isset($this->settings['envType']) ? $this->settings['envType'] : null,
+        isset($this->settings['payPageFlag']) ? $this->settings['payPageFlag'] : null,
       );
 
       $this->network_manager = new PPEX_PG_Network_Manager(new PPEX_WC_Http_Client());
 
       $this->wc_b2b_pg_client = new PPEX_WC_PG_Client($this->merchant_context, $this->plugin_context);
+
+      if (isset($this->settings['clientSecret'])) {
+        $ppex_wc_pg_v2_http_client = new PPEX_WC_Http_Client_V2();
+        $this->standard_checkout_client = PhonePe\payments\v2\standardCheckout\StandardCheckoutClient::getInstance($this->settings['clientId'], $this->settings['clientVersion'], $this->settings['clientSecret'], $this->plugin_context->get_environment(), true, $ppex_wc_pg_v2_http_client);
+        $this->pg_v2_client = new PPEX_WC_PG_V2_Client($this->standard_checkout_client, $this->plugin_context);
+      }
       $this->init_hooks();
       $this->check_order_recieved();
     }
@@ -131,6 +149,7 @@ function ppex_woocommerce_phonepe_init() {
 
     private function require_client_implementation() {
       require_once self::$directory_path . 'PPEX_WC_PG_Client.php';
+      require_once self::$directory_path . 'PPEX_WC_PG_V2_Client.php';
     }
 
     private function init_plugin_vars() {
@@ -154,7 +173,7 @@ function ppex_woocommerce_phonepe_init() {
               <script>
                 jQuery('ul.woocommerce-thankyou-order-details li.woocommerce-order-overview__payment-method.method strong').text("<?php echo esc_attr(PPEX_PG_Constants::PAYMENT_METHOD_NAME); ?>");
               </script>
-      <?php
+        <?php
             }
             return $title;
           }
@@ -163,62 +182,199 @@ function ppex_woocommerce_phonepe_init() {
     }
 
     public function init_form_fields() {
-      $this->form_fields = array(
-        'enabled'      => array(
-          'title'     => __('Enable/Disable'),
-          'type'       => 'checkbox',
-          'label'      => __('Enable PhonePe Payments.'),
-          'default'    => 'no'
-        ),
-        'merchantIdentifier' => array(
-          'title'      => __('Merchant Id'),
-          'type'       => 'text',
-          'description'  => __('Merchant Id Provided by PhonePe'),
-          'desc_tip'     => true
-        ),
-        'saltKey'          => array(
-          'title'      => __('Salt Key'),
-          'type'      => 'text',
-          'description'  => __('Salt Key Provided by PhonePe'),
-          'desc_tip'     => true
-        ),
-        'Index'          => array(
-          'title'      => __('Salt Key Index'),
-          'type'      => 'text',
-          'description'  => __('Salt Key Index Provided by PhonePe'),
-          'desc_tip' => true
-        ),
-        'envType'         => array(
-          'title'      => __('Environment'),
-          'default'  => PPEX_Constants::PRODUCTION,
-          'type'      => 'select',
-          'options'       => STAGE_AVAIALABLE ? array(PPEX_Constants::UAT, PPEX_Constants::PRODUCTION, PPEX_Constants::STAGE) : array(PPEX_Constants::UAT, PPEX_Constants::PRODUCTION),
-          'description'  => __('Environment type for PhonePe'),
-          'desc_tip' => true
-        ),
-        'payPageFlag'      => array(
-          'title'     => __('Payment page open mode'),
-          'default'   => 'Open on top of the current page',
-          'type'       => 'select',
-          'options'       => array('Open on top of the current page', 'Redirect to a full-length payment page'),
-          'description'  => __('Both modes have the same set of features. In some cases, page load performance is better when redirected to a full-length page.'),
-          'desc_tip' => true
-        ),
-      );
+      $woocommerce_phonepe_settings = get_option('woocommerce_phonepe_settings');
+      $isClientSecretPresent =  isset($woocommerce_phonepe_settings['clientSecret']) && !empty($woocommerce_phonepe_settings['clientSecret']);
+      $isSaltKeyPresent = isset($woocommerce_phonepe_settings['saltKey']) && !empty($woocommerce_phonepe_settings['saltKey']);
+      if ($isClientSecretPresent || $isSaltKeyPresent == false) {
+        $this->form_fields = array(
+          'enabled' => array(
+            'title' => __('Enable/Disable'),
+            'type' => 'checkbox',
+            'label' => __('Enable PhonePe Payments.'),
+            'default' => 'no'
+          ),
+          'clientId' => array(
+            'title' => __('Client Id <span style="color: red;" title="This field is mandatory">*</span>'),
+            'type' => 'text',
+            'description' => __('Client Id Provided by PhonePe'),
+            'desc_tip' => true
+          ),
+          'clientSecret' => array(
+            'title' => __('API Key <span style="color: red;" title="This field is mandatory">*</span>'),
+            'type' => 'text',
+            'description' => __('API Key Provided by PhonePe'),
+            'desc_tip' => true
+          ),
+          'clientVersion' => array(
+            'title' => __('Client Version <span style="color: red;" title="This field is mandatory">*</span>'),
+            'type' => 'text',
+            'description' => __('Client Version Provided by PhonePe'),
+            'desc_tip' => true
+          ),
+          'envType' => array(
+            'title' => __('Environment'),
+            'default' => PPEX_Constants::PRODUCTION,
+            'type' => 'select',
+            'options' => STAGE_AVAIALABLE ? array(PPEX_Constants::UAT, PPEX_Constants::PRODUCTION, PPEX_Constants::STAGE) : array(PPEX_Constants::UAT, PPEX_Constants::PRODUCTION),
+            'description' => __('Environment type for PhonePe'),
+            'desc_tip' => true
+          ),
+          'payPageFlag' => array(
+            'title' => __('Payment page open mode'),
+            'default' => 'Open on top of the current page',
+            'type' => 'select',
+            'options' => array('Open on top of the current page', 'Redirect to a full-length payment page'),
+            'description' => __('Both modes have the same set of features. In some cases, page load performance is better when redirected to a full-length page.'),
+            'desc_tip' => true
+          ),
+        );
+      } else {
+        $this->form_fields = array(
+          'enabled' => array(
+            'title' => __('Enable/Disable'),
+            'type' => 'checkbox',
+            'label' => __('Enable PhonePe Payments.'),
+            'default' => 'no'
+          ),
+          'merchantIdentifier' => array(
+            'title' => __('Merchant Id'),
+            'type' => 'text',
+            'description' => __('Merchant Id Provided by PhonePe'),
+            'desc_tip' => true
+          ),
+          'saltKey' => array(
+            'title' => __('Salt Key'),
+            'type' => 'text',
+            'description' => __('Salt Key Provided by PhonePe'),
+            'desc_tip' => true
+          ),
+          'Index' => array(
+            'title' => __('Salt Key Index'),
+            'type' => 'text',
+            'description' => __('Salt Key Index Provided by PhonePe'),
+            'desc_tip' => true
+          ),
+          'envType' => array(
+            'title' => __('Environment'),
+            'default' => PPEX_Constants::PRODUCTION,
+            'type' => 'select',
+            'options' => STAGE_AVAIALABLE ? array(PPEX_Constants::UAT, PPEX_Constants::PRODUCTION, PPEX_Constants::STAGE) : array(PPEX_Constants::UAT, PPEX_Constants::PRODUCTION),
+            'description' => __('Environment type for PhonePe'),
+            'desc_tip' => true
+          ),
+          'payPageFlag' => array(
+            'title' => __('Payment page open mode'),
+            'default' => 'Open on top of the current page',
+            'type' => 'select',
+            'options' => array('Open on top of the current page', 'Redirect to a full-length payment page'),
+            'description' => __('Both modes have the same set of features. In some cases, page load performance is better when redirected to a full-length page.'),
+            'desc_tip' => true
+          ),
+        );
+      }
     }
 
+    public function ppex_preprocess_phonepe_payment_fields($options) {
+
+      // Check if clientId and clientSecret are present in the options
+      if (isset($options['clientId']) && isset($options['clientSecret']) && isset($options['clientVersion'])) {
+        switch ($options['envType']){
+            case 0: $environemnt = PPEX_Constants::UAT; break;
+            case 1: $environemnt = PPEX_Constants::PRODUCTION; break;
+            case 2: $environemnt = PPEX_Constants::STAGE; break;
+            default: $environemnt = PPEX_Constants::PRODUCTION;
+        }
+        try {
+          $ppex_wc_pg_v2_http_client = new PPEX_WC_Http_Client_V2();
+          $standard_checkout_client = PhonePe\payments\v2\standardCheckout\StandardCheckoutClient::getInstance($options['clientId'], $options['clientVersion'], $options['clientSecret'], $environemnt, true, $ppex_wc_pg_v2_http_client);
+          $OAuthToken = $standard_checkout_client->getAuthHeadersToken();
+
+          // call webhook API
+          $callback_url = site_url() . '/index.php/wp-json/wp-phonepe/v2/callback';
+
+          $url = PPEX_Utils::get_base_webhook_url($environemnt) . PPEX_Constants::WEBHOOK_ENDPOINT;
+          $headers = array();
+          $headers['Authorization'] = $OAuthToken;
+          $headers['Content-Type'] = 'application/json';
+          $username = generate_username(PPEX_Constants::WEBHOOK_CREDENTIAL_LENGTH);
+          // Generate an 12-character random password
+          $password = generate_password(PPEX_Constants::WEBHOOK_CREDENTIAL_LENGTH);
+
+          // Set the POST data
+          $data = [
+              "webhooks" => [
+                  [
+                      "channel" => [
+                          "type" => "HTTPS",  // Change from HTTP to HTTPS as per the contract
+                          "url" => $callback_url,
+                          "username" => $username,
+                          "password" => $password,
+                          "description" => "WooCommerce Plugin Webhook"
+                      ],
+                      "events" => [
+                          PPEX_Constants::CHECKOUT_ORDER_COMPLETED,
+                          PPEX_Constants::CHECKOUT_ORDER_FAILED
+                      ]
+                  ]
+              ]
+          ];
+          $postData = json_encode($data);
+          try {
+              $webhook_respose = $ppex_wc_pg_v2_http_client::postRequest($url, $postData, $headers);
+          } catch (Exception $exception) {
+              ppLogError(json_encode($exception));
+          }
+          ppLogInfo("webhook response: ");
+          ppLogInfo(json_encode($webhook_respose));
+
+          $options['username'] = $username;
+          $options['password'] = $password;
+          $event = PPEX_Utils::create_event($this->plugin_context, PPEX_Constants::CHANGES_SAVED_AND_PLUGIN_ACTIVATED);
+          $event->data['webhookResponse'] = $webhook_respose;
+          try {
+              $standard_checkout_client->sendEvent($event);
+          } catch (Exception $exception) {
+              ppLogError(json_encode($exception));
+          }
+
+        } catch (Exception $exception) {
+          ppLogError(json_encode($exception));
+          $options['clientId'] = "";
+          $options['clientSecret'] = "";
+          $options['clientVersion'] = "";
+          $code =$exception->getCode();
+
+          if($code == PPEX_PG_Constants::CLIENT_NOT_FOUND) {
+              add_action('admin_notices', function () {
+                  echo '<div class="notice notice-error"><p>Incorrect credentials, Please try again with correct credentials. Refer logs for more information. </p></div>';
+              });
+          }else {
+              add_action('admin_notices', function () {
+                  echo '<div class="notice notice-error"><p>Unexpected error occured while saving credentials, refer logs for more information. </p></div>';
+              });
+          }
+
+          remove_action( 'admin_notices', 'settings_saved_notice' );
+        }
+      }
+
+      return $options;
+    }
     public function send_activation_event() {
-      $ppex_event = new PPEX_Event();
-      $ppex_event->set_event_type("CHANGES_SAVED_AND_PLUGIN_ACTIVATED");
-      $ppex_event->set_merchant_id($this->get_merchant_context()->get_merchant_id());
-      $this->network_manager->post_event($ppex_event, $this->get_merchant_context(), $this->get_plugin_context());
+      if($this->ppex_is_pg_v2_enabled() == false) {
+				$ppex_event = new PPEX_Event();
+				$ppex_event->set_event_type("CHANGES_SAVED_AND_PLUGIN_ACTIVATED");
+				$ppex_event->set_merchant_id($this->get_merchant_context()->get_merchant_id());
+				$this->network_manager->post_event($ppex_event, $this->get_merchant_context(), $this->get_plugin_context());
+      }
     }
-
 
     public function init_hooks() {
       add_action('woocommerce_api_' . $this->id, array($this, 'check_phonepe_response'));
       add_action('woocommerce_receipt_' . $this->id, array(&$this, 'receipt_page'));
       add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'send_activation_event'));
+      add_filter('sanitize_option_woocommerce_phonepe_settings', array($this, 'ppex_preprocess_phonepe_payment_fields'), 10, 1);
+
       if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array(&$this, 'process_admin_options'));
       } else {
@@ -240,19 +396,34 @@ function ppex_woocommerce_phonepe_init() {
     public function receipt_page($order_id) {
       echo '<p>' . __('Thank you, please wait while we confirm your orders.') . '</p>';
       try {
-        $this->wc_b2b_pg_client->render_payment_ui($order_id);
+        if ($this->ppex_is_pg_v2_enabled()) {
+          $this->pg_v2_client->render_payment_ui($order_id);
+        } else {
+          $this->wc_b2b_pg_client->render_payment_ui($order_id);
+        }
       } catch (Exception $error) {
-        ppLogError($error->getCode());
         ppLogError($error);
         echo "We're sorry, an unexpected error has occurred. Please try again later.";
 
-        $ppex_failure_event = new PPEX_Event();
-        $ppex_failure_event->set_event_type(PPEX_Constants::PAYPAGE_NOT_RENDERED);
-        $ppex_failure_event->set_merchant_id($this->merchant_context->get_merchant_id());
-        $ppex_failure_event->set_state('FAILURE');
-        $ppex_failure_event->set_code($error->getCode());
-        $ppex_failure_event->set_message($error);
-        $this->network_manager->post_event($ppex_failure_event, $this->merchant_context, $this->plugin_context);
+        if($this->ppex_is_pg_v2_enabled()) {
+          $event = PPEX_Utils::create_event($this->plugin_context, PPEX_Constants::PAYPAGE_NOT_RENDERED);
+          $event->data['code'] = $error->getCode();
+          $event->data['message'] = $error->getMessage();
+          $event->data['state'] = PPEX_Constants::FAILURE;
+					try {
+            $this->standard_checkout_client->sendEvent($event);
+					} catch (Exception $exception) {
+						ppLogError(json_encode($exception));
+					}
+        } else {
+					$ppex_failure_event = new PPEX_Event();
+					$ppex_failure_event->set_event_type(PPEX_Constants::PAYPAGE_NOT_RENDERED);
+					$ppex_failure_event->set_merchant_id($this->merchant_context->get_merchant_id());
+					$ppex_failure_event->set_state('FAILURE');
+					$ppex_failure_event->set_code($error->getCode());
+					$ppex_failure_event->set_message($error->getMessage());
+					$this->network_manager->post_event($ppex_failure_event, $this->merchant_context, $this->plugin_context);
+        }
       }
     }
 
@@ -276,11 +447,27 @@ function ppex_woocommerce_phonepe_init() {
      **/
     public function check_phonepe_response() {
       ppLogInfo(json_encode($_GET['merchant_transaction_id']));
-      $this->wc_b2b_pg_client->check_phonepe_response($_GET['merchant_transaction_id']);
+      try {
+				if ($this->ppex_is_pg_v2_enabled()) {
+					$this->pg_v2_client->check_phonepe_response($_GET['merchant_transaction_id']);
+				} else {
+					$this->wc_b2b_pg_client->check_phonepe_response($_GET['merchant_transaction_id']);
+				}
+      }catch (Exception $exception) {
+          ppLogError(json_encode($exception));
+      }
+    }
+
+    public function ppex_is_pg_v2_enabled() {
+      return isset($this->settings['clientSecret']);
     }
 
     public function get_wc_b2b_pg_client() {
       return $this->wc_b2b_pg_client;
+    }
+
+    public function get_pg_v2_client() {
+      return $this->pg_v2_client;
     }
 
     public function get_merchant_context() {
@@ -293,6 +480,10 @@ function ppex_woocommerce_phonepe_init() {
 
     public function get_network_manager() {
       return $this->network_manager;
+    }
+
+    public function get_standard_checkout_client() {
+      return $this->standard_checkout_client;
     }
 
     /*
@@ -324,7 +515,6 @@ function ppex_woocommerce_phonepe_init() {
     }
   }
 
-
   //   Hook the custom function to the 'woocommerce_blocks_loaded' action
   add_action('woocommerce_blocks_loaded', 'ppex_register_order_approval_payment_method_type');
 
@@ -346,9 +536,7 @@ function ppex_woocommerce_phonepe_init() {
     );
   }
 
-
-
-  /*
+    /*
     ** To create shortcut to PhonePe plugin specific settings for marchants 
     */
 
@@ -378,7 +566,7 @@ function ppex_woocommerce_phonepe_init() {
   function ppex_plugin_row_meta($links, $file) {
     if (plugin_basename(__FILE__) == $file) {
       $row_meta = array(
-        'New to PhonePe PG? Register here!'    => PPEX_WC_BUSINESS_DASHBOARD_LINK
+        'New to PhonePe PG? Register here!'    => PPEX_WC_ONBOARDING_LINK
       );
       return array_merge($links, $row_meta);
     }
@@ -416,12 +604,25 @@ function ppex_woocommerce_phonepe_init() {
   );
 
   function ppex_fire_plugin_deactivated_event() {
+    // TDDO: condition to differenciate pg v1 and v2 events
+
     $wc_phonepe = new WC_PhonePe();
     $ppex_event = new PPEX_Event();
-    $ppex_event->set_event_type("PLUGIN_DEACTIVATED");
-    $ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
-    $wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
+
+    if($wc_phonepe->ppex_is_pg_v2_enabled()) {
+			$event = PPEX_Utils::create_event($wc_phonepe->get_plugin_context(), PPEX_Constants::PLUGIN_DEACTIVATED);
+			try {
+			 $wc_phonepe->get_standard_checkout_client()->sendEvent($event);
+			} catch (Exception $exception) {
+				ppLogError(json_encode($exception));
+			}
+    }else {
+			$ppex_event->set_event_type(PPEX_Constants::PLUGIN_DEACTIVATED);
+			$ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
+			$wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
+		}
   }
+
 
   function simulate_as_not_rest($is_rest_api_request) {
     if (empty($_SERVER['REQUEST_URI'])) {
@@ -429,6 +630,10 @@ function ppex_woocommerce_phonepe_init() {
     }
 
     if (strpos($_SERVER['REQUEST_URI'], '/index.php/wp-json/' . 'wp-phonepe/v1/callback') !== false) {
+      return false;
+    }
+
+    if (strpos($_SERVER['REQUEST_URI'], '/index.php/wp-json/' . 'wp-phonepe/v2/callback') !== false) {
       return false;
     }
 
@@ -453,6 +658,16 @@ function ppex_woocommerce_phonepe_init() {
     );
 
     register_rest_route(
+      'wp-phonepe/v2',
+      'callback',
+      array(
+        'methods'  => 'POST',
+        'callback' => 'handle_pg_v2_callback',
+        'permission_callback' => '__return_true',
+      )
+    );
+
+    register_rest_route(
       'wp-phonepe/v1',
       'check-pending-status',
       array(
@@ -466,18 +681,36 @@ function ppex_woocommerce_phonepe_init() {
   add_action('rest_api_init', 'register_routes');
 
   function handle_callback() {
+		$wc_phonepe = new WC_PhonePe();
+
+		$merchant_id = $wc_phonepe->get_merchant_context()->get_merchant_id();
+		$merchant_key = $wc_phonepe->get_merchant_context()->get_salt_key();
+		$key_index = $wc_phonepe->get_merchant_context()->get_salt_index();
+		$payload = file_get_contents('php://input');
+		$headers = filter_var($_SERVER['HTTP_X_VERIFY'], FILTER_SANITIZE_STRING);
+		$payload = json_decode($payload, true);
+		$decoded_payload = $payload['response'];
+		$ppex_pg_callback = $wc_phonepe->get_network_manager()->handle_callback($decoded_payload, $headers, $merchant_key, $key_index);
+
+		$wc_phonepe->get_wc_b2b_pg_client()->handle_callback_response($ppex_pg_callback);
+  }
+
+  function handle_pg_v2_callback() {
+
     $wc_phonepe = new WC_PhonePe();
+    if (!$wc_phonepe->ppex_is_pg_v2_enabled()) {
+      ppLogError('PG V2 is not enabled, aborted callback processing');
+    }
 
-    $merchant_id = $wc_phonepe->get_merchant_context()->get_merchant_id();
-    $merchant_key = $wc_phonepe->get_merchant_context()->get_salt_key();
-    $key_index = $wc_phonepe->get_merchant_context()->get_salt_index();
     $payload = file_get_contents('php://input');
-    $headers = filter_var($_SERVER['HTTP_X_VERIFY'], FILTER_SANITIZE_STRING);
-    $payload = json_decode($payload, true);
-    $decoded_payload = $payload['response'];
-    $ppex_pg_callback = $wc_phonepe->get_network_manager()->handle_callback($decoded_payload, $headers, $merchant_key, $key_index);
+    $headers = getallheaders();
 
-    $wc_phonepe->get_wc_b2b_pg_client()->handle_callback_response($ppex_pg_callback);
+    $phonepe_woocommerce_config = get_option('woocommerce_phonepe_settings');
+    $username = $phonepe_woocommerce_config['username'];
+    $password = $phonepe_woocommerce_config['password'];
+
+    $ppex_pg_v2_callback = new PPEX_PG_V2_Callback($headers, $payload, $username, $password);
+    return $wc_phonepe->get_pg_v2_client()->handle_callback_response($ppex_pg_v2_callback);
   }
 
   add_action('woocommerce_order_item_add_action_buttons', 'wc_order_item_add_action_buttons_callback', 10, 1);
@@ -595,8 +828,33 @@ function ppex_woocommerce_phonepe_init() {
   }
 
   function check_pending_status() {
-    $wc_phonepe = new WC_PhonePe();
-    return $wc_phonepe->get_wc_b2b_pg_client()->check_pending_status();
+    try {
+			$wc_phonepe = new WC_PhonePe();
+
+			global $wpdb;
+
+			$pending_orders_query = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}posts where post_type = %s and post_status = %s;", 'shop_order', 'wc-pending'));
+
+			foreach ($pending_orders_query as $order) {
+				$wc_order_id = $order->ID;
+				$order = wc_get_order($wc_order_id);
+				$merchant_transaction_id = $order->get_transaction_id();
+				if ($order->get_payment_method() != PPEX_PG_Constants::PAYMENT_METHOD_NAME) {
+					continue;
+				}
+
+				$ppex_order_type = $order->get_meta('ppex_order_type');
+				if ($ppex_order_type == PPEX_Constants::PG_V2_ORDER && $wc_phonepe->ppex_is_pg_v2_enabled()) {
+					// check status using pg v2 client
+					$wc_phonepe->get_pg_v2_client()->check_pending_status($merchant_transaction_id);
+				} else {
+					// check status using pg v1 client
+					$wc_phonepe->get_wc_b2b_pg_client()->check_pending_status($merchant_transaction_id);
+				}
+			}
+		}catch (Exception $exception){
+            ppLogError("Exception: " . json_encode($exception));
+		}
   }
 
   function phonepe_support_menu_item() {
@@ -638,10 +896,19 @@ function ppex_woocommerce_phonepe_init() {
   function render_phonepe_pg_support_page() {
     $wc_phonepe = new WC_PhonePe();
     $ppex_event = new PPEX_Event();
-    $ppex_event->set_event_type("PHONEPE_PG_SUPPORT_CLICKED");
-    $ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
-    $wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
 
+    if($wc_phonepe->ppex_is_pg_v2_enabled()) {
+            $event = PPEX_Utils::create_event($wc_phonepe->get_plugin_context(), PPEX_Constants::PHONEPE_PG_SUPPORT_CLICKED);
+			try {
+			 $wc_phonepe->get_standard_checkout_client()->sendEvent($event);
+			} catch (Exception $exception) {
+				ppLogError(json_encode($exception));
+			}
+    }else {
+			$ppex_event->set_event_type(PPEX_Constants::PHONEPE_PG_SUPPORT_CLICKED);
+			$ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
+			$wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
+		}
 
     echo "<p><strong>How to Report Bugs with PhonePe Payments Gateway</strong></p>
 
@@ -670,10 +937,19 @@ function ppex_woocommerce_phonepe_init() {
 
     $wc_phonepe = new WC_PhonePe();
     $ppex_event = new PPEX_Event();
-    $ppex_event->set_event_type("COMPOSE_ERROR_REPORT_CLICKED");
-    $ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
-    $wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
 
+    if($wc_phonepe->ppex_is_pg_v2_enabled()) {
+            $event = PPEX_Utils::create_event($wc_phonepe->get_plugin_context(), PPEX_Constants::COMPOSE_ERROR_REPORT_CLICKED);
+			try {
+				$wc_phonepe->get_standard_checkout_client()->sendEvent($event);
+			} catch (Exception $exception) {
+				ppLogError(json_encode($exception));
+			}
+		}else {
+			$ppex_event->set_event_type(PPEX_Constants::COMPOSE_ERROR_REPORT_CLICKED);
+			$ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
+			$wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
+		}
 
     $url = "mailto:" . PPEX_Constants::MERCHANT_SUPPORT_EMAIL_ID . "?subject=Request for PhonePe PG Support | " . $wc_phonepe->get_merchant_context()->get_merchant_id() . " | Woocommerce &body=Dear Support Team, %0d%0a I am writing to inform you about a technical issue I am currently facing with our payment gateway. Please find the key details below: %0d%0a MerchantID:  " . $wc_phonepe->get_merchant_context()->get_merchant_id() . " %0d%0a Marketplace: Woocommerce " . $wc_phonepe->get_plugin_context()->get_x_source_platform_version() . " %0d%0a Plugin Version: " . $wc_phonepe->get_plugin_context()->get_x_source_version() . " %0d%0a Environment: " . $wc_phonepe->get_plugin_context()->get_environment() . " %0d%0a Description of the Issue: %0d%0a [Provide a brief description of the issue here] %0d%0a %0d%0a Additional Details: %0d%0a For WooCommerce Marketplace: %0d%0a Please find attached the errorLogs.zip file for your reference. %0d%0a Download errorLogs using the 'Download Error Logs' button in the 'PhonePe PG Support' in sidebar of wordpress dashboard. %0d%0a %0d%0a For Transactional Issues: Share transaction ID/s related to the issue: %0d%0a [Insert Transaction ID/ List of transaction ID here]. %0d%0a For Scenario specific Issues: %0d%0a Attach a full-page screenshot or a screen recording which illustrates the issue. The incident took place at [insert time of the issue here]. %0d%0a %0d%0a Please look into the issue. %0d%0a Kind Regards, %0d%0a [Your Name] %0d%0a Merchant ID: " . $wc_phonepe->get_merchant_context()->get_merchant_id() . " ";
 
@@ -685,10 +961,18 @@ function ppex_woocommerce_phonepe_init() {
   function ppex_download_logs_callback() {
     $wc_phonepe = new WC_PhonePe();
     $ppex_event = new PPEX_Event();
-    $ppex_event->set_event_type("DOWNLOAD_ERROR_LOGS_CLICKED");
-    $ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
-    $wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
-
+    if($wc_phonepe->ppex_is_pg_v2_enabled()) {
+			$event = PPEX_Utils::create_event($wc_phonepe->get_plugin_context(), PPEX_Constants::DOWNLOAD_ERROR_LOGS_CLICKED);
+			try {
+				$wc_phonepe->get_standard_checkout_client()->sendEvent($event);
+			} catch (Exception $exception) {
+				ppLogError(json_encode($exception));
+			}
+    } else {
+			$ppex_event->set_event_type(PPEX_Constants::DOWNLOAD_ERROR_LOGS_CLICKED);
+			$ppex_event->set_merchant_id($wc_phonepe->get_merchant_context()->get_merchant_id());
+			$wc_phonepe->get_network_manager()->post_event($ppex_event, $wc_phonepe->get_merchant_context(), $wc_phonepe->get_plugin_context());
+    }
     $log_directory = WP_CONTENT_DIR . '/uploads/wc-logs/';
     $logs = glob($log_directory . '/*.log');
 
@@ -727,6 +1011,40 @@ function ppex_woocommerce_phonepe_init() {
     }
   }
 
+  function generate_username($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ') {
+    $str = '';
+    $max = mb_strlen($keyspace, '8bit') - 1;
+    if ($max < 1) {
+      throw new Exception('$keyspace must be at least two characters long');
+    }
+    for ($i = 0; $i < $length; ++$i) {
+      $str .= $keyspace[random_int(0, $max)];
+    }
+    return $str;
+  }
+
+  function generate_password($length = 20) {
+    $length = min(max($length, 8), 20);
+
+    $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    $numbers = '0123456789';
+
+    // Start with at least one letter and one number
+    $password = $letters[random_int(0, strlen($letters) - 1)] . $numbers[random_int(0, strlen($numbers) - 1)];
+
+    // Fill the rest of the password with random characters from both sets
+    $allChars = $letters . $numbers;
+    for ($i = 2; $i < $length; $i++) {
+      $password .= $allChars[random_int(0, strlen($allChars) - 1)];
+    }
+
+    // Shuffle the characters to ensure randomness
+    $password = str_shuffle($password);
+
+    return $password;
+  }
+
+
   function dashboard_status() {
     $plugin_dir = plugin_dir_url(__FILE__);
     global $typenow, $wp_query;
@@ -754,4 +1072,6 @@ function ppex_woocommerce_phonepe_init() {
   }
   add_action('restrict_manage_posts', 'dashboard_status');
 }
+
+
 ?>

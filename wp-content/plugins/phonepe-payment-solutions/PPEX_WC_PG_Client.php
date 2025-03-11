@@ -69,7 +69,7 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
       $this->plugin_context
     );
 
-    $ppex_event->set_event_type(PPEX_Constants::PAYMENT_REQUEST_TRIGGERED_FROM_PLUGIN);
+    $ppex_event->set_event_type(PPEX_Constants::PAYMENT_REQUEST_TRIGGERED_FROM_PLUGIN); 
     $this->network_manager->post_event($ppex_event, $this->merchant_context, $this->plugin_context);
 
     return $this->network_manager->pg_v1_pay($pg_v1_pay_request);
@@ -104,22 +104,22 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
     $ppex_event->set_merchant_transaction_id($pg_v1_pay_response->get_merchant_transaction_id());
     $this->network_manager->post_event($ppex_event, $this->merchant_context, $this->plugin_context);
 
-    // sucess scenario notification
+    // success scenario notification
     global $woocommerce;
     $this->msg['message'] = '';
     $this->msg['class'] = '';
 
     if ($pg_v1_pay_response->get_success() == false) {
-      switch($pg_v1_pay_response->get_code()){
+      switch ($pg_v1_pay_response->get_code()) {
         case PPEX_PG_Constants::INTERNAL_SECURITY_BLOCK_1:
-          if($pg_v1_pay_response->get_data()['Transacting_URL'] != null && $pg_v1_pay_response->get_data()['Onboarding_URL'] != null){
+          if ($pg_v1_pay_response->get_data()['Transacting_URL'] != null && $pg_v1_pay_response->get_data()['Onboarding_URL'] != null) {
             $transactingUrlString = $pg_v1_pay_response->get_data()['Transacting_URL'];
             $onboardingUrlData = $pg_v1_pay_response->get_data()['Onboarding_URL'];
 
-            if(is_array($onboardingUrlData)){
+            if (is_array($onboardingUrlData)) {
               // If it's an array, join the URLs with commas to create a single string
               $onboardingUrlString = implode(', ', $onboardingUrlData);
-            }else{
+            } else {
               // If it's a single URL, assign it to the onboardingUrlString
               $onboardingUrlString = $onboardingUrlData;
             }
@@ -128,13 +128,13 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
           break;
 
         case PPEX_PG_Constants::INTERNAL_SECURITY_BLOCK_2:
-          if($pg_v1_pay_response->get_data()['Transacting_IP_Address'] != null && $pg_v1_pay_response->get_data()['Onboarding_IP_Address'] != null){
+          if ($pg_v1_pay_response->get_data()['Transacting_IP_Address'] != null && $pg_v1_pay_response->get_data()['Onboarding_IP_Address'] != null) {
             $transactingIPString = $pg_v1_pay_response->get_data()['Transacting_IP_Address'];
             $onboardingIPData = $pg_v1_pay_response->get_data()['Onboarding_IP_Address'];
 
-            if(is_array($onboardingIPData)){
+            if (is_array($onboardingIPData)) {
               $onboardingIPString = implode(', ', $onboardingIPData);
-            }else{
+            } else {
               $onboardingIPString = $onboardingIPData;
             }
             $order->add_order_note("PhonePe Payment Solutions: Payment Request Failed " . "\n error message: " . $pg_v1_pay_response->get_message() . "\n Transacting IP Address: " . $transactingIPString . " \n Onboarding IP Address: " . $onboardingIPString);
@@ -143,21 +143,22 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
           break;
 
         case PPEX_PG_Constants::INTERNAL_SECURITY_BLOCK_4:
-          if($pg_v1_pay_response->get_data()['Transacting_Package_Name'] != null && $pg_v1_pay_response->get_data()['Onboarding_Package_Name'] != null){
+          if ($pg_v1_pay_response->get_data()['Transacting_Package_Name'] != null && $pg_v1_pay_response->get_data()['Onboarding_Package_Name'] != null) {
             $transactingPackageString = $pg_v1_pay_response->get_data()['Transacting_Package_Name'];
             $onboardingPackageData = $pg_v1_pay_response->get_data()['Onboarding_Package_Name'];
 
-            if(is_array($onboardingPackageData)){
+            if (is_array($onboardingPackageData)) {
               $onboardingPackageString = implode(', ', $onboardingPackageData);
-            }else{
+            } else {
               $onboardingPackageString = $onboardingPackageData;
             }
             $order->add_order_note("PhonePe Payment Solutions: Payment Request Failed " . "\n Error Message: " . $pg_v1_pay_response->get_message() . "\n Transacting Package Name: " . $transactingPackageString . " \n Onboarding Package Name: " . $onboardingPackageString);
           }
           break;
-        
-        default:  $order->add_order_note("PhonePe Payment Solutions: Payment Request Failed " . "\n error message: " . $pg_v1_pay_response->get_message()); 
-        break;
+
+        default:
+          $order->add_order_note("PhonePe Payment Solutions: Payment Request Failed " . "\n error message: " . $pg_v1_pay_response->get_message());
+          break;
       }
       if ($pg_v1_pay_response->get_code() != null) {
         $msg = 'Transaction could not be initiated because of ' . $pg_v1_pay_response->get_code() . '. Please try again.';
@@ -190,7 +191,6 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
       exit;
     } else {
       $redirect_pay_url = $pg_v1_pay_response->get_redirect_url();
-      $checkout_url = get_option('woocommerce_checkout_page_id');
 
       $img_src = 'https://imgstatic.phonepe.com/images/online-merchant-assets/plugins/woocommerce/64/64/loader.gif';
       $callback_url = esc_url_raw($this->get_redirect_url_for_order($pg_v1_pay_response->get_merchant_transaction_id()));
@@ -271,7 +271,6 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
   public function check_phonepe_response($merchant_transaction_id) {
     ppLogInfo('mtid: ' . $merchant_transaction_id);
     $wc_order_id = PPEX_Utils::get_merchant_transaction_id_from_unique_transaction_id($merchant_transaction_id);
-    ppLogInfo('wc_order_id: ' . $wc_order_id);
 
     if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
       $order = new WC_Order($wc_order_id);
@@ -293,7 +292,7 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
     if ($code != PPEX_Constants::TXN_NOT_FOUND) {
       $amount_returned = $ppex_api_response->get_data()['amount'];
     } else {
-      ppLogInfo("Transaction not found for merchant_transaction_id " . $merchant_transaction_id);
+      ppLogError("Transaction not found for merchant_transaction_id " . $merchant_transaction_id);
       wp_redirect(site_url());
       exit;
     }
@@ -305,7 +304,6 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
     if ($code == PPEX_Constants::SUCCESS && $amount_in_paisa == $amount_returned) {
       $this->status_update_for_order($code, $wc_order_id, $merchant_transaction_id);
       $redirect_url = $order->get_checkout_order_received_url();
-      ppLogInfo('success url: ' . $redirect_url);
     } else {
       if ($amount_in_paisa != $amount_returned) {
         $msg .= "Amount mismatch!";
@@ -316,7 +314,6 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
       }
       $this->status_update_for_order(PPEX_Constants::FAILED, $wc_order_id, $merchant_transaction_id, $msg);
       $redirect_url = wc_get_checkout_url();
-      ppLogInfo('failure url: ' . $redirect_url);
     }
 
     $redirect_url = add_query_arg(
@@ -340,29 +337,18 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
     exit;
   }
 
-  public function check_pending_status() {
+  public function check_pending_status($merchant_transaction_id) {
     $merchant_id = $this->merchant_context->get_merchant_id();
     $salt_key = $this->merchant_context->get_salt_key();
     $salt_index = $this->merchant_context->get_salt_index();
 
-    global $wpdb;
+    $wc_order_id = PPEX_Utils::get_merchant_transaction_id_from_unique_transaction_id($merchant_transaction_id);
+    $x_verify    = self::calculate_status_checksum($merchant_id, $merchant_transaction_id, $salt_key, $salt_index);
+    $ppex_api_response  = $this->network_manager->pg_status_check($x_verify, $merchant_id, $merchant_transaction_id, $this->plugin_context->get_environment());
 
-    $pending_orders_query = $wpdb->get_results($wpdb->prepare("SELECT * FROM {$wpdb->prefix}posts where post_type = %s and post_status = %s;", 'shop_order', 'wc-pending'));
+    $code = $ppex_api_response->get_code();
 
-    foreach ($pending_orders_query as $order) {
-      $wc_order_id = $order->ID;
-      $order = wc_get_order($order->ID);
-      $merchant_transaction_id = $order->get_transaction_id();
-      if ($order->get_payment_method() != PPEX_PG_Constants::PAYMENT_METHOD_NAME) {
-        continue;
-      }
-      $x_verify    = self::calculate_status_checksum($merchant_id, $merchant_transaction_id, $salt_key, $salt_index);
-      $ppex_api_response  = $this->network_manager->pg_status_check($x_verify, $merchant_id, $merchant_transaction_id, $this->plugin_context->get_environment());
-
-      $code = $ppex_api_response->get_code();
-
-      $this->status_update_for_order($code, $wc_order_id, $merchant_transaction_id);
-    }
+    $this->status_update_for_order($code, $wc_order_id, $merchant_transaction_id);
   }
 
   public function status_update_for_order($code, $wc_order_id, $merchant_transaction_id, $msg = "") {
@@ -373,7 +359,7 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
     if ($order == false) return;
 
     // order marked completed will not be modified by status check or callback
-    if ($order->status == 'completed') {
+    if ($order->status == 'completed' || $order->status == 'processing') {
       return;
     }
 
@@ -394,7 +380,7 @@ class PPEX_WC_PG_Client implements PPEX_PG_Interface {
     }
   }
 
-  static public function calculate_status_checksum($merchantId, $txnid, $key, $index) {
+  public static function calculate_status_checksum($merchantId, $txnid, $key, $index) {
     $string_to_be_hashed = PPEX_PG_Constants::PG_V1_STATUS_ENDPOINT . $merchantId . "/" . $txnid . $key;
     $hashed_string = PPEX_Utils::generate_hashed_string($string_to_be_hashed, $index);
     return $hashed_string;
