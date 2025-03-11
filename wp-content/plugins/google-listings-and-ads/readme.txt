@@ -5,7 +5,7 @@ Requires at least: 6.1
 Tested up to: 6.7
 Requires PHP: 7.4
 Requires PHP Architecture: 64 Bits
-Stable tag: 2.9.5
+Stable tag: 2.9.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -140,37 +140,17 @@ To allow your products to appear in all relevant locations, make sure you’ve c
 
 == Changelog ==
 
-= 2.9.5 - 2025-01-15 =
-* Dev - Fix E2E tests in WC 9.6.
-* Dev - Fix tests in WooCommerce 9.6.
-* Fix - Avoid the negative shipping rate taken from WooCommerce settings leading to false onboarding completion and make its error message more explicit.
-* Fix - Show leaving prompt in Edit Ads Campaign if the form was modified.
-* Fix - Sync shipping max times to Google Merchant Center.
-* Tweak - Add an admin service provider for WP Admin requests.
-* Tweak - Conditionally load job classes.
-* Tweak - Consistent usage of ContainerAware.
-* Tweak - Pop up confirmation prompt on the Shipping page before saving changes.
-* Tweak - Refactor installer class to load dependencies when needed.
-* Tweak - Remove unused Http proxy class.
-* Tweak - WC 9.6 compatibility.
-* Update - Drop support for WordPress < 6.1.
-* Update - Move tax rate setup from the Edit free listings page to the Settings page.
-* Update - Move the Edit free listings page to a dedicated page and rename the page to Shipping.
+= 2.9.9 - 2025-02-18 =
+* Fix - Error displayed when accessing campaign assets editing page without attached asset groups.
+* Tweak - Opt-in to URL expansion.
+* Tweak - Supplement the implementation of API Pull for the Settings page.
+* Tweak - WC 9.7 compatibility.
 
-= 2.9.4 - 2024-12-25 =
-* Fix - Clear previous errors after completing sync.
-* Tweak - Adjust conditions for MCM.
-* Update - Google Ads API to v18.
+= 2.9.8 - 2025-02-04 =
+* Tweak - Replace WooCommerce logo with Woo 2.0 Brand.
 
-= 2.9.3 - 2024-12-18 =
-* Dev - Eliminate the duplicate functions used to group shipping time data.
-* Dev - Improve E2E tests for related products.
-* Fix - Budget Recommendation data not populating on install.
-* Fix - PHP 8.4 package compatibility.
-* Fix - Prevent duplicate conversion and purchase event tracking.
-* Fix - The saved max shipping time is not showing after revisiting the free listings editing page.
-* Tweak - Drop Jetpack packages and switch to packages bundled with WooCommerce.
-* Tweak - WC 9.5 compatibility.
-* Update - Drop support for WooCommerce < 7.9.
+= 2.9.7 - 2025-01-28 =
+* Tweak - Adjust some query and table functions.
+* Tweak - Allow mapping of a Google ID without a prefix.
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/google-listings-and-ads/trunk/changelog.txt).

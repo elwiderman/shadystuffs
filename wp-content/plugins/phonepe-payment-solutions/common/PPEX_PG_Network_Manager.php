@@ -135,7 +135,7 @@ class PPEX_PG_Network_Manager {
     $ppex_event->set_flow_type(PPEX_PG_Constants::FLOW_TYPE);
     $ppex_event->set_user_operating_system(filter_var($_SERVER['HTTP_USER_AGENT'], FILTER_SANITIZE_STRING));
 
-    $base_url_for = PPEX_Utils::get_base_url($plugin_context->get_environment());
+    $base_url_for = PPEX_Utils::get_base_events_url($plugin_context->get_environment());
 
     $json_data = json_encode($ppex_event->to_array());
     $encoded_payload = base64_encode($json_data);

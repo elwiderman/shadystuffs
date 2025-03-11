@@ -86,9 +86,12 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
                     <p>
 						<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-attribute-groups' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
                         <br/>
-                        <a href="<?php echo esc_url( WPCAG_REVIEWS ); ?>" target="_blank"><?php esc_html_e( 'Reviews', 'wpc-attribute-groups' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCAG_CHANGELOG ); ?>" target="_blank"><?php esc_html_e( 'Changelog', 'wpc-attribute-groups' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCAG_DISCUSSION ); ?>" target="_blank"><?php esc_html_e( 'Discussion', 'wpc-attribute-groups' ); ?></a>
+                        <a href="<?php echo esc_url( WPCAG_REVIEWS ); ?>"
+                           target="_blank"><?php esc_html_e( 'Reviews', 'wpc-attribute-groups' ); ?></a> |
+                        <a href="<?php echo esc_url( WPCAG_CHANGELOG ); ?>"
+                           target="_blank"><?php esc_html_e( 'Changelog', 'wpc-attribute-groups' ); ?></a> |
+                        <a href="<?php echo esc_url( WPCAG_DISCUSSION ); ?>"
+                           target="_blank"><?php esc_html_e( 'Discussion', 'wpc-attribute-groups' ); ?></a>
                     </p>
                 </div>
 				<?php if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) { ?>
@@ -98,13 +101,17 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
 				<?php } ?>
                 <div class="wpclever_settings_page_nav">
                     <h2 class="nav-tab-wrapper">
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcag&tab=settings' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcag&tab=settings' ) ); ?>"
+                           class="<?php echo esc_attr( $active_tab === 'settings' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>">
 							<?php esc_html_e( 'Settings', 'wpc-attribute-groups' ); ?>
                         </a>
-                        <a href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=wpc-attribute-group&post_type=product' ) ); ?>" class="nav-tab">
+                        <a href="<?php echo esc_url( admin_url( 'edit-tags.php?taxonomy=wpc-attribute-group&post_type=product' ) ); ?>"
+                           class="nav-tab">
 							<?php esc_html_e( 'Attribute Groups', 'wpc-attribute-groups' ); ?>
                         </a>
-                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcag&tab=premium' ) ); ?>" class="<?php echo esc_attr( $active_tab === 'premium' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>" style="color: #c9356e">
+                        <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-wpcag&tab=premium' ) ); ?>"
+                           class="<?php echo esc_attr( $active_tab === 'premium' ? 'nav-tab nav-tab-active' : 'nav-tab' ); ?>"
+                           style="color: #c9356e">
 							<?php esc_html_e( 'Premium Version', 'wpc-attribute-groups' ); ?>
                         </a>
                         <a href="<?php echo esc_url( admin_url( 'admin.php?page=wpclever-kit' ) ); ?>" class="nav-tab">
@@ -144,7 +151,9 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
                                     <th scope="row"><?php esc_html_e( 'Title', 'wpc-attribute-groups' ); ?></th>
                                     <td>
                                         <label>
-                                            <input type="text" class="text regular-text" name="wpcag_settings[single_attributes_title]" value="<?php echo esc_attr( $single_attributes_title ); ?>"/>
+                                            <input type="text" class="text regular-text"
+                                                   name="wpcag_settings[single_attributes_title]"
+                                                   value="<?php echo esc_attr( $single_attributes_title ); ?>"/>
                                         </label>
                                     </td>
                                 </tr>
@@ -152,7 +161,9 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
                                     <th scope="row"><?php esc_html_e( 'Description', 'wpc-attribute-groups' ); ?></th>
                                     <td>
                                         <label>
-                                            <textarea name="wpcag_settings[single_attributes_description]" cols="50" rows="3" style="width: 100%"><?php echo esc_html( $single_attributes_description ); ?></textarea>
+                                            <textarea name="wpcag_settings[single_attributes_description]" cols="50"
+                                                      rows="3"
+                                                      style="width: 100%"><?php echo esc_html( $single_attributes_description ); ?></textarea>
                                         </label>
                                     </td>
                                 </tr>
@@ -200,7 +211,8 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
 					<?php } elseif ( $active_tab === 'premium' ) { ?>
                         <div class="wpclever_settings_page_content_text">
                             <p>Get the Premium Version just $29!
-                                <a href="https://wpclever.net/downloads/wpc-attribute-groups/?utm_source=pro&utm_medium=wpcag&utm_campaign=wporg" target="_blank">https://wpclever.net/downloads/wpc-attribute-groups/</a>
+                                <a href="https://wpclever.net/downloads/wpc-attribute-groups/?utm_source=pro&utm_medium=wpcag&utm_campaign=wporg"
+                                   target="_blank">https://wpclever.net/downloads/wpc-attribute-groups/</a>
                             </p>
                             <p><strong>Extra features for Premium Version:</strong></p>
                             <ul style="margin-bottom: 0">
@@ -217,12 +229,15 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
                     <div class="wpclever_settings_page_suggestion_content">
                         <div>
                             To display custom engaging real-time messages on any wished positions, please install
-                            <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart Messages</a> plugin. It's free!
+                            <a href="https://wordpress.org/plugins/wpc-smart-messages/" target="_blank">WPC Smart
+                                Messages</a> plugin. It's free!
                         </div>
                         <div>
                             Wanna save your precious time working on variations? Try our brand-new free plugin
-                            <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC Variation Bulk Editor</a> and
-                            <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC Variation Duplicator</a>.
+                            <a href="https://wordpress.org/plugins/wpc-variation-bulk-editor/" target="_blank">WPC
+                                Variation Bulk Editor</a> and
+                            <a href="https://wordpress.org/plugins/wpc-variation-duplicator/" target="_blank">WPC
+                                Variation Duplicator</a>.
                         </div>
                     </div>
                 </div>
@@ -520,7 +535,8 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
                 </select> </label>
             <div class="wpcag_apply_val_wrapper hide_if_apply_all">
                 <label>
-                    <select class="wpcag_terms wpcag_apply_val" multiple="multiple" name="wpcag_apply_val[]" data-<?php echo esc_attr( $apply ); ?>="<?php echo esc_attr( implode( ',', (array) $apply_val ) ); ?>">
+                    <select class="wpcag_terms wpcag_apply_val" multiple="multiple" name="wpcag_apply_val[]"
+                            data-<?php echo esc_attr( $apply ); ?>="<?php echo esc_attr( implode( ',', (array) $apply_val ) ); ?>">
 						<?php if ( is_array( $apply_val ) && ! empty( $apply_val ) ) {
 							foreach ( $apply_val as $t ) {
 								if ( $term = get_term_by( 'slug', $t, $apply ) ) {
@@ -536,7 +552,10 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
 			echo '<label>' . esc_html__( 'Attributes', 'wpc-attribute-groups' ) . '</label>';
 			echo wp_kses( $th_end . $td_start, $allowed_html ); ?>
             <div class="wpcag_attributes_wrapper">
-                <label for="wpcag_attributes_selector"></label><select name="wpcag_attributes[]" id="wpcag_attributes_selector" class="wpcag_attributes_selector" multiple="multiple">
+                <label for="wpcag_attributes_selector"></label><select name="wpcag_attributes[]"
+                                                                       id="wpcag_attributes_selector"
+                                                                       class="wpcag_attributes_selector"
+                                                                       multiple="multiple">
 					<?php
 					$product_attributes = [];
 
@@ -692,7 +711,8 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
 								echo '<option value="' . esc_attr( $group->term_id ) . '">' . esc_html( $group->name ) . ' (' . count( $group_attributes ) . ')</option>';
 							} ?>
                         </select> </label>
-                    <button type="button" class="button wpcag_group_attributes_add"><?php esc_html_e( 'Add', 'wpc-attribute-groups' ); ?></button>
+                    <button type="button"
+                            class="button wpcag_group_attributes_add"><?php esc_html_e( 'Add', 'wpc-attribute-groups' ); ?></button>
                 </div>
 				<?php
 			}

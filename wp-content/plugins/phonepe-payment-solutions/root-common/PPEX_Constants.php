@@ -14,11 +14,13 @@ if (!class_exists('PPEX_Constants')) {
 		const PPBASE_URL_UAT                        = "https://api-preprod.phonepe.com/apis/pg-sandbox";
 
 
-		const PPBASE_URL_PROD_EVENTS                 = "https://api.phonepe.com/apis/tyche";
-		const PPBASE_URL_STAGE_EVENTS                = "https://api-testing.phonepe.com/apis/hermes";
+		const PPBASE_URL_PROD_EVENTS                 = "https://api.phonepe.com/apis/pg-ingestion";
+		const PPBASE_URL_STAGE_EVENTS                = "https://api-testing.phonepe.com/apis/pg-ingestion";
 		const PPBASE_URL_UAT_EVENTS                  = "https://api-preprod.phonepe.com/apis/tyche";
 
-		//const PPBASE_URL_STAGE                      = "http://hermes.nixy.stg-drove.phonepe.nb6";
+		const PPBASE_URL_PROD_WEBHOOK										= "https://api.phonepe.com/apis/omx-service";
+		const PPBASE_URL_STAGE_WEBHOOK									= "https://api-testing.phonepe.com/apis/omx-service";
+		const PPBASE_URL_UAT_WEBHOOK									= "https://api-preprod.phonepe.com/apis/pg-sandbox";
 
 
 		const STAGE_SCRIPT                          = "https://mercury-stg.phonepe.com/web/bundle/checkout.js";
@@ -38,6 +40,7 @@ if (!class_exists('PPEX_Constants')) {
 		const DECLINED                              = "PAYMENT_DECLINED";
 		const FAILED                                = "PAYMENT_FAILED";
 		const ERROR                                  = "PAYMENT_ERROR";
+		
 
 		const ORDER_UPDATE_SUCCESS                  = "ORDER_UPDATE_SUCCESS";
 		const ORDER_UPDATE_FAILED                    = "ORDER_UPDATE_FAILED";
@@ -45,7 +48,7 @@ if (!class_exists('PPEX_Constants')) {
 		const SAVE_USER_ADDRESS_FAILED              = "SAVE_USER_ADDRESS_FAILED";
 		const ORDER_INIT_FAILED                     = "ORDER_INIT_FAILED";
 
-		const MAX_RETRY_COUNT                        = 5;
+		const MAX_RETRY_COUNT                        = 10;
 		const CONNECT_TIMEOUT_IN_SECONDS            = 10;
 		const TIMEOUT_IN_SECONDS                    = 10;
 
@@ -56,6 +59,12 @@ if (!class_exists('PPEX_Constants')) {
 		const PLUGIN_STATUS_CHECK                        = "PLUGIN_STATUS_CHECK";
 		const PLUGIN_HAS_GIVEN_CONTROL_BACK_TO_MERCHANT = "PLUGIN_HAS_GIVEN_CONTROL_BACK_TO_MERCHANT";
 		const CALLBACK_RECIEVED_AT_PLUGIN                = "CALLBACK_RECIEVED_AT_PLUGIN";
+		const CHECK_PENDING_STATUS											= "CHECK_PENDING_STATUS";
+		const NON_TRANSACTIONAL_EVENT										= "NON_TRANSACTIONAL_EVENT";
+		const PLUGIN_DEACTIVATED												= "PLUGIN_DEACTIVATED";
+		const PHONEPE_PG_SUPPORT_CLICKED								= "PHONEPE_PG_SUPPORT_CLICKED";
+		const COMPOSE_ERROR_REPORT_CLICKED							= "COMPOSE_ERROR_REPORT_CLICKED";
+		const DOWNLOAD_ERROR_LOGS_CLICKED								= "DOWNLOAD_ERROR_LOGS_CLICKED";
 
 		const PHONEPE_CHECKOUT_FAILURE                  = "PHONEPE_CHECKOUT_FAILURE";
 		const ORDER_INIT                                = "ORDER_INIT";
@@ -68,5 +77,11 @@ if (!class_exists('PPEX_Constants')) {
 		const PAY_BUTTON_CLICKED_ON_PLUGIN_BOTTOM_SHEET   = "PAY_BUTTON_CLICKED_ON_PLUGIN_BOTTOM_SHEET";
 		const PAYMENT_RESPONSE_RECEIVED_AT_PLUGIN_BOTTOM_SHEET       = "PAYMENT_RESPONSE_RECEIVED_AT_PLUGIN_BOTTOM_SHEET";
 		const CALLBACK_RECEIVED_AT_PLUGIN_BOTTOM_SHEET              = "CALLBACK_RECEIVED_AT_PLUGIN_BOTTOM_SHEET";
+		const FAILURE = "FAILURE";
+		const CHECKOUT_ORDER_COMPLETED = "checkout.order.completed";
+		const CHECKOUT_ORDER_FAILED = "checkout.order.failed";
+		const WEBHOOK_CREDENTIAL_LENGTH = 12;
+		const PG_V2_ORDER = "PG_V2_ORDER";
+		const WEBHOOK_ENDPOINT = "/v1/webhooks/configure";
 	}
 }
