@@ -3,7 +3,7 @@ Contributors: facebook, automattic, woothemes
 Tags: facebook, woocommerce, marketing, product catalog feed, pixel
 Requires at least: 5.6
 Tested up to: 6.7
-Stable tag: 3.4.1
+Stable tag: 3.4.4
 Requires PHP: 7.4
 MySQL: 5.6 or greater
 License: GPLv2 or later
@@ -39,43 +39,19 @@ When opening a bug on GitHub, please give us as many details as possible.
 * Current version of Facebook-for-WooCommerce, WooCommerce, Wordpress, PHP
 
 == Changelog ==
-= 3.4.1 - 2025-02-27 = 
-* Tweak - Removed custom field definitions by @devbodaghe in #2876
-* Dev - Improved readability of function prepare_product() in fbproduct.php by @mshymon in #2889
-* Dev - Enabled PHPUnit code coverage report generation by @carterbruce in #2893
 
-= 3.4.0 - 2025-02-19 =
-* Add - FB product video field to add videos. Also added products sync to support the video field with Batch API by @gurtejrehal in #2874
-* Tweak - tests for #2874 by @gurtejrehal in #2888
-* Tweak - tests for Product Update action as ramp up task by @nealweiMeta in #2883
-* Fix - translations loading before the init hook by @iodic in #2866
-* Fix - Fixed feeds by requesting a feed file upload session after feed file is generated and added missing new fields to the feed file by @mshymon in #2841
+= 3.4.4 - 2025-03-26 =
+* Add - Create tests for ProductFeedUploads create endpoint by @ajello-meta in #2902
+* Add - Create tests for ProductFeedUploads read endpoint by @ajello-meta in #2903
+* Tweak - Remove phpcs:ignoreFile annotation + Enable code coverage report generation with phpunit by @sol-loup in #2897 and #2901
+* Fix - Restores the original dynamic property behavior in the AsyncRequest class by @sol-loup in #2921
+* Tweak - Changing APP to PLUGIN on README.MD by @SayanPandey in #2916
+* Tweak - Update README.md - Added noification for ownership transfer by @SayanPandey in #2910
+* Tweak - Added is_multisite logging to the update_plugin_version_configuration request by @carterbuce in #2955
+* Tweak - Add woo_commerce_retailer_id to products API request by @crisojog in #2958
+* Tweak - Syncing plugin version info by @vinkmeta in #2960
+* Fix - sync products out of stock to meta despite visibility config by @francorisso in #2952
+* Fix - Update woo_commerce_retailer_id to existing field external_variant_id by @crisojog in #2963
+* Tweak - Update readme.txt by @vinkmeta in #2949
 
-= 3.3.5 - 2025-02-12 = 
-* Add - Rich Text Description to Woo Product Sync with Meta by devbodaghe in #2843
-
-= 3.3.4 - 2025-02-11 =
-* Fix - Fixing the issue with version number
-
-= 3.3.3 - 2025-02-06 = 
-* Fix - Use of recommended delete connection endpoint over delete permission endpoint by atuld123 in #2844
-* Add - Expose Brand & MPN to Woocommerce UI by @devbodaghe in #2842
-= 3.3.4 - 2025-02-11 =
-* Fix - Fixing the issue with version number
-
-= 3.3.3 - 2025-02-06 = 
-* Fix - Use of recommended delete connection endpoint over delete permission endpoint by atuld123 in #2844
-* Add - Expose Brand & MPN to Woocommerce UI by @devbodaghe in #2842
-
-= 3.3.2 - 2025-01-21 =
-* Fix - a bug that arose from reliance on the plugin version compatibility tag by @vinkmeta in #2856
-* Fix - Update catalog link in connections tab to point to Catalog by @devbodaghe in #2848
-* Fix - Product URL links now point to items tab by @vinkmeta in #2852
-* Tweak - Removed sell on Instagram by @mshymon in #2854
-* Tweak - Add custom fields to product data structure by @devbodaghe in #2836
-* Fix - Multiple issues with Fixed FB Attribute Syncing by @vinkmeta in #2860
-
-= 3.3.1 - 2024-12-06 = 
-* Fix - Sale price effective date by @vinkmeta in #2809
-* Fix - Sync stock quantity when available by @mshymon in #2811
-* Fix - Sync product GTIN when available by @mshymon in #2810
+[See changelog for all versions](https://raw.githubusercontent.com/facebook/facebook-for-woocommerce/refs/heads/main/changelog.txt).

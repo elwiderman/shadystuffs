@@ -143,18 +143,14 @@ if ( ! class_exists( 'Wpccl_Frontend' ) ) {
 				$individual = $coupon->get_individual_use();
 
 				switch ( $type ) {
-					case 'percent' :
+					case 'percent';
 						$amount = sprintf( Wpccl_Helper::localization( 'discount', /* translators: value */ esc_html__( '%s Discount', 'wpc-coupon-listing' ) ), $coupon->get_amount() . '%' );
-
 						break;
-					case 'fixed_product' :
+					case 'fixed_product':
 						$amount = sprintf( Wpccl_Helper::localization( 'product_discount', /* translators: value */ esc_html__( '%s Product Discount', 'wpc-coupon-listing' ) ), wc_price( $coupon->get_amount() ) );
-
 						break;
 					default:
 						$amount = sprintf( Wpccl_Helper::localization( 'discount', /* translators: value */ esc_html__( '%s Discount', 'wpc-coupon-listing' ) ), wc_price( $coupon->get_amount() ) );
-
-						break;
 				}
 
 				if ( $coupon->get_free_shipping() ) {
@@ -178,7 +174,8 @@ if ( ! class_exists( 'Wpccl_Frontend' ) ) {
 					$classes .= ' wpccl-coupon-plain';
 				}
 				?>
-                <div class="<?php echo esc_attr( $classes ); ?>" data-coupon="<?php echo esc_attr( $coupon->get_code() ); ?>">
+                <div class="<?php echo esc_attr( $classes ); ?>"
+                     data-coupon="<?php echo esc_attr( $coupon->get_code() ); ?>">
                     <div class="wpccl-coupon-info">
 						<?php
 						if ( ( Wpccl_Helper::get_setting( 'value', 'show' ) === 'show' ) && ! in_array( 'value', $hide_arr ) ) {
