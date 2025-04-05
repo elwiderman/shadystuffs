@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="LMuLY7x2Gn-ZryCQvdZFIA8Mrcp1MLfYbvPHP_3MA7E" />
     <link rel="shortcut icon" type="image/x-icon" href="<?php echo image('theme/favicon.png?v=1'); ?>"/>
     <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
 
