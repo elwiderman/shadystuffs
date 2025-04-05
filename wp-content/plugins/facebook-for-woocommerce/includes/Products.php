@@ -42,7 +42,7 @@ class Products {
 
 	/** @var string product image source option to use the parent product image in Facebook */
 	const PRODUCT_IMAGE_SOURCE_CUSTOM = 'custom';
-
+	
 	/** @var string the meta key used to store the Google product category ID for the product */
 	const GOOGLE_PRODUCT_CATEGORY_META_KEY = '_wc_facebook_google_product_category';
 
@@ -288,6 +288,10 @@ class Products {
 	 * @return bool
 	 */
 	public static function is_product_visible( \WC_Product $product ) {
+		if ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) && ! $product->is_in_stock() ) {
+			self::$products_visibility[ $product->get_id() ] = false;
+			return false;
+		}
 		// accounts for a legacy bool value, current should be (string) 'yes' or (string) 'no'
 		if ( ! isset( self::$products_visibility[ $product->get_id() ] ) ) {
 			if ( $product->is_type( 'variable' ) ) {
