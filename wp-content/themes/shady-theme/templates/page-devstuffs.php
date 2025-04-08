@@ -543,6 +543,53 @@ if (is_user_logged_in() && in_array('administrator', $user->roles)) :
         echo '</pre>';
     endforeach; */
 
+
+
+    // remove the fabric variations from all products and set the price to 799
+    
+    
+    // echo '<pre>';
+    // var_dump($products);
+    // echo '</pre>';
+
+    
+
+    ?>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="form-vatiation">
+                    <?php
+                    $args = [
+                        'type'        => 'variable',
+                        'category'    => 't-shirts',
+                        'limit'       => 5,
+                        'page'        => 1,
+                        'status'      => 'publish',
+                        'return'      => 'ids',
+                        'paginate'  => true,
+                    ];
+                    $products = wc_get_products($args);
+
+                    $total = $products->total;
+                    $found_pages = $products->max_num_pages;
+                    ?>
+
+                    <form id="variationFix">
+                        <?php wp_nonce_field('shady_woo_cleanup', 'shady_woo_cleanup'); ?>
+                        <input type="hidden" name="page" value="1">
+                        <input type="hidden" name="found_pages" value="<?php echo $found_pages;?>">
+                        <input type="hidden" name="total" value="<?php echo $total;?>">
+                        <input type="hidden" name="action" value="shady_cleanup_tshirts">
+                        <button type="submit" class="btn-orange">Update the products</button>
+
+                        <span style="display:none;">Loading ...</span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
 else :
     echo '<h1>boom</h1>';
 endif;

@@ -38,6 +38,17 @@ function shady_framework_scripts() {
         ));
     }
 
+    if (is_page_template('templates/page-devstuffs.php')) {
+        wp_enqueue_script('shady-dev', $path . shady_get_hashed_assets('js/dev.js'), '', '', [
+            'strategy'      => 'defer',
+            'in_footer'     => true
+        ]);
+
+        wp_localize_script('shady-dev', 'WPURLS', array(
+            'ajaxurl'       => admin_url('admin-ajax.php'),
+        ));
+    }
+
     // the stylesheets
     global $wp_styles; // Call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
 
