@@ -228,3 +228,161 @@ function shady_load_more_products_shop() {
     endif;
 }
 
+
+// cleanup the tshirts to not have fabric as the attribute and create new variations and set the prices
+add_action('wp_ajax_shady_cleanup_tshirts', 'shady_cleanup_tshirts');
+add_action('wp_ajax_nopriv_shady_cleanup_tshirts', 'shady_cleanup_tshirts');
+function shady_cleanup_tshirts() {
+    if (!isset($_POST['shady_woo_cleanup']) || !wp_verify_nonce($_POST['shady_woo_cleanup'], 'shady_woo_cleanup')) :
+        print 'Sorry, your nonce did not verify.';
+    exit;
+    else :
+        $page = (int)$_POST['page'];
+        $args = [
+            'type'        => 'variable',
+            'category'    => 't-shirts',
+            'limit'       => 5,
+            'page'        => $page,
+            'status'      => 'publish',
+            'return'      => 'ids',
+            'paginate'   => true
+        ];
+        $products = wc_get_products($args);
+
+        $found_pages = $products->max_num_pages;
+
+        $response = [];
+
+        $posts_fixed = [];
+
+        $attribute_to_remove = 'pa_fabric';
+        
+        foreach ($products->products as $product_id) {
+            $product = wc_get_product($product_id);
+            $variations = $product->get_children();
+            
+            // Check if the product has the attribute to remove
+            foreach ($variations as $variation_id) {
+                $variation = new WC_Product_Variation($variation_id);
+                $variation_attributes = $variation->get_attributes();
+
+                if (array_key_exists($attribute_to_remove, $variation_attributes)) {
+                    wp_delete_post($variation_id, true); // Delete the variation permanently
+                }
+            }
+
+            // remove the fabric attribute from the product
+            $attributes = $product->get_attributes();
+            if (isset($attributes[$attribute_to_remove])) {
+                unset($attributes[$attribute_to_remove]);
+                $product->set_attributes($attributes);
+                $product->save();
+            }
+
+
+            // Build all combinations of attribute values
+            $attribute_options = [];
+
+            foreach ($attributes as $attribute_name => $attribute) {
+                if ($attribute->get_variation()) {
+                    $attribute_options[$attribute_name] = $attribute->get_options();
+                }
+            }
+
+            if (empty($attribute_options)) {
+                return;
+            }
+
+            // Generate all possible combinations
+            $combinations = [[]];
+            $variations_for_response = [];
+            foreach ($attribute_options as $attribute_name => $options) {
+                $temp = [];
+                foreach ($combinations as $combination) {
+                    foreach ($options as $option) {
+                        $temp[] = array_merge($combination, [ $attribute_name => $option ]);
+                    }
+                }
+                $combinations = $temp;
+            }
+
+            // Create each variation if it doesn't already exist
+            foreach ($combinations as $variation_attributes) {
+                $variation_exists = false;
+
+                // Check if variation already exists
+                foreach ($product->get_children() as $child_id) {
+                    $variation = wc_get_product($child_id);
+                    if (!$variation || $variation->get_type() !== 'variation') continue;
+
+                    $match = true;
+                    foreach ($variation_attributes as $key => $value) {
+                        if ($variation->get_attribute($key) !== $value) {
+                            $match = false;
+                            break;
+                        }
+                    }
+
+                    if ($match) {
+                        $variation_exists = true;
+                        break;
+                    }
+                }
+
+                if (!$variation_exists) {
+                    $variation_post = [
+                        'post_title'  => $product->get_name() . ' - ' . implode(' / ', $variation_attributes),
+                        'post_status' => 'publish',
+                        'post_parent' => $product_id,
+                        'post_type'   => 'product_variation',
+                        'menu_order'  => 0,
+                    ];
+
+                    $variation_id = wp_insert_post($variation_post);
+
+                    foreach ($variation_attributes as $key => $value) {
+                        // Set the variation attributes
+                        $slug = get_term_by('id', $value, $key)->slug;
+                        update_post_meta($variation_id, 'attribute_' . sanitize_title($key), $slug);
+                    }
+
+                    // Optional: set default values
+                    update_post_meta($variation_id, '_regular_price', '799.00');
+                    update_post_meta($variation_id, '_stock_status', 'instock');
+
+                    array_push($variations_for_response, [
+                        'variation_id' => $variation_id,
+                        'attributes'   => $variation_attributes,
+                    ]);
+                }
+            }
+            
+            array_push($posts_fixed, [
+                'product_id' => $product_id,
+                'product_name' => $product->get_name(),
+                'variations' => $variations_for_response,
+            ]);
+            
+            // Sync the product afterward
+            WC_Product_Variable::sync($product_id);
+
+            wp_reset_postdata();
+        }
+    
+        if ($page <= $found_pages) {
+            $last_page = false;
+            $page++;
+        } else {
+            $last_page = true;
+        }
+
+        $response = [
+            'result' => $posts_fixed,
+            'page' => $page,
+            'last_page' => $last_page,
+            'found_pages' => $found_pages
+        ];
+        wp_send_json($response);
+
+    endif;
+}

@@ -15,6 +15,7 @@
     "src/js/app.js",
     "src/js/shadyWoo.js",
     "src/js/shadyShop.js",
+    "src/js/dev.js",
     "src/scss/app.scss",
     "src/scss/admin.scss"
   ],
