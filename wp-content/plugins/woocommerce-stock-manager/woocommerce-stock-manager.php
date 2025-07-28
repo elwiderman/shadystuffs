@@ -3,22 +3,22 @@
  * Plugin Name: Stock Manager for WooCommerce
  * Plugin URI: https://www.storeapps.org/woocommerce-plugins/
  * Description: Manage product's stock and price in your WooCommerce store. Export/Import inventory, track history, sort and more...
- * Version: 3.2.0
+ * Version: 3.4.0
  * Author: StoreApps
  * Author URI: https://www.storeapps.org/
  * Developer: StoreApps
  * Developer URI: https://www.storeapps.org/
  * Requires at least: 5.0.0
- * Tested up to: 6.7.1
+ * Tested up to: 6.8
  * Requires PHP: 5.6+
  * WC requires at least: 3.5.0
- * WC tested up to: 9.4.2
+ * WC tested up to: 9.8.2
  * Requires Plugins: woocommerce
  * Text Domain: woocommerce-stock-manager
  * Domain Path: /languages/
  * License: GNU General Public License v2.0
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
- * Copyright (c) 2020-2024 StoreApps. All rights reserved.
+ * Copyright (c) 2020-2025 StoreApps. All rights reserved.
  *
  * @package woocommerce-stock-manager
  */
@@ -35,8 +35,8 @@ if ( ! defined( 'WPINC' ) ) {
 if ( ! defined( 'STOCKDIR' ) ) {
 	define( 'STOCKDIR', plugin_dir_path( __FILE__ ) );
 }
-if ( ! defined( 'STOCKURL' ) ) {
-	define( 'STOCKURL', plugin_dir_url( __FILE__ ) );
+if ( ! defined( 'WSM_PLUGIN_URL' ) ) {
+	define( 'WSM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }
 if ( ! defined( 'WSM_PLUGIN_FILE' ) ) {
 	define( 'WSM_PLUGIN_FILE', __FILE__ );
@@ -401,7 +401,6 @@ function is_wsm_admin_page() {
 	if ( 'stock-manager' === $page || 'stock-manager-import-export' === $page || 'stock-manager-log' === $page || 'stock-manager-storeapps-plugins' === $page ) {
 		return true;
 	}
-
 	return false;
 }
 

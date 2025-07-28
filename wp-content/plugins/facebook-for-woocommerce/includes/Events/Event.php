@@ -1,5 +1,4 @@
 <?php
-// phpcs:ignoreFile
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
  *
@@ -11,7 +10,7 @@
 
 namespace WooCommerce\Facebook\Events;
 
-defined( 'ABSPATH' ) or exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Event object.
@@ -22,7 +21,7 @@ class Event {
 
 
 	/**
-	 * @var array data specific to this event instance with the same structure as the event’s payload
+	 * @var array data specific to this event instance with the same structure as the event's payload
 	 *
 	 * @see https://developers.facebook.com/docs/marketing-api/server-side-api/payload-helper
 	 */
@@ -160,6 +159,7 @@ class Event {
 	 *
 	 * @return string
 	 */
+// phpcs:disable
 	protected function generate_event_id() {
 		try {
 			$data = random_bytes( 16 );
@@ -189,6 +189,7 @@ class Event {
 			);
 		}
 	}
+// phpcs:enable
 
 
 	/**
@@ -251,18 +252,20 @@ class Event {
 	 * @return string
 	 */
 	protected function get_click_id() {
-		$click_id = '';
-		if ( ! empty( $_COOKIE['_fbc'] ) ) {
-			$click_id = wc_clean( wp_unslash( $_COOKIE['_fbc'] ) );
-		} elseif ( ! empty( $_REQUEST['fbclid'] ) ) {
-			// generate the click ID based on the query parameter
-			$version         = 'fb';
-			$subdomain_index = 1;
-			$creation_time   = time();
-			$fbclid          = wc_clean( wp_unslash( $_REQUEST['fbclid'] ) );
-			$click_id        = "{$version}.{$subdomain_index}.{$creation_time}.{$fbclid}";
+		$fbc = '';
+		if ( isset( $_GET['fbclid'] ) ) {
+			$fbclid   = sanitize_text_field( wp_unslash( $_GET['fbclid'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			$cur_time = (int) ( microtime( true ) * 1000 );
+			$fbc      = 'fb.1.' . $cur_time . '.' . rawurldecode( $fbclid );
+		} elseif ( ! empty( $_COOKIE['_fbc'] ) ) {
+			$fbc = wc_clean( wp_unslash( $_COOKIE['_fbc'] ) );
+		} elseif ( isset( $_SESSION['_fbc'] ) ) {
+			$fbc = $_SESSION['_fbc']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
-		return $click_id;
+		if ( $fbc ) {
+			$_SESSION['_fbc'] = $fbc;
+		}
+		return $fbc;
 	}
 
 
@@ -274,7 +277,13 @@ class Event {
 	 * @return string
 	 */
 	protected function get_browser_id() {
-		return ! empty( $_COOKIE['_fbp'] ) ? wc_clean( wp_unslash( $_COOKIE['_fbp'] ) ) : '';
+		$fbp = ! empty( $_COOKIE['_fbp'] ) ? wc_clean( wp_unslash( $_COOKIE['_fbp'] ) ) : '';
+		if ( $fbp ) {
+			$_SESSION['_fbp'] = $fbp;
+		} elseif ( isset( $_SESSION['_fbp'] ) ) {
+			$fbp = $_SESSION['_fbp']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		}
+		return $fbp;
 	}
 
 

@@ -5,9 +5,9 @@ Author URI: https://www.storeapps.org/woocommerce-plugins/?utm_source=wprepo&utm
 Plugin URI: https://www.storeapps.org/woocommerce-plugins/?utm_source=wprepo&utm_medium=web&utm_campaign=wsm_readme
 Tags: woocommerce stock management, woocommerce stock manager, woocommerce product stock manager, woocommerce stock management free, woocommerce inventory management
 Requires at least: 5.0.0
-Tested up to: 6.7.1
+Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 3.2.0
+Stable tag: 3.4.0
 License: GPLv2
 
 Best WooCommerce stock management plugin to manage and edit product stock and their variables from a single dashboard. Stock log, import/export, filters and more...
@@ -150,6 +150,20 @@ Be sure, that you have active stock manager.
 4. Product stock as on date
 
 == Changelog ==
+
+= 3.4.0 (30.04.2025) =
+* Fix: Filter by 'In stock' not working after last update
+* Fix: Product categories with special characters not displaying correctly in dashboard filters
+* Update: POT file
+
+= 3.3.0 (25.04.2025) =
+* New: WordPress 6.8 compatible
+* New: WooCommerce 9.8.2 compatible
+* New: Support for updating Stock field for WooCommerce variable parent products
+* Fix: Variation product stock not updating correctly for WooCommerce Subscriptions
+* Fix: Filter by 'out of stock' not working for WooCommerce product variations
+* Fix: 'Manage stock' checkbox incorrectly appeared enabled on variations when only the parent product had it active
+* Update: POT file
 
 = 3.2.0 (26.11.2024) =
 * New: WordPress 6.7.1 compatible
@@ -323,6 +337,12 @@ Be sure, that you have active stock manager.
 For the changelog of earlier versions, please refer to the separate [changelog.txt](https://plugins.svn.wordpress.org/woocommerce-stock-manager/trunk/changelog.txt) file.
 
 == Upgrade Notice ==
+
+= 3.4.0 =
+Fixes related to Filter by 'In stock' not working after last update, Product categories with special characters not displaying correctly in dashboard filters. Recommended upgrade.
+
+= 3.3.0 =
+WordPress 6.8 compatible, WooCommerce 9.8.2 compatible, Support for updating Stock field for WooCommerce variable parent products, Fixes related to Variation product stock not updating correctly for WooCommerce Subscriptions, Filter by 'out of stock' not working for WooCommerce product variations, 'Manage stock' checkbox incorrectly appeared enabled on variations when only the parent product had it active. Recommended upgrade.
 
 = 3.2.0 =
 WordPress 6.7.1 compatible, WooCommerce 9.4.2 compatible, Fixes related to Internationalization related warnings on WordPress v6.7, CSV export fails when WooCommerce Product title contains '#'. Recommended upgrade.

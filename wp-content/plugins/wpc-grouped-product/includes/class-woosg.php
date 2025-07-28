@@ -172,19 +172,26 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 			$active_tab = sanitize_key( $_GET['tab'] ?? 'settings' );
 			?>
             <div class="wpclever_settings_page wrap">
-                <h1 class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Grouped Product', 'wpc-grouped-product' ) . ' ' . esc_html( WOOSG_VERSION ) . ' ' . ( defined( 'WOOSG_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-grouped-product' ) . '</span>' : '' ); ?></h1>
-                <div class="wpclever_settings_page_desc about-text">
-                    <p>
-                        Thank you for using our plugin! If you are satisfied, please reward it a full five-star
-                        <span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span> rating. <br/>
-                        <a href="<?php echo esc_url( WOOSG_REVIEWS ); ?>"
-                           target="_blank"><?php esc_html_e( 'Reviews', 'wpc-grouped-product' ); ?></a> |
-                        <a href="<?php echo esc_url( WOOSG_CHANGELOG ); ?>"
-                           target="_blank"><?php esc_html_e( 'Changelog', 'wpc-grouped-product' ); ?></a> |
-                        <a href="<?php echo esc_url( WOOSG_DISCUSSION ); ?>"
-                           target="_blank"><?php esc_html_e( 'Discussion', 'wpc-grouped-product' ); ?></a>
-                    </p>
+                <div class="wpclever_settings_page_header">
+                    <a class="wpclever_settings_page_header_logo" href="https://wpclever.net/"
+                       target="_blank" title="Visit wpclever.net"></a>
+                    <div class="wpclever_settings_page_header_text">
+                        <div class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Grouped Product', 'wpc-grouped-product' ) . ' ' . esc_html( WOOSG_VERSION ) . ' ' . ( defined( 'WOOSG_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-grouped-product' ) . '</span>' : '' ); ?></div>
+                        <div class="wpclever_settings_page_desc about-text">
+                            <p>
+                                Thank you for using our plugin! If you are satisfied, please reward it a full five-star
+                                <span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span> rating. <br/>
+                                <a href="<?php echo esc_url( WOOSG_REVIEWS ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Reviews', 'wpc-grouped-product' ); ?></a> |
+                                <a href="<?php echo esc_url( WOOSG_CHANGELOG ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Changelog', 'wpc-grouped-product' ); ?></a> |
+                                <a href="<?php echo esc_url( WOOSG_DISCUSSION ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Discussion', 'wpc-grouped-product' ); ?></a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
+                <h2></h2>
 				<?php if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) { ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php esc_html_e( 'Settings updated.', 'wpc-grouped-product' ); ?></p>
@@ -288,7 +295,7 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
                                                 <option value="above" <?php selected( $position, 'above' ); ?>><?php esc_html_e( 'Above add to cart button', 'wpc-grouped-product' ); ?></option>
                                                 <option value="below" <?php selected( $position, 'below' ); ?>><?php esc_html_e( 'Under add to cart button', 'wpc-grouped-product' ); ?></option>
                                                 <option value="tab" <?php selected( $position, 'tab' ); ?>><?php esc_html_e( 'In a new tab', 'wpc-grouped-product' ); ?></option>
-                                                <option value="no" <?php selected( $position, 'no' ); ?>><?php esc_html_e( 'No (hide it)', 'wpc-grouped-product' ); ?></option>
+                                                <option value="no" <?php selected( $position, 'no' ); ?>><?php esc_html_e( 'None (hide it)', 'wpc-grouped-product' ); ?></option>
                                             </select> </label>
                                         <p class="description"><?php esc_html_e( 'Choose the position to show the grouped product list. You also can use the shortcode [woosg] to show the list where you want.', 'wpc-grouped-product' ); ?></p>
                                     </td>
@@ -1477,7 +1484,7 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 				$product_class .= ' disabled';
 			}
 
-			if ( class_exists( 'WPCleverWoopq' ) && ( get_option( '_woopq_decimal', 'no' ) === 'yes' ) ) {
+			if ( class_exists( 'WPCleverWoopq' ) && ( WPCleverWoopq::get_setting( 'decimal', 'no' ) === 'yes' ) ) {
 				$step = '0.000001';
 			} else {
 				$step = 1;
@@ -1716,7 +1723,7 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 							$item_link_class    = apply_filters( 'woosg_item_link_class', 'woosg-product-link' . ( WPCleverWoosg_Helper()::get_setting( 'link', 'yes' ) === 'yes_popup' ? ' woosq-link' : '' ), $product );
 							$item_id            = $product->is_type( 'variable' ) ? 0 : $item['id'];
 
-							if ( $product->is_purchasable() && $product->is_in_stock() ) {
+							if ( $product->is_type( 'variable' ) || ( $product->is_purchasable() && $product->is_in_stock() ) ) {
 								$min = apply_filters( 'woosg_quantity_input_min', 0, $product );
 								$max = apply_filters( 'woosg_quantity_input_max', $product->get_max_purchase_quantity(), $product );
 
@@ -1783,7 +1790,7 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 										do_action( 'woosg_before_item_thumb', $product, $global_product, $order );
 
 										if ( $link ) {
-											echo '<a class="' . esc_attr( $item_link_class ) . '" data-id="' . esc_attr( $item['id'] ) . '" data-context="woosg" href="' . esc_url( get_permalink( $item['id'] ) ) . '" ' . ( WPCleverWoosg_Helper()::get_setting( 'link', 'yes' ) === 'yes_blank' ? 'target="_blank"' : '' ) . '>';
+											echo '<a class="' . esc_attr( $item_link_class ) . '" data-id="' . esc_attr( $item['id'] ) . '" data-context="woosg" href="' . esc_url( apply_filters( 'woosg_item_product_link', get_permalink( $item['id'] ), $item ) ) . '" ' . ( WPCleverWoosg_Helper()::get_setting( 'link', 'yes' ) === 'yes_blank' ? 'target="_blank"' : '' ) . '>';
 										} ?>
                                         <div class="woosg-thumb-ori">
 											<?php echo wp_kses( apply_filters( 'woosg_item_thumbnail', $product->get_image( self::$image_size ), $product, $global_product, $order ), [
@@ -1819,7 +1826,7 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 									$item_name = '';
 
 									if ( $link ) {
-										$item_name .= '<a class="' . esc_attr( $item_link_class ) . '" data-id="' . esc_attr( $item['id'] ) . '" data-context="woosg" href="' . esc_url( get_permalink( $item['id'] ) ) . '" ' . ( WPCleverWoosg_Helper()::get_setting( 'link', 'yes' ) === 'yes_blank' ? 'target="_blank"' : '' ) . '>';
+										$item_name .= '<a class="' . esc_attr( $item_link_class ) . '" data-id="' . esc_attr( $item['id'] ) . '" data-context="woosg" href="' . esc_url( apply_filters( 'woosg_item_product_link', get_permalink( $item['id'] ), $item ) ) . '" ' . ( WPCleverWoosg_Helper()::get_setting( 'link', 'yes' ) === 'yes_blank' ? 'target="_blank"' : '' ) . '>';
 									}
 
 									if ( $product->is_in_stock() ) {
@@ -1890,7 +1897,8 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 											'woosg_qty'   => [
 												'input_value' => $item_qty,
 												'min_value'   => $min,
-												'max_value'   => $max
+												'max_value'   => $max,
+												'order'       => $order
 											],
 											'classes'     => [
 												'input-text',
@@ -1898,14 +1906,13 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 												'woosg_qty',
 												'qty',
 												'text'
-											],
-											'input_name'  => 'woosg_qty_' . $order
+											]
 										];
 
 										if ( apply_filters( 'woosg_use_woocommerce_quantity_input', true ) ) {
 											woocommerce_quantity_input( $qty_args, $product );
 										} else {
-											echo apply_filters( 'woosg_quantity_input', '<input type="number" class="input-text woosg-qty woosg_qty qty text" value="' . esc_attr( $item_qty ) . '" min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" name="woosg_qty_' . $order . '" />', $qty_args, $product );
+											echo apply_filters( 'woosg_quantity_input', '<input type="number" class="input-text woosg-qty woosg_qty qty text" value="' . esc_attr( $item_qty ) . '" min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" name="quantity"/>', $qty_args, $product );
 										}
 
 										if ( $show_plus_minus ) {
@@ -1978,7 +1985,8 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 													'woosg_qty'   => [
 														'input_value' => $item_qty,
 														'min_value'   => $min,
-														'max_value'   => $max
+														'max_value'   => $max,
+														'order'       => $order
 													],
 													'classes'     => [
 														'input-text',
@@ -1986,14 +1994,13 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 														'woosg_qty',
 														'qty',
 														'text'
-													],
-													'input_name'  => 'woosg_qty_' . $order
+													]
 												];
 
 												if ( apply_filters( 'woosg_use_woocommerce_quantity_input', true ) ) {
 													woocommerce_quantity_input( $qty_args, $product );
 												} else {
-													echo apply_filters( 'woosg_quantity_input', '<input type="number" class="input-text woosg-qty woosg_qty qty text" value="' . esc_attr( $item_qty ) . '" min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" name="woosg_qty_' . $order . '" />', $qty_args, $product );
+													echo apply_filters( 'woosg_quantity_input', '<input type="number" class="input-text woosg-qty woosg_qty qty text" value="' . esc_attr( $item_qty ) . '" min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" name="quantity"/>', $qty_args, $product );
 												}
 
 												if ( $show_plus_minus ) {
@@ -2023,6 +2030,7 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 							<?php
 						} elseif ( ! empty( $item['text'] ) ) {
 							$item_class = 'woosg-item-text';
+							$item_text  = apply_filters( 'woosg_item_text', wp_kses_post( $item['text'] ), $item, $global_product, $order );
 
 							if ( ! empty( $item['type'] ) ) {
 								$item_class .= ' woosg-item-text-type-' . $item['type'];
@@ -2031,9 +2039,9 @@ if ( ! class_exists( 'WPCleverWoosg' ) ) {
 							echo '<div class="' . esc_attr( apply_filters( 'woosg_item_text_class', $item_class, $item, $global_product, $order ) ) . '">';
 
 							if ( empty( $item['type'] ) || ( $item['type'] === 'none' ) ) {
-								echo wp_kses_post( $item['text'] );
+								echo $item_text;
 							} else {
-								echo wp_kses_post( '<' . $item['type'] . '>' . $item['text'] . '</' . $item['type'] . '>' );
+								echo '<' . $item['type'] . '>' . $item_text . '</' . $item['type'] . '>';
 							}
 
 							echo '</div>';

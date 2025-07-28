@@ -29,25 +29,15 @@ class Xoo_El_Core{
 			add_action( 'admin_notices', array( $this, 'otp_login_update_notice' ) );
 			return;
 		}
-		$this->define_constants();
+		
 		$this->includes();
 		$this->hooks();
 	}
 
 
-	public function define_constants(){
-		define( "XOO_EL_PATH", plugin_dir_path( XOO_EL_PLUGIN_FILE ) ); // Plugin path
-		define( "XOO_EL_URL", untrailingslashit( plugins_url( '/', XOO_EL_PLUGIN_FILE ) ) ); // plugin url
-		define( "XOO_EL_PLUGIN_BASENAME", plugin_basename( XOO_EL_PLUGIN_FILE ) );
-		define( "XOO_EL_VERSION", "2.8.8" ); //Plugin version
-
-	}
-
 
 	public function includes(){
 
-		//xootix framework
-		require_once XOO_EL_PATH.'/includes/xoo-framework/xoo-framework.php';
 		require_once XOO_EL_PATH.'/includes/class-xoo-el-helper.php';
 
 		//Field framework
@@ -85,6 +75,7 @@ class Xoo_El_Core{
 		add_action( 'init', array( $this, 'on_install' ), 0 );
 		add_action( 'admin_notices', array( $this, 'show_outdated_template_notice' ) );
 		add_action( 'admin_head', array( $this, 'inline_styling' ) );
+		add_filter( 'xoo_aff_enable_autocompadr', array( $this,'enable_autocompadr' ), 10, 2 );
 	}
 
 
@@ -154,6 +145,23 @@ class Xoo_El_Core{
 				if( isset( $glOptions['m-myacc-sc'] ) ){
 					$glOptions['m-chkout-sc'] = $glOptions['m-myacc-sc'];
 				}
+				update_option( 'xoo-el-gl-options', $glOptions );
+			}
+
+			if( version_compare( $db_version, '2.9.2', '<')  ){
+				update_option('xoo_tracking_consent_easy-login-woocommerce', 'no' );
+			}
+
+			if( version_compare( $db_version, '2.9.3', '<')  ){
+				update_option( 'xoo-el-settings-init', 'yes' );
+			}
+
+			if( version_compare( $db_version, '2.9.4', '<') ){
+
+				$glOptions = (array) xoo_el_helper()->get_general_option();
+
+				$glOptions['m-myacclpw-sc'] = '';
+
 				update_option( 'xoo-el-gl-options', $glOptions );
 			}
 
@@ -230,6 +238,13 @@ class Xoo_El_Core{
 		</style>
 		<?php
 	}
+
+
+	public function enable_autocompadr( $allow, $aff ){
+		if( $aff->plugin_slug === 'easy-login-woocommerce' ) return false;
+		return $allow;
+	}
+	
 
 
 }

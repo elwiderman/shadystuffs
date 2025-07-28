@@ -3,23 +3,23 @@
 Plugin Name: WPC Smart Attribute Groups for WooCommerce
 Plugin URI: https://wpclever.net/
 Description: WPC Smart Attribute Groups give you the possibility to display product attributes in separate groups.
-Version: 1.1.6
+Version: 1.1.8
 Author: WPClever
 Author URI: https://wpclever.net
 Text Domain: wpc-attribute-groups
 Domain Path: /languages/
 Requires Plugins: woocommerce
 Requires at least: 4.0
-Tested up to: 6.7
+Tested up to: 6.8
 WC requires at least: 3.0
-WC tested up to: 9.7
+WC tested up to: 9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 
 defined( 'ABSPATH' ) || exit;
 
-! defined( 'WPCAG_VERSION' ) && define( 'WPCAG_VERSION', '1.1.6' );
+! defined( 'WPCAG_VERSION' ) && define( 'WPCAG_VERSION', '1.1.8' );
 ! defined( 'WPCAG_LITE' ) && define( 'WPCAG_LITE', __FILE__ );
 ! defined( 'WPCAG_FILE' ) && define( 'WPCAG_FILE', __FILE__ );
 ! defined( 'WPCAG_URI' ) && define( 'WPCAG_URI', plugin_dir_url( __FILE__ ) );

@@ -81,19 +81,26 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
 			$active_tab = sanitize_key( $_GET['tab'] ?? 'settings' );
 			?>
             <div class="wpclever_settings_page wrap">
-                <h1 class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Smart Attribute Groups', 'wpc-attribute-groups' ) . ' ' . esc_html( WPCAG_VERSION ) . ' ' . ( defined( 'WPCAG_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-attribute-groups' ) . '</span>' : '' ); ?></h1>
-                <div class="wpclever_settings_page_desc about-text">
-                    <p>
-						<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-attribute-groups' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
-                        <br/>
-                        <a href="<?php echo esc_url( WPCAG_REVIEWS ); ?>"
-                           target="_blank"><?php esc_html_e( 'Reviews', 'wpc-attribute-groups' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCAG_CHANGELOG ); ?>"
-                           target="_blank"><?php esc_html_e( 'Changelog', 'wpc-attribute-groups' ); ?></a> |
-                        <a href="<?php echo esc_url( WPCAG_DISCUSSION ); ?>"
-                           target="_blank"><?php esc_html_e( 'Discussion', 'wpc-attribute-groups' ); ?></a>
-                    </p>
+                <div class="wpclever_settings_page_header">
+                    <a class="wpclever_settings_page_header_logo" href="https://wpclever.net/"
+                       target="_blank" title="Visit wpclever.net"></a>
+                    <div class="wpclever_settings_page_header_text">
+                        <div class="wpclever_settings_page_title"><?php echo esc_html__( 'WPC Smart Attribute Groups', 'wpc-attribute-groups' ) . ' ' . esc_html( WPCAG_VERSION ) . ' ' . ( defined( 'WPCAG_PREMIUM' ) ? '<span class="premium" style="display: none">' . esc_html__( 'Premium', 'wpc-attribute-groups' ) . '</span>' : '' ); ?></div>
+                        <div class="wpclever_settings_page_desc about-text">
+                            <p>
+								<?php printf( /* translators: stars */ esc_html__( 'Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating.', 'wpc-attribute-groups' ), '<span style="color:#ffb900">&#9733;&#9733;&#9733;&#9733;&#9733;</span>' ); ?>
+                                <br/>
+                                <a href="<?php echo esc_url( WPCAG_REVIEWS ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Reviews', 'wpc-attribute-groups' ); ?></a> |
+                                <a href="<?php echo esc_url( WPCAG_CHANGELOG ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Changelog', 'wpc-attribute-groups' ); ?></a> |
+                                <a href="<?php echo esc_url( WPCAG_DISCUSSION ); ?>"
+                                   target="_blank"><?php esc_html_e( 'Discussion', 'wpc-attribute-groups' ); ?></a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
+                <h2></h2>
 				<?php if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] ) { ?>
                     <div class="notice notice-success is-dismissible">
                         <p><?php esc_html_e( 'Settings updated.', 'wpc-attribute-groups' ); ?></p>
@@ -308,10 +315,10 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
 				die( 'Permissions check failed!' );
 			}
 
-			if ( isset( $_POST['ids'] ) ) {
+			if ( ! empty( $_POST['ids'] ) ) {
 				$ids = array_map( 'absint', explode( ',', sanitize_text_field( $_POST['ids'] ) ) );
 
-				if ( is_array( $ids ) && ! empty( $ids ) ) {
+				if ( ! empty( $ids ) ) {
 					foreach ( $ids as $k => $id ) {
 						if ( $id ) {
 							update_term_meta( $id, 'wpcag_order', $k + 1 );
@@ -342,10 +349,10 @@ if ( ! class_exists( 'Wpcag_Backend' ) ) {
 			}
 
 			if ( ! current_user_can( 'edit_products' ) || ! isset( $_POST['group_id'], $_POST['i'] ) ) {
-				wp_die( - 1 );
+				wp_die();
 			}
 
-			$group_id = ( isset( $_POST['group_id'] ) && (int) $_POST['group_id'] ? (int) $_POST['group_id'] : null );
+			$group_id = (int) $_POST['group_id'] ?: null;
 			$i        = absint( $_POST['i'] );
 			parse_str( wp_unslash( $_POST['data'] ), $data );
 

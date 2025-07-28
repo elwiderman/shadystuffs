@@ -2,9 +2,9 @@
 Contributors: wpclever
 Donate link: https://wpclever.net
 Tags: woocommerce, wpc, group, grouped, kits
-Tested up to: 6.7
-Version: 5.1.6
-Stable tag: 5.1.6
+Tested up to: 6.8
+Version: 5.2.0
+Stable tag: 5.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -92,6 +92,22 @@ Please try other plugins from us:
 5. Almost done! click Save and see the result
 
 == Changelog ==
+
+= 5.2.0 =
+* Added: Filter hook 'woosg_item_text'
+* Added: Filter hook 'woosg_item_product_link'
+* Updated: Optimized the code
+
+= 5.1.9 =
+* Fixed: Minor CSS/JS issues in the backend
+
+= 5.1.8 =
+* Fixed: Minor CSS/JS issues
+* Updated: Compatible with WP 6.8 & Woo 9.9
+
+= 5.1.7 =
+* Added: Filter hook 'woosg_is_purchasable'
+* Fixed: Quantity input
 
 = 5.1.6 =
 * Updated: Optimized the code

@@ -97,6 +97,9 @@ class Connection {
 	/** @var string the Commerce merchant settings ID option name */
 	const OPTION_COMMERCE_MERCHANT_SETTINGS_ID = 'wc_facebook_commerce_merchant_settings_id';
 
+	/** @var string the Commerce Partner Integration ID option name */
+	const OPTION_COMMERCE_PARTNER_INTEGRATION_ID = 'wc_facebook_commerce_partner_integration_id';
+
 	/** @var string|null the generated external merchant settings ID */
 	private $external_business_id;
 
@@ -145,8 +148,13 @@ class Connection {
 			return;
 		}
 
-		try {
+		$flag_name = '_wc_facebook_for_woocommerce_refresh_business_configuration';
+		if ( 'yes' === get_transient( $flag_name ) ) {
+			return;
+		}
+		set_transient( $flag_name, 'yes', HOUR_IN_SECONDS );
 
+		try {
 			$response = $this->get_plugin()->get_api()->get_business_configuration( $this->get_external_business_id() );
 			facebook_for_woocommerce()->get_tracker()->track_facebook_business_config(
 				$response->is_ig_shopping_enabled(),
@@ -154,7 +162,6 @@ class Connection {
 			);
 
 		} catch ( ApiException $exception ) {
-
 			$this->get_plugin()->log( 'Could not refresh business configuration. ' . $exception->getMessage() );
 		}
 
@@ -173,17 +180,148 @@ class Connection {
 			return;
 		}
 
+		$flag_name = '_wc_facebook_for_woocommerce_refresh_installation_data';
+		if ( 'yes' === get_transient( $flag_name ) ) {
+			return;
+		}
+		set_transient( $flag_name, 'yes', DAY_IN_SECONDS );
+
 		try {
-
 			$this->update_installation_data();
-
+			$this->repair_or_update_commerce_integration_data();
 		} catch ( ApiException $exception ) {
-
-			$this->get_plugin()->log( 'Could not refresh installation data. ' . $exception->getMessage() );
+			$this->get_plugin()->log( 'Could not refresh installation data. ' . $exception->getMessage(), null, 'error'  );
 		}
 
 	}
 
+	/**
+	 * Forces a refresh of installation data and config sync with Meta, bypassing transient checks.
+	 * Used during version upgrades to ensure config is properly synchronized.
+	 *
+	 * @since 3.5.4
+	 */
+	public function force_config_sync_on_update() {
+
+		// bail if not connected
+		if ( ! $this->is_connected() ) {
+			$this->get_plugin()->log( 'Skipping config sync on update - not connected to Facebook' );
+			return;
+		}
+
+		$this->get_plugin()->log( 'Starting forced config sync on version update' );
+
+		try {
+			// Force refresh installation data without transient check
+			$this->update_installation_data();
+			$this->repair_or_update_commerce_integration_data();
+			$this->get_plugin()->log( 'Successfully completed forced config sync on version update' );
+
+		} catch ( ApiException $exception ) {
+			$this->get_plugin()->log( 'Failed to complete forced config sync on update: ' . $exception->getMessage(), null, 'error' );
+		}
+
+	}
+
+	/**
+	 * Refreshes the client side info and configuration.
+	 *
+	 * @since 3.4.8
+	 */
+	public function repair_or_update_commerce_integration_data() {
+		// bail if not connected
+		if ( ! $this->is_connected() ) {
+			return;
+		}
+
+		try {
+			$commerce_integration_id = $this->get_commerce_partner_integration_id();
+
+			// If commerce integration ID doesn't exist, call repair endpoint
+			if ( empty( $commerce_integration_id ) ) {
+				$response = $this->get_plugin()->get_api()->repair_commerce_integration(
+					$this->get_external_business_id(),
+					$this->get_shop_domain(),
+					admin_url(),
+					$this->get_plugin()->get_version()
+				);
+
+				if ( ! $response->is_successful() ) {
+					$this->get_plugin()->log( 'Failed to repair commerce integration.', null, 'error' );
+					return;
+				}
+
+				// Store the new commerce integration ID
+				$new_commerce_integration_id = $response->get_commerce_partner_integration_id();
+				if ( empty( $new_commerce_integration_id ) ) {
+					$this->get_plugin()->log( 'Failed to get commerce partner integration ID from repair response.', null, 'error' );
+					return;
+				}
+
+				$this->update_commerce_partner_integration_id( $new_commerce_integration_id );
+				$commerce_integration_id = $new_commerce_integration_id;
+				$this->get_plugin()->log( 'Successfully repaired commerce integration. New ID: ' . $commerce_integration_id );
+			}
+
+			// If we have a commerce integration ID, update the configuration
+			if ( ! empty( $commerce_integration_id ) ) {
+				$update_response = $this->get_plugin()->get_api()->update_commerce_integration(
+					$commerce_integration_id,
+					$this->get_plugin()->get_version(),  // extension_version
+					admin_url(),                         // admin_url
+					$this->get_country_code(),           // country_code
+					$this->get_currency(),               // currency
+					$this->get_platform_store_id(),      // platform_store_id
+				);
+
+				if ( ! $update_response->is_successful() ) {
+					$this->get_plugin()->log( 'Failed to update commerce integration configuration.', null, 'error' );
+					return;
+				}
+
+				$this->get_plugin()->log( 'Successfully updated commerce integration configuration.' );
+			}
+
+		} catch ( ApiException $exception ) {
+			$this->get_plugin()->log( 'Could not repair or update commerce integration data. ' . $exception->getMessage(), null, 'error'  );
+		}
+	}
+
+	/**
+	 * Gets the shop domain.
+	 *
+	 * @return string
+	 */
+	private function get_shop_domain() {
+		return site_url( '/' );
+	}
+
+	/**
+	 * Gets the country code.
+	 *
+	 * @return string|null
+	 */
+	private function get_country_code() {
+		return WC()->countries->get_base_country();
+	}
+
+	/**
+	 * Gets the currency.
+	 *
+	 * @return string|null
+	 */
+	private function get_currency() {
+		return get_woocommerce_currency();
+	}
+
+	/**
+	 * Gets the platform store ID.
+	 *
+	 * @return int
+	 */
+	private function get_platform_store_id() {
+		return get_current_blog_id();
+	}
 
 	/**
 	 * Retrieves and stores the connected installation data.
@@ -230,6 +368,12 @@ class Connection {
 
 		if ( $response->get_commerce_merchant_settings_id() ) {
 			$this->update_commerce_merchant_settings_id( sanitize_text_field( $response->get_commerce_merchant_settings_id() ) );
+		}
+
+		if ( $response->get_commerce_partner_integration_id() ) {
+			$this->update_commerce_partner_integration_id( sanitize_text_field( $response->get_commerce_partner_integration_id() ) );
+		} else {
+			$this->update_commerce_partner_integration_id( "" );
 		}
 	}
 
@@ -322,6 +466,7 @@ class Connection {
 			else {
 				facebook_for_woocommerce()->log( 'Initial full product sync disabled by filter hook `facebook_for_woocommerce_allow_full_batch_api_sync`', 'facebook_for_woocommerce_connect' );
 			}
+			facebook_for_woocommerce()->get_product_sets_sync_handler()->sync_all_product_sets();
 			update_option( 'wc_facebook_has_connected_fbe_2', 'yes' );
 			update_option( 'wc_facebook_has_authorized_pages_read_engagement', 'yes' );
 			// redirect to the Commerce onboarding if directed to do so
@@ -362,7 +507,7 @@ class Connection {
 			if ( json_last_error() === JSON_ERROR_NONE ) {
 				// If error is the first key we want to use just the body to simplify the message.
 				$decoded_message = isset( $decoded_message->error ) ? $decoded_message->error : $decoded_message;
-				$message         = json_encode( $decoded_message, JSON_PRETTY_PRINT );
+				$message         = wp_json_encode( $decoded_message, JSON_PRETTY_PRINT );
 			}
 			return $message;
 	}
@@ -428,6 +573,7 @@ class Connection {
 		$this->update_instagram_business_id( '' );
 		$this->update_commerce_merchant_settings_id( '' );
 		$this->update_external_business_id( '' );
+		$this->update_commerce_partner_integration_id( '' );
 		update_option( \WC_Facebookcommerce_Integration::SETTING_FACEBOOK_PAGE_ID, '' );
 		update_option( \WC_Facebookcommerce_Integration::SETTING_FACEBOOK_PIXEL_ID, '' );
 		facebook_for_woocommerce()->get_integration()->update_product_catalog_id( '' );
@@ -795,6 +941,18 @@ class Connection {
 
 
 	/**
+	 * Gets Commerce Partner Integration ID value.
+	 *
+	 * @since 3.4.8
+	 *
+	 * @return string
+	 */
+	public function get_commerce_partner_integration_id() {
+		return get_option( self::OPTION_COMMERCE_PARTNER_INTEGRATION_ID, '' );
+	}
+
+
+	/**
 	 * Gets the proxy URL.
 	 *
 	 * @since 2.0.0
@@ -909,7 +1067,7 @@ class Connection {
 				'display'       => 'page',
 				'response_type' => 'code',
 				'scope'         => implode( ',', $this->get_scopes() ),
-				'extras'        => json_encode( $this->get_connect_parameters_extras() ),
+				'extras'        => wp_json_encode( $this->get_connect_parameters_extras() ),
 			)
 		);
 	}
@@ -951,11 +1109,11 @@ class Connection {
 	/**
 	 * Gets the configured timezone string using values accepted by Facebook
 	 *
-	 * @since 2.0.0
+	 * @since 2.5.0
 	 *
 	 * @return string
 	 */
-	private function get_timezone_string() {
+	public function get_timezone_string() {
 		$timezone = wc_timezone_string();
 		// convert +05:30 and +05:00 into Etc/GMT+5 - we ignore the minutes because Facebook does not allow minute offsets
 		if ( preg_match( '/([+-])(\d{2}):\d{2}/', $timezone, $matches ) ) {
@@ -1354,5 +1512,16 @@ class Connection {
 		}
 		wp_redirect( $redirect_url ); //phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect
 		exit;
+	}
+
+	/**
+	 * Stores the given Commerce Partner Integration ID.
+	 *
+	 * @since 3.4.
+	 *
+	 * @param string $id the ID
+	 */
+	public function update_commerce_partner_integration_id( $id ) {
+		update_option( self::OPTION_COMMERCE_PARTNER_INTEGRATION_ID, $id );
 	}
 }

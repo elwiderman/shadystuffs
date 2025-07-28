@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WPC Smart Attribute Groups for WooCommerce 1.1.6\n"
+"Project-Id-Version: WPC Smart Attribute Groups for WooCommerce 1.1.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wpc-attribute-groups\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-27T08:32:42+00:00\n"
+"POT-Creation-Date: 2025-06-24T03:45:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wpc-attribute-groups\n"
@@ -40,7 +40,7 @@ msgid "https://wpclever.net"
 msgstr ""
 
 #: includes/class-backend.php:74
-#: includes/class-backend.php:84
+#: includes/class-backend.php:88
 msgid "WPC Smart Attribute Groups"
 msgstr ""
 
@@ -48,251 +48,251 @@ msgstr ""
 msgid "Smart Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:84
+#: includes/class-backend.php:88
 msgid "Premium"
 msgstr ""
 
 #. translators: stars
-#: includes/class-backend.php:87
+#: includes/class-backend.php:91
 msgid "Thank you for using our plugin! If you are satisfied, please reward it a full five-star %s rating."
 msgstr ""
 
-#: includes/class-backend.php:90
+#: includes/class-backend.php:94
 msgid "Reviews"
 msgstr ""
 
-#: includes/class-backend.php:92
+#: includes/class-backend.php:96
 msgid "Changelog"
 msgstr ""
 
-#: includes/class-backend.php:94
+#: includes/class-backend.php:98
 msgid "Discussion"
 msgstr ""
 
-#: includes/class-backend.php:99
+#: includes/class-backend.php:106
 msgid "Settings updated."
 msgstr ""
 
-#: includes/class-backend.php:106
-#: includes/class-backend.php:256
+#: includes/class-backend.php:113
+#: includes/class-backend.php:263
 msgid "Settings"
 msgstr ""
 
-#: includes/class-backend.php:110
-#: includes/class-backend.php:257
-#: includes/class-backend.php:427
-#: includes/class-backend.php:429
+#: includes/class-backend.php:117
+#: includes/class-backend.php:264
+#: includes/class-backend.php:434
+#: includes/class-backend.php:436
 msgid "Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:115
-#: includes/class-backend.php:258
+#: includes/class-backend.php:122
+#: includes/class-backend.php:265
 msgid "Premium Version"
 msgstr ""
 
-#: includes/class-backend.php:118
+#: includes/class-backend.php:125
 msgid "Essential Kit"
 msgstr ""
 
-#: includes/class-backend.php:125
+#: includes/class-backend.php:132
 #: templates/product-attributes.php:122
 #: templates/product-attributes.php:131
 msgid "Other"
 msgstr ""
 
-#: includes/class-backend.php:135
+#: includes/class-backend.php:142
 msgid "Single Attributes"
 msgstr ""
 
-#: includes/class-backend.php:138
+#: includes/class-backend.php:145
 msgid "Configure for single attributes - which were not assigned for any groups."
 msgstr ""
 
-#: includes/class-backend.php:142
+#: includes/class-backend.php:149
 msgid "Position"
 msgstr ""
 
-#: includes/class-backend.php:145
+#: includes/class-backend.php:152
 msgid "Above Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:146
+#: includes/class-backend.php:153
 msgid "Below Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:151
+#: includes/class-backend.php:158
 msgid "Title"
 msgstr ""
 
-#: includes/class-backend.php:161
-#: includes/class-backend.php:617
+#: includes/class-backend.php:168
+#: includes/class-backend.php:624
 msgid "Description"
 msgstr ""
 
-#: includes/class-backend.php:171
+#: includes/class-backend.php:178
 msgid "Show Weight"
 msgstr ""
 
-#: includes/class-backend.php:174
-#: includes/class-backend.php:184
-#: includes/class-backend.php:586
+#: includes/class-backend.php:181
+#: includes/class-backend.php:191
+#: includes/class-backend.php:593
 msgid "Yes"
 msgstr ""
 
-#: includes/class-backend.php:175
-#: includes/class-backend.php:185
-#: includes/class-backend.php:587
+#: includes/class-backend.php:182
+#: includes/class-backend.php:192
+#: includes/class-backend.php:594
 msgid "No"
 msgstr ""
 
-#: includes/class-backend.php:177
+#: includes/class-backend.php:184
 msgid "Show/hide the product weight in \"Single Attributes\"."
 msgstr ""
 
-#: includes/class-backend.php:181
+#: includes/class-backend.php:188
 msgid "Show Dimensions"
 msgstr ""
 
-#: includes/class-backend.php:187
+#: includes/class-backend.php:194
 msgid "Show/hide the product dimensions in \"Single Attributes\"."
 msgstr ""
 
-#: includes/class-backend.php:192
+#: includes/class-backend.php:199
 msgid "Style"
 msgstr ""
 
-#: includes/class-backend.php:196
+#: includes/class-backend.php:203
 msgid "Layout"
 msgstr ""
 
-#: includes/class-backend.php:199
+#: includes/class-backend.php:206
 msgid "Layout 01"
 msgstr ""
 
-#: includes/class-backend.php:200
+#: includes/class-backend.php:207
 msgid "Layout 02"
 msgstr ""
 
-#: includes/class-backend.php:274
+#: includes/class-backend.php:281
 msgid "Community support"
 msgstr ""
 
-#: includes/class-backend.php:428
+#: includes/class-backend.php:435
 msgid "Attribute Group"
 msgstr ""
 
-#: includes/class-backend.php:430
+#: includes/class-backend.php:437
 msgid "All Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:431
+#: includes/class-backend.php:438
 msgid "Edit Attribute Group"
 msgstr ""
 
-#: includes/class-backend.php:432
+#: includes/class-backend.php:439
 msgid "View Attribute Group"
 msgstr ""
 
-#: includes/class-backend.php:433
+#: includes/class-backend.php:440
 msgid "Update Attribute Group"
 msgstr ""
 
-#: includes/class-backend.php:434
+#: includes/class-backend.php:441
 msgid "Add New Attribute Group"
 msgstr ""
 
-#: includes/class-backend.php:435
+#: includes/class-backend.php:442
 msgid "New Attribute Group Name"
 msgstr ""
 
-#: includes/class-backend.php:436
+#: includes/class-backend.php:443
 msgid "Parent Attribute Group"
 msgstr ""
 
-#: includes/class-backend.php:437
+#: includes/class-backend.php:444
 msgid "Parent Attribute Group:"
 msgstr ""
 
-#: includes/class-backend.php:438
+#: includes/class-backend.php:445
 msgid "Search Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:439
+#: includes/class-backend.php:446
 msgid "Popular Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:440
+#: includes/class-backend.php:447
 msgid "&larr; Go to Attribute Groups"
 msgstr ""
 
-#: includes/class-backend.php:441
+#: includes/class-backend.php:448
 msgid "Separate groups with commas"
 msgstr ""
 
-#: includes/class-backend.php:442
+#: includes/class-backend.php:449
 msgid "Add or remove groups"
 msgstr ""
 
-#: includes/class-backend.php:443
+#: includes/class-backend.php:450
 msgid "Choose from the most used groups"
 msgstr ""
 
-#: includes/class-backend.php:444
+#: includes/class-backend.php:451
 msgid "No groups found"
 msgstr ""
 
-#: includes/class-backend.php:522
-#: includes/class-backend.php:618
+#: includes/class-backend.php:529
+#: includes/class-backend.php:625
 msgid "Apply for"
 msgstr ""
 
-#: includes/class-backend.php:525
-#: includes/class-backend.php:649
+#: includes/class-backend.php:532
+#: includes/class-backend.php:656
 msgid "All products"
 msgstr ""
 
-#: includes/class-backend.php:552
-#: includes/class-backend.php:619
+#: includes/class-backend.php:559
+#: includes/class-backend.php:626
 msgid "Attributes"
 msgstr ""
 
-#: includes/class-backend.php:583
+#: includes/class-backend.php:590
 msgid "Exclude from Additional Information"
 msgstr ""
 
-#: includes/class-backend.php:589
+#: includes/class-backend.php:596
 msgid "Exclude this group from Additional Information. You still can place it in a new tab or elsewhere by using a shortcode."
 msgstr ""
 
-#: includes/class-backend.php:616
+#: includes/class-backend.php:623
 msgid "Name"
 msgstr ""
 
-#: includes/class-backend.php:620
+#: includes/class-backend.php:627
 msgid "Shortcode"
 msgstr ""
 
-#: includes/class-backend.php:635
+#: includes/class-backend.php:642
 msgid "Configure terms"
 msgstr ""
 
-#: includes/class-backend.php:682
+#: includes/class-backend.php:689
 msgid "Excluded from Additional Information"
 msgstr ""
 
-#: includes/class-backend.php:687
+#: includes/class-backend.php:694
 msgid "* Premium Version only"
 msgstr ""
 
-#: includes/class-backend.php:706
+#: includes/class-backend.php:713
 msgid "Add attributes from group"
 msgstr ""
 
-#: includes/class-backend.php:708
+#: includes/class-backend.php:715
 msgid "Attribute group"
 msgstr ""
 
-#: includes/class-backend.php:715
+#: includes/class-backend.php:722
 msgid "Add"
 msgstr ""
 

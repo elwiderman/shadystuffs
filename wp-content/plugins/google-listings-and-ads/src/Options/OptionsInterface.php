@@ -47,6 +47,7 @@ interface OptionsInterface {
 	public const WP_TOS_ACCEPTED                           = 'wp_tos_accepted';
 	public const WPCOM_REST_API_STATUS                     = 'wpcom_rest_api_status';
 	public const GTIN_MIGRATION_STATUS                     = 'gtin_migration_status';
+	public const API_PULL_SYNC_MODE                        = 'api_pull_sync_mode';
 
 	public const VALID_OPTIONS = [
 		self::ADS_ACCOUNT_CURRENCY                      => true,
@@ -84,6 +85,7 @@ interface OptionsInterface {
 		self::WPCOM_REST_API_STATUS                     => true,
 		self::GOOGLE_WPCOM_AUTH_NONCE                   => true,
 		self::GTIN_MIGRATION_STATUS                     => true,
+		self::API_PULL_SYNC_MODE                        => true,
 	];
 
 	public const OPTION_TYPES = [
@@ -150,11 +152,4 @@ interface OptionsInterface {
 	 * @return int
 	 */
 	public function get_ads_id(): int;
-
-	/**
-	 * If the WPCOM API is authorized
-	 *
-	 * @return bool
-	 */
-	public function is_wpcom_api_authorized(): bool;
 }

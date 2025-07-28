@@ -1,9 +1,9 @@
-=== Variation Swatches for WooCommerce by CartFlows ===
+=== Variation Swatches for WooCommerce – Make Product Choices Visual, Easy & Clickable ===
 Contributors: brainstormforce
-Tags: woocommerce variation swatches, woocommerce attributes, woocommerce product variation, variation product swatches, color variation swatch
+Tags: WooCommerce variation swatches, variation swatches for WooCommerce, WooCommerce color swatches, WooCommerce image swatches, swatches plugin for variable products, WooCommerce product variations
 Requires at least: 5.4
-Tested up to: 6.7
-Stable tag: 1.0.12
+Tested up to: 6.8
+Stable tag: 1.0.13
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,89 +12,115 @@ Variation Swatches for WooCommerce is the easiest to use plugin to convert dropd
 
 == Description ==
 
-<strong>Variation Swatches for WooCommerce is the easiest to use plugin to convert dropdown boxes into highly engaging variation swatches. </strong>
+## Create a Visual Shopping Experience for Your Customers 🎨
 
-Make it faster and easier for your buyers to choose product variations visually.
+Tired of outdated dropdowns on your WooCommerce store? With Variation Swatches for WooCommerce, you can replace boring select boxes with clickable color blocks, image thumbnails, or clean text labels—giving your shoppers a faster, clearer, and more engaging way to pick product variations.
 
-There are no complicated settings or configuration needed to start using Variation Swatches for WooCommerce.
+Make your store look modern, improve user experience, and drive more conversions - without writing a single line of code.
+
+🎯 Boost conversion rates by making product options more accessible and intuitive.  
+🛍️ Create a polished store that aligns with your brand and boosts shopper confidence.  
+👉 [Try the Live Demo](https://bsf.io/variation-swatches-woo-demo) and experience it for yourself\!
+
 [youtube https://www.youtube.com/watch?v=j2UbKnuF7-Y]
 
-Instantly convert traditional dropdown attributes to visually appealing swatches. This plugin provides options to convert woocommerce variation attributes to swatches. We provide multiple options like image, color, label type swatches for both product page and shop page.
+##🛒 Made for Store Owners Who Care About Experience & Sales
 
-Variation Swatches for WooCommerce works with most well coded WordPress themes & plugins.
+### WooCommerce Store Owners with Variable Products
 
-Learn more from our [knowledge base.](https://cartflows.com/docs/variation-swatches-for-woocommerce-plugin/)
+Whether you're selling t-shirts in multiple sizes or handmade products in different materials, your shoppers will love the ease of use.
 
-[Try it out on a free dummy site](https://bsf.io/variation-swatches-woo-demo)
+### Clothing & Fashion Retailers
 
-## Variation Swatches Is Compatible With ##
+Showcase color and size options visually with color swatches and labels, making fashion shopping smoother and more intuitive.
 
-### Page Builders ###
-Variation Swatches works with all WordPress page builders, including:
+### Handmade & Custom Product Sellers
 
-* Elementor
-* Beaver Builder
-* Brizy Builder
-* Divi Builder
-* Thrive Architect
-* Gutenberg
-* Spectra Website Builder
-* Oxygen Builder
-* Bricks Builder
-* And others
+Showcase patterns, textures, or materials with image swatches that reflect the uniqueness of your products.
 
-### WooCommerce Themes ###
-Variation Swatches works with any theme, including:
+### Stores Focused on User Experience
 
-* Astra
-* Avada
-* Blocksy
-* Divi
-* Flatsome
-* GeneratePress
-* Hello Elementor
-* Hestia
-* Kadence
-* Neve
-* OceanWP
+Simplify variation selection and reduce cart abandonment with a modern, user-friendly interface.
 
-Here are some of our products:
+### Visual-First Brands
 
-* **Astra Theme**
-Currently used by nearly 2 million websites, Astra Theme is the most popular WordPress theme and is also the most popular WooCommerce theme. Variation Swatches for WooCommerce was made to work perfectly with Astra Theme. [Visit Astra Theme](https://wpastra.com)
+Maintain a seamless brand experience by matching swatch styles to your store’s colors, fonts, and design.
 
-* **CartFlows**
-Currently used by nearly 300,000 store owners to get more orders and increase the order value through our conversion optimized checkout replacement for WooCommerce, checkout order bumps, one-click post purchase upsells, and A/B split testing engine. [Visit CartFlows](https://cartflows.com)
+##🎥 See What Experts Are Saying
 
-* **Cart Abandonment Recovery**
-Currently used by nearly 400,000 store owners to capture lost revenue caused by buyers that don’t complete their checkout. Cart Abandonment Recovery captures these lost orders and automatically contacts the lost buyers to get them to complete their order. [Visit Cart Abandonment Recovery](https://wordpress.org/plugins/woo-cart-abandonment-recovery/)
+Real reviews. Real results. Influencers and eCommerce pros love the user-friendly experience this plugin delivers:
 
-* **Stripe for WooCommerce**
-Stripe for WooCommerce delivers a simple, secure way to accept credit card payments, Apple Pay, and Google Pay on your WooCommerce store. Reduce payment friction and boost conversions using this free plugin! [Visit Stripe for WooCommerce](https://wordpress.org/plugins/checkout-plugins-stripe-woo/)
+▶️ Learn how top WooCommerce experts are using this plugin to improve UX and conversions.
 
-* **Starter Templates**
-Currently used by nearly 2 million websites, Starter Templates offers hundreds of complete website templates, including over 50 website designs for WooCommerce stores. [Visit Starter Templates](https://wordpress.org/plugins/astra-sites/)
-
-As you can see, we know WooCommerce inside and out and help thousands of store owners build highly profitable stores everyday.
-
-
-== Global Features: ==
-1. Enable Swatches for Shop / Product details pages
-1. 3 different Swatch types (label, color, image)
-1. Completely customizable swatches design with height, width and border radius
-1. Auto convert variation dropdowns to label/button type Swatch
-1. Disabled Attribute Type (Blur with Cross, Blur Only, Hide)
-1. Enable/Disable tooltip
-1. Tooltip with image preview
-
-== Shop Page Features: ==
-1. Override global features and make different settings for shop page
-1. Swatches Alignment for shop page (Left, Center, Right)
-1. Swatches position (Before title, After title, Before price, After price)
-
-== USERS LOVE VARIATION SWATCHES ==
 [youtube https://www.youtube.com/watch?v=94OJz6lu_HE]
+
+▶️ Watch how Ferdy configures swatches in just minutes, perfect for beginners.
+
 [youtube https://www.youtube.com/watch?v=mjXCkw7rt2Y]
+
+##🔧 Features That Improve Both Looks and Sales
+
+### Color, Image & Label Swatches
+
+Turn product variation dropdowns into eye-catching swatches. Choose from color blocks, upload custom images (like textures or patterns), or use simple labels like “S”, “M”, “L”. Your customers get an intuitive, visual shopping experience that speeds up decision-making and lowers drop-offs.
+
+### Tooltips for Clarity
+
+No more guesswork. Enable tooltips that appear when a customer hovers over a swatch—so they always know what they’re selecting.
+
+### Auto-Convert Dropdowns to Swatches
+
+The plugin automatically detects variation dropdowns and converts them into swatches based on your global settings. No need to manually configure each product.
+
+### Global & Per-Product Swatches
+
+Set default swatch styles for each attribute globally. Want more control? Override them on a per-product basis to match your store’s layout or campaign needs.
+
+### Fast, Lightweight, and Fully Compatible
+
+Built with performance in mind. Variation Swatches won’t bloat your site or clash with other tools. It works seamlessly with most WooCommerce-compatible themes and major plugins.
+
+## ✅ Works with Your Favorite Themes & Plugins
+
+Variation Swatches works great with all popular themes, including:
+
+* Astra,   
+* Spectra One,  
+* Blocksy,   
+* Kadence,   
+* GeneratePress,   
+* OceanWP,   
+* Hello Elementor,   
+* Storefront,   
+* Bricks Builder,  
+* Flatsome,  
+* Hestia,  
+* Neve,  
+* And Many More.
+
+Fully compatible with plugins like:
+
+* Spectra,  
+* Elementor,   
+* Beaver Builder,   
+* Brizy Builder  
+* Bricks Builder,  
+* Gutenberg,  
+* Oxygen Builder,  
+* CartFlows,   
+* OttoKit,   
+* SureForms,  
+* Cart Abandonment Recovery for WooCommerce.  
+* SureMembers,  
+* TutorLMS,  
+* LifterLMS,  
+* LearnPress,  
+* LearnDash,,  
+* MemberPress,  
+* PrestoPlayer,  
+* WooCommerce Subscriptions,   
+* WooCommerce Product Addons,   
+* And Many More.
 
 == Installation ==
 
@@ -103,8 +129,31 @@ As you can see, we know WooCommerce inside and out and help thousands of store o
 3. Make sure to disable caching on your checkout and thank you steps
 
 == Frequently Asked Questions ==
-= Does this shows variations on shop / archieve page? =
-Yes, this plugin enables variation swatches on shop / archieve page. User can select variant directly from shop page and add to cart.
+
+= Will it work with my existing products and themes? = 
+Yes\! It works out of the box with any WooCommerce-compatible theme and variable product setup.
+
+= Can I show both color and image swatches? = 
+Absolutely. You can assign different types (color, image, label) for each attribute as needed.
+
+= Does it slow down my store? = 
+No – the plugin is built for speed and performance with minimal impact on site load times.
+
+= Is it compatible with page builders? = 
+Yes\! Works great with Elementor, Spectra, and most major page builders.
+
+= I am new to Variation Swatches. Where can I find the documentation? = 
+[Click here](https://cartflows.com/docs-category/variation-swatches/) to access our documentation. Have questions or need help with a specific feature? Here’s how to connect with us:
+
+* [Support](https://cartflows.com/support/)  
+* [Contact Us](https://cartflows.com/contact/)  
+* [Join the community](https://www.facebook.com/groups/cartflows/) 
+
+= How can I report a security bug? =
+
+We take plugin security extremely seriously. If you discover a security vulnerability, please report it in a safe and responsible manner.
+
+You can report the issue through our [Bug Bounty Program](https://brainstormforce.com/bug-bounty-program/).
 
 == Screenshots ==
 1. Converts default dropdowns to Swatches
@@ -112,21 +161,26 @@ Yes, this plugin enables variation swatches on shop / archieve page. User can se
 
 == Changelog ==
 
+= 1.0.13 – THURSDAY, 24th APRIL 2025 =
+* New - Introduced a CartFlows info page to help users discover checkout optimization features.
+* Improvement - Added filters cfvsw_is_required_screen_for_swatch_types and cfvsw_available_attributes for better customization.
+* Fix - Swatches were not displaying for variation products when included in a bundled product.
+
 = 1.0.12 – THURSDAY, 21st NOVEMBER  2024 =
-- Fix: Fixed the conflict with 'WooCommerce Load More Products' plugin & disabled attributes of variations products.
-- Fix: Fixed the conflict with Astra theme 'Swap image on hover" feature not working when swatches are disabled from shop/archive pages
+* Fix - Fixed the conflict with 'WooCommerce Load More Products' plugin & disabled attributes of variations products.
+* Fix - Fixed the conflict with Astra theme 'Swap image on hover" feature not working when swatches are disabled from shop/archive pages
 
 = 1.0.11 – MONDAY, 7th OCTOBER  2024 =
-- Fix: Resolved the issue where the variation swatch selection did not function properly when jQuery Migrate was disabled in Bricks Builder.
-- Fix: Resolved the issue where the "Out-of-Stock Disable" feature did not work correctly with pagination.
+* Fix - Resolved the issue where the variation swatch selection did not function properly when jQuery Migrate was disabled in Bricks Builder.
+* Fix - Resolved the issue where the "Out-of-Stock Disable" feature did not work correctly with pagination.
 
 = 1.0.10 – THURSDAY, 15th AUGUST 2024 =
-- Improvement: Updated the WooCommerce HPOS Compatibility.
+* Improvement: Updated the WooCommerce HPOS Compatibility.
 
 = 1.0.9 – WEDNESDAY, 14th AUGUST 2024 =
-- Fix: Resolved the issue of "Swipe images on hover" feature was not working when using the Astra theme.
-- Fix: Removed error messages related to undefined variables that were appearing on the frontend.
-- Fix: Updated the codebase to better handle both array and non-array values.
+* Fix - Resolved the issue of "Swipe images on hover" feature was not working when using the Astra theme.
+* Fix - Removed error messages related to undefined variables that were appearing on the frontend.
+* Fix - Updated the codebase to better handle both array and non-array values.
 
 = 1.0.8 – THURSDAY, 28th MARCH 2024 =
 * New: Introduced the border width option for the swatch. You can now set a custom border width to your swatches.
