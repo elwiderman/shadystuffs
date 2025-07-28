@@ -4,8 +4,8 @@ Donate link: https://david.dw-perspective.org.uk/donate
 Tags: cache, caching, image cache, minify, performance cache, page speed, image optimizer, compress images, optimize database, clean database
 Requires PHP: 7.2
 Requires at least: 4.9
-Tested up to: 6.7
-Stable tag: 4.1.1
+Tested up to: 6.8
+Stable tag: 4.2.3
 License: GPLv2+
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -234,8 +234,8 @@ You think your site is fast without caching? A caching plugin will make your web
 Yes, your Gutenberg pages will be cached, as well as those created with page builder plugins such as Elementor.
 
 = How do I know my webpage is being cached (or why it isn't)? =
-If cache is enabled, and in order to see if your page is cached, use the "View Source" function in your web browser to view the page source. To find caching information, scroll down to the bottom, and you should see a line added by the cache: `<!-- Cached by WP Optimize - https://getwpo.com - Last modified: Sat, 20 Jul 2019 21:17:19 GMT ->`
-However, note that if you are using a further service that minifies HTML (e.g. Cloudflare), then this line may have been removed. Another method is to inspect the contents of the directory wpo-cache inside your wp-content directory. <a href="https://getwpo.com/faqs/how-do-i-know-my-webpage-is-being-cached/>Further information can be read here</a>
+If cache is enabled, and in order to see if your page is cached, use the "View Source" function in your web browser to view the page source. To find caching information, scroll down to the bottom, and you should see a line added by the cache: `<!-- Cached by WP Optimize - https://teamupdraft.com/wp-optimize/ - Last modified: Sat, 20 Jul 2019 21:17:19 GMT ->`
+However, note that if you are using a further service that minifies HTML (e.g. Cloudflare), then this line may have been removed. Another method is to inspect the contents of the directory wpo-cache inside your wp-content directory. <a href="https://teamupdraft.com/documentation/wp-optimize/topics/caching/faqs/how-do-i-know-my-webpage-is-being-cached/>Further information can be read here</a>
 Also note that if you do not preload the cache, a page or post will have to be visited once for the cache file to be generated.
 
 = How do I configure the page cache? =
@@ -394,6 +394,56 @@ If none of the above works, disable processing of JavaScript files in the minify
 
 
 == Changelog ==
+
+= 4.2.3 - 15/Jul/2025 =
+
+* FIX: Cache - Resolved PHP warning caused by excessively long cache file names
+* FIX: Corrected typo from `meta data` to `metadata`
+* FIX: Cron reschedule event error for hook `wpo_prune_404_log` when `is_minimum_requirement_met` is `false`
+* FIX: Premium - Fixed a rare PHP warning that could occur when saving a post
+* FIX: Unused image - incorrect image filtering in multisite
+* FIX: WP Remote sync conflict caused in v4.2.1 and v4.2.2 By replacing wp_salt with core PHP functions
+* FIX: YouTube lazy-load – Thumbnail image now falls back to JPG if browser doesn't support WebP
+* FIX: WebP images were not being served in Firefox on certain environments
+* TWEAK: 404 detector logs URLs on mobile screens goes out of viewport fixed.
+* TWEAK: CSS Improvements, better font size handling, remove duplication, and SASS instead of import
+* TWEAK: Delay YouTube preview image cache purging
+* TWEAK: Display notice when server does not allow database optimizations
+* TWEAK: Enhanced database optimization compatibility with jQuery 4
+* TWEAK: Fixed incorrect transients count in database optimizations UI
+* TWEAK: Improved sanitization of incoming data in `Updraft_Smush_Manager_Commands`
+* TWEAK: Minify - Improved compatibility with Divi theme's dynamically generated assets
+* TWEAK: Multisite corrected site count in database optimizations UI.
+* TWEAK: Preserve EXIF data is set to false by default in all places at codebase level.
+* TWEAK: Update URLs of links and images to point to https://teamupdraft.com
+
+= 4.2.2 - 02/June/2025 =
+
+* FIX: Cache - Resolved unwanted output in WP-CLI and fatal error related to WooCommerce's country-specific files, introduced in v4.2.0
+* TWEAK: Premium - Cache - Compatibility with WordPress 6.8
+
+= 4.2.1 - 05/May/2025 =
+
+* FIX: Cache - Compatibility issue with other plugins due to late start of output buffering
+* TWEAK: Improved array handling in `get_active_plugins()`, potentially avoiding edge-case fatal error
+
+= 4.2.0 - 01/May/2025 =
+
+* SECURITY: On multisite installs (only), a logged-in site administrator could use an unsanitised parameter to inject unwanted content into SQL queries. Thanks to Marc Montpas for the responsible disclosure.
+* FEATURE: Premium - Replace YouTube Iframes with preview images to improve page speed
+* FIX: Fix conflict with the WPML plugin
+* FIX: Smush - Fixed PHP warning on the Media Library page
+* FIX: Smush - Fixed issue where the Smush popup would freeze
+* FIX: WebP images not served after WP-Optimize reactivation
+* REFACTOR: Smush option removed from media upload modal
+* TWEAK:  Update advert banner logos, texts and links
+* TWEAK: Add missing separator between compression items in media library
+* TWEAK: Avoid PHP warning thrown by Page Speed Ninja plugin
+* TWEAK: Cache - Start caching after plugins loaded 
+* TWEAK: Fix PHP deprecation warning in PHPSQLParser for PHP 8.4
+* TWEAK: Fix deprecation warning in Updraft_Logger class for PHP 8.4
+* TWEAK: Fixes absence of checkbox to remove all transients
+* TWEAK: Premium - Support and feedback links in Help tab now point to getwpo.com
 
 = 4.1.1 - 05/Mar/2025 =
 
@@ -818,4 +868,4 @@ If none of the above works, disable processing of JavaScript files in the minify
 [See changelog for all versions](https://plugins.svn.wordpress.org/wp-optimize/trunk/changelog.txt).
 
 == Upgrade Notice ==
-* 4.1.1: A fix for page builders with Delay JS option - a recommended update for all
+* 4.2.3: Lot of fixes and tweaks - a recommended update for all

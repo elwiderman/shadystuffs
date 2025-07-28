@@ -170,7 +170,7 @@ class WSM_StoreApps_Marketplace {
 					<div class="addons-banner-block-item-content">
 						<h3>Smart Manager</h3>
 						<p>Bulk edit products, variations, customers, orders, coupons, WordPress custom post types and more in a spreadsheet view 10x faster. Advanced search, CSV export, inline edit and a lot more. <em>Our Best Selling product.</em></p>
-						<a class="addons-button addons-button-solid" href="https://www.storeapps.org/product/smart-manager/?utm_source=wsm&utm_medium=in_app_marketplace&utm_campaign=in_app_marketplace" target="_blank" rel="noopener">Learn more</a>
+						<a class="addons-button addons-button-solid" href="<?php echo esc_url( admin_url( 'admin.php?page=stock-manager-pricing' ) ); ?>" target="_blank" rel="noopener">Learn more</a>
 					</div>
 				</div>
 				<div class="addons-banner-block-item">

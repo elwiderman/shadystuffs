@@ -3,7 +3,7 @@
  * Stock Manager
  *
  * @package  woocommerce-stock-manager/public/
- * @version  2.9.0
+ * @version  3.0.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -46,6 +46,8 @@ class Stock_Manager {
 
 		// Action to declare WooCommerce HPOS compatibility.
 		add_action( 'before_woocommerce_init', array( $this, 'declare_hpos_compatibility' ) );
+		// to filter products based on stock status.
+		add_filter( 'woocommerce_rest_product_object_query', array( $this, 'modify_stock_status_filter' ), 99, 2 );
 	}
 
 	/**
@@ -276,6 +278,68 @@ class Stock_Manager {
 		if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
 			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', 'woocommerce-stock-manager/woocommerce-stock-manager.php', true );
 		}
+	}
+		/**
+		 * Modify the WooCommerce REST API product query to filter products based on stock status.
+		 *
+		 * @param array           $args The query arguments.
+		 * @param WP_REST_Request $request The REST API request object.
+		 * @return array Modified query arguments.
+		 */
+	public function modify_stock_status_filter( $args = array(), $request = null ) {
+		// Retrieve query parameters from the REST request.
+		$params = is_callable( array( $request, 'get_query_params' ) ) ? $request->get_query_params() : array();
+		// Check if the necessary parameters are present and not empty.
+		if ( ( empty( $params ) ) || ( ! is_array( $params ) ) || ( empty( $params['wsm_filter'] ) ) || ( empty( $params['stock_status'] ) ) || ( 'true' !== $params['wsm_filter'] ) ) {
+			return $args;
+		}
+		$product_ids = array();
+		// Handle stock statuses.
+		switch ( $params['stock_status'] ) {
+			case 'outofstock':
+				// Remove stock_status value to avoid setting it in the meta query.
+				$request['stock_status'] = '';
+				$product_ids             = $this->filter_out_of_stock_products();
+				break;
+			default:
+				$product_ids = array();
+				break;
+		}
+		// Update the query arguments if we have any matching IDs.
+		if ( ( ! empty( $product_ids ) ) && ( is_array( $product_ids ) ) ) {
+			$args['post__in'] = array_unique( array_merge( ! empty( $args['post__in'] ) ? $args['post__in'] : array(), $product_ids ) );
+		}
+		return $args;
+	}
+
+	/**
+	 * Get products and variations based on 'outofstock' status.
+	 *
+	 * @return array Modified query arguments.
+	 */
+	public function filter_out_of_stock_products() {
+		global $wpdb;
+		// Get product IDs and parent product IDs of variations that are out of stock.
+		$combined_ids = $wpdb->get_col(// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"
+			SELECT DISTINCT 
+				CASE 
+					WHEN p.post_type = 'product' THEN p.ID
+					WHEN p.post_type = 'product_variation' THEN p.post_parent
+				END AS product_id
+			FROM {$wpdb->posts} AS p
+			INNER JOIN {$wpdb->postmeta} AS pm 
+			ON p.ID = pm.post_id
+			AND pm.meta_key = '_stock_status'
+			AND pm.meta_value = %s
+			WHERE p.post_type IN ('product', 'product_variation')
+		",
+				'outofstock'
+			)
+		);
+		// Update the query arguments if we have any matching IDs.
+		return ! empty( $combined_ids ) ? $combined_ids : array();
 	}
 
 }//end class

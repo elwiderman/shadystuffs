@@ -3,7 +3,7 @@
  * Main class for Stock Manager.
  *
  * @package  woocommerce-stock-manager/admin/
- * @version  3.1.0
+ * @version  3.3.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -56,8 +56,6 @@ class Stock_Manager_Admin {
 
 		include_once 'includes/class-wsm-stock.php';
 
-		add_action( 'admin_notices', array( $this, 'includes' ) );
-
 		// Add direct link on product list and individual product page.
 		add_filter( 'post_row_actions', array( $this, 'add_stock_log_link_to_product_list' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( $this, 'add_stock_log_link_to_individual_product' ) );
@@ -65,6 +63,8 @@ class Stock_Manager_Admin {
 		// To update footer text on WSM screens.
 		add_filter( 'admin_footer_text', array( $this, 'wsm_footer_text' ), 99999 );
 		add_filter( 'update_footer', array( $this, 'wsm_update_footer_text' ), 99999 );
+		// Go Pro icon css.
+		add_action( 'admin_footer', array( &$this, 'go_pro_submenu_icon_css' ), 10 );
 	}
 
 	/**
@@ -80,17 +80,6 @@ class Stock_Manager_Admin {
 		}
 
 		return self::$instance;
-	}
-
-	/**
-	 * Include required core files used in admin.
-	 */
-	public function includes() {
-		$is_wsm_admin = is_wsm_admin_page();
-		if ( $is_wsm_admin ) {
-			$this->wsm_add_subscribe_notice();
-
-		}
 	}
 
 	/**
@@ -146,7 +135,7 @@ class Stock_Manager_Admin {
 							)
 						),
 						function( $carry, $item ) {
-							$carry[ $item->term_id ] = $item->name;
+							$carry[ $item->term_id ] = html_entity_decode( $item->name );
 							return $carry;
 						},
 						array()
@@ -319,13 +308,20 @@ class Stock_Manager_Admin {
 		);
 		add_submenu_page(
 			'stock-manager',
+			__( '<span class="wsm_pricing_icon"> 🔥 </span> Go Pro', 'woocommerce-stock-manager' ),
+			__( '<span class="wsm_pricing_icon"> 🔥 </span> Go Pro', 'woocommerce-stock-manager' ),
+			'manage_options',
+			'stock-manager-pricing',
+			array( $this, 'display_pricing_page' )
+		);
+		add_submenu_page(
+			'stock-manager',
 			__( 'StoreApps Plugins', 'woocommerce-stock-manager' ),
 			__( 'StoreApps Plugins', 'woocommerce-stock-manager' ),
 			$manage,
 			'stock-manager-storeapps-plugins',
 			array( $this, 'display_sa_marketplace_page' )
 		);
-
 	}
 
 	/**
@@ -496,4 +492,127 @@ class Stock_Manager_Admin {
 
 	}
 
+	/**
+	 * Render the pricing page.
+	 */
+	public function display_pricing_page() {
+		if ( ! file_exists( __DIR__ . '/includes/class-wsm-in-app-pricing.php' ) ) {
+			return;
+		}
+		include_once __DIR__ . '/includes/class-wsm-in-app-pricing.php';
+	}
+
+	/**
+	 * Get the display name of the current user or a fallback value.
+	 *
+	 * @param string $fallback The fallback value to use if the user's display name is not set. Default is 'there'.
+	 * @return string|false The display name of the current user or false if user not exist.
+	 */
+	public static function get_current_user_display_name( $fallback = 'there' ) {
+		if ( ( empty( $fallback ) ) ) {
+			$fallback = _x( 'there', 'default display name', 'woocommerce-stock-manager' );
+		}
+		$current_user = wp_get_current_user();
+		if ( ! $current_user->exists() ) {
+			return false;
+		}
+		return ( ( ! empty( $current_user->display_name ) ) ) ? $current_user->display_name : $fallback;
+	}
+
+	/**
+	 * Function to handle admin notices.
+	 */
+	public static function add_admin_notices() {
+		if ( '1' === get_option( 'sa_wsm_dismiss_in_app_pricing_notice' ) ) {
+			return;
+		}
+		$current_user_display_name = self::get_current_user_display_name();
+		if ( ( empty( $_GET['page'] ) ) || ( ! in_array( sanitize_text_field( wp_unslash( $_GET['page'] ) ), array( 'stock-manager', 'stock-manager-import-export', 'stock-manager-log' ), true ) ) || ( empty( $current_user_display_name ) ) ) { // phpcs:ignore
+			return;
+		}
+		?>
+		<style type="text/css">
+			.wsm_in_app_pricing_notice {
+				width: 50%;
+				background-color: rgb(204 251 241 / 82%) !important;
+				margin-top: 1em !important;
+				margin-bottom: 1em !important;
+				padding: 1em;
+				box-shadow: 0 0 7px 0 rgba(0, 0, 0, .2);
+				font-size: 1.1em;
+				margin: 0 auto;
+				text-align: center;
+				border-bottom-right-radius: 0.25rem;
+				border-bottom-left-radius: 0.25rem;
+				border-top: 4px solid #508991 !important;
+			}
+			.wsm_main_headline {
+				font-size: 1.7em;
+				color: rgb(55 65 81);
+				opacity: 0.9;
+			}
+			.wsm_main_headline .dashicons.dashicons-awards {
+				font-size: 3em;
+				color: #508991;
+				width: unset;
+				line-height: 3rem;
+				margin-right: 0.1em;
+			}
+			.wsm_sub_headline {
+				font-size: 1.2em;
+				color: rgb(55 65 81);
+				line-height: 1.3em;
+				opacity: 0.8;
+			}
+		</style>
+		<div class="wsm_in_app_pricing_notice">
+			<div class="wsm_container">
+				<div class="wsm_main_headline">
+					<span class="dashicons dashicons-awards"></span>
+					<span>
+						<?php
+						echo wp_kses_post(
+							sprintf(// translators: %s: discount string.
+								_x( 'Our best-seller Smart Manager Pro – up to <strong style="font-size:1.75rem;">%s</strong>', 'upgrade notice', 'woocommerce-stock-manager' ),
+								esc_html( '60% off!' )
+							)
+						);
+						?>
+					</span>
+				</div>
+				<div class="wsm_sub_headline" style="margin: 0.75rem 0 0 .5em !important;">
+					<?php
+					echo wp_kses_post(
+						sprintf(// translators: %s: pricing page link.
+							_x( 'Get <strong>all Stock Manager features + Bulk Edit</strong> + more. %s.', 'upgrade notice', 'woocommerce-stock-manager' ),
+							'<a style="color: rgb(55 65 81);" href="' . esc_url( admin_url( 'admin.php?page=stock-manager-pricing' ) ) . '" target="_blank">' .
+							esc_html_x( 'Click here', 'upgrade notice', 'woocommerce-stock-manager' ) . '</a>'
+						)
+					);
+					?>
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Function to add Css for GO Pro sub menu icon
+	 */
+	public function go_pro_submenu_icon_css() {
+		?>
+		<style type="text/css">
+			@keyframes beat {
+				to { transform: scale(1.1); }
+			}
+			.wsm_pricing_icon {
+				animation: beat .25s infinite alternate;
+				transform-origin: center;
+				color: #ea7b00;
+				display: inline-block;
+				font-size: 1.5em;
+			}
+		</style>
+		<?php
+	}
 }//end class

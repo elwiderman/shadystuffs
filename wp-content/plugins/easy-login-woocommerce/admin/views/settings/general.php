@@ -15,15 +15,45 @@ $settings = array(
 	/** MAIN **/
 	array(
 		'callback' 		=> 'links',
-		'title' 		=> 'Fields',
+		'title' 		=> 'Links',
 		'id' 			=> 'fake',
 		'section_id' 	=> 'gl_main',
 		'args' 			=> array(
 			'options' 	=> array(
-				admin_url('admin.php?page=xoo-el-fields') => 'Manage'
+				admin_url('admin.php?page=xoo-el-fields') => 'Manage Fields',
+				admin_url( 'nav-menus.php?xoo_el_nav=true' ) => 'Add Links to Menu',
 			)
 		)
 	),
+
+
+	array(
+		'callback' 		=> 'asset_selector',
+		'title' 		=> 'Form Pattern',
+		'id' 			=> 'm-form-pattern',
+		'section_id' 	=> 'gl_main',
+		'default' 		=> 'separate',
+		'args' 			=> array(
+			'options' => array(
+				'separate' 	=> array(
+					'title' => 'Separate',
+					'asset' => XOO_EL_URL.'/admin/assets/images/pattern-separate.jpg',
+					'info' 	=> 'Displays separate login and registration forms side by side'
+				),
+				'single' 	=> array(
+					'title' => 'Single',
+					'asset' => XOO_EL_URL.'/admin/assets/images/pattern-single.jpg',
+					'info' 	=> 'A single field form where users enter email or username and are auto-directed to login or registration based on input.'
+				)
+			),
+			'custom_attributes' => array(
+				'data-multiple' => 'no',
+				'data-required' => 'yes'
+			)
+		),
+
+	),
+
 
 
 	array(
@@ -65,21 +95,6 @@ $settings = array(
 	),
 
 
-	array(
-		'callback' 		=> 'select',
-		'title' 		=> 'Form Pattern',
-		'id' 			=> 'm-form-pattern',
-		'section_id' 	=> 'gl_main',
-		'args'			=> array(
-			'options' => array(
-				'separate' 	=> 'Separate Login and register forms',
-				'single' 	=> 'Single Field Form',
-			)
-		),
-		'default' 		=> 'separate',
-		'desc' 			=> 'Single field form will navigate users to login/signup depending on the data.'
-	),
-
 
 
 	array(
@@ -119,6 +134,22 @@ if( class_exists( 'woocommerce' ) ){
 		'section_id' 	=> 'gl_wc',
 		'default' 		=> '[xoo_el_inline_form active="login"]',
 		'desc' 			=> 'My account page form shortcode. See info tab for shortcode details',
+		'args' 			=> array(
+			'rows' => 2,
+			'cols' => 60,
+			'custom_attributes' => array(
+				'spellcheck' => 'false',
+			)
+		)
+	);
+
+	$settings[] = array(
+		'callback' 		=> 'textarea',
+		'title' 		=> 'Lost Password page form shortcode',
+		'id' 			=> 'm-myacclpw-sc',
+		'section_id' 	=> 'gl_wc',
+		'default' 		=> '[xoo_el_inline_form active="lostpw"]',
+		'desc' 			=> 'Lost Password page form shortcode. See info tab for shortcode details',
 		'args' 			=> array(
 			'rows' => 2,
 			'cols' => 60,
@@ -228,7 +259,7 @@ $popup = array(
 		'title' 		=> 'Auto open Popup',
 		'id' 			=> 'ao-enable',
 		'section_id' 	=> 'gl_ao',
-		'default' 		=> 'no',
+		'default' 		=> 'yes',
 	),
 
 

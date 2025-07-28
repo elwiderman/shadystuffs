@@ -144,13 +144,10 @@ class SA_WSM_In_App_Offer {
 	 * Admin styles & scripts
 	 */
 	public function admin_styles_and_scripts() {
-
 		if ( $this->is_show() ) {
-
 			if ( ! wp_script_is( 'jquery' ) ) {
 				wp_enqueue_script( 'jquery' );
 			}
-
 			?>
 			<script type="text/javascript">
 				jQuery(function(){

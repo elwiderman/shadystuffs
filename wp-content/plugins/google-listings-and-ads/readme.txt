@@ -2,10 +2,10 @@
 Contributors: automattic, google, woocommerce
 Tags: woocommerce, google, product feed, ads, listings
 Requires at least: 6.1
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
 Requires PHP Architecture: 64 Bits
-Stable tag: 2.9.10
+Stable tag: 3.2.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -140,17 +140,31 @@ To allow your products to appear in all relevant locations, make sure you’ve c
 
 == Changelog ==
 
-= 2.9.10 - 2025-03-18 =
-* Dev - Add the conversion action details to the connection test page.
-* Fix - It may be unable to connect to the auto-selected Google Ads account after disconnecting during onboarding.
+= 3.2.0 - 2025-07-22 =
+* Add - Block shipping, products, and coupons synchronization when push synchronization is disabled.
+* Add - Budget Metrics endpoint for fetching metrics with a custom budget.
+* Add - Controller for fetching incentive credits from Middleware.
+* Add - Event tracking for budget recommendations and metrics.
+* Add - Fetch budget recommendations from the Google Ads API.
+* Add - Include blog ID to all notification messages.
+* Add - New endpoint for synchronizing listing settings with Google.
+* Add - Provide the recommendations and metrics when setting a campaign budget.
+* Add - Show a prompt for suggesting a higher budget to get back free ad credits before completing the onboarding and ads onboarding.
+* Tweak - Restrict Budget Metrics to positive numbers.
+* Update - Google Ads API from v18 to v20.
+* Update - Remove WPCOM API authorization check as authorization is granted by default.
+* Update - Remove opt-in/opt-out UI controls for product data sync.
 
-= 2.9.9 - 2025-02-18 =
-* Fix - Error displayed when accessing campaign assets editing page without attached asset groups.
-* Tweak - Opt-in to URL expansion.
-* Tweak - Supplement the implementation of API Pull for the Settings page.
-* Tweak - WC 9.7 compatibility.
+= 3.1.1 - 2025-07-08 =
+* Fix - Do not render experience rating banner if Ads account is disconnected.
+* Fix - Fixed undefined array key warnings in Price Benchmarks feature.
 
-= 2.9.8 - 2025-02-04 =
-* Tweak - Replace WooCommerce logo with Woo 2.0 Brand.
+= 3.1.0 - 2025-07-01 =
+* Add - A new endpoint for Google-triggered account linking.
+* Add - Notice to gather feedback and request ratings from merchants.
+* Add - Reintroduce account:connect functionality for Google account linking.
+* Fix - Prevent the user from continuing if the minimum shipping time is not set.
+* Fix - The API error of querying campaign assets by an invalid ID after saving a campaign with assets.
+* Tweak - WC 10.0 compatibility.
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/google-listings-and-ads/trunk/changelog.txt).

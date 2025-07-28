@@ -1,9 +1,9 @@
 === Facebook for WooCommerce ===
-Contributors: facebook, automattic, woothemes
-Tags: facebook, woocommerce, marketing, product catalog feed, pixel
+Contributors: facebook
+Tags: meta, facebook, conversions api, catalog sync, ads
 Requires at least: 5.6
-Tested up to: 6.7
-Stable tag: 3.4.6
+Tested up to: 6.8.1
+Stable tag: 3.5.3
 Requires PHP: 7.4
 MySQL: 5.6 or greater
 License: GPLv2 or later
@@ -40,15 +40,24 @@ When opening a bug on GitHub, please give us as many details as possible.
 
 == Changelog ==
 
-= 3.4.6 - 2025-04-04 =
-* Fix - Product availability syncing by @vinkmeta in #3010
-* Fix - Product attribute sort error which prevented product edits in certain scenarios by @iodic in #3012
-
-= 3.4.5 - 2025-04-01 =
-* Tweak - Add new product field external_update_time to measure product update latency by @mshymon in #2973
-* Fix - for 'PHP Warning: Undefined variable $fb_product_parent' by @mshymon in #2976
-* Fix - Updated logic to choose/create the feed for product sync by @mshymon in #2989
-* Add - Facebook Product Data Tab Enhancement by @devbodaghe in #2938
-* Fix - PHP Warning for empty attributes by @vinkmeta in #3001
+= 3.5.4 - 2025-06-25 =
+* Add - Enhanced product attribute mapping system with improved support for custom fields and value normalization by @devbodaghe in #3234
+* Fix - Single batch call for bulk edit by @SayanPandey in #3352
+* Tweak - Redundant api calls reduction by @SayanPandey in #3356
+* Fix - Whatsapp consent checkbox enable for classic checkout by @sharunaanandraj in #3451
+* Add - Unit tests for FeedConfigurationDetection class by @sol-loup in #3450
+* Add - Unit tests for DebugTools class by @sol-loup in #3448
+* Add - Unit tests for AdminMessageHandler class by @sol-loup in #3447
+* Add - Unit tests for Enhanced_Catalog_Attribute_Fields class by @sol-loup in #3449
+* Add - Comprehensive unit tests for Google_Product_Category_Field class to improve code coverage by @sol-loup in #3446
+* Add - Comprehensive unit tests for Product_Categories class to improve code coverage by @sol-loup in #3426
+* Add - Unit tests for ProductCatalog ProductSets Delete Request class by @sol-loup in #3417
+* Add - Comprehensive unit tests for Request_Limit_Reached exception to improve code coverage by @sol-loup in #3427
+* Add - Comprehensive unit tests for WC_Facebookcommerce_WarmConfig to improve code coverage by @sol-loup in #3424
+* Add - Comprehensive unit tests for Commerce class to improve code coverage by @sol-loup in #3425
+* Add - Unit tests for SettingsMoved note class to improve code coverage by @sol-loup in #3428
+* Add - Comprehensive unit tests for ProfilingLoggerProcess to improve code coverage by @sol-loup in #3412
+* Fix - Logs for excluded categories and tags by @SayanPandey in #3445
+* Fix - Age group normalisation error and updating supported FB fields for age group by @devbodaghe in #3460
 
 [See changelog for all versions](https://raw.githubusercontent.com/facebook/facebook-for-woocommerce/refs/heads/main/changelog.txt).

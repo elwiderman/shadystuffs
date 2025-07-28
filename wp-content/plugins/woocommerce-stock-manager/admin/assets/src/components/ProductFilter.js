@@ -31,6 +31,7 @@ const ProductFilter = (props) => {
     stock_status: '',
     order: 'desc',
     orderBy: 'date',
+    wsm_filter: true
   });
 
   const timer = useRef(null);

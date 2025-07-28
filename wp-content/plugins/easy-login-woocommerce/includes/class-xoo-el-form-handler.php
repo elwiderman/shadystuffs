@@ -185,10 +185,13 @@ class Xoo_El_Form_Handler{
 				}
 			}
 
+
+			$creds = apply_filters( 'xoo_el_login_credentials', $creds );
+
 			do_action( 'xoo_el_before_perform_login', $creds );
 
 			// Perform the login
-			$user = wp_signon( apply_filters( 'xoo_el_login_credentials', $creds ), is_ssl() );
+			$user = wp_signon( $creds , is_ssl() );
 
 			if ( is_wp_error( $user ) ) {
 
@@ -471,7 +474,7 @@ class Xoo_El_Form_Handler{
 			'user_login' => $username,
 			'user_pass'  => $password,
 			'user_email' => $email,
-			'role'       => isset( $extra_data['userRoleSelected'] ) ? $extra_data['userRoleSelected'] : esc_attr( self::$glSettings['m-user-role'] ),
+			'role'       => isset( $extra_data['userRoleSelected'] ) ? $extra_data['userRoleSelected'] : esc_html( self::$glSettings['m-user-role'] ),
 		);
 		
 		$new_customer_data = apply_filters( 'xoo_el_register_new_customer_data', $customer_data );

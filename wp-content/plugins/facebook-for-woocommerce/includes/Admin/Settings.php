@@ -13,8 +13,10 @@ namespace WooCommerce\Facebook\Admin;
 use Automattic\WooCommerce\Admin\Features\Features as WooAdminFeatures;
 use WooCommerce\Facebook\Admin\Settings_Screens;
 use WooCommerce\Facebook\Admin\Settings_Screens\Connection;
+use WooCommerce\Facebook\Admin\Settings_Screens\Whatsapp_Utility;
 use WooCommerce\Facebook\Framework\Helper;
 use WooCommerce\Facebook\Framework\Plugin\Exception as PluginException;
+use WooCommerce\Facebook\RolloutSwitches;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -38,16 +40,22 @@ class Settings {
 	/** @var Abstract_Settings_Screen[] */
 	private $screens;
 
+	/** @var \WC_Facebookcommerce */
+	private $plugin;
+
 	/**
 	 * Settings constructor.
 	 *
-	 * @param bool $is_connected is the state of the plugin connection to the Facebook Marketing API
+	 * @param \WC_Facebookcommerce $plugin is the plugin instance of WC_Facebookcommerce
 	 * @since 2.0.0
 	 */
-	public function __construct( bool $is_connected ) {
+	public function __construct( \WC_Facebookcommerce $plugin ) {
 
-		$this->screens = $this->build_menu_item_array( $is_connected );
+		$this->plugin = $plugin;
 
+		$this->screens = $this->build_menu_item_array();
+
+		add_action( 'admin_init', array( $this, 'add_extra_screens' ) );
 		add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
 		add_action( 'wp_loaded', array( $this, 'save' ) );
 		add_filter( 'parent_file', array( $this, 'set_parent_and_submenu_file' ) );
@@ -58,22 +66,42 @@ class Settings {
 	/**
 	 * Arranges the tabs. If the plugin is connected to FB, Advertise tab will be first, otherwise the Connection tab will be the first tab.
 	 *
-	 * @param bool $is_connected is Facebook connected
 	 * @since 3.0.7
 	 */
-	private function build_menu_item_array( bool $is_connected ): array {
+	public function build_menu_item_array(): array {
 		$advertise  = [ Settings_Screens\Advertise::ID => new Settings_Screens\Advertise() ];
 		$connection = [ Settings_Screens\Connection::ID => new Settings_Screens\Connection() ];
 
-		$first = ( $is_connected ) ? $advertise : $connection;
-		$last  = ( $is_connected ) ? $connection : $advertise;
+		$is_connected = $this->plugin->get_connection_handler()->is_connected();
+		$first        = ( $is_connected ) ? $advertise : $connection;
+		$last         = ( $is_connected ) ? $connection : $advertise;
 
 		$screens = array(
-			Settings_Screens\Product_Sync::ID => new Settings_Screens\Product_Sync(),
-			Settings_Screens\Product_Sets::ID => new Settings_Screens\Product_Sets(),
+			Settings_Screens\Product_Sync::ID       => new Settings_Screens\Product_Sync(),
+			Settings_Screens\Product_Sets::ID       => new Settings_Screens\Product_Sets(),
+			Settings_Screens\Product_Attributes::ID => new Settings_Screens\Product_Attributes(),
 		);
 
 		return array_merge( array_merge( $first, $screens ), $last );
+	}
+
+	public function add_extra_screens(): void {
+		$rollout_switches                      = $this->plugin->get_rollout_switches();
+		$is_connected                          = $this->plugin->get_connection_handler()->is_connected();
+		$is_whatsapp_utility_messaging_enabled = $rollout_switches->is_switch_enabled( RolloutSwitches::WHATSAPP_UTILITY_MESSAGING );
+		if ( true === $is_connected && true === $is_whatsapp_utility_messaging_enabled ) {
+			$this->screens[ Settings_Screens\Whatsapp_Utility::ID ] = new Settings_Screens\Whatsapp_Utility();
+		}
+
+		$is_woo_all_products_sync_enbaled = $this->plugin->get_rollout_switches()->is_switch_enabled(
+			RolloutSwitches::SWITCH_WOO_ALL_PRODUCTS_SYNC_ENABLED
+		);
+		/**
+		 * If all products sync is not enabled should show the Product sync tab
+		 */
+		if ( true === $is_connected && false === $is_woo_all_products_sync_enbaled ) {
+			$this->screens[ Settings_Screens\Product_Sync::ID ] = new Settings_Screens\Product_Sync();
+		}
 	}
 
 	/**
@@ -155,6 +183,10 @@ class Settings {
 	 * @param string $screen_id the ID to connect to
 	 */
 	private function connect_to_enhanced_admin( $screen_id ) {
+		$is_woo_all_products_sync_enbaled = $this->plugin->get_rollout_switches()->is_switch_enabled(
+			RolloutSwitches::SWITCH_WOO_ALL_PRODUCTS_SYNC_ENABLED
+		);
+
 		if ( is_callable( 'wc_admin_connect_page' ) ) {
 			$crumbs = array(
 				__( 'Facebook for WooCommerce', 'facebook-for-woocommerce' ),
@@ -167,7 +199,13 @@ class Settings {
 						$crumbs[] = __( 'Connection', 'facebook-for-woocommerce' );
 						break;
 					case Settings_Screens\Product_Sync::ID:
-						$crumbs[] = __( 'Product sync', 'facebook-for-woocommerce' );
+						/**
+						 * If all proudcts sync not enabled
+						 * Show the product sync tab
+						 */
+						if ( ! $is_woo_all_products_sync_enbaled ) {
+							$crumbs[] = __( 'Product sync', 'facebook-for-woocommerce' );
+						}
 						break;
 					case Settings_Screens\Advertise::ID:
 						$crumbs[] = __( 'Advertise', 'facebook-for-woocommerce' );
@@ -219,7 +257,18 @@ class Settings {
 		?>
 		<nav class="nav-tab-wrapper woo-nav-tab-wrapper facebook-for-woocommerce-tabs">
 			<?php foreach ( $tabs as $id => $label ) : ?>
-				<a href="<?php echo esc_html( admin_url( 'admin.php?page=' . self::PAGE_ID . '&tab=' . esc_attr( $id ) ) ); ?>" class="nav-tab <?php echo $current_tab === $id ? 'nav-tab-active' : ''; ?>"><?php echo esc_html( $label ); ?></a>
+				<?php $url = admin_url( 'admin.php?page=' . self::PAGE_ID . '&tab=' . esc_attr( $id ) ); ?>
+				<?php if ( 'whatsapp_utility' === $id ) : ?>
+					<?php
+					$wa_integration_config_id = get_option( 'wc_facebook_wa_integration_config_id', '' );
+					if ( ! empty( $wa_integration_config_id ) ) {
+						$url .= '&view=utility_settings';
+					}
+					?>
+					<a href="<?php echo esc_url( $url ); ?>" class="nav-tab <?php echo $current_tab === $id ? 'nav-tab-active' : ''; ?>"><?php echo esc_html( $label ); ?></a>
+				<?php else : ?>
+					<a href="<?php echo esc_url( $url ); ?>" class="nav-tab <?php echo $current_tab === $id ? 'nav-tab-active' : ''; ?>"><?php echo esc_html( $label ); ?></a>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</nav>
 		<?php

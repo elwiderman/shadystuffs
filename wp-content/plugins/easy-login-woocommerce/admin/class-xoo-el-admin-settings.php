@@ -30,23 +30,179 @@ class Xoo_El_Admin_Settings{
 
 		add_filter( 'plugin_action_links_' . XOO_EL_PLUGIN_BASENAME, array( $this, 'plugin_action_links' ) );
 		add_filter( 'xoo_aff_add_fields', array( $this,'add_new_fields' ), 10, 2 );
-		add_filter( 'xoo_aff_enable_autocompadr', array( $this,'enable_autocompadr' ), 10, 2 );
 		add_action( 'xoo_aff_field_selector', array( $this, 'customFields_addon_notice' ) );
 		add_action('admin_enqueue_scripts',array($this,'enqueue_scripts'));
 		add_action( 'admin_footer', array( $this, 'inline_css' ) );
 
 		add_action( 'wp_loaded', array( $this, 'register_addon_tab' ), 20 );
 
-		add_action( 'plugins_loaded', array( $this, 'register_shortcode_tab' ), 100 );
+		add_action( 'wp_loaded', array( $this, 'register_shortcode_tab' ) );
 
-		add_action('xoo_tab_page_start', array( $this, 'tab_html' ), 10, 2 );
+		add_action('xoo_tab_page_start', array( $this, 'tab_html' ), 20, 2 );
 
 		if( xoo_el_helper()->admin->is_settings_page() ){
+
 			remove_action( 'xoo_tab_page_start', array(  xoo_el_helper()->admin, 'info_tab_data' ), 10, 2 );
 			add_action( 'xoo_tab_page_end', array(  $this, 'troubleshoot_info' ), 10, 2 );
+
+			if( get_option('xoo-el-settings-init') === false ){
+				add_action( 'xoo_tab_page_end', array( $this, 'popup_begin' ), 10, 2 );
+				add_filter('admin_body_class', array( $this, 'admin_body_class') );
+				add_action( 'xoo_tab_page_start', array( $this, 'init_done_notice' ), 10, 2 );
+			}
+
+			add_filter( 'tiny_mce_before_init', array( $this, 'shortcode_generator_rtl_fix' ), 100 );		
+
 		}
 
+		if( get_option('xoo-el-settings-init') === false ){
+			add_action( 'xoo_admin_settings_easy-login-woocommerce_saved', array( $this, 'popup_initialised' ) );
+		}		
+		
+
 		add_action( 'xoo_aff_admin_page_display_start', array( $this, 'documentation_link' ), 20 );
+		
+	}
+
+	public function shortcode_generator_rtl_fix($settings){
+		
+		if( is_rtl() ){
+			$settings['directionality'] = 'ltr';
+		}
+		$settings['height'] = 200;
+   		return $settings;
+	}
+
+
+	public function admin_body_class( $classes ){
+		$classes .= ' xoo-el-adpopup-active';
+		return $classes;
+	}
+
+	public function popup_begin( $tab_id, $tab_data ){
+
+		if( $tab_id !== 'general' ) return;
+
+		?>
+		<div class="xoo-el-admin-popup">
+			<div class="xoo-el-adpop">
+
+				<div>
+					<span class="xoo-el-adpopup-head">Popup Style</span>
+					<?php echo xoo_el_helper()->admin->get_setting_html_pop( 'style', 'sy_popup', 'sy-popup-style' ); ?>
+				</div>
+
+
+				
+
+				<div class="xoo-el-adpop-bottom">
+					<div class="xoo-eladpop-menu">
+						<?php $this->menu_html(); ?>
+					</div>
+					<div class="xoo-el-adpop-autoopen">
+						<span class="xoo-el-adpopup-head">Auto open popup</span>
+						<?php echo xoo_el_helper()->admin->get_setting_html_pop( 'general', 'gl_ao', 'ao-enable' ); ?>
+						<span>You can toggle it later from the settings</span>
+					</div>
+				</div>
+
+				<!-- <div>
+					<span class="xoo-el-adpopup-head">Choose Form Layout</span>
+					<?php //echo xoo_el_helper()->admin->get_setting_html_pop( 'general', 'gl_main', 'm-form-pattern' ); ?>
+				</div> -->
+
+
+				<button type="button" class="xoo-el-adpopup-go button-primary button">Let's Go!</button>
+			</div>
+			<div class="xoo-el-adpop-opac"></div>
+		</div>
+
+		
+
+		<?php
+	}
+
+	public function init_done_notice( $tab_id, $tab_data ){
+		if( !class_exists('woocommerce') || $tab_id !== 'general' ) return;
+
+		?>
+			<div class="xoo-el-init-done" >
+				<span>The WooCommerce My Account page form has been automatically replaced with the inline form. You can change this in the settings under the General tab → WooCommerce.</span>
+				<span class="dashicons dashicons-no-alt"></span>
+			</div>
+		<?php
+	}
+
+
+	public function popup_initialised( $formData ){
+
+		update_option( 'xoo-el-settings-init', 'yes' );
+
+		//Add links to menu
+		if( isset( $formData['xoo-el-add-to-menu'] ) && $formData['xoo-el-add-to-menu'] !== 'none' ){
+
+			$menu_name = sanitize_text_field( $formData['xoo-el-add-to-menu'] );
+			$menu = wp_get_nav_menu_object($menu_name);
+
+			if( $menu ) {
+			
+				$menu_id = $menu->term_id;
+				
+				// Add the menu item
+				wp_update_nav_menu_item( $menu_id, 0, array(
+					'menu-item-title' 	=> 'Login',
+					'menu-item-classes' => 'xoo-el-login-tgr',
+					'menu-item-status' => 'publish',
+				) );
+
+				if( class_exists('woocommerce') ){
+
+					wp_update_nav_menu_item( $menu_id, 0, array(
+						'menu-item-title' 	=> 'My Account',
+						'menu-item-classes' => 'xoo-el-myaccount-menu',
+						'menu-item-status' 	=> 'publish',
+						'menu-item-url' 	=> wc_get_page_permalink( 'myaccount' )
+					) );
+				}
+
+
+				wp_update_nav_menu_item( $menu_id, 0, array(
+					'menu-item-title' 	=> 'Logout',
+					'menu-item-classes' => 'xoo-el-logout-menu',
+					'menu-item-status'	 => 'publish',
+				) );
+
+			}
+		}
+
+		
+	}
+
+
+
+	public function menu_html(){
+
+		$menus 	= wp_get_nav_menus();
+
+		if( empty( $menus ) ) return;
+
+		$menuOptions 	= array();
+
+		foreach ($menus as $menuObj ) {
+			$menuOptions[ $menuObj->slug ] = $menuObj->name;
+		}
+
+		$menuOptions['none'] = 'Do not add';
+		
+		?>
+		<span class="xoo-el-adpopup-head">Add Popup Link to Menu</span>
+		<select name="xoo-el-add-to-menu">
+			<?php foreach ( $menuOptions as $slug => $name ): ?>
+				<option value="<?php echo $slug ?>"><?php echo $name ?></option>
+			<?php endforeach; ?>
+		</select>
+		<span>You can add or remove this later from your menu page</span>
+		<?php
 		
 	}
 
@@ -101,11 +257,16 @@ class Xoo_El_Admin_Settings{
 	}
 
 	public function register_addon_tab(){
-		xoo_el_helper()->admin->register_tab( 'Add-ons', 'addon' );
+		xoo_el_helper()->admin->register_tab( 'Add-ons', 'addon', '', 'no', array(
+			'priority' => 100
+		) );
+		xoo_el_helper()->admin->tabs['info']['priority'] = 50;
 	}
 
 	public function register_shortcode_tab(){
-		xoo_el_helper()->admin->register_tab( 'Shortcodes', 'shortcodes' );
+		xoo_el_helper()->admin->register_tab( 'Shortcodes', 'shortcodes', '', 'no', array(
+			'priority' => 30
+		) );
 	}
 
 	public function tab_html( $tab_id, $tab_data ){
@@ -137,12 +298,6 @@ class Xoo_El_Admin_Settings{
 		if( $aff->plugin_slug === 'easy-login-woocommerce' ) return false;
 		return $allow;
 	}
-
-	public function enable_autocompadr( $allow, $aff ){
-		if( $aff->plugin_slug === 'easy-login-woocommerce' ) return false;
-		return $allow;
-	}
-	
 	
 
 	public function generate_settings(){
@@ -179,7 +334,8 @@ class Xoo_El_Admin_Settings{
 		wp_enqueue_style( 'xoo-el-admin-style', XOO_EL_URL . '/admin/assets/css/xoo-el-admin-style.css', array(), XOO_EL_VERSION, 'all' );
 		wp_enqueue_script( 'xoo-el-admin-js', XOO_EL_URL . '/admin/assets/js/xoo-el-admin-js.js', array( 'jquery' ), XOO_EL_VERSION, false );
 		wp_localize_script('xoo-el-admin-js','xoo_el_admin_localize',array(
-			'adminurl'  => admin_url().'admin-ajax.php',
+			'adminurl'  		=> admin_url().'admin-ajax.php',
+			'hasWoocommerce' 	=> class_exists('woocommerce')
 		));
 
 
@@ -219,8 +375,7 @@ class Xoo_El_Admin_Settings{
 			?>
 			<style type="text/css">
 				li#xoo_el_actions_link .accordion-section-title {
-				    background-color: #007cba;
-				    color: #fff;
+				    background-color: #87d7ff;
 				}
 			</style>
 			<?php
