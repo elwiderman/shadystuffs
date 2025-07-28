@@ -389,3 +389,4 @@ wp-config.php
 .parcel-cache
 dist
 /wp-content/db.php
+/wp-content/ai1wm-backups
