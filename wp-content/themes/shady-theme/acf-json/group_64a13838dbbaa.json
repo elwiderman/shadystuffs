@@ -21,94 +21,6 @@
             "selected": 0
         },
         {
-            "key": "field_64a18c2d21fd9",
-            "label": "Hero Slider",
-            "name": "hero_slider_repeater",
-            "aria-label": "",
-            "type": "repeater",
-            "instructions": "",
-            "required": 0,
-            "conditional_logic": 0,
-            "wrapper": {
-                "width": "",
-                "class": "",
-                "id": ""
-            },
-            "layout": "table",
-            "pagination": 0,
-            "min": 0,
-            "max": 0,
-            "collapsed": "",
-            "button_label": "Add Row",
-            "rows_per_page": 20,
-            "sub_fields": [
-                {
-                    "key": "field_64a18c4321fda",
-                    "label": "Is active ?",
-                    "name": "is_active_bool",
-                    "aria-label": "",
-                    "type": "true_false",
-                    "instructions": "",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "20",
-                        "class": "",
-                        "id": ""
-                    },
-                    "message": "",
-                    "default_value": 1,
-                    "ui_on_text": "",
-                    "ui_off_text": "",
-                    "ui": 1,
-                    "parent_repeater": "field_64a18c2d21fd9"
-                },
-                {
-                    "key": "field_64a18c6421fdb",
-                    "label": "Slide Image",
-                    "name": "slide_img",
-                    "aria-label": "",
-                    "type": "image",
-                    "instructions": "",
-                    "required": 1,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "40",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "library": "all",
-                    "min_width": "",
-                    "min_height": "",
-                    "min_size": "",
-                    "max_width": "",
-                    "max_height": "",
-                    "max_size": "",
-                    "mime_types": "",
-                    "preview_size": "thumbnail",
-                    "parent_repeater": "field_64a18c2d21fd9"
-                },
-                {
-                    "key": "field_64a18cb621fdc",
-                    "label": "Slide Link",
-                    "name": "slide_link",
-                    "aria-label": "",
-                    "type": "link",
-                    "instructions": "Add the relevant link to the Slide here. Leave empty if no link is desired.",
-                    "required": 0,
-                    "conditional_logic": 0,
-                    "wrapper": {
-                        "width": "40",
-                        "class": "",
-                        "id": ""
-                    },
-                    "return_format": "array",
-                    "parent_repeater": "field_64a18c2d21fd9"
-                }
-            ]
-        },
-        {
             "key": "field_64a19b7b5b58c",
             "label": "Show Searchbar",
             "name": "show_searchbar_bool",
@@ -778,5 +690,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1723730625
+    "modified": 1754607370
 }

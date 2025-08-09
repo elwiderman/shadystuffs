@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean:output": "rimraf .parcel-cache dist",
-    "watch": "yarn run clean:output && parcel watch",
+    "watch": "yarn run clean:output && parcel watch --host 127.0.0.1",
     "build": "yarn run clean:output && parcel build --no-source-maps"
   },
   "source": [
@@ -16,8 +16,10 @@
     "src/js/shadyWoo.js",
     "src/js/shadyShop.js",
     "src/js/dev.js",
+    "src/js/v2/home.js",
     "src/scss/app.scss",
-    "src/scss/admin.scss"
+    "src/scss/admin.scss",
+    "src/scss/home.scss"
   ],
   "devDependencies": {
     "@parcel/runtime-browser-hmr": "^2.12.0",
@@ -60,6 +62,7 @@
     "lodash": "^4.17.21",
     "select2": "^4.1.0-rc.0",
     "slick-carousel": "^1.8.1",
+    "swiper": "^11.2.10",
     "waypoints": "^4.0.1"
   }
 }

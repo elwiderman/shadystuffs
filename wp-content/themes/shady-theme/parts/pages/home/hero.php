@@ -1,38 +1,51 @@
 <?php
 // hero section
-$hero_slider    = get_field('hero_slider_gallery');
-if (have_rows('hero_slider_repeater')) : ?>
+if (get_field('show_hero_slider_bool')) : ?>
 <section class="section-block section-hero">
     <div class="container-full">
         <div class="row no-gutters">
             <div class="col-12">
-                <div class="hero-slider home-hero">
-                <?php
-                while (have_rows('hero_slider_repeater')) : the_row();
-                    if (get_sub_field('is_active_bool')) :
-                        $link       = get_sub_field('slide_link');
-                        $link_class = $link ? '' : 'no-link';
-                        $img        = get_sub_field('slide_img');
-                        
-
-                        $link_class = $link ? 'slide__perma' : 'slide__perma no-link';
-                        $link_href  = $link ? $link['url'] : '#';
-                        $link_target= $link ? $link['target'] : '';
+                <div class="hero-slider swiper" id="homeHeroSlider">
+                    <div class="swiper-wrapper">
+                    <?php
+                    while (have_rows('hero_slider_repeater')) : the_row();
+                        $bg     = get_sub_field('bg_img');
+                        $main   = get_sub_field('main_img');
+                        $link   = get_sub_field('link');
                         
                         echo "
-                        <div>
+                        <div class='swiper-slide'>
                             <div class='slide'>
-                                <a href='{$link_href}' class='{$link_class}' target='{$link_target}'>
-                                    <figure class='slide__img mb-0'>
-                                        <img class='img-fluid' src='{$img['url']}' alt='{$img['alt']}'>
+                                <a href='{$link['url']}' target='{$link['target']}' class='slide__perma' style='background-image:url({$bg['url']});'>
+                                    <figure class='slide__perma--thumb mb-0'>
+                                        <img class='img-fluid' src='{$main['url']}' alt='{$main['alt']}'>
                                     </figure>
+                                    <h2 class='slide__perma--label'>{$link['title']}</h2>
                                 </a>
                             </div>
                         </div>
                         ";
-                    endif;
-                endwhile;
-                ?>
+                    endwhile;
+                    while (have_rows('hero_slider_repeater')) : the_row();
+                        $bg     = get_sub_field('bg_img');
+                        $main   = get_sub_field('main_img');
+                        $link   = get_sub_field('link');
+                        
+                        echo "
+                        <div class='swiper-slide'>
+                            <div class='slide'>
+                                <a href='{$link['url']}' target='{$link['target']}' class='slide__perma' style='background-image:url({$bg['url']});'>
+                                    <figure class='slide__perma--thumb mb-0'>
+                                        <img class='img-fluid' src='{$main['url']}' alt='{$main['alt']}'>
+                                    </figure>
+                                    <h2 class='slide__perma--label'>{$link['title']}</h2>
+                                </a>
+                            </div>
+                        </div>
+                        ";
+                    endwhile;
+                    ?>
+                    </div>
                 </div>
             </div>
         </div>
