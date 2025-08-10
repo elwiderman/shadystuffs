@@ -12,6 +12,7 @@ export default class Home {
     init() {
         this.heroSlider();
         this.collectionsSlider();
+        this.bestsellersSlider();
     }
 
     heroSlider() {
@@ -36,7 +37,7 @@ export default class Home {
 
     collectionsSlider() {
         const swiper = new Swiper('#homeCollectionsSlider', {
-            modules: [Autoplay, Navigation],
+            modules: [Autoplay, Navigation,],
             autoplay: {
                 delay: 5000,
                 pauseOnMouseEnter: true,
@@ -45,6 +46,27 @@ export default class Home {
             loopedSlides: 5,
             slidesPerView: 1,
             spaceBetween: 0,
+            navigation: {
+                nextEl: '.left-arrow',
+                prevEl: '.right-arrow',
+            },
+        });
+    }
+
+    bestsellersSlider() {
+        const swiper = new Swiper('#bestsellersSlider', {
+            modules: [Autoplay, Navigation, Mousewheel],
+            autoplay: {
+                delay: 5000,
+                pauseOnMouseEnter: true,
+            },
+            loop: true,
+            loopedSlides: 4,
+            slidesPerView: 4,
+            spaceBetween: '24px',
+            mousewheel: {
+                forceToAxis: true
+            },
             navigation: {
                 nextEl: '.left-arrow',
                 prevEl: '.right-arrow',

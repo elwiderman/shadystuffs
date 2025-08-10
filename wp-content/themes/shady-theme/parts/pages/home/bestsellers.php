@@ -27,19 +27,28 @@ if (get_field('show_bestsellers_bool')) :
                     <?php
                     // for best sellers
                     if (sizeof(get_field('bestsellers_relations')) > 0) :
-                        echo "<div class='bestsellers-carousel'>";
+                        echo "<div class='bestsellers-slider' id='bestsellersSlider'>
+                            <div class='swiper-wrapper'>
+                        ";
                         foreach (get_field('bestsellers_relations') as $post_id) :
                             $post_object = get_post($post_id);
 
                             setup_postdata($GLOBALS['post'] =& $post_object);
 
-                            echo "<div>";
+                            echo "<div class='swiper-slide'>";
                             wc_get_template_part('content', 'product-carousel');
                             echo "</div>";
 
                             wp_reset_postdata();
                         endforeach;
-                        echo "</div>";
+                        echo "</div>
+                            <button class='slide-navs left-arrow'>
+                                <span></span>
+                            </button>
+                            <button class='slide-navs right-arrow'>
+                                <span></span>
+                            </button>
+                        </div>";
                     endif;
                     ?>
                 </div>
