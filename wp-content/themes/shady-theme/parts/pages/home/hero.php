@@ -20,7 +20,9 @@ if (get_field('show_hero_slider_bool')) : ?>
                                     <figure class='slide__perma--thumb mb-0'>
                                         <img class='img-fluid' src='{$main['url']}' alt='{$main['alt']}'>
                                     </figure>
-                                    <h2 class='slide__perma--label'>{$link['title']}</h2>
+                                    <h2 class='slide__perma--label'>
+                                        <span>{$link['title']}</span>
+                                    </h2>
                                 </a>
                             </div>
                         </div>

@@ -11,6 +11,7 @@ export default class Home {
 
     init() {
         this.heroSlider();
+        this.collectionsSlider();
     }
 
     heroSlider() {
@@ -20,12 +21,34 @@ export default class Home {
                 delay: 5000,
                 pauseOnMouseEnter: true,
             },
+            navigation: false,
             loop: true,
             loopedSlides: 5,
             loopAdditionalSlides: 5,
-            mousewheel: true,
+            mousewheel: {
+                forceToAxis: true
+            },
             slidesPerView: 5,
             spaceBetween: 0,
+            freeMode: true
+        });
+    }
+
+    collectionsSlider() {
+        const swiper = new Swiper('#homeCollectionsSlider', {
+            modules: [Autoplay, Navigation],
+            autoplay: {
+                delay: 5000,
+                pauseOnMouseEnter: true,
+            },
+            loop: true,
+            loopedSlides: 5,
+            slidesPerView: 1,
+            spaceBetween: 0,
+            navigation: {
+                nextEl: '.left-arrow',
+                prevEl: '.right-arrow',
+            },
         });
     }
 }
