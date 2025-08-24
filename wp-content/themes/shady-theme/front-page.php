@@ -10,6 +10,7 @@ get_header();
     get_template_part('parts/pages/home/hero');
     get_template_part('parts/pages/home/collections');
     get_template_part('parts/pages/home/bestsellers');
+    get_template_part('parts/pages/home/b2bcustom');
     // get_template_part('parts/pages/home/highlight');
     // get_template_part('parts/pages/home/arrivals');
     ?>
