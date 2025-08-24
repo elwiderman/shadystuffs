@@ -1,0 +1,42 @@
+.section-block {
+    display: block;
+    position: relative;
+    &.section-hero {
+        margin-bottom: 120px;
+        .hero-slider {
+            .slide {
+                &__perma {
+                    display: block;
+                    width: 100%;
+                    aspect-ratio: 288 / 563;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    position: relative;
+                    z-index: 0;
+                    &--thumb {
+                        @include center-absolute(1);
+                        width: 100%;
+                        @include transition(0.3s);
+                    }
+                    &--label {
+                        position: absolute;
+                        bottom: 55px;
+                        left: 0;
+                        width: 100%;
+                        text-align: center;
+                        @extend .h5;
+                        color: $primary-bg;
+                    }
+                    &:hover {
+                        .slide__perma {
+                            &--thumb {
+                                transform: translateX(-50%) translateY(calc(-50% - 25px));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

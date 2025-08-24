@@ -5,8 +5,11 @@
 /* Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Acme&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Special+Elite&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 // Font family
 $primary-font: 'Acme', sans-serif;
+$primary-font: 'Bitter', serif;
 $alt-font: 'Special Elite', cursive;
 $secondary-font: 'Montserrat', sans-serif;
 

@@ -228,7 +228,9 @@
                     "ui": 0,
                     "ajax": 0,
                     "placeholder": "",
-                    "parent_repeater": "field_66c486711ba9a"
+                    "parent_repeater": "field_66c486711ba9a",
+                    "create_options": 0,
+                    "save_options": 0
                 }
             ]
         },
@@ -355,5 +357,5 @@
     "active": true,
     "description": "",
     "show_in_rest": 0,
-    "modified": 1724191625
+    "modified": 1754606321
 }

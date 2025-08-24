@@ -1,0 +1,50 @@
+.b2bcustom-content-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    .section-block {
+        &.section-b2bcustom {
+            .block-feat {
+                width: 100%;
+                aspect-ratio: 923 / 450;
+                overflow: hidden;
+                img {
+                    @include img-obj-fit;
+                }
+            }
+            .block-meta {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: relative;
+                z-index: 0;
+                &:before {
+                    content: '';
+                    @include full-absolute(-1);
+                    background: rgba($primary-color, 0.5);
+                }
+                &__content {
+                    color: $primary-bg;
+                    padding: 25px;
+                    &--title {
+                        font-weight: $medium;
+                    }
+                }
+            }
+            @include respond-to('s-desk') {
+                &:nth-child(even) {
+                    .col-md-7 {
+                        order: 1;
+                    }
+                    .col-md-5 {
+                        order: 0;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -7,46 +7,54 @@ function shady_framework_scripts() {
     wp_deregister_script('bootstrap'); // to prevent clash with plugins calling bootstrap 3
 
     // Adding lottie
-    wp_enqueue_script('lottie-scripts', '//unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js', '', '', false);
+    // wp_enqueue_script('lottie-scripts', '//unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js', '', '', false);
 
     // Adding scripts file in the footer
-    wp_enqueue_script('site-scripts', $path . shady_get_hashed_assets('js/app.js'), '', '', [
-        'strategy'      => 'defer',
-        'in_footer'     => true
-    ]);
+    // wp_enqueue_script('site-scripts', $path . shady_get_hashed_assets('js/app.js'), '', '', [
+    //     'strategy'      => 'defer',
+    //     'in_footer'     => true
+    // ]);
 
-    if (is_cart() || is_product()) {
-        wp_enqueue_script('shady-woo', $path . shady_get_hashed_assets('js/shadyWoo.js'), ['wc-add-to-cart', 'wc-add-to-cart-variation', 'woocommerce', 'wc-cart'], '', [
-            'strategy'      => 'defer',
-            'in_footer'     => true
-        ]);
+    // if (is_cart() || is_product()) {
+    //     wp_enqueue_script('shady-woo', $path . shady_get_hashed_assets('js/shadyWoo.js'), ['wc-add-to-cart', 'wc-add-to-cart-variation', 'woocommerce', 'wc-cart'], '', [
+    //         'strategy'      => 'defer',
+    //         'in_footer'     => true
+    //     ]);
 
-        wp_localize_script('shady-woo', 'WPURLS', array(
-            'ajaxurl'       => admin_url('admin-ajax.php'),
-            'cart_nonce'    => wp_create_nonce('update_cart_nonce'),
-        ));
-    }
+    //     wp_localize_script('shady-woo', 'WPURLS', array(
+    //         'ajaxurl'       => admin_url('admin-ajax.php'),
+    //         'cart_nonce'    => wp_create_nonce('update_cart_nonce'),
+    //     ));
+    // }
 
-    if (is_shop() || is_tax(['collection']) || is_product_category() || is_product_tag()) {
-        wp_enqueue_script('shady-woo-shop', $path . shady_get_hashed_assets('js/shadyShop.js'), '', '', [
-            'strategy'      => 'defer',
-            'in_footer'     => true
-        ]);
+    // if (is_shop() || is_tax(['collection']) || is_product_category() || is_product_tag()) {
+    //     wp_enqueue_script('shady-woo-shop', $path . shady_get_hashed_assets('js/shadyShop.js'), '', '', [
+    //         'strategy'      => 'defer',
+    //         'in_footer'     => true
+    //     ]);
 
-        wp_localize_script('shady-woo-shop', 'WPURLS', array(
-            'ajaxurl'       => admin_url('admin-ajax.php'),
-        ));
-    }
+    //     wp_localize_script('shady-woo-shop', 'WPURLS', array(
+    //         'ajaxurl'       => admin_url('admin-ajax.php'),
+    //     ));
+    // }
 
-    if (is_page_template('templates/page-devstuffs.php')) {
-        wp_enqueue_script('shady-dev', $path . shady_get_hashed_assets('js/dev.js'), '', '', [
-            'strategy'      => 'defer',
-            'in_footer'     => true
-        ]);
+    // if (is_page_template('templates/page-devstuffs.php')) {
+    //     wp_enqueue_script('shady-dev', $path . shady_get_hashed_assets('js/dev.js'), '', '', [
+    //         'strategy'      => 'defer',
+    //         'in_footer'     => true
+    //     ]);
 
-        wp_localize_script('shady-dev', 'WPURLS', array(
-            'ajaxurl'       => admin_url('admin-ajax.php'),
-        ));
+    //     wp_localize_script('shady-dev', 'WPURLS', array(
+    //         'ajaxurl'       => admin_url('admin-ajax.php'),
+    //     ));
+    // }
+
+
+
+    if (is_page_template('front-page.php')) {
+        wp_enqueue_script('home-scripts', $path . shady_get_hashed_assets('js/v2/home.js'), '', '', true);
+
+        wp_enqueue_style('home-css', $path . shady_get_hashed_assets('scss/home.scss'), array(), '', 'all');
     }
 
     // the stylesheets

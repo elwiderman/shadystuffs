@@ -32,17 +32,17 @@ h3 {
         line-height: 1.1;
     }
 }
-h4 {
-    @include font($secondary-font, $regular);
+h4, .h4 {
+    @include font($primary-font, $semi-bold);
     font-size: 30px;
     line-height: 1.2;
 }
-h5 {
-    @include font($secondary-font, $regular);
+h5, .h5 {
+    @include font($primary-font, $semi-bold);
     font-size: 25px;
     line-height: 1.2;
 }
-h6 {
+h6, .h6 {
     @include font($secondary-font, $semi-bold);
     font-size: 16px;
     line-height: 1.2;
@@ -71,7 +71,7 @@ p {
 
 .lead {
     @include font($secondary-font, $medium);
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.4;
 }
 .text-muted {
