@@ -4,7 +4,8 @@
  * Plugin Name: PhonePe Payment Solutions
  * Plugin URI: https://github.com/PhonePe/
  * Description: Using this plugin you can accept payments through PhonePe. After activating this plugin, you can see the PhonePe option linked to the checkout page of woocommerce site. On configuring with the provided Merchant credentials, you can enable this plugin in Preprod/Prod environment.
- * Version: 3.0.3
+ * Version: 3.0.4
+ * 3.0.3
  * Author: PhonePe
  * Requires PHP: 8.2
  */
@@ -1072,6 +1073,39 @@ function ppex_woocommerce_phonepe_init() {
   }
   add_action('restrict_manage_posts', 'dashboard_status');
 }
+
+/**
+ * Bridge function to execute the background polling from the Action Scheduler.
+ * This function is registered in the global scope so that the background worker can find it.
+ */
+function phonepe_run_reschedule_callback($merchant_transaction_id, $start_time, $backoff) {
+    if (!class_exists('WC_Payment_Gateways')) {
+        ppLogError("Action Scheduler: WooCommerce Payment Gateways class not found.");
+        return;
+    }
+
+    $gateways = WC()->payment_gateways()->payment_gateways();
+    if (!isset($gateways[PPEX_PG_Constants::PHONEPE_PG_ID])) {
+        ppLogError("Action Scheduler: Could not find the 'phonepe' payment gateway.");
+        return;
+    }
+
+    $wc_phonepe_instance = $gateways[PPEX_PG_Constants::PHONEPE_PG_ID];
+    if (!$wc_phonepe_instance || !$wc_phonepe_instance->ppex_is_pg_v2_enabled()) {
+        ppLogError("Action Scheduler: PhonePe gateway instance not found or not configured for V2.");
+        return;
+    }
+
+    $pg_v2_client = $wc_phonepe_instance->get_pg_v2_client();
+    if (!$pg_v2_client) {
+        ppLogError("Action Scheduler: Could not get V2 client instance.");
+        return;
+    }
+
+    $pg_v2_client->check_status_and_reschedule($merchant_transaction_id, $start_time, $backoff);
+}
+
+add_action('phonepe_check_status_and_reschedule', 'phonepe_run_reschedule_callback', 10, 3);
 
 
 ?>

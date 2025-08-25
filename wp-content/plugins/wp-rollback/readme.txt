@@ -5,7 +5,7 @@ Requires at least: 6.5
 Donate Link: https://wprollback.com/
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.0.1
+Stable tag: 3.0.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -111,6 +111,34 @@ Yes! All strings are internationalized and ready to be translated. Simply use th
 This is the first version of this plugin. It is a tool for your convenience. Rollback at your own risk!
 
 == Changelog ==
+
+= 3.0.5 =
+* Fix: Resolved conflict where maintenance mode was interfering with external monitoring tools like Nagios, WP-CLI, and automated WordPress update checks. The maintenance page is now only shown to regular site visitors, allowing monitoring tools and admin processes to function normally.
+* Fix: Maintenance mode now only activates when rolling back active plugins or themes. Inactive plugins and themes no longer trigger maintenance mode unnecessarily.
+* Fix: Corrected an issue where the maintenance mode step wasn't displaying in the Free version's rollback progress UI due to incorrect service provider load order.
+* Improvement: Refactored rollback step registration for better code maintainability across Free and Pro versions, ensuring consistent behavior.
+
+= 3.0.4 =
+* New: Added maintenance mode support during rollback operations to prevent site access while files are being replaced, following WordPress Core update patterns.
+* Improvement: Enhanced rollback safety with automatic maintenance mode cleanup that ensures your site never gets stuck in maintenance mode, even if a rollback fails.
+* Fix: Removed overly restrictive package validation that required plugin main files to match the plugin slug. This fix allows plugins like Visual Composer (with main file "plugin-wordpress.php") and other legitimate plugins with non-standard main file names to be rolled back successfully.
+* Fix: Resolved fatal error when using WP CLI bulk updates (`wp plugin update --all`) due to missing string type check. The backup service now properly handles cases where the package parameter is boolean instead of a string during bulk operations.
+* Fix: WordPress Multisite network admin pages now properly load rollback scripts and styles.
+* Fix: Resolved package validation errors on multisite installations where ZIP files were incorrectly flagged as invalid.
+* Fix: Fixed multisite upload size restrictions that prevented rollbacks due to the default 1MB limit.
+
+= 3.0.3 =
+* Fix: Resolved fatal error when attempting to rollback plugins that return boolean false for requires_php field instead of a string value. This fix ensures proper type validation for WordPress requirement fields.
+* Fix: Plugin and theme names containing HTML entities (like &amp;, &lt;, etc.) now display correctly in rollback modals instead of showing raw HTML characters.
+
+= 3.0.2 =
+* Improvement: Simplified theme rollback button display functionality - all themes now display rollback buttons without checking WordPress.org availability.
+* Improvement: Consolidated theme rollback JavaScript handlers between free and pro versions for better code maintainability.
+* Improvement: Removed visual distinction between WordPress.org and premium plugin rollback links for a more consistent UI.
+* Fix: Resolved fatal error on themes.php page caused by incorrect namespace references.
+
+= 3.0.1 =
+* Fix: Resolved an error with JetPack Sync and potentially other plugins that modify plugin data and return null.
 
 = 3.0.0 =
 * New: Added additional "WP Rollback" menu item under WP-Admin > Tools. 

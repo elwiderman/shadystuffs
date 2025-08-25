@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WP Rollback plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Rollback 3.0.1\n"
+"Project-Id-Version: WP Rollback 3.0.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/free-plugin\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-07-26T02:48:10+00:00\n"
+"POT-Creation-Date: 2025-08-23T04:23:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wp-rollback\n"
@@ -17,8 +17,8 @@ msgstr ""
 #. Plugin Name of the plugin
 #. Author of the plugin
 #: wp-rollback.php
-#: src/Rollbacks/Actions/RegisterAdminMenu.php:29
-#: src/Rollbacks/Actions/RegisterAdminMenu.php:37
+#: src/Rollbacks/Actions/RegisterAdminMenu.php:28
+#: src/Rollbacks/Actions/RegisterAdminMenu.php:36
 msgid "WP Rollback"
 msgstr ""
 
@@ -43,11 +43,8 @@ msgstr ""
 msgid "Support"
 msgstr ""
 
-#: src/Rollbacks/MultisiteSupport.php:55
-#: build/themesAdmin.js:1
-#: build/tools.js:59
-#: build/tools.js:60
-msgid "Rollback"
+#: src/PluginSetup/PluginMeta.php:76
+msgid "Go Pro!"
 msgstr ""
 
 #: src/Rollbacks/PluginRollback.php:40
@@ -78,18 +75,10 @@ msgstr ""
 msgid "Validating package integrity…"
 msgstr ""
 
-#: src/Rollbacks/ThemeRollback/Actions/UpdateThemeList.php:79
-msgid "support forums"
-msgstr ""
-
-#. translators: 1: link to WP.org support
-#: src/Rollbacks/ThemeRollback/Actions/UpdateThemeList.php:88
-#, php-format
-msgid "An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the %1$s."
-msgstr ""
-
-#: src/Rollbacks/ThemeRollback/Actions/UpdateThemeList.php:95
-msgid "(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)"
+#: build/themesAdmin.js:1
+#: build/tools.js:59
+#: build/tools.js:60
+msgid "Rollback"
 msgstr ""
 
 #: build/themesAdmin.js:1
@@ -295,7 +284,7 @@ msgid "Need help?"
 msgstr ""
 
 #: build/tools.js:59
-msgid "Read our guide on why rollbacks can fail"
+msgid "Read our troubleshooting guide"
 msgstr ""
 
 #. translators: 1: Asset slug

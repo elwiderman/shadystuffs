@@ -34,6 +34,9 @@ if ( ! empty( $product_tabs ) ) : ?>
 		<?php
 		$i = 0;
 		foreach ($product_tabs as $key => $product_tab) :
+			echo '<pre>';
+			var_dump($product_tab);
+			echo '</pre>';
 			$i++;
 			/* 
 			setting the accordion to start collapsed

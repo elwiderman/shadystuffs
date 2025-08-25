@@ -5,7 +5,7 @@ Requires PHP: 8.2 or later
 Plugin Name: PhonePe Payment Solutions
 Authors: PhonePe
 Tested up to: 6.7
-Stable tag: 3.0.3
+Stable tag: 3.0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -86,6 +86,12 @@ Need Help?
 If you encounter any integration issues, please create a support ticket from your [PhonePe Merchant Dashboard](https://business.phonepe.com/dashboard) for assistance.
 
 == Changelog ==
+
+= Version 3.0.4 =
+* Added enhanced status check polling to resolve instagram browser issue.
+
+= Version 3.0.3 =
+* Minor bug fixes
 
 = Version 3.0.2 =
 * Updated readme with latest integration instructions.

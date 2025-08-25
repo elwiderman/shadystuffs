@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online
 Requires at least: 6.7
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 10.0.3
+Stable tag: 10.1.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -143,9 +143,10 @@ Check out [Frequently Asked Questions](https://woocommerce.com/document/frequent
 = Minimum Requirements =
 
 * PHP 7.4 or greater is required (PHP 8.0 or greater is recommended)
-* MySQL 5.6 or greater, OR MariaDB version 10.1 or greater, is required
-
-Visit the [WooCommerce server requirements documentation](https://woocommerce.com/document/server-requirements/?utm_source=wp%20org%20repo%20listing&utm_content=3.6) for a detailed list of server requirements.
+* MySQL 5.5.5 or greater, OR MariaDB version 10.1 or greater, is required
+* WordPress 6.7 or greater
+* (Recommended) WordPress [memory limit](https://woocommerce.com/document/increasing-the-wordpress-memory-limit/) of 256 MB or greater.
+* (Recommended) [HTTPS](https://woocommerce.com/document/ssl-and-https/) support.
 
 = Automatic installation =
 
@@ -169,11 +170,17 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 10.0.4 2025-07-23 =
+= 10.1.1 2025-08-20 =
 
 **WooCommerce**
 
-* Fix - Possible fatal error with Gutenberg 21.2.0, in particular in Analytics reports. [#59846](https://github.com/woocommerce/woocommerce/pull/59846)
+* Fix - Ensure recurring actions are registered and dependent classes are loaded as needed [#60417](https://github.com/woocommerce/woocommerce/pull/60417)
+* Fix - Fix filtering offline payment methods settings pages to be rendered in legacy mode. [#60432](https://github.com/woocommerce/woocommerce/pull/60432)
+* Fix - Fix spacing in tax line in the order summary [#60469](https://github.com/woocommerce/woocommerce/pull/60469)
+* Fix - Prevent skeleton display when an express payment method is active to avoid unmounting express buttons [#60394](https://github.com/woocommerce/woocommerce/pull/60394)
+* Fix - Use dynamically-generated URLs for resetting accounts and switching to live accounts in the Payments NOX. [#60329](https://github.com/woocommerce/woocommerce/pull/60329)
+* Fix - Fix flat shipping rate validation breaking advanced shipping rate formula input [#60348](https://github.com/woocommerce/woocommerce/pull/60348)
+* Enhancement - Set the ‘Set up payments’ task to in-progress state upon starting live WooPayments onboarding. [#60329](https://github.com/woocommerce/woocommerce/pull/60329)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

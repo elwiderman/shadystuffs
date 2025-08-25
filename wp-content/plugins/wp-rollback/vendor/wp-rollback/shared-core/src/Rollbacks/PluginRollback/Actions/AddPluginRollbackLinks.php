@@ -15,6 +15,8 @@ declare(strict_types=1);
 
 namespace WpRollback\SharedCore\Rollbacks\PluginRollback\Actions;
 
+use WpRollback\SharedCore\Rollbacks\Traits\PluginHelpers;
+
 /**
  * Class AddPluginRollbackLinks
  *
@@ -22,6 +24,7 @@ namespace WpRollback\SharedCore\Rollbacks\PluginRollback\Actions;
  */
 class AddPluginRollbackLinks
 {
+    use PluginHelpers;
     /**
      * The plugin slug used in URLs
      * 
@@ -68,18 +71,9 @@ class AddPluginRollbackLinks
             return $actions;
         }
 
-        $isProPluginActive = $this->isProPluginActive();
-        $isPremiumAsset = $this->isPremiumAsset($pluginData);
-
         // Always use the regular rollback URL
         $rollbackURL = $this->buildRollbackUrl($pluginFile);
-        
-        // Style premium asset links differently when Pro plugin isn't active
-        if (!$isProPluginActive && $isPremiumAsset) {
-            $actions['rollback'] = $this->generatePremiumRollbackLink($rollbackURL);
-        } else {
-            $actions['rollback'] = $this->generateRollbackLink($rollbackURL);
-        }
+        $actions['rollback'] = $this->generateRollbackLink($rollbackURL);
 
         return apply_filters('wpr_plugin_action_link', $actions);
     }
@@ -156,17 +150,6 @@ class AddPluginRollbackLinks
     }
 
     /**
-     * Check if Pro plugin is active
-     *
-     * @return bool Whether Pro plugin is active
-     */
-    protected function isProPluginActive(): bool
-    {
-        // Check if Pro plugin is active by looking for the Pro plugin file
-        return is_plugin_active('wp-rollback-pro/wp-rollback-pro.php') || $this->isProVersion;
-    }
-
-    /**
      * Build the rollback URL
      *
      * @param string $pluginFile Plugin file path
@@ -190,9 +173,8 @@ class AddPluginRollbackLinks
      */
     protected function getBaseAdminUrl(): string
     {
-        return is_network_admin()
-            ? network_admin_url('tools.php')
-            : admin_url('tools.php');
+        $page = is_network_admin() ? 'settings.php' : 'tools.php';
+        return $this->getContextualAdminUrl($page);
     }
 
     /**
@@ -207,24 +189,6 @@ class AddPluginRollbackLinks
             'wpr_plugin_markup',
             sprintf(
                 '<a href="%1$s">%2$s</a>',
-                esc_url($rollbackURL),
-                esc_html__('Rollback', 'wp-rollback')
-            )
-        );
-    }
-
-    /**
-     * Generate HTML for premium rollback link (when Pro plugin is not active and asset is premium)
-     *
-     * @param string $rollbackURL Rollback URL
-     * @return string HTML link
-     */
-    protected function generatePremiumRollbackLink(string $rollbackURL): string
-    {
-        return apply_filters(
-            'wpr_plugin_markup',
-            sprintf(
-                '<a href="%1$s" style="color: #d63638;">%2$s</a>',
                 esc_url($rollbackURL),
                 esc_html__('Rollback', 'wp-rollback')
             )
