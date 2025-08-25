@@ -14,7 +14,6 @@ namespace WpRollback\Free\PluginSetup;
 use WpRollback\SharedCore\Core\Assets\AssetsManager;
 use WpRollback\SharedCore\Core\SharedCore;
 use WpRollback\SharedCore\Rollbacks\Registry\RollbackStepRegisterer;
-
 /**
  * Handles script and style registration for the free plugin.
  *
@@ -43,10 +42,15 @@ class PluginScripts
     {
         $assetsManager = SharedCore::container()->make(AssetsManager::class);
         
+        // Determine the correct admin URL based on context
+        $adminUrl = is_network_admin()
+            ? network_admin_url('settings.php?page=wp-rollback')
+            : admin_url('tools.php?page=wp-rollback');
+        
         $assetsManager->enqueueScript('tools', [
             'rollback_nonce' => wp_create_nonce('wpr_rollback_nonce'),
             'restApiNonce' => wp_create_nonce('wp_rest'),
-            'adminUrl' => admin_url('tools.php?page=wp-rollback'),
+            'adminUrl' => $adminUrl,
             'restUrl' => esc_url_raw(rest_url()),
             'rollbackSteps' => $this->getRollbackSteps(),
         ]);

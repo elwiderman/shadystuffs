@@ -91,6 +91,7 @@ class WC_Facebook_Product {
 	const FB_AGE_GROUP             = 'fb_age_group';
 	const FB_GENDER                = 'fb_gender';
 	const FB_PRODUCT_VIDEO         = 'fb_product_video';
+	const FB_PRODUCT_IMAGES        = 'fb_product_images';
 	const FB_VARIANT_IMAGE         = 'fb_image';
 	const FB_VISIBILITY            = 'fb_visibility';
 	const FB_REMOVE_FROM_SYNC      = 'fb_remove_from_sync';
@@ -400,6 +401,28 @@ class WC_Facebook_Product {
 				$image_urls = array( $custom_image_url, $product_image_url, $parent_product_image_url );
 				break;
 
+			case Products::PRODUCT_IMAGE_SOURCE_MULTIPLE:
+				// Get multiple images from FB_PRODUCT_IMAGES meta field
+				$multiple_image_ids  = $this->woo_product->get_meta( self::FB_PRODUCT_IMAGES );
+				$multiple_image_urls = array();
+
+				if ( ! empty( $multiple_image_ids ) ) {
+					// Split comma-separated attachment IDs
+					$attachment_ids = array_map( 'trim', explode( ',', $multiple_image_ids ) );
+					foreach ( $attachment_ids as $attachment_id ) {
+						if ( is_numeric( $attachment_id ) && ! empty( $attachment_id ) ) {
+							$image_url = wp_get_attachment_image_url( $attachment_id, $image_size );
+							if ( $image_url ) {
+								$multiple_image_urls[] = $image_url;
+							}
+						}
+					}
+				}
+
+				// Use multiple images first, then fallback to variation and parent images
+				$image_urls = array_merge( $multiple_image_urls, array( $product_image_url, $parent_product_image_url ) );
+				break;
+
 			case Products::PRODUCT_IMAGE_SOURCE_PARENT_PRODUCT:
 				$image_urls = array( $parent_product_image_url, $product_image_url );
 				break;
@@ -691,7 +714,7 @@ class WC_Facebook_Product {
 			} elseif ( ! is_wp_error( $brand_taxonomy ) && $brand_taxonomy ) {
 				$fb_brand = $brand_taxonomy;
 			} else {
-				$fb_brand = wp_strip_all_tags( WC_Facebookcommerce_Utils::get_store_name() );
+				$fb_brand = WC_Facebookcommerce_Utils::get_default_fb_brand();
 			}
 		}
 
@@ -782,7 +805,12 @@ class WC_Facebook_Product {
 			if ( empty( $short_description ) ) {
 				$post = $this->get_post_data();
 				if ( $post && ! empty( $post->post_excerpt ) ) {
-					$short_description = WC_Facebookcommerce_Utils::clean_string( $post->post_excerpt );
+					$cleaned_excerpt = WC_Facebookcommerce_Utils::clean_string( $post->post_excerpt );
+
+					// Check if this is a WooCommerce-generated attribute summary
+					if ( ! WC_Facebookcommerce_Utils::is_woocommerce_attribute_summary( $cleaned_excerpt ) ) {
+						$short_description = $cleaned_excerpt;
+					}
 				}
 			}
 
@@ -802,7 +830,10 @@ class WC_Facebook_Product {
 		$post_excerpt = WC_Facebookcommerce_Utils::clean_string( $post->post_excerpt );
 
 		if ( ! empty( $post_excerpt ) ) {
-			$short_description = $post_excerpt;
+			// Check if this is a WooCommerce-generated attribute summary
+			if ( ! WC_Facebookcommerce_Utils::is_woocommerce_attribute_summary( $post_excerpt ) ) {
+				$short_description = $post_excerpt;
+			}
 		}
 
 		// If no short description (excerpt) found, check if main description is short enough
@@ -1811,6 +1842,16 @@ class WC_Facebook_Product {
 			}
 		}
 
+		/**
+		 * Additional check to ensure product is marked hidden in case of out of stock
+		 */
+		$product_id      = $this->get_id();
+		$current_product = wc_get_product( $product_id );
+
+		if ( $current_product && ! $current_product->is_in_stock() ) {
+			$product_data['visibility'] = \WC_Facebookcommerce_Integration::FB_SHOP_PRODUCT_HIDDEN;
+		}
+
 		// Set any attributes not already set by direct mappings
 		if ( ! isset( $product_data['brand'] ) ) {
 			$product_data['brand'] = Helper::str_truncate( $this->get_fb_brand( $is_api_call ), 100 );
@@ -2807,13 +2848,13 @@ class WC_Facebook_Product {
 				'facebook_attributes'       => $facebook_attributes,
 				'facebook_attribute_values' => array(
 					'age_group' => array(
-						'adult'     => __( 'Adult', 'facebook-for-woocommerce' ),
-						'all ages'  => __( 'All Ages', 'facebook-for-woocommerce' ),
-						'kids'      => __( 'Kids', 'facebook-for-woocommerce' ),
-						'teen'      => __( 'Teen', 'facebook-for-woocommerce' ),
-						'infant'    => __( 'Infant', 'facebook-for-woocommerce' ),
-						'newborn'   => __( 'Newborn', 'facebook-for-woocommerce' ),
-						'toddler'   => __( 'Toddler', 'facebook-for-woocommerce' ),
+						'adult'    => __( 'Adult', 'facebook-for-woocommerce' ),
+						'all ages' => __( 'All Ages', 'facebook-for-woocommerce' ),
+						'kids'     => __( 'Kids', 'facebook-for-woocommerce' ),
+						'teen'     => __( 'Teen', 'facebook-for-woocommerce' ),
+						'infant'   => __( 'Infant', 'facebook-for-woocommerce' ),
+						'newborn'  => __( 'Newborn', 'facebook-for-woocommerce' ),
+						'toddler'  => __( 'Toddler', 'facebook-for-woocommerce' ),
 					),
 					'gender'    => array(
 						'female' => __( 'Female', 'facebook-for-woocommerce' ),
@@ -2848,13 +2889,13 @@ class WC_Facebook_Product {
 			),
 			'facebook_attribute_values' => array(
 				'age_group' => array(
-					'adult'     => __( 'Adult', 'facebook-for-woocommerce' ),
-					'all ages'  => __( 'All Ages', 'facebook-for-woocommerce' ),
-					'kids'      => __( 'Kids', 'facebook-for-woocommerce' ),
-					'teen'      => __( 'Teen', 'facebook-for-woocommerce' ),
-					'infant'    => __( 'Infant', 'facebook-for-woocommerce' ),
-					'newborn'   => __( 'Newborn', 'facebook-for-woocommerce' ),
-					'toddler'   => __( 'Toddler', 'facebook-for-woocommerce' ),
+					'adult'    => __( 'Adult', 'facebook-for-woocommerce' ),
+					'all ages' => __( 'All Ages', 'facebook-for-woocommerce' ),
+					'kids'     => __( 'Kids', 'facebook-for-woocommerce' ),
+					'teen'     => __( 'Teen', 'facebook-for-woocommerce' ),
+					'infant'   => __( 'Infant', 'facebook-for-woocommerce' ),
+					'newborn'  => __( 'Newborn', 'facebook-for-woocommerce' ),
+					'toddler'  => __( 'Toddler', 'facebook-for-woocommerce' ),
 				),
 				'gender'    => array(
 					'female' => __( 'Female', 'facebook-for-woocommerce' ),

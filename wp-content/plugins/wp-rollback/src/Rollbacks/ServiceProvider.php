@@ -19,22 +19,17 @@ use WpRollback\SharedCore\Core\Contracts\ServiceProvider as ServiceProviderContr
 use WpRollback\Free\Rollbacks\Actions\RegisterAdminMenu;
 use WpRollback\Free\Rollbacks\PluginRollback\Actions\AddPluginRollbackLinks;
 use WpRollback\Free\Rollbacks\PluginRollback\Actions\PreCurrentActivePlugins;
-use WpRollback\Free\Rollbacks\ThemeRollback\Actions\PrepareThemeJS;
-use WpRollback\Free\Rollbacks\ThemeRollback\Actions\UpdateThemeList;
-use WpRollback\Free\Rollbacks\ThemeRollback\Controllers\TypeConfirmationController;
+use WpRollback\Free\Rollbacks\ThemeRollback\Actions\AddMultisiteThemeRollbackLinks;
 use WpRollback\Free\Rollbacks\ThemeRollback\Views\ThemeRollbackButton;
 use WpRollback\SharedCore\Core\SharedCore;
 use WpRollback\Free\Core\Constants;
-use WpRollback\SharedCore\Rollbacks\DTO\RollbackRequestDTO;
 use WpRollback\SharedCore\Rollbacks\Registry\RollbackStepRegisterer;
-
 use WpRollback\Free\PluginSetup\PluginScripts;
-use WpRollback\SharedCore\Rollbacks\ToolsPage\ToolsPage;
 
 /**
  * Class ServiceProvider.
  *
- * @since 3.0.0`
+ * @since 3.0.0
  */
 class ServiceProvider implements ServiceProviderContract
 {
@@ -45,11 +40,6 @@ class ServiceProvider implements ServiceProviderContract
      */
     public function register(): void
     {
-        // Register RollbackRequestDTO with Constants dependency
-        SharedCore::container()->singleton(RollbackRequestDTO::class, function ($container) {
-            return new RollbackRequestDTO($container->make(Constants::class));
-        });
-
         // Register AddPluginRollbackLinks with Constants dependency
         SharedCore::container()->singleton(AddPluginRollbackLinks::class, function ($container) {
             return new AddPluginRollbackLinks($container->make(Constants::class));
@@ -59,16 +49,19 @@ class ServiceProvider implements ServiceProviderContract
         SharedCore::container()->singleton(PluginScripts::class);
         
         // Override the shared RollbackStepRegisterer to exclude ValidatePackage and add UpsellValidatePackage
-        // This replaces the shared registration to customize steps for the free plugin
+        // This uses the base steps and modifies them for the free version
         SharedCore::container()->singleton(RollbackStepRegisterer::class, function () {
             $registerer = new RollbackStepRegisterer();
-            // Register base steps without ValidatePackage (pro feature)
-            $registerer->addStep(\WpRollback\SharedCore\Rollbacks\RollbackSteps\DownloadAsset::class);
-            $registerer->addStep(\WpRollback\SharedCore\Rollbacks\RollbackSteps\BackupAsset::class);
-            // Add the upsell step instead of actual validation
-            $registerer->addStep(\WpRollback\Free\Rollbacks\RollbackSteps\UpsellValidatePackage::class);
-            $registerer->addStep(\WpRollback\SharedCore\Rollbacks\RollbackSteps\ReplaceAsset::class);
-            $registerer->addStep(\WpRollback\SharedCore\Rollbacks\RollbackSteps\Cleanup::class);
+
+            // Register all base steps from shared-core
+            $registerer->register(RollbackStepRegisterer::getBaseSteps());
+            
+            // Insert the upsell step after BackupAsset (replacing ValidatePackage position)
+            $registerer->registerAfter(
+                \WpRollback\Free\Rollbacks\RollbackSteps\UpsellValidatePackage::class,
+                \WpRollback\SharedCore\Rollbacks\RollbackSteps\BackupAsset::class
+            );
+            
             return $registerer;
         });
         
@@ -130,9 +123,7 @@ class ServiceProvider implements ServiceProviderContract
      */
     private function bootThemeRollback(): void
     {
-        Hooks::addAction('set_site_transient_update_themes', UpdateThemeList::class);
-        Hooks::addFilter('wp_prepare_themes_for_js', PrepareThemeJS::class);
-        Hooks::addAction('wp_ajax_is_wordpress_theme', TypeConfirmationController::class);
+        // Theme rollback.
         Hooks::addAction('admin_enqueue_scripts', ThemeRollbackButton::class);
     }
 
@@ -142,12 +133,22 @@ class ServiceProvider implements ServiceProviderContract
      */
     private function addMultiSiteSupport(): void
     {
-        Hooks::addFilter('theme_action_links', MultisiteSupport::class, 'addThemeLink', 20, 2);
-        
         // For multisite support
         Hooks::addAction('network_admin_menu', self::class, 'registerMultisiteMenu');
         
         Hooks::addFilter('network_admin_plugin_action_links', AddPluginRollbackLinks::class, '__invoke', 20, 4);
+        
+        // Register factory for AddMultisiteThemeRollbackLinks
+        // Note: This only applies in network admin - single sites use ThemeRollbackButton instead
+        Hooks::registerFactory(
+            AddMultisiteThemeRollbackLinks::class,
+            function () {
+                return SharedCore::container()->make(AddMultisiteThemeRollbackLinks::class);
+            }
+        );
+        
+        // Add theme rollback links in network admin themes table
+        Hooks::addFilter('theme_action_links', AddMultisiteThemeRollbackLinks::class, '__invoke', 20, 3);
     }
     
     /**

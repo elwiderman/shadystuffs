@@ -17,6 +17,63 @@ class PPEX_WC_PG_V2_Client implements PPEX_PG_Interface {
 		add_action('wp_enqueue_scripts', array($this, 'enqueue_fingerprint_js'), 10);
 	}
 
+	public function check_status_and_reschedule($merchant_transaction_id, $start_time, $backoff = 1) {
+		$wc_order_id = PPEX_Utils::get_merchant_transaction_id_from_unique_transaction_id($merchant_transaction_id);
+		$order = wc_get_order($wc_order_id);
+
+		// 1. Timeout Condition: Stop if 30 minutes have passed.
+		if ((time() - $start_time) > 1800) {
+			ppLogError("Polling timeout for transaction " . $merchant_transaction_id . ". Marking as failed.");
+			$this->status_update_for_order(PPEX_PG_Constants::PG_V2_FAILED, $wc_order_id, $merchant_transaction_id, 'Payment timeout after 30 minutes.');
+			return;
+		}
+
+		// 2. Final State Condition: Stop if the order is already successful.
+        if ($order && ( ($order->get_status() == PPEX_Constants::PROCESSING) || ( $order->get_status() == PPEX_Constants::COMPLETED) ))  {
+			ppLogInfo("Polling stopped for " . $merchant_transaction_id . ". Order is in a terminal state (" . ($order ? $order->get_status() : 'not found') . ").");
+			return;
+		}
+
+		// 3. Perform a single status check.
+		try {
+			$response = $this->standard_checkout_client->getOrderStatus($merchant_transaction_id);
+			$state = $response->getState();
+			ppLogInfo("Polling for " . $merchant_transaction_id . ". Current state: " . $state);
+
+			// Re-add the event logging
+			$amount_in_rupees = sanitize_text_field($order->get_total());
+			$amount_in_paisa = sanitize_text_field(PPEX_Utils::convert_to_paisa($amount_in_rupees));
+			$event = PPEX_Utils::create_event($this->plugin_context, PPEX_Constants::PLUGIN_STATUS_CHECK);
+			$event->data["amount"] = $amount_in_paisa;
+			$event->data["state"] = $state;
+			$event->setMerchantOrderId($merchant_transaction_id);
+			try {
+				$this->standard_checkout_client->sendEvent($event);
+			} catch (Exception $exception) {
+				ppLogError(json_encode($exception));
+			}
+
+			// 4. Handle the response.
+			if ($state == PPEX_PG_Constants::PG_V2_COMPLETED || $state == PPEX_PG_Constants::PG_V2_FAILED) {
+				// Final status received, update the order and stop.
+                ppLogInfo("marking order: ". $merchant_transaction_id . " as processing/completed/failed");
+				$this->status_update_for_order($state, $wc_order_id, $merchant_transaction_id);
+			} else if ($state == PPEX_PG_Constants::PG_V2_PENDING || $state == PPEX_Constants::SERVER_ERROR) {
+				// Status is still pending, schedule the next check.
+				$next_check_time = time() + $backoff;
+				$next_backoff = min($backoff * 2, 60); // Double the backoff, max 60 seconds.
+				as_schedule_single_action($next_check_time, 'phonepe_check_status_and_reschedule', array($merchant_transaction_id, $start_time, $next_backoff));
+				ppLogInfo("Rescheduling check for " . $merchant_transaction_id . " in " . $backoff . " seconds.");
+			}
+		} catch (Exception $e) {
+			ppLogError("Error during polling for " . $merchant_transaction_id . ": " . $e->getMessage());
+			// Optionally, reschedule even on error.
+			$next_check_time = time() + $backoff;
+			$next_backoff = min($backoff * 2, 60);
+			as_schedule_single_action($next_check_time, 'phonepe_check_status_and_reschedule', array($merchant_transaction_id, $start_time, $next_backoff));
+		}
+	}
+
 	public function init_txn($wc_order_id) {
 		if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
 			$order = new WC_Order($wc_order_id);
@@ -162,6 +219,14 @@ class PPEX_WC_PG_V2_Client implements PPEX_PG_Interface {
 				ppLogError(json_encode($exception));
 			}
 
+			// Schedule the FIRST background status check using Action Scheduler.
+			if (function_exists('as_schedule_single_action')) {
+				as_schedule_single_action(time() + 5, 'phonepe_check_status_and_reschedule', array($merchant_order_id, time(), 1));
+				ppLogInfo("Scheduled initial status check with Action Scheduler for transaction: " . $merchant_order_id);
+			} else {
+				ppLogError("Action Scheduler not found. Could not schedule background poll.");
+			}
+
 			return array(
 				"redirect_url" => $standard_checkout_pay_response->getRedirectUrl(),
 				"merchant_order_id" => $merchant_order_id,
@@ -232,7 +297,8 @@ class PPEX_WC_PG_V2_Client implements PPEX_PG_Interface {
 		try {
 			$response = $this->standard_checkout_client->verifyCallbackResponse($ppex_pg_v2_callback->getHeaders(), $ppex_pg_v2_callback->getPayload(), $ppex_pg_v2_callback->getUsername(), $ppex_pg_v2_callback->getPassword());
 		}catch (Exception $exception) {
-			ppLogError(json_encode($exception));
+			ppLogError("Callback Verification Failed: " . json_encode($exception));
+            ppLogError("Callback Payload: " . $ppex_pg_v2_callback->getPayload());
 		}
 
 		$unique_merchant_transaction_id = $response->getPayload()->getMerchantOrderId();
@@ -251,7 +317,7 @@ class PPEX_WC_PG_V2_Client implements PPEX_PG_Interface {
 			ppLogError(json_encode($exception));
 		}
 
-		if ($order && ( ($order->get_status() == 'processing') || ( $order->get_status() == 'completed') ))  { // TODO: move 'processing' string to constants
+		if ($order && ( ($order->get_status() == PPEX_Constants::PROCESSING) || ( $order->get_status() == PPEX_Constants::COMPLETED) ))  {
 			return "Payment is Successful";
 		}
 
@@ -286,7 +352,7 @@ class PPEX_WC_PG_V2_Client implements PPEX_PG_Interface {
 	}
 
 	public function check_phonepe_response($merchant_transaction_id) {
-		ppLogInfo('mtid: ' . $merchant_transaction_id);
+		ppLogInfo('User redirected back. Checking status for mtid: ' . $merchant_transaction_id);
 		$wc_order_id = PPEX_Utils::get_merchant_transaction_id_from_unique_transaction_id($merchant_transaction_id);
 
 		if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
@@ -309,8 +375,7 @@ class PPEX_WC_PG_V2_Client implements PPEX_PG_Interface {
 				$retry_counter++;
                 $event = PPEX_Utils::create_event($this->plugin_context, PPEX_Constants::PLUGIN_STATUS_CHECK);
                 $event->data["amount"] = $amount_in_paisa;
-                $event->data["st
-                ate"] = $response->getState();
+                $event->data["state"] = $response->getState();
                 $event->setMerchantOrderId($merchant_transaction_id);
 
 				try {
@@ -399,7 +464,7 @@ class PPEX_WC_PG_V2_Client implements PPEX_PG_Interface {
 			$this->msg['class'] = 'error';
 			$this->msg['message'] = $msg;
 			$order->update_status('failed');
-			$order->add_order_note("PhonePe Payment Solutions: Payment Transaction Failed" . ' - merchant transaction id: ' . $merchant_transaction_id);
+			$order->add_order_note("PhonePe Payment Solutions: " . $msg . " Payment Transaction Failed" . ' - merchant transaction id: ' . $merchant_transaction_id);
 		} else {
 			$order->update_status('wc-pending', 'Pending');
 		}

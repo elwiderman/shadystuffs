@@ -3,7 +3,7 @@ Contributors: facebook
 Tags: meta, facebook, conversions api, catalog sync, ads
 Requires at least: 5.6
 Tested up to: 6.8.1
-Stable tag: 3.5.3
+Stable tag: 3.5.5
 Requires PHP: 7.4
 MySQL: 5.6 or greater
 License: GPLv2 or later
@@ -28,36 +28,33 @@ Visit the Facebook Help Center [here](https://www.facebook.com/business/help/900
 
 == Support ==
 
-If you believe you have found a security vulnerability on Facebook, we encourage you to let us know right away. We investigate all legitimate reports and do our best to quickly fix the problem. Before reporting, please review [this page](https://www.facebook.com/whitehat), which includes our responsible disclosure policy and reward guideline. You can submit bugs [here](https://github.com/facebookincubator/facebook-for-woocommerce/issues) or contact advertising support [here](https://www.facebook.com/business/help/900699293402826).
+Before raising a question with Meta Support, please first take a look at the Meta [helpcenter docs](https://www.facebook.com/business/help), by searching for keywords like 'WooCommerce' here. If you didn't find what you were looking for, you can go to [Meta Direct Support](https://www.facebook.com/business-support-home) and ask your question.
 
-When opening a bug on GitHub, please give us as many details as possible.
-
+When reporting an issue on Meta Direct Support, please give us as many details as possible.
 * Symptoms of your problem
 * Screenshot, if possible
 * Your Facebook page URL
 * Your website URL
 * Current version of Facebook-for-WooCommerce, WooCommerce, Wordpress, PHP
 
+To suggest technical improvements, you can raise an issue on our [Github repository](https://github.com/facebook/facebook-for-woocommerce/issues).
+
 == Changelog ==
 
-= 3.5.4 - 2025-06-25 =
-* Add - Enhanced product attribute mapping system with improved support for custom fields and value normalization by @devbodaghe in #3234
-* Fix - Single batch call for bulk edit by @SayanPandey in #3352
-* Tweak - Redundant api calls reduction by @SayanPandey in #3356
-* Fix - Whatsapp consent checkbox enable for classic checkout by @sharunaanandraj in #3451
-* Add - Unit tests for FeedConfigurationDetection class by @sol-loup in #3450
-* Add - Unit tests for DebugTools class by @sol-loup in #3448
-* Add - Unit tests for AdminMessageHandler class by @sol-loup in #3447
-* Add - Unit tests for Enhanced_Catalog_Attribute_Fields class by @sol-loup in #3449
-* Add - Comprehensive unit tests for Google_Product_Category_Field class to improve code coverage by @sol-loup in #3446
-* Add - Comprehensive unit tests for Product_Categories class to improve code coverage by @sol-loup in #3426
-* Add - Unit tests for ProductCatalog ProductSets Delete Request class by @sol-loup in #3417
-* Add - Comprehensive unit tests for Request_Limit_Reached exception to improve code coverage by @sol-loup in #3427
-* Add - Comprehensive unit tests for WC_Facebookcommerce_WarmConfig to improve code coverage by @sol-loup in #3424
-* Add - Comprehensive unit tests for Commerce class to improve code coverage by @sol-loup in #3425
-* Add - Unit tests for SettingsMoved note class to improve code coverage by @sol-loup in #3428
-* Add - Comprehensive unit tests for ProfilingLoggerProcess to improve code coverage by @sol-loup in #3412
-* Fix - Logs for excluded categories and tags by @SayanPandey in #3445
-* Fix - Age group normalisation error and updating supported FB fields for age group by @devbodaghe in #3460
+= 3.5.6 - 2025-08-18 =
+* Fix - Improving website prformance by reducing frequency of heavy queries by @vinkmeta in #3556
+* Dev - chore: add multiple images functionality tests with rollout switch in… by @devbodaghe in #3554
+* Update - Enable Offer Management APIs + Tweaks by @mradmeta in #3548
+* Add - Add Rollout Switches for Gating Multiple Variants by @devbodaghe in #3551
+* Add - Feature/multiple images for variants by @devbodaghe in #3543
+* Fix - Fix product set banner reappearance after dismissal  by @mshymon in #3547
+* Fix - Remove unnecessary logging for product attribute mapper attributes by @devbodaghe in #3546
+* Update - Deprecate FB Product Sets tab and migrate legacy product sets by @mshymon in #3534
+* Add - Automated secondary QA test to compare artifact from prepare-release and marketplace version by @immadhavv in #3544
+* Fix - Fix: Disable dropdown fields when 'Do not sync' is selected by @devbodaghe in #3541
+* Fix - Show Facebook Product Video field for variable products by @ukilla in #3542
+* Fix - Fix bug in plugin version upgrade/downgrade logic in Lifecycle by @mshymon in #3539
+* Add - Run e2e tests on marketplace release of the plugin by @immadhavv in #3535
+* Fix - Fix/prevent woocommerce attribute summaries in facebook short descriptions by @devbodaghe in #3531
 
 [See changelog for all versions](https://raw.githubusercontent.com/facebook/facebook-for-woocommerce/refs/heads/main/changelog.txt).
