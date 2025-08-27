@@ -1,0 +1,51 @@
+.woocommerce, .woocommerce-page {
+    ul {
+        &.products {
+            li {
+                &.product {
+                    float: none;
+                    padding: 0 15px;
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+
+    .woocommerce-breadcrumb {
+        font-size: 14px;
+        a {
+            font-weight: $semi-bold;
+        }
+    } 
+}
+
+
+
+.section-block {
+    &.section-product-more {
+        margin-top: 100px;
+        .section-title {
+            font-size: 20px;
+        }
+        .products-slider {
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 40px;
+            z-index: 0;
+            .slide-navs {
+                position: absolute;
+                bottom: 0px;
+                z-index: 1;
+                @extend .btn-arrow;
+                &.left-arrow {
+                    left: calc(50% - 60px);
+                }
+                &.right-arrow {
+                    left: unset;
+                    right: calc(50% - 60px);
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+}

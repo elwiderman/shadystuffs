@@ -56,12 +56,17 @@ function shady_framework_scripts() {
 
         wp_enqueue_style('home-css', $path . shady_get_hashed_assets('scss/home.scss'), array(), '', 'all');
     }
+    
+    if (is_product()) {
+        wp_enqueue_script('prod-single-scripts', $path . shady_get_hashed_assets('js/v2/wooSingle.js'), '', '', true);
+        wp_enqueue_style('prod-single-css', $path . shady_get_hashed_assets('scss/prod-single.scss'), array(), '', 'all');
+    }
 
     // the stylesheets
     global $wp_styles; // Call global $wp_styles variable to add conditional wrapper around ie stylesheet the WordPress way
 
     // Register main stylesheet
-    wp_enqueue_style('site-css', $path . shady_get_hashed_assets('scss/app.scss'), array(), '', 'all');
+    // wp_enqueue_style('site-css', $path . shady_get_hashed_assets('scss/app.scss'), array(), '', 'all');
 }
 
 add_action('wp_enqueue_scripts', 'shady_framework_scripts', 1000);

@@ -1,0 +1,26 @@
+.section-block {
+    &.section-product-main {
+        .entry-image {
+            .product-thumbs {
+                &__wrap {
+                    @include flex-display;
+                    width: 100%;
+                    &--col {
+                        flex: none;
+                        width: 50%;
+                        cursor: zoom-in;
+                        a {
+                            width: 100%;
+                            aspect-ratio: 3 / 4;
+                            display: block;
+                            overflow: hidden;
+                            img {
+                                @include img-obj-fit;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
