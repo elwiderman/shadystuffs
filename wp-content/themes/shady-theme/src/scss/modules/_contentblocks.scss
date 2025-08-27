@@ -93,7 +93,20 @@
                 }
             }
         }
-
+        .woosw-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            @extend .btn-square-white;
+            background: transparent !important;
+            border: none !important;
+            .woosw-btn-icon {
+                font-size: 24px;
+            }
+            .woosw-btn-text {
+                display: none;
+            }
+        }
         &__image {
             position: relative;
             z-index: 0;

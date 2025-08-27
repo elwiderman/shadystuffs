@@ -34,7 +34,7 @@ function shady_add_excerpts_to_pages() {
 
 /* HIDE ADMIN BAR
 ------------------------------------*/
-//show_admin_bar(false);
+show_admin_bar(false);
 
 
 /* POST THUMBNAIL

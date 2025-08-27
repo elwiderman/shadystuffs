@@ -1,8 +1,7 @@
 import ready from 'domready';
 import $ from 'jquery';
-// import 'slick-carousel';
 import Swiper from 'swiper';
-import { Navigation, Pagination, Mousewheel, Autoplay } from 'swiper/modules';
+import { Navigation, Pagination, Mousewheel, Autoplay, FreeMode } from 'swiper/modules';
 
 export default class Home {
     constructor() {
@@ -17,14 +16,14 @@ export default class Home {
 
     heroSlider() {
         const swiper = new Swiper('#homeHeroSlider', {
-            modules: [Autoplay, Mousewheel],
+            modules: [Autoplay, Mousewheel, FreeMode],
             autoplay: {
-                delay: 5000,
+                delay: 3000,
                 pauseOnMouseEnter: true,
             },
             navigation: false,
             loop: true,
-            loopedSlides: 5,
+            loopedSlides: 6,
             loopAdditionalSlides: 5,
             mousewheel: {
                 forceToAxis: true
@@ -56,14 +55,15 @@ export default class Home {
     bestsellersSlider() {
         const swiper = new Swiper('#bestsellersSlider', {
             modules: [Autoplay, Navigation, Mousewheel],
-            autoplay: {
-                delay: 5000,
-                pauseOnMouseEnter: true,
-            },
+            // autoplay: {
+            //     delay: 5000,
+            //     pauseOnMouseEnter: true,
+            // },
+            autoplay: false,
             loop: true,
             loopedSlides: 4,
             slidesPerView: 4,
-            spaceBetween: '24px',
+            spaceBetween: 32,
             mousewheel: {
                 forceToAxis: true
             },

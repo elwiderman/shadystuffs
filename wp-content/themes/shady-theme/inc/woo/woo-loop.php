@@ -113,7 +113,7 @@ function shady_woo_loop_wrap_title_price_end() {
 remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10);
 
 // add the wishlist and the quick view buttons
-add_action('woocommerce_after_shop_loop_item', 'shady_woo_loop_thumb_wishlist_quickview', 6);
+// add_action('woocommerce_after_shop_loop_item', 'shady_woo_loop_thumb_wishlist_quickview', 6);
 function shady_woo_loop_thumb_wishlist_quickview() {
     global $product;
     ?>

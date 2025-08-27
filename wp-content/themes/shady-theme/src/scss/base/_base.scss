@@ -118,7 +118,7 @@ ul {
     max-width: 100vw;
     margin-top: 80px;
     @include transition(0.3s);
-    overflow-x: hidden;
+    // overflow-x: hidden;
     @include respond-to-mob('medium') {
         margin-top: 70px;
     }

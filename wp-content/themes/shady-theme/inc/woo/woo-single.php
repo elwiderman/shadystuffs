@@ -120,9 +120,11 @@ function shady_template_single_excerpt() {
 add_action('woocommerce_single_product_summary', 'shady_add_wishlist_after_add_to_cart_shop_sinlge', 31);
 function shady_add_wishlist_after_add_to_cart_shop_sinlge() {
     global $product;
+    $product_id = $product->get_id();
+    $shortcode  = '[woosw id="'.$product_id.'"]';
 
     echo '<div class="wishlist">';
-	echo do_shortcode('[yith_wcwl_add_to_wishlist]');
+	echo do_shortcode($shortcode);
     echo '</div>';
 }
 
@@ -227,27 +229,9 @@ function shady_size_chart_before_quantity() {
         ?>
         
         <div class="sizechart-wrap">
-            <a href="#" class="sizechart-wrap__trigger-sizechart" data-bs-toggle="modal" data-bs-target="#sizeChartPop">
+            <a href="<?php echo $desk['url'];?>" class="sizechart-wrap__trigger-sizechart" data-fancybox>
                 <?php _e('See Size-Chart', 'shady');?>
             </a>
-    
-            <div class="modal fade" id="sizeChartPop" tabindex="-1" aria-labelledby="sizeChartPopLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i class="icon-x"></i>
-                        </button>
-                        <div class="modal-body">
-                            <figure class="size-chart mb-0 d-none d-lg-block">
-                                <img src="<?php echo $desk['url'];?>" alt="<?php echo $desk['alt'];?>" class="img-fluid">
-                            </figure>
-                            <figure class="size-chart mb-0 d-lg-none">
-                                <img src="<?php echo $mob['url'];?>" alt="<?php echo $mob['alt'];?>" class="img-fluid">
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <?php
     endif;
@@ -259,27 +243,9 @@ function shady_size_chart_before_quantity() {
         ?>
         
         <div class="fabricguide-wrap">
-            <a href="#" class="fabricguide-wrap__trigger-fabricguide" data-bs-toggle="modal" data-bs-target="#fabricGuidePop">
+            <a href="<?php echo $desk['url'];?>" class="fabricguide-wrap__trigger-fabricguide" data-fancybox>
                 <?php _e('See Fabric-Guide', 'shady');?>
             </a>
-    
-            <div class="modal fade" id="fabricGuidePop" tabindex="-1" aria-labelledby="fabricGuidePopLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <i class="icon-x"></i>
-                        </button>
-                        <div class="modal-body">
-                            <figure class="size-chart mb-0 d-none d-lg-block">
-                                <img src="<?php echo $desk['url'];?>" alt="<?php echo $desk['alt'];?>" class="img-fluid">
-                            </figure>
-                            <figure class="size-chart mb-0 d-lg-none">
-                                <img src="<?php echo $mob['url'];?>" alt="<?php echo $mob['alt'];?>" class="img-fluid">
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <?php
     endif;
@@ -320,40 +286,42 @@ function shady_show_custom_string_after_price_in_single() {
             <h6 class='product-higlight-offers__title'>
                 <i class='icon-price'></i>Offers <span class='color-dark' style='font-size:80%;'>(Discounts applied automatically on final cart value)</span>
             </h6>
-            <div class='product-higlight-offers__items' id='highlightOfferSlider'>
-                <div>
-                    <div class='item'>
-                        <p class='mb-0'><span>₹150 OFF</span><br>above ₹800</p>
+            <div class='product-higlight-offers__items swiper' id='highlightOfferSlider'>
+                <div class='swiper-wrapper'>
+                    <div class='swiper-slide'>
+                        <div class='item'>
+                            <p class='mb-0'><span>₹150 OFF</span><br>above ₹800</p>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class='item'>
-                        <p class='mb-0'><span>₹200 OFF</span><br>above ₹1,000</p>
+                    <div class='swiper-slide'>
+                        <div class='item'>
+                            <p class='mb-0'><span>₹200 OFF</span><br>above ₹1,000</p>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class='item'>
-                        <p class='mb-0'><span>₹400 OFF</span><br>above ₹1,400</p>
+                    <div class='swiper-slide'>
+                        <div class='item'>
+                            <p class='mb-0'><span>₹400 OFF</span><br>above ₹1,400</p>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class='item'>
-                        <p class='mb-0'><span>₹500 OFF</span><br>above ₹2,100</p>
+                    <div class='swiper-slide'>
+                        <div class='item'>
+                            <p class='mb-0'><span>₹500 OFF</span><br>above ₹2,100</p>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class='item'>
-                        <p class='mb-0'><span>₹700 OFF</span><br>above ₹3,000</p>
+                    <div class='swiper-slide'>
+                        <div class='item'>
+                            <p class='mb-0'><span>₹700 OFF</span><br>above ₹3,000</p>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class='item'>
-                        <p class='mb-0'><span>₹800 OFF</span><br>above ₹4,000</p>
+                    <div class='swiper-slide'>
+                        <div class='item'>
+                            <p class='mb-0'><span>₹800 OFF</span><br>above ₹4,000</p>
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <div class='item'>
-                        <p class='mb-0'><span>₹2000 OFF</span><br>above ₹10,000</p>
+                    <div class='swiper-slide'>
+                        <div class='item'>
+                            <p class='mb-0'><span>₹2000 OFF</span><br>above ₹10,000</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -364,19 +332,27 @@ function shady_show_custom_string_after_price_in_single() {
 
 
 /* the image section */
-remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10);
-// remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
+// remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash', 10);
 
-// add_action('woocommerce_before_single_product_summary', 'shady_woo_custom_product_images', 20);
+remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20);
+add_action('woocommerce_before_single_product_summary', 'shady_woo_custom_product_images', 20);
 function shady_woo_custom_product_images() {
     if (is_product()) {
-        get_template_part('woocommerce/single-product/custom-images');
+        get_template_part('woocommerce/single-product/custom-thumbs');
     }
 }
 
 
 // remove the zoom on hover anim
-// add_action( 'wp', 'shady_remove_zoom_lightbox_theme_support', 99 ); 
+add_action( 'wp', 'shady_remove_zoom_lightbox_theme_support', 99 ); 
 function shady_remove_zoom_lightbox_theme_support() { 
     remove_theme_support( 'wc-product-gallery-zoom' );
+}
+
+
+// increase the number of related products to 6 at least
+add_filter('woocommerce_output_related_products_args', 'shady_increase_related_prods_count', 20 );
+function shady_increase_related_prods_count( $args ) {
+    $args['posts_per_page'] = 6; // number of related products
+    return $args;
 }
